@@ -1,17 +1,17 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Chapter 5: The (Not So) Secret Lifecycle of Variables
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Chương 5: Vòng Đời (Không Hề) Bí Mật Của Biến
 
-By now you should have a decent grasp of the nesting of scopes, from the global scope downward—called a program's scope chain.
+Đến bây giờ bạn nên có một sự nắm bắt tốt về sự lồng nhau của các phạm vi, từ phạm vi toàn cục xuống—được gọi là chuỗi phạm vi của chương trình.
 
-But just knowing which scope a variable comes from is only part of the story. If a variable declaration appears past the first statement of a scope, how will any references to that identifier *before* the declaration behave? What happens if you try to declare the same variable twice in a scope?
+Nhưng chỉ biết phạm vi nào mà một biến đến từ đó chỉ là một phần của câu chuyện. Nếu một khai báo biến xuất hiện sau câu lệnh đầu tiên của một phạm vi, bất kỳ tham chiếu nào đến định danh đó *trước* khai báo sẽ hoạt động như thế nào? Điều gì xảy ra nếu bạn cố gắng khai báo cùng một biến hai lần trong một phạm vi?
 
-JS's particular flavor of lexical scope is rich with nuance in how and when variables come into existence and become available to the program.
+Hương vị đặc biệt của JS về phạm vi từ vựng rất phong phú với sắc thái trong cách và khi nào các biến xuất hiện và trở nên có sẵn cho chương trình.
 
-## When Can I Use a Variable?
+## Khi Nào Tôi Có Thể Sử Dụng Một Biến?
 
-At what point does a variable become available to use within its scope? There may seem to be an obvious answer: *after* the variable has been declared/created. Right? Not quite.
+Tại thời điểm nào một biến trở nên có sẵn để sử dụng trong phạm vi của nó? Có vẻ như có một câu trả lời rõ ràng: *sau khi* biến đã được khai báo/tạo. Đúng không? Không hẳn.
 
-Consider:
+Hãy xem xét:
 
 ```js
 greeting();
@@ -22,25 +22,25 @@ function greeting() {
 }
 ```
 
-This code works fine. You may have seen or even written code like it before. But did you ever wonder how or why it works? Specifically, why can you access the identifier `greeting` from line 1 (to retrieve and execute a function reference), even though the `greeting()` function declaration doesn't occur until line 4?
+Mã này hoạt động tốt. Bạn có thể đã thấy hoặc thậm chí viết mã như thế này trước đây. Nhưng bạn đã bao giờ tự hỏi làm thế nào hoặc tại sao nó hoạt động không? Cụ thể, tại sao bạn có thể truy cập định danh `greeting` từ dòng 1 (để truy xuất và thực thi một tham chiếu hàm), mặc dù khai báo hàm `greeting()` không xảy ra cho đến dòng 4?
 
-Recall Chapter 1 points out that all identifiers are registered to their respective scopes during compile time. Moreover, every identifier is *created* at the beginning of the scope it belongs to, **every time that scope is entered**.
+Nhớ lại Chương 1 chỉ ra rằng tất cả các định danh được đăng ký vào các phạm vi tương ứng của chúng trong thời gian biên dịch. Hơn nữa, mỗi định danh được *tạo* ở đầu phạm vi mà nó thuộc về, **mỗi khi phạm vi đó được nhập**.
 
-The term most commonly used for a variable being visible from the beginning of its enclosing scope, even though its declaration may appear further down in the scope, is called **hoisting**.
+Thuật ngữ thường được sử dụng nhất cho một biến có thể nhìn thấy từ đầu phạm vi bao quanh của nó, mặc dù khai báo của nó có thể xuất hiện xa hơn trong phạm vi, được gọi là **hoisting**.
 
-But hoisting alone doesn't fully answer the question. We can see an identifier called `greeting` from the beginning of the scope, but why can we **call** the `greeting()` function before it's been declared?
+Nhưng chỉ hoisting thôi không trả lời đầy đủ câu hỏi. Chúng ta có thể thấy một định danh có tên `greeting` từ đầu phạm vi, nhưng tại sao chúng ta có thể **gọi** hàm `greeting()` trước khi nó được khai báo?
 
-In other words, how does the variable `greeting` have any value (the function reference) assigned to it, from the moment the scope starts running? The answer is a special characteristic of formal `function` declarations, called *function hoisting*. When a `function` declaration's name identifier is registered at the top of its scope, it's additionally auto-initialized to that function's reference. That's why the function can be called throughout the entire scope!
+Nói cách khác, làm thế nào biến `greeting` có bất kỳ giá trị nào (tham chiếu hàm) được gán cho nó, từ thời điểm phạm vi bắt đầu chạy? Câu trả lời là một đặc điểm đặc biệt của các khai báo `function` chính thức, được gọi là *function hoisting*. Khi định danh tên của khai báo `function` được đăng ký ở đầu phạm vi của nó, nó cũng được tự động khởi tạo thành tham chiếu của hàm đó. Đó là lý do tại sao hàm có thể được gọi trong toàn bộ phạm vi!
 
-One key detail is that both *function hoisting* and `var`-flavored *variable hoisting* attach their name identifiers to the nearest enclosing **function scope** (or, if none, the global scope), not a block scope.
+Một chi tiết quan trọng là cả *function hoisting* và *variable hoisting* hương vị `var` đều gắn định danh tên của chúng vào **phạm vi hàm** bao quanh gần nhất (hoặc, nếu không có, phạm vi toàn cục), không phải phạm vi khối.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Declarations with `let` and `const` still hoist (see the TDZ discussion later in this chapter). But these two declaration forms attach to their enclosing block rather than just an enclosing function as with `var` and `function` declarations. See "Scoping with Blocks" in Chapter 6 for more information. |
+| Các khai báo với `let` và `const` vẫn hoist (xem cuộc thảo luận TDZ sau trong chương này). Nhưng hai dạng khai báo này gắn vào khối bao quanh của chúng thay vì chỉ một hàm bao quanh như với các khai báo `var` và `function`. Xem "Phạm Vi với Khối" trong Chương 6 để biết thêm thông tin. |
 
-### Hoisting: Declaration vs. Expression
+### Hoisting: Khai Báo so với Biểu Thức
 
-*Function hoisting* only applies to formal `function` declarations (specifically those which appear outside of blocks—see "FiB" in Chapter 6), not to `function` expression assignments. Consider:
+*Function hoisting* chỉ áp dụng cho các khai báo `function` chính thức (cụ thể là những cái xuất hiện bên ngoài các khối—xem "FiB" trong Chương 6), không phải cho các gán biểu thức `function`. Hãy xem xét:
 
 ```js
 greeting();
@@ -51,23 +51,23 @@ var greeting = function greeting() {
 };
 ```
 
-Line 1 (`greeting();`) throws an error. But the *kind* of error thrown is very important to notice. A `TypeError` means we're trying to do something with a value that is not allowed. Depending on your JS environment, the error message would say something like, "'undefined' is not a function," or more helpfully, "'greeting' is not a function."
+Dòng 1 (`greeting();`) ném ra một lỗi. Nhưng *loại* lỗi được ném ra rất quan trọng để chú ý. Một `TypeError` có nghĩa là chúng ta đang cố gắng làm điều gì đó với một giá trị không được phép. Tùy thuộc vào môi trường JS của bạn, thông báo lỗi sẽ nói điều gì đó như, "'undefined' is not a function," hoặc hữu ích hơn, "'greeting' is not a function."
 
-Notice that the error is **not** a `ReferenceError`. JS isn't telling us that it couldn't find `greeting` as an identifier in the scope. It's telling us that `greeting` was found but doesn't hold a function reference at that moment. Only functions can be invoked, so attempting to invoke some non-function value results in an error.
+Chú ý rằng lỗi **không phải** là `ReferenceError`. JS không nói với chúng ta rằng nó không thể tìm thấy `greeting` như một định danh trong phạm vi. Nó nói với chúng ta rằng `greeting` đã được tìm thấy nhưng không giữ một tham chiếu hàm tại thời điểm đó. Chỉ các hàm mới có thể được gọi, vì vậy cố gắng gọi một số giá trị không phải hàm dẫn đến lỗi.
 
-But what does `greeting` hold, if not the function reference?
+Nhưng `greeting` giữ gì, nếu không phải tham chiếu hàm?
 
-In addition to being hoisted, variables declared with `var` are also automatically initialized to `undefined` at the beginning of their scope—again, the nearest enclosing function, or the global. Once initialized, they're available to be used (assigned to, retrieved from, etc.) throughout the whole scope.
+Ngoài việc được hoisted, các biến được khai báo với `var` cũng được tự động khởi tạo thành `undefined` ở đầu phạm vi của chúng—một lần nữa, hàm bao quanh gần nhất, hoặc toàn cục. Khi được khởi tạo, chúng có sẵn để được sử dụng (được gán cho, truy xuất từ, v.v.) trong toàn bộ phạm vi.
 
-So on that first line, `greeting` exists, but it holds only the default `undefined` value. It's not until line 4 that `greeting` gets assigned the function reference.
+Vì vậy, trên dòng đầu tiên đó, `greeting` tồn tại, nhưng nó chỉ giữ giá trị `undefined` mặc định. Phải đến dòng 4 thì `greeting` mới được gán tham chiếu hàm.
 
-Pay close attention to the distinction here. A `function` declaration is hoisted **and initialized to its function value** (again, called *function hoisting*). A `var` variable is also hoisted, and then auto-initialized to `undefined`. Any subsequent `function` expression assignments to that variable don't happen until that assignment is processed during runtime execution.
+Hãy chú ý kỹ đến sự phân biệt ở đây. Một khai báo `function` được hoisted **và được khởi tạo thành giá trị hàm của nó** (một lần nữa, được gọi là *function hoisting*). Một biến `var` cũng được hoisted, và sau đó được tự động khởi tạo thành `undefined`. Bất kỳ gán biểu thức `function` tiếp theo nào cho biến đó không xảy ra cho đến khi gán đó được xử lý trong quá trình thực thi thời gian chạy.
 
-In both cases, the name of the identifier is hoisted. But the function reference association isn't handled at initialization time (beginning of the scope) unless the identifier was created in a formal `function` declaration.
+Trong cả hai trường hợp, tên của định danh được hoisted. Nhưng liên kết tham chiếu hàm không được xử lý tại thời gian khởi tạo (đầu phạm vi) trừ khi định danh được tạo trong một khai báo `function` chính thức.
 
 ### Variable Hoisting
 
-Let's look at another example of *variable hoisting*:
+Hãy xem một ví dụ khác về *variable hoisting*:
 
 ```js
 greeting = "Hello!";
@@ -77,31 +77,31 @@ console.log(greeting);
 var greeting = "Howdy!";
 ```
 
-Though `greeting` isn't declared until line 5, it's available to be assigned to as early as line 1. Why?
+Mặc dù `greeting` không được khai báo cho đến dòng 5, nó có sẵn để được gán sớm nhất là dòng 1. Tại sao?
 
-There's two necessary parts to the explanation:
+Có hai phần cần thiết cho lời giải thích:
 
-* the identifier is hoisted,
-* **and** it's automatically initialized to the value `undefined` from the top of the scope.
+* định danh được hoisted,
+* **và** nó được tự động khởi tạo thành giá trị `undefined` từ đầu phạm vi.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Using *variable hoisting* of this sort probably feels unnatural, and many readers might rightly want to avoid relying on it in their programs. But should all hoisting (including *function hoisting*) be avoided? We'll explore these different perspectives on hoisting in more detail in Appendix A. |
+| Sử dụng *variable hoisting* loại này có lẽ cảm thấy không tự nhiên, và nhiều độc giả có thể đúng khi muốn tránh dựa vào nó trong các chương trình của họ. Nhưng liệu tất cả hoisting (bao gồm *function hoisting*) nên được tránh? Chúng ta sẽ khám phá những quan điểm khác nhau này về hoisting chi tiết hơn trong Phụ lục A. |
 
-## Hoisting: Yet Another Metaphor
+## Hoisting: Một Phép Ẩn Dụ Khác
 
-Chapter 2 was full of metaphors (to illustrate scope), but here we are faced with yet another: hoisting itself. Rather than hoisting being a concrete execution step the JS engine performs, it's more useful to think of hoisting as a visualization of various actions JS takes in setting up the program **before execution**.
+Chương 2 đầy các phép ẩn dụ (để minh họa phạm vi), nhưng ở đây chúng ta phải đối mặt với một phép ẩn dụ khác: chính hoisting. Thay vì hoisting là một bước thực thi cụ thể mà công cụ JS thực hiện, nó hữu ích hơn khi nghĩ về hoisting như một hình dung của các hành động khác nhau mà JS thực hiện trong việc thiết lập chương trình **trước khi thực thi**.
 
-The typical assertion of what hoisting means: *lifting*—like lifting a heavy weight upward—any identifiers all the way to the top of a scope. The explanation often asserted is that the JS engine will actually *rewrite* that program before execution, so that it looks more like this:
+Khẳng định điển hình về ý nghĩa của hoisting: *nâng lên*—như nâng một trọng lượng nặng lên—bất kỳ định danh nào lên đầu phạm vi. Lời giải thích thường được khẳng định là công cụ JS sẽ thực sự *viết lại* chương trình đó trước khi thực thi, để nó trông giống như thế này hơn:
 
 ```js
-var greeting;           // hoisted declaration
-greeting = "Hello!";    // the original line 1
+var greeting;           // khai báo được hoisted
+greeting = "Hello!";    // dòng 1 ban đầu
 console.log(greeting);  // Hello!
-greeting = "Howdy!";    // `var` is gone!
+greeting = "Howdy!";    // `var` đã biến mất!
 ```
 
-The hoisting (metaphor) proposes that JS pre-processes the original program and re-arranges it a bit, so that all the declarations have been moved to the top of their respective scopes, before execution. Moreover, the hoisting metaphor asserts that `function` declarations are, in their entirety, hoisted to the top of each scope. Consider:
+Phép ẩn dụ hoisting đề xuất rằng JS tiền xử lý chương trình ban đầu và sắp xếp lại nó một chút, để tất cả các khai báo đã được di chuyển lên đầu các phạm vi tương ứng của chúng, trước khi thực thi. Hơn nữa, phép ẩn dụ hoisting khẳng định rằng các khai báo `function` được, trong toàn bộ của chúng, hoisted lên đầu mỗi phạm vi. Hãy xem xét:
 
 ```js
 studentName = "Suzy";
@@ -114,7 +114,7 @@ function greeting() {
 var studentName;
 ```
 
-The "rule" of the hoisting metaphor is that function declarations are hoisted first, then variables are hoisted immediately after all the functions. Thus, the hoisting story suggests that program is *re-arranged* by the JS engine to look like this:
+"Quy tắc" của phép ẩn dụ hoisting là các khai báo hàm được hoisted trước, sau đó các biến được hoisted ngay sau tất cả các hàm. Do đó, câu chuyện hoisting gợi ý rằng chương trình được *sắp xếp lại* bởi công cụ JS để trông như thế này:
 
 ```js
 function greeting() {
@@ -127,27 +127,27 @@ greeting();
 // Hello Suzy!
 ```
 
-This hoisting metaphor is convenient. Its benefit is allowing us to hand wave over the magical look-ahead pre-processing necessary to find all these declarations buried deep in scopes and somehow move (hoist) them to the top; we can just think about the program as if it's executed by the JS engine in a **single pass**, top-down.
+Phép ẩn dụ hoisting này thuận tiện. Lợi ích của nó là cho phép chúng ta vẫy tay qua việc tiền xử lý nhìn trước kỳ diệu cần thiết để tìm tất cả các khai báo này được chôn sâu trong các phạm vi và bằng cách nào đó di chuyển (hoist) chúng lên đầu; chúng ta chỉ có thể nghĩ về chương trình như thể nó được thực thi bởi công cụ JS trong **một lần duyệt**, từ trên xuống dưới.
 
-Single-pass definitely seems more straightforward than Chapter 1's assertion of a two-phase processing.
+Một lần duyệt chắc chắn có vẻ đơn giản hơn khẳng định của Chương 1 về xử lý hai giai đoạn.
 
-Hoisting as a mechanism for re-ordering code may be an attractive simplification, but it's not accurate. The JS engine doesn't actually re-arrange the code. It can't magically look ahead and find declarations; the only way to accurately find them, as well as all the scope boundaries in the program, would be to fully parse the code.
+Hoisting như một cơ chế để sắp xếp lại mã có thể là một sự đơn giản hóa hấp dẫn, nhưng nó không chính xác. Công cụ JS không thực sự sắp xếp lại mã. Nó không thể nhìn trước một cách kỳ diệu và tìm các khai báo; cách duy nhất để tìm chúng một cách chính xác, cũng như tất cả các ranh giới phạm vi trong chương trình, sẽ là phân tích cú pháp đầy đủ mã.
 
-Guess what parsing is? The first phase of the two-phase processing! There's no magical mental gymnastics that gets around that fact.
+Đoán xem phân tích cú pháp là gì? Giai đoạn đầu tiên của xử lý hai giai đoạn! Không có thể dục tinh thần kỳ diệu nào vượt qua sự thật đó.
 
-So if the hoisting metaphor is (at best) inaccurate, what should we do with the term? I think it's still useful—indeed, even members of TC39 regularly use it!—but I don't think we should claim it's an actual re-arrangement of source code.
+Vì vậy, nếu phép ẩn dụ hoisting (tốt nhất) không chính xác, chúng ta nên làm gì với thuật ngữ? Tôi nghĩ nó vẫn hữu ích—thực sự, ngay cả các thành viên của TC39 thường xuyên sử dụng nó!—nhưng tôi không nghĩ chúng ta nên tuyên bố nó là một sắp xếp lại thực tế của mã nguồn.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Incorrect or incomplete mental models often still seem sufficient because they can occasionally lead to accidental right answers. But in the long run it's harder to accurately analyze and predict outcomes if your thinking isn't particularly aligned with how the JS engine works. |
+| Các mô hình tinh thần không chính xác hoặc không đầy đủ thường vẫn có vẻ đủ vì chúng đôi khi có thể dẫn đến câu trả lời đúng ngẫu nhiên. Nhưng về lâu dài, khó phân tích và dự đoán kết quả chính xác hơn nếu suy nghĩ của bạn không đặc biệt phù hợp với cách công cụ JS hoạt động. |
 
-I assert that hoisting *should* be used to refer to the **compile-time operation** of generating runtime instructions for the automatic registration of a variable at the beginning of its scope, each time that scope is entered.
+Tôi khẳng định rằng hoisting *nên* được sử dụng để chỉ **hoạt động thời gian biên dịch** của việc tạo các hướng dẫn thời gian chạy cho việc đăng ký tự động của một biến ở đầu phạm vi của nó, mỗi khi phạm vi đó được nhập.
 
-That's a subtle but important shift, from hoisting as a runtime behavior to its proper place among compile-time tasks.
+Đó là một sự thay đổi tinh tế nhưng quan trọng, từ hoisting như một hành vi thời gian chạy đến vị trí thích hợp của nó trong số các nhiệm vụ thời gian biên dịch.
 
-## Re-declaration?
+## Khai Báo Lại?
 
-What do you think happens when a variable is declared more than once in the same scope? Consider:
+Bạn nghĩ điều gì xảy ra khi một biến được khai báo nhiều hơn một lần trong cùng một phạm vi? Hãy xem xét:
 
 ```js
 var studentName = "Frank";
@@ -158,15 +158,15 @@ var studentName;
 console.log(studentName);   // ???
 ```
 
-What do you expect to be printed for that second message? Many believe the second `var studentName` has re-declared the variable (and thus "reset" it), so they expect `undefined` to be printed.
+Bạn mong đợi điều gì được in cho thông báo thứ hai đó? Nhiều người tin rằng `var studentName` thứ hai đã khai báo lại biến (và do đó "đặt lại" nó), vì vậy họ mong đợi `undefined` được in.
 
-But is there such a thing as a variable being "re-declared" in the same scope? No.
+Nhưng có một thứ như một biến được "khai báo lại" trong cùng một phạm vi không? Không.
 
-If you consider this program from the perspective of the hoisting metaphor, the code would be re-arranged like this for execution purposes:
+Nếu bạn xem xét chương trình này từ quan điểm của phép ẩn dụ hoisting, mã sẽ được sắp xếp lại như thế này cho mục đích thực thi:
 
 ```js
 var studentName;
-var studentName;    // clearly a pointless no-op!
+var studentName;    // rõ ràng là một no-op vô nghĩa!
 
 studentName = "Frank";
 console.log(studentName);
@@ -176,29 +176,29 @@ console.log(studentName);
 // Frank
 ```
 
-Since hoisting is actually about registering a variable at the beginning of a scope, there's nothing to be done in the middle of the scope where the original program actually had the second `var studentName` statement. It's just a no-op(eration), a pointless statement.
+Vì hoisting thực sự là về việc đăng ký một biến ở đầu phạm vi, không có gì để làm ở giữa phạm vi nơi chương trình ban đầu thực sự có câu lệnh `var studentName` thứ hai. Đó chỉ là một no-op(eration), một câu lệnh vô nghĩa.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| In the style of the conversation narrative from Chapter 2, *Compiler* would find the second `var` declaration statement and ask the *Scope Manager* if it had already seen a `studentName` identifier; since it had, there wouldn't be anything else to do. |
+| Theo phong cách của câu chuyện trò chuyện từ Chương 2, *Compiler* sẽ tìm thấy câu lệnh khai báo `var` thứ hai và hỏi *Scope Manager* nếu nó đã thấy một định danh `studentName`; vì nó đã có, sẽ không có gì khác để làm. |
 
-It's also important to point out that `var studentName;` doesn't mean `var studentName = undefined;`, as most assume. Let's prove they're different by considering this variation of the program:
+Cũng quan trọng để chỉ ra rằng `var studentName;` không có nghĩa là `var studentName = undefined;`, như hầu hết cho là. Hãy chứng minh chúng khác nhau bằng cách xem xét biến thể này của chương trình:
 
 ```js
 var studentName = "Frank";
 console.log(studentName);   // Frank
 
 var studentName;
-console.log(studentName);   // Frank <--- still!
+console.log(studentName);   // Frank <--- vẫn!
 
-// let's add the initialization explicitly
+// hãy thêm khởi tạo rõ ràng
 var studentName = undefined;
-console.log(studentName);   // undefined <--- see!?
+console.log(studentName);   // undefined <--- thấy chưa!?
 ```
 
-See how the explicit `= undefined` initialization produces a different outcome than assuming it happens implicitly when omitted? In the next section, we'll revisit this topic of initialization of variables from their declarations.
+Thấy cách khởi tạo `= undefined` rõ ràng tạo ra kết quả khác với việc giả định nó xảy ra ngầm định khi bị bỏ qua không? Trong phần tiếp theo, chúng ta sẽ xem lại chủ đề khởi tạo các biến từ các khai báo của chúng.
 
-A repeated `var` declaration of the same identifier name in a scope is effectively a do-nothing operation. Here's another illustration, this time across a function of the same name:
+Một khai báo `var` lặp lại của cùng tên định danh trong một phạm vi thực sự là một hoạt động không làm gì. Đây là một minh họa khác, lần này qua một hàm có cùng tên:
 
 ```js
 var greeting;
@@ -207,7 +207,7 @@ function greeting() {
     console.log("Hello!");
 }
 
-// basically, a no-op
+// về cơ bản, một no-op
 var greeting;
 
 typeof greeting;        // "function"
@@ -217,11 +217,11 @@ var greeting = "Hello!";
 typeof greeting;        // "string"
 ```
 
-The first `greeting` declaration registers the identifier to the scope, and because it's a `var` the auto-initialization will be `undefined`. The `function` declaration doesn't need to re-register the identifier, but because of *function hoisting* it overrides the auto-initialization to use the function reference. The second `var greeting` by itself doesn't do anything since `greeting` is already an identifier and *function hoisting* already took precedence for the auto-initialization.
+Khai báo `greeting` đầu tiên đăng ký định danh vào phạm vi, và vì nó là một `var` nên tự động khởi tạo sẽ là `undefined`. Khai báo `function` không cần đăng ký lại định danh, nhưng vì *function hoisting* nó ghi đè tự động khởi tạo để sử dụng tham chiếu hàm. `var greeting` thứ hai tự nó không làm gì vì `greeting` đã là một định danh và *function hoisting* đã ưu tiên cho tự động khởi tạo.
 
-Actually assigning `"Hello!"` to `greeting` changes its value from the initial function `greeting()` to the string; `var` itself doesn't have any effect.
+Thực sự gán `"Hello!"` cho `greeting` thay đổi giá trị của nó từ hàm `greeting()` ban đầu thành chuỗi; chính `var` không có bất kỳ hiệu ứng nào.
 
-What about repeating a declaration within a scope using `let` or `const`?
+Còn lặp lại một khai báo trong một phạm vi bằng cách sử dụng `let` hoặc `const` thì sao?
 
 ```js
 let studentName = "Frank";
@@ -231,9 +231,9 @@ console.log(studentName);
 let studentName = "Suzy";
 ```
 
-This program will not execute, but instead immediately throw a `SyntaxError`. Depending on your JS environment, the error message will indicate something like: "studentName has already been declared." In other words, this is a case where attempted "re-declaration" is explicitly not allowed!
+Chương trình này sẽ không thực thi, mà thay vào đó ngay lập tức ném ra một `SyntaxError`. Tùy thuộc vào môi trường JS của bạn, thông báo lỗi sẽ chỉ ra điều gì đó như: "studentName has already been declared." Nói cách khác, đây là một trường hợp mà cố gắng "khai báo lại" rõ ràng không được phép!
 
-It's not just that two declarations involving `let` will throw this error. If either declaration uses `let`, the other can be either `let` or `var`, and the error will still occur, as illustrated with these two variations:
+Không chỉ là hai khai báo liên quan đến `let` sẽ ném lỗi này. Nếu một trong hai khai báo sử dụng `let`, cái kia có thể là `let` hoặc `var`, và lỗi vẫn sẽ xảy ra, như được minh họa với hai biến thể này:
 
 ```js
 var studentName = "Frank";
@@ -241,7 +241,7 @@ var studentName = "Frank";
 let studentName = "Suzy";
 ```
 
-and:
+và:
 
 ```js
 let studentName = "Frank";
@@ -249,29 +249,29 @@ let studentName = "Frank";
 var studentName = "Suzy";
 ```
 
-In both cases, a `SyntaxError` is thrown on the *second* declaration. In other words, the only way to "re-declare" a variable is to use `var` for all (two or more) of its declarations.
+Trong cả hai trường hợp, một `SyntaxError` được ném ra trên khai báo *thứ hai*. Nói cách khác, cách duy nhất để "khai báo lại" một biến là sử dụng `var` cho tất cả (hai hoặc nhiều) khai báo của nó.
 
-But why disallow it? The reason for the error is not technical per se, as `var` "re-declaration" has always been allowed; clearly, the same allowance could have been made for `let`.
+Nhưng tại sao không cho phép nó? Lý do cho lỗi không phải là kỹ thuật per se, vì "khai báo lại" `var` luôn được phép; rõ ràng, cùng một sự cho phép có thể đã được thực hiện cho `let`.
 
-It's really more of a "social engineering" issue. "Re-declaration" of variables is seen by some, including many on the TC39 body, as a bad habit that can lead to program bugs. So when ES6 introduced `let`, they decided to prevent "re-declaration" with an error.
+Nó thực sự là một vấn đề "kỹ thuật xã hội" hơn. "Khai báo lại" các biến được một số người, bao gồm nhiều người trong cơ quan TC39, coi là một thói quen xấu có thể dẫn đến lỗi chương trình. Vì vậy, khi ES6 giới thiệu `let`, họ quyết định ngăn chặn "khai báo lại" với một lỗi.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| This is of course a stylistic opinion, not really a technical argument. Many developers agree with the position, and that's probably in part why TC39 included the error (as well as `let` conforming to `const`). But a reasonable case could have been made that staying consistent with `var`'s precedent was more prudent, and that such opinion-enforcement was best left to opt-in tooling like linters. In Appendix A, we'll explore whether `var` (and its associated behavior, like "re-declaration") can still be useful in modern JS. |
+| Tất nhiên đây là một ý kiến phong cách, không thực sự là một lập luận kỹ thuật. Nhiều nhà phát triển đồng ý với vị trí này, và đó có lẽ là một phần lý do tại sao TC39 bao gồm lỗi (cũng như `let` tuân theo `const`). Nhưng một trường hợp hợp lý có thể đã được thực hiện rằng duy trì nhất quán với tiền lệ của `var` là thận trọng hơn, và rằng việc thực thi ý kiến như vậy tốt nhất được để lại cho các công cụ tham gia như linters. Trong Phụ lục A, chúng ta sẽ khám phá liệu `var` (và hành vi liên quan của nó, như "khai báo lại") vẫn có thể hữu ích trong JS hiện đại. |
 
-When *Compiler* asks *Scope Manager* about a declaration, if that identifier has already been declared, and if either/both declarations were made with `let`, an error is thrown. The intended signal to the developer is "Stop relying on sloppy re-declaration!"
+Khi *Compiler* hỏi *Scope Manager* về một khai báo, nếu định danh đó đã được khai báo, và nếu một trong hai/cả hai khai báo được thực hiện với `let`, một lỗi được ném ra. Tín hiệu dự định cho nhà phát triển là "Ngừng dựa vào khai báo lại cẩu thả!"
 
-### Constants?
+### Hằng Số?
 
-The `const` keyword is more constrained than `let`. Like `let`, `const` cannot be repeated with the same identifier in the same scope. But there's actually an overriding technical reason why that sort of "re-declaration" is disallowed, unlike `let` which disallows "re-declaration" mostly for stylistic reasons.
+Từ khóa `const` bị hạn chế hơn `let`. Giống như `let`, `const` không thể được lặp lại với cùng định danh trong cùng một phạm vi. Nhưng thực sự có một lý do kỹ thuật ghi đè tại sao loại "khai báo lại" đó không được phép, không giống như `let` không cho phép "khai báo lại" chủ yếu vì lý do phong cách.
 
-The `const` keyword requires a variable to be initialized, so omitting an assignment from the declaration results in a `SyntaxError`:
+Từ khóa `const` yêu cầu một biến được khởi tạo, vì vậy bỏ qua một phép gán từ khai báo dẫn đến một `SyntaxError`:
 
 ```js
 const empty;   // SyntaxError
 ```
 
-`const` declarations create variables that cannot be re-assigned:
+Các khai báo `const` tạo ra các biến không thể được gán lại:
 
 ```js
 const studentName = "Frank";
@@ -281,26 +281,26 @@ console.log(studentName);
 studentName = "Suzy";   // TypeError
 ```
 
-The `studentName` variable cannot be re-assigned because it's declared with a `const`.
+Biến `studentName` không thể được gán lại vì nó được khai báo với một `const`.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| The error thrown when re-assigning `studentName` is a `TypeError`, not a `SyntaxError`. The subtle distinction here is actually pretty important, but unfortunately far too easy to miss. Syntax errors represent faults in the program that stop it from even starting execution. Type errors represent faults that arise during program execution. In the preceding snippet, `"Frank"` is printed out before we process the re-assignment of `studentName`, which then throws the error. |
+| Lỗi được ném ra khi gán lại `studentName` là một `TypeError`, không phải `SyntaxError`. Sự phân biệt tinh tế ở đây thực sự khá quan trọng, nhưng thật không may quá dễ bỏ lỡ. Lỗi cú pháp đại diện cho lỗi trong chương trình ngăn nó thậm chí bắt đầu thực thi. Lỗi kiểu đại diện cho lỗi phát sinh trong quá trình thực thi chương trình. Trong đoạn mã trước, `"Frank"` được in ra trước khi chúng ta xử lý gán lại `studentName`, sau đó ném ra lỗi. |
 
-So if `const` declarations cannot be re-assigned, and `const` declarations always require assignments, then we have a clear technical reason why `const` must disallow any "re-declarations": any `const` "re-declaration" would also necessarily be a `const` re-assignment, which can't be allowed!
+Vì vậy, nếu các khai báo `const` không thể được gán lại, và các khai báo `const` luôn yêu cầu gán, thì chúng ta có một lý do kỹ thuật rõ ràng tại sao `const` phải không cho phép bất kỳ "khai báo lại" nào: bất kỳ "khai báo lại" `const` nào cũng nhất thiết sẽ là một gán lại `const`, điều này không thể được phép!
 
 ```js
 const studentName = "Frank";
 
-// obviously this must be an error
+// rõ ràng đây phải là một lỗi
 const studentName = "Suzy";
 ```
 
-Since `const` "re-declaration" must be disallowed (on those technical grounds), TC39 essentially felt that `let` "re-declaration" should be disallowed as well, for consistency. It's debatable if this was the best choice, but at least we have the reasoning behind the decision.
+Vì "khai báo lại" `const` phải không được phép (trên những cơ sở kỹ thuật đó), TC39 về cơ bản cảm thấy rằng "khai báo lại" `let` cũng nên không được phép, để nhất quán. Có thể tranh luận nếu đây là lựa chọn tốt nhất, nhưng ít nhất chúng ta có lý do đằng sau quyết định.
 
-### Loops
+### Vòng Lặp
 
-So it's clear from our previous discussion that JS doesn't really want us to "re-declare" our variables within the same scope. That probably seems like a straightforward admonition, until you consider what it means for repeated execution of declaration statements in loops. Consider:
+Vì vậy, rõ ràng từ cuộc thảo luận trước đó của chúng ta rằng JS không thực sự muốn chúng ta "khai báo lại" các biến của chúng ta trong cùng một phạm vi. Điều đó có lẽ có vẻ như một lời khuyên đơn giản, cho đến khi bạn xem xét ý nghĩa của nó đối với việc thực thi lặp lại các câu lệnh khai báo trong các vòng lặp. Hãy xem xét:
 
 ```js
 var keepGoing = true;
@@ -312,11 +312,13 @@ while (keepGoing) {
 }
 ```
 
-Is `value` being "re-declared" repeatedly in this program? Will we get errors thrown? No.
+`value` có đang được "khai báo lại" lặp đi lặp lại trong chương trình này không? Chúng ta sẽ nhận được lỗi được ném ra không? Không.
 
-All the rules of scope (including "re-declaration" of `let`-created variables) are applied *per scope instance*. In other words, each time a scope is entered during execution, everything resets.
+Tất cả các quy tắc của phạm vi (bao gồm "khai báo lại" của các biến được tạo bằng `let`) được áp dụng *cho mỗi thể hiện phạm vi*. Nói cách khác, mỗi khi một phạm vi được nhập trong quá trình thực thi, mọi thứ đặt lại.
 
-Each loop iteration is its own new scope instance, and within each scope instance, `value` is only being declared once. So there's no attempted "re-declaration," and thus no error. Before we consider other loop forms, what if the `value` declaration in the previous snippet were changed to a `var`?
+Mỗi lần lặp vòng lặp là thể hiện phạm vi mới riêng của nó, và trong mỗi thể hiện phạm vi, `value` chỉ được khai báo một lần. Vì vậy, không có cố gắng "khai báo lại", và do đó không có lỗi.
+
+Trước khi chúng ta xem xét các dạng vòng lặp khác, điều gì sẽ xảy ra nếu khai báo `value` trong đoạn mã trước được thay đổi thành một `var`?
 
 ```js
 var keepGoing = true;
@@ -328,13 +330,13 @@ while (keepGoing) {
 }
 ```
 
-Is `value` being "re-declared" here, especially since we know `var` allows it? No. Because `var` is not treated as a block-scoping declaration (see Chapter 6), it attaches itself to the global scope. So there's just one `value` variable, in the same scope as `keepGoing` (global scope, in this case). No "re-declaration" here, either!
+`value` có đang được "khai báo lại" ở đây không, đặc biệt là vì chúng ta biết `var` cho phép nó? Không. Bởi vì `var` không được coi là một khai báo phạm vi khối (xem Chương 6), nó gắn chính nó vào phạm vi toàn cục. Vì vậy, chỉ có một biến `value`, trong cùng phạm vi với `keepGoing` (phạm vi toàn cục, trong trường hợp này). Không có "khai báo lại" ở đây, cả!
 
-One way to keep this all straight is to remember that `var`, `let`, and `const` keywords are effectively *removed* from the code by the time it starts to execute. They're handled entirely by the compiler.
+Một cách để giữ tất cả điều này thẳng thắn là nhớ rằng các từ khóa `var`, `let`, và `const` thực sự bị *xóa* khỏi mã vào thời điểm nó bắt đầu thực thi. Chúng được xử lý hoàn toàn bởi trình biên dịch.
 
-If you mentally erase the declarator keywords and then try to process the code, it should help you decide if and when (re-)declarations might occur.
+Nếu bạn xóa các từ khóa khai báo trong tâm trí và sau đó cố gắng xử lý mã, nó sẽ giúp bạn quyết định nếu và khi nào (khai báo lại) có thể xảy ra.
 
-What about "re-declaration" with other loop forms, like `for`-loops?
+Còn "khai báo lại" với các dạng vòng lặp khác, như vòng lặp `for` thì sao?
 
 ```js
 for (let i = 0; i < 3; i++) {
@@ -346,17 +348,17 @@ for (let i = 0; i < 3; i++) {
 // 2: 20
 ```
 
-It should be clear that there's only one `value` declared per scope instance. But what about `i`? Is it being "re-declared"?
+Nó nên rõ ràng rằng chỉ có một `value` được khai báo cho mỗi thể hiện phạm vi. Nhưng còn `i` thì sao? Nó có đang được "khai báo lại" không?
 
-To answer that, consider what scope `i` is in. It might seem like it would be in the outer (in this case, global) scope, but it's not. It's in the scope of `for`-loop body, just like `value` is. In fact, you could sorta think about that loop in this more verbose equivalent form:
+Để trả lời điều đó, hãy xem xét phạm vi nào mà `i` nằm trong. Có vẻ như nó sẽ nằm trong phạm vi bên ngoài (trong trường hợp này, toàn cục), nhưng nó không phải. Nó nằm trong phạm vi của thân vòng lặp `for`, giống như `value`. Trên thực tế, bạn có thể nghĩ về vòng lặp đó ở dạng tương đương dài dòng hơn này:
 
 ```js
 {
-    // a fictional variable for illustration
+    // một biến hư cấu để minh họa
     let $$i = 0;
 
     for ( /* nothing */; $$i < 3; $$i++) {
-        // here's our actual loop `i`!
+        // đây là `i` vòng lặp thực tế của chúng ta!
         let i = $$i;
 
         let value = i * 10;
@@ -368,28 +370,28 @@ To answer that, consider what scope `i` is in. It might seem like it would be in
 }
 ```
 
-Now it should be clear: the `i` and `value` variables are both declared exactly once **per scope instance**. No "re-declaration" here.
+Bây giờ nó nên rõ ràng: các biến `i` và `value` đều được khai báo chính xác một lần **cho mỗi thể hiện phạm vi**. Không có "khai báo lại" ở đây.
 
-What about other `for`-loop forms?
+Còn các dạng vòng lặp `for` khác thì sao?
 
 ```js
 for (let index in students) {
-    // this is fine
+    // điều này tốt
 }
 
 for (let student of students) {
-    // so is this
+    // điều này cũng vậy
 }
 ```
 
-Same thing with `for..in` and `for..of` loops: the declared variable is treated as *inside* the loop body, and thus is handled per iteration (aka, per scope instance). No "re-declaration."
+Điều tương tự với vòng lặp `for..in` và `for..of`: biến được khai báo được coi là *bên trong* thân vòng lặp, và do đó được xử lý cho mỗi lần lặp (hay còn gọi là, cho mỗi thể hiện phạm vi). Không có "khai báo lại."
 
-OK, I know you're thinking that I sound like a broken record at this point. But let's explore how `const` impacts these looping constructs. Consider:
+OK, tôi biết bạn đang nghĩ rằng tôi nghe như một đĩa hát bị hỏng tại thời điểm này. Nhưng hãy khám phá cách `const` ảnh hưởng đến các cấu trúc vòng lặp này. Hãy xem xét:
 
 ```js
 var keepGoing = true;
 while (keepGoing) {
-    // ooo, a shiny constant!
+    // ooo, một hằng số sáng bóng!
     const value = Math.random();
     if (value > 0.5) {
         keepGoing = false;
@@ -397,55 +399,55 @@ while (keepGoing) {
 }
 ```
 
-Just like the `let` variant of this program we saw earlier, `const` is being run exactly once within each loop iteration, so it's safe from "re-declaration" troubles. But things get more complicated when we talk about `for`-loops.
+Giống như biến thể `let` của chương trình này mà chúng ta đã thấy trước đó, `const` đang được chạy chính xác một lần trong mỗi lần lặp vòng lặp, vì vậy nó an toàn khỏi rắc rối "khai báo lại". Nhưng mọi thứ trở nên phức tạp hơn khi chúng ta nói về vòng lặp `for`.
 
-`for..in` and `for..of` are fine to use with `const`:
+`for..in` và `for..of` tốt để sử dụng với `const`:
 
 ```js
 for (const index in students) {
-    // this is fine
+    // điều này tốt
 }
 
 for (const student of students) {
-    // this is also fine
+    // điều này cũng tốt
 }
 ```
 
-But not the general `for`-loop:
+Nhưng không phải vòng lặp `for` chung:
 
 ```js
 for (const i = 0; i < 3; i++) {
-    // oops, this is going to fail with
-    // a Type Error after the first iteration
+    // rất tiếc, điều này sẽ thất bại với
+    // một Type Error sau lần lặp đầu tiên
 }
 ```
 
-What's wrong here? We could use `let` just fine in this construct, and we asserted that it creates a new `i` for each loop iteration scope, so it doesn't even seem to be a "re-declaration."
+Có gì sai ở đây? Chúng ta có thể sử dụng `let` tốt trong cấu trúc này, và chúng ta khẳng định rằng nó tạo ra một `i` mới cho mỗi phạm vi lần lặp vòng lặp, vì vậy nó thậm chí không có vẻ là một "khai báo lại."
 
-Let's mentally "expand" that loop like we did earlier:
+Hãy "mở rộng" vòng lặp đó trong tâm trí như chúng ta đã làm trước đó:
 
 ```js
 {
-    // a fictional variable for illustration
+    // một biến hư cấu để minh họa
     const $$i = 0;
 
     for ( ; $$i < 3; $$i++) {
-        // here's our actual loop `i`!
+        // đây là `i` vòng lặp thực tế của chúng ta!
         const i = $$i;
         // ..
     }
 }
 ```
 
-Do you spot the problem? Our `i` is indeed just created once inside the loop. That's not the problem. The problem is the conceptual `$$i` that must be incremented each time with the `$$i++` expression. That's **re-assignment** (not "re-declaration"), which isn't allowed for constants.
+Bạn có phát hiện vấn đề không? `i` của chúng ta thực sự chỉ được tạo một lần bên trong vòng lặp. Đó không phải là vấn đề. Vấn đề là `$$i` khái niệm phải được tăng mỗi lần với biểu thức `$$i++`. Đó là **gán lại** (không phải "khai báo lại"), điều này không được phép cho các hằng số.
 
-Remember, this "expanded" form is only a conceptual model to help you intuit the source of the problem. You might wonder if JS could have effectively made the `const $$i = 0` instead into `let $ii = 0`, which would then allow `const` to work with our classic `for`-loop? It's possible, but then it could have introduced potentially surprising exceptions to `for`-loop semantics.
+Hãy nhớ, dạng "mở rộng" này chỉ là một mô hình khái niệm để giúp bạn trực giác nguồn gốc của vấn đề. Bạn có thể tự hỏi liệu JS có thể đã làm cho `const $$i = 0` thay vào đó thành `let $$i = 0`, sau đó sẽ cho phép `const` hoạt động với vòng lặp `for` cổ điển của chúng ta không? Có thể, nhưng sau đó nó có thể đã giới thiệu các ngoại lệ có khả năng đáng ngạc nhiên cho ngữ nghĩa vòng lặp `for`.
 
-For example, it would have been a rather arbitrary (and likely confusing) nuanced exception to allow `i++` in the `for`-loop header to skirt strictness of the `const` assignment, but not allow other re-assignments of `i` inside the loop iteration, as is sometimes useful.
+Ví dụ, nó sẽ là một ngoại lệ sắc thái khá tùy tiện (và có khả năng gây nhầm lẫn) để cho phép `i++` trong tiêu đề vòng lặp `for` tránh sự nghiêm ngặt của gán `const`, nhưng không cho phép các gán lại khác của `i` bên trong lần lặp vòng lặp, như đôi khi hữu ích.
 
-The straightforward answer is: `const` can't be used with the classic `for`-loop form because of the required re-assignment.
+Câu trả lời đơn giản là: `const` không thể được sử dụng với dạng vòng lặp `for` cổ điển vì gán lại bắt buộc.
 
-Interestingly, if you don't do re-assignment, then it's valid:
+Thú vị là, nếu bạn không thực hiện gán lại, thì nó hợp lệ:
 
 ```js
 var keepGoing = true;
@@ -456,15 +458,15 @@ for (const i = 0; keepGoing; /* nothing here */ ) {
 }
 ```
 
-That works, but it's pointless. There's no reason to declare `i` in that position with a `const`, since the whole point of such a variable in that position is **to be used for counting iterations**. Just use a different loop form, like a `while` loop, or use a `let`!
+Điều đó hoạt động, nhưng nó vô nghĩa. Không có lý do để khai báo `i` ở vị trí đó với một `const`, vì toàn bộ điểm của một biến như vậy ở vị trí đó là **được sử dụng để đếm các lần lặp**. Chỉ cần sử dụng một dạng vòng lặp khác, như vòng lặp `while`, hoặc sử dụng một `let`!
 
-## Uninitialized Variables (aka, TDZ)
+## Biến Chưa Được Khởi Tạo (hay còn gọi là TDZ)
 
-With `var` declarations, the variable is "hoisted" to the top of its scope. But it's also automatically initialized to the `undefined` value, so that the variable can be used throughout the entire scope.
+Với các khai báo `var`, biến được "hoisted" lên đầu phạm vi của nó. Nhưng nó cũng được tự động khởi tạo thành giá trị `undefined`, để biến có thể được sử dụng trong toàn bộ phạm vi.
 
-However, `let` and `const` declarations are not quite the same in this respect.
+Tuy nhiên, các khai báo `let` và `const` không hoàn toàn giống nhau trong khía cạnh này.
 
-Consider:
+Hãy xem xét:
 
 ```js
 console.log(studentName);
@@ -473,16 +475,16 @@ console.log(studentName);
 let studentName = "Suzy";
 ```
 
-The result of this program is that a `ReferenceError` is thrown on the first line. Depending on your JS environment, the error message may say something like: "Cannot access studentName before initialization."
+Kết quả của chương trình này là một `ReferenceError` được ném ra trên dòng đầu tiên. Tùy thuộc vào môi trường JS của bạn, thông báo lỗi có thể nói điều gì đó như: "Cannot access studentName before initialization."
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The error message as seen here used to be much more vague or misleading. Thankfully, several of us in the community were successfully able to lobby for JS engines to improve this error message so it more accurately tells you what's wrong! |
+| Thông báo lỗi như được thấy ở đây từng mơ hồ hoặc gây hiểu lầm hơn nhiều. Rất may, một số người trong số chúng ta trong cộng đồng đã có thể vận động thành công cho các công cụ JS cải thiện thông báo lỗi này để nó chính xác hơn nói với bạn điều gì sai! |
 
-That error message is quite indicative of what's wrong: `studentName` exists on line 1, but it's not been initialized, so it cannot be used yet. Let's try this:
+Thông báo lỗi đó khá chỉ ra những gì sai: `studentName` tồn tại trên dòng 1, nhưng nó chưa được khởi tạo, vì vậy nó không thể được sử dụng. Hãy thử điều này:
 
 ```js
-studentName = "Suzy";   // let's try to initialize it!
+studentName = "Suzy";   // hãy thử khởi tạo nó!
 // ReferenceError
 
 console.log(studentName);
@@ -490,24 +492,24 @@ console.log(studentName);
 let studentName;
 ```
 
-Oops. We still get the `ReferenceError`, but now on the first line where we're trying to assign to (aka, initialize!) this so-called "uninitialized" variable `studentName`. What's the deal!?
+Rất tiếc. Chúng ta vẫn nhận được `ReferenceError`, nhưng bây giờ trên dòng đầu tiên nơi chúng ta đang cố gắng gán cho (hay còn gọi là, khởi tạo!) biến "chưa được khởi tạo" này `studentName`. Chuyện gì đang xảy ra!?
 
-The real question is, how do we initialize an uninitialized variable? For `let`/`const`, the **only way** to do so is with an assignment attached to a declaration statement. An assignment by itself is insufficient! Consider:
+Câu hỏi thực sự là, làm thế nào chúng ta khởi tạo một biến chưa được khởi tạo? Đối với `let`/`const`, cách **duy nhất** để làm như vậy là với một phép gán được gắn vào một câu lệnh khai báo. Một phép gán tự nó là không đủ! Hãy xem xét:
 
 ```js
 let studentName = "Suzy";
 console.log(studentName);   // Suzy
 ```
 
-Here, we are initializing the `studentName` (in this case, to `"Suzy"` instead of `undefined`) by way of the `let` declaration statement form that's coupled with an assignment.
+Ở đây, chúng ta đang khởi tạo `studentName` (trong trường hợp này, thành `"Suzy"` thay vì `undefined`) bằng cách dạng câu lệnh khai báo `let` được kết hợp với một phép gán.
 
-Alternatively:
+Hoặc:
 
 ```js
 // ..
 
 let studentName;
-// or:
+// hoặc:
 // let studentName = undefined;
 
 // ..
@@ -518,21 +520,21 @@ console.log(studentName);
 // Suzy
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| That's interesting! Recall from earlier, we said that `var studentName;` is *not* the same as `var studentName = undefined;`, but here with `let`, they behave the same. The difference comes down to the fact that `var studentName` automatically initializes at the top of the scope, where `let studentName` does not. |
+| Điều đó thú vị! Nhớ lại từ trước đó, chúng ta đã nói rằng `var studentName;` *không* giống với `var studentName = undefined;`, nhưng ở đây với `let`, chúng hoạt động giống nhau. Sự khác biệt xuất phát từ thực tế là `var studentName` tự động khởi tạo ở đầu phạm vi, trong khi `let studentName` thì không. |
 
-Remember that we've asserted a few times so far that *Compiler* ends up removing any `var`/`let`/`const` declarators, replacing them with the instructions at the top of each scope to register the appropriate identifiers.
+Hãy nhớ rằng chúng ta đã khẳng định một vài lần cho đến nay rằng *Compiler* kết thúc bằng việc xóa bất kỳ khai báo `var`/`let`/`const` nào, thay thế chúng bằng các hướng dẫn ở đầu mỗi phạm vi để đăng ký các định danh thích hợp.
 
-So if we analyze what's going on here, we see that an additional nuance is that *Compiler* is also adding an instruction in the middle of the program, at the point where the variable `studentName` was declared, to handle that declaration's auto-initialization. We cannot use the variable at any point prior to that initialization occurring. The same goes for `const` as it does for `let`.
+Vì vậy, nếu chúng ta phân tích những gì đang xảy ra ở đây, chúng ta thấy rằng một sắc thái bổ sung là *Compiler* cũng đang thêm một hướng dẫn ở giữa chương trình, tại điểm nơi biến `studentName` được khai báo, để xử lý tự động khởi tạo của khai báo đó. Chúng ta không thể sử dụng biến tại bất kỳ điểm nào trước khi tự động khởi tạo đó xảy ra. Điều tương tự cũng đúng cho `const` như nó làm cho `let`.
 
-The term coined by TC39 to refer to this *period of time* from the entering of a scope to where the auto-initialization of the variable occurs is: Temporal Dead Zone (TDZ).
+Thuật ngữ được đặt ra bởi TC39 để chỉ *khoảng thời gian* này từ việc nhập một phạm vi đến nơi tự động khởi tạo của biến xảy ra là: Vùng Chết Tạm thời (Temporal Dead Zone - TDZ).
 
-The TDZ is the time window where a variable exists but is still uninitialized, and therefore cannot be accessed in any way. Only the execution of the instructions left by *Compiler* at the point of the original declaration can do that initialization. After that moment, the TDZ is done, and the variable is free to be used for the rest of the scope.
+TDZ là cửa sổ thời gian nơi một biến tồn tại nhưng vẫn chưa được khởi tạo, và do đó không thể được truy cập theo bất kỳ cách nào. Chỉ việc thực thi các hướng dẫn được để lại bởi *Compiler* tại điểm của khai báo ban đầu mới có thể thực hiện khởi tạo đó. Sau thời điểm đó, TDZ hoàn thành, và biến tự do được sử dụng cho phần còn lại của phạm vi.
 
-A `var` also technically has a TDZ, but it's zero in length and thus unobservable to our programs! Only `let` and `const` have an observable TDZ.
+Một `var` cũng về mặt kỹ thuật có một TDZ, nhưng nó có độ dài bằng không và do đó không thể quan sát được đối với các chương trình của chúng ta! Chỉ `let` và `const` có TDZ có thể quan sát được.
 
-By the way, "temporal" in TDZ does indeed refer to *time* not *position in code*. Consider:
+Nhân tiện, "temporal" (tạm thời) trong TDZ thực sự đề cập đến *thời gian* không phải *vị trí trong mã*. Hãy xem xét:
 
 ```js
 askQuestion();
@@ -545,13 +547,13 @@ function askQuestion() {
 }
 ```
 
-Even though positionally the `console.log(..)` referencing `studentName` comes *after* the `let studentName` declaration, timing wise the `askQuestion()` function is invoked *before* the `let` statement is encountered, while `studentName` is still in its TDZ! Hence the error.
+Mặc dù về mặt vị trí `console.log(..)` tham chiếu `studentName` đến *sau* khai báo `let studentName`, về mặt thời gian hàm `askQuestion()` được gọi *trước* câu lệnh `let` được gặp, trong khi `studentName` vẫn đang trong TDZ của nó! Do đó lỗi.
 
-There's a common misconception that TDZ means `let` and `const` do not hoist. This is an inaccurate, or at least slightly misleading, claim. They definitely hoist.
+Có một quan niệm sai lầm phổ biến rằng TDZ có nghĩa là `let` và `const` không hoist. Đây là một tuyên bố không chính xác, hoặc ít nhất hơi gây hiểu lầm. Chúng chắc chắn hoist.
 
-The actual difference is that `let`/`const` declarations do not automatically initialize at the beginning of the scope, the way `var` does. The *debate* then is if the auto-initialization is *part of* hoisting, or not? I think auto-registration of a variable at the top of the scope (i.e., what I call "hoisting") and auto-initialization at the top of the scope (to `undefined`) are distinct operations and shouldn't be lumped together under the single term "hoisting."
+Sự khác biệt thực sự là các khai báo `let`/`const` không tự động khởi tạo ở đầu phạm vi, theo cách `var` làm. *Cuộc tranh luận* sau đó là liệu tự động khởi tạo có phải là *một phần của* hoisting, hay không? Tôi nghĩ tự động đăng ký một biến ở đầu phạm vi (tức là, những gì tôi gọi là "hoisting") và tự động khởi tạo ở đầu phạm vi (thành `undefined`) là các hoạt động riêng biệt và không nên được gộp lại với nhau dưới thuật ngữ đơn lẻ "hoisting."
 
-We've already seen that `let` and `const` don't auto-initialize at the top of the scope. But let's prove that `let` and `const` *do* hoist (auto-register at the top of the scope), courtesy of our friend shadowing (see "Shadowing" in Chapter 3):
+Chúng ta đã thấy rằng `let` và `const` không tự động khởi tạo ở đầu phạm vi. Nhưng hãy chứng minh rằng `let` và `const` *thực sự* hoist (tự động đăng ký ở đầu phạm vi), nhờ vào bạn của chúng ta shadowing (xem "Shadowing" trong Chương 3):
 
 ```js
 var studentName = "Kyle";
@@ -569,26 +571,26 @@ var studentName = "Kyle";
 }
 ```
 
-What's going to happen with the first `console.log(..)` statement? If `let studentName` didn't hoist to the top of the scope, then the first `console.log(..)` *should* print `"Kyle"`, right? At that moment, it would seem, only the outer `studentName` exists, so that's the variable `console.log(..)` should access and print.
+Điều gì sẽ xảy ra với câu lệnh `console.log(..)` đầu tiên? Nếu `let studentName` không hoist lên đầu phạm vi, thì `console.log(..)` đầu tiên *nên* in `"Kyle"`, đúng không? Tại thời điểm đó, có vẻ như, chỉ có `studentName` bên ngoài tồn tại, vì vậy đó là biến mà `console.log(..)` nên truy cập và in.
 
-But instead, the first `console.log(..)` throws a TDZ error, because in fact, the inner scope's `studentName` **was** hoisted (auto-registered at the top of the scope). What **didn't** happen (yet!) was the auto-initialization of that inner `studentName`; it's still uninitialized at that moment, hence the TDZ violation!
+Nhưng thay vào đó, `console.log(..)` đầu tiên ném ra một lỗi TDZ, bởi vì trên thực tế, `studentName` của phạm vi bên trong **đã** được hoisted (tự động đăng ký ở đầu phạm vi). Điều **không** xảy ra (chưa!) là tự động khởi tạo của `studentName` bên trong đó; nó vẫn chưa được khởi tạo tại thời điểm đó, do đó vi phạm TDZ!
 
-So to summarize, TDZ errors occur because `let`/`const` declarations *do* hoist their declarations to the top of their scopes, but unlike `var`, they defer the auto-initialization of their variables until the moment in the code's sequencing where the original declaration appeared. This window of time (hint: temporal), whatever its length, is the TDZ.
+Vì vậy, để tóm tắt, lỗi TDZ xảy ra vì các khai báo `let`/`const` *thực sự* hoist các khai báo của chúng lên đầu phạm vi của chúng, nhưng không giống như `var`, chúng hoãn tự động khởi tạo các biến của chúng cho đến thời điểm trong trình tự mã nơi khai báo ban đầu xuất hiện. Cửa sổ thời gian này (gợi ý: tạm thời), dù độ dài của nó là bao nhiêu, là TDZ.
 
-How can you avoid TDZ errors?
+Làm thế nào bạn có thể tránh lỗi TDZ?
 
-My advice: always put your `let` and `const` declarations at the top of any scope. Shrink the TDZ window to zero (or near zero) length, and then it'll be moot.
+Lời khuyên của tôi: luôn đặt các khai báo `let` và `const` của bạn ở đầu bất kỳ phạm vi nào. Thu nhỏ cửa sổ TDZ xuống độ dài bằng không (hoặc gần bằng không), và sau đó nó sẽ không còn vấn đề.
 
-But why is TDZ even a thing? Why didn't TC39 dictate that `let`/`const` auto-initialize the way `var` does? Just be patient, we'll come back to explore the *why* of TDZ in Appendix A.
+Nhưng tại sao TDZ lại là một thứ? Tại sao TC39 không ra lệnh rằng `let`/`const` tự động khởi tạo theo cách `var` làm? Chỉ cần kiên nhẫn, chúng ta sẽ quay lại khám phá *tại sao* của TDZ trong Phụ lục A.
 
-## Finally Initialized
+## Cuối Cùng Được Khởi Tạo
 
-Working with variables has much more nuance than it seems at first glance. *Hoisting*, *(re)declaration*, and the *TDZ* are common sources of confusion for developers, especially those who have worked in other languages before coming to JS. Before moving on, make sure your mental model is fully grounded on these aspects of JS scope and variables.
+Làm việc với các biến có nhiều sắc thái hơn vẻ ngoài ban đầu. *Hoisting*, *(khai báo lại)*, và *TDZ* là các nguồn gây nhầm lẫn phổ biến cho các nhà phát triển, đặc biệt là những người đã làm việc với các ngôn ngữ khác trước khi đến với JS. Trước khi tiếp tục, hãy đảm bảo mô hình tinh thần của bạn được căn cứ đầy đủ trên các khía cạnh này của phạm vi và biến JS.
 
-Hoisting is generally cited as an explicit mechanism of the JS engine, but it's really more a metaphor to describe the various ways JS handles variable declarations during compilation. But even as a metaphor, hoisting offers useful structure for thinking about the life-cycle of a variable—when it's created, when it's available to use, when it goes away.
+Hoisting thường được trích dẫn như một cơ chế rõ ràng của công cụ JS, nhưng nó thực sự là một phép ẩn dụ hơn để mô tả các cách khác nhau mà JS xử lý các khai báo biến trong quá trình biên dịch. Nhưng ngay cả như một phép ẩn dụ, hoisting cung cấp cấu trúc hữu ích để suy nghĩ về vòng đời của một biến—khi nó được tạo, khi nó có sẵn để sử dụng, khi nó biến mất.
 
-Declaration and re-declaration of variables tend to cause confusion when thought of as runtime operations. But if you shift to compile-time thinking for these operations, the quirks and *shadows* diminish.
+Khai báo và khai báo lại các biến có xu hướng gây nhầm lẫn khi được coi là các hoạt động thời gian chạy. Nhưng nếu bạn chuyển sang suy nghĩ thời gian biên dịch cho các hoạt động này, các quirks và *shadows* giảm bớt.
 
-The TDZ (temporal dead zone) error is strange and frustrating when encountered. Fortunately, TDZ is relatively straightforward to avoid if you're always careful to place `let`/`const` declarations at the top of any scope.
+Lỗi TDZ (vùng chết tạm thời) là kỳ lạ và bực bội khi gặp phải. Rất may, TDZ tương đối đơn giản để tránh nếu bạn luôn cẩn thận đặt các khai báo `let`/`const` ở đầu bất kỳ phạm vi nào.
 
-As you successfully navigate these twists and turns of variable scope, the next chapter will lay out the factors that guide our decisions to place our declarations in various scopes, especially nested blocks.
+Khi bạn điều hướng thành công những khúc quanh này của phạm vi biến, chương tiếp theo sẽ đặt ra các yếu tố hướng dẫn quyết định của chúng ta để đặt các khai báo của chúng ta trong các phạm vi khác nhau, đặc biệt là các khối lồng nhau.

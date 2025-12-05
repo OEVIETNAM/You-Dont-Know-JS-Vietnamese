@@ -1,16 +1,16 @@
-# You Don't Know JS Yet: Objects & Classes - 2nd Edition
+# You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang trong quá trình thực hiện |
 
-[Table of Contents](toc.md)
+[Mục lục](toc.md)
 
-* [Foreword](foreword.md) (by [Rick Waldron](https://twitter.com/rwaldron))
-* [Preface](../preface.md)
-* [Chapter 1: Object Foundations](ch1.md)
-* [Chapter 2: How Objects Work](ch2.md)
-* [Chapter 3: Classy Objects](ch3.md)
-* [Chapter 4: This Works](ch4.md)
-* [Chapter 5: Delegation](ch5.md)
-* [Thank You!](thanks.md)
+* [Lời tựa](foreword.md) (bởi [Rick Waldron](https://twitter.com/rwaldron))
+* [Lời nói đầu](../preface.md)
+* [Chương 1: Nền tảng Đối tượng](ch1.md)
+* [Chương 2: Cách Đối tượng Hoạt động](ch2.md)
+* [Chương 3: Đối tượng kiểu Lớp](ch3.md)
+* [Chương 4: This Hoạt động](ch4.md)
+* [Chương 5: Ủy quyền](ch5.md)
+* [Cảm ơn!](thanks.md)

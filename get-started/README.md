@@ -1,20 +1,21 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 
 <img src="images/cover.png" width="300">
 
 -----
 
-**[Purchase ebook/PDF from Leanpub](https://leanpub.com/ydkjsy-get-started)**
+**[Mua ebook/PDF từ Leanpub](https://leanpub.com/ydkjsy-get-started)**
 
 -----
 
-[Table of Contents](toc.md)
+[Mục lục](toc.md)
 
-* [Foreword](foreword.md) (by [Brian Holt](https://twitter.com/holtbt))
-* [Preface](../preface.md)
-* [Chapter 1: What Is JavaScript?](ch1.md)
-* [Chapter 2: Surveying JS](ch2.md)
-* [Chapter 3: Digging to the Roots of JS](ch3.md)
-* [Chapter 4: The Bigger Picture](ch4.md)
-* [Appendix A: Exploring Further](apA.md)
-* [Appendix B: Practice, Practice, Practice!](apB.md)
+* [Lời tựa](foreword.md) (bởi [Brian Holt](https://twitter.com/holtbt))
+* [Lời nói đầu](../preface.md)
+* [Chương 1: JavaScript là gì?](ch1.md)
+* [Chương 2: Khảo sát JS](ch2.md)
+* [Chương 3: Đào sâu vào gốc rễ của JS](ch3.md)
+* [Chương 4: Bức tranh toàn cảnh](ch4.md)
+* [Phụ lục A: Khám phá thêm](apA.md)
+* [Phụ lục B: Luyện tập, Luyện tập, Luyện tập!](apB.md)
+

@@ -1,68 +1,68 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 
-## Table of Contents
+## Mục Lục
 
-* Foreword
-* Preface
-* Chapter 1: What's the Scope?
-    * About This Book
-    * Compiled vs. Interpreted
-    * Compiling Code
-    * Compiler Speak
-    * Cheating: Run-Time Scope Modifications
-    * Lexical Scope
-* Chapter 2: Illustrating Lexical Scope
-    * Marbles, and Buckets, and Bubbles... Oh My!
-    * A Conversation Among Friends
-    * Nested Scope
-    * Continue the Conversation
-* Chapter 3: The Scope Chain
-    * "Lookup" Is (Mostly) Conceptual
-    * Shadowing
-    * Function Name Scope
-    * Arrow Functions
-    * Backing Out
-* Chapter 4: Around the Global Scope
-    * Why Global Scope?
-    * Where Exactly is this Global Scope?
+* Lời Tựa
+* Lời Nói Đầu
+* Chương 1: Phạm Vi Là Gì?
+    * Về Cuốn Sách Này
+    * Biên Dịch vs. Thông Dịch
+    * Biên Dịch Mã
+    * Ngôn Ngữ Trình Biên Dịch
+    * Gian Lận: Sửa Đổi Phạm Vi Thời Gian Chạy
+    * Phạm Vi Từ Vựng
+* Chương 2: Minh Họa Phạm Vi Từ Vựng
+    * Bi, và Thùng, và Bong Bóng... Ôi Trời!
+    * Một Cuộc Trò Chuyện Giữa Những Người Bạn
+    * Phạm Vi Lồng Nhau
+    * Tiếp Tục Cuộc Trò Chuyện
+* Chương 3: Chuỗi Phạm Vi
+    * "Tra Cứu" (Hầu Như) Là Khái Niệm
+    * Che Khuất (Shadowing)
+    * Phạm Vi Tên Hàm
+    * Hàm Mũi Tên
+    * Rút Lui
+* Chương 4: Xung Quanh Phạm Vi Toàn Cục
+    * Tại Sao Phạm Vi Toàn Cục?
+    * Chính Xác Thì Phạm Vi Toàn Cục Này Ở Đâu?
     * Global This
-    * Globally Aware
-* Chapter 5: The (Not So) Secret Lifecycle of Variables
-    * When Can I Use a Variable?
-    * Hoisting: Yet Another Metaphor
-    * Re-declaration?
-    * Uninitialized Variables (aka, TDZ)
-    * Finally Initialized
-* Chapter 6: Limiting Scope Exposure
-    * Least Exposure
-    * Hiding in Plain (Function) Scope
-    * Scoping with Blocks
-    * Function Declarations in Blocks
-    * Blocked Over
-* Chapter 7: Using Closures
-    * See the Closure
-    * The Closure Lifecycle and Garbage Collection (GC)
-    * An Alternative Perspective
-    * Why Closure?
-    * Closer to Closure
-* Chapter 8: The Module Pattern
-    * Encapsulation and Least Exposure (POLE)
-    * What is a Module?
+    * Nhận Thức Toàn Cục
+* Chương 5: Vòng Đời (Không Quá) Bí Mật Của Biến
+    * Khi Nào Tôi Có Thể Sử Dụng Một Biến?
+    * Hoisting: Lại Một Phép Ẩn Dụ Khác
+    * Khai Báo Lại?
+    * Biến Chưa Được Khởi Tạo (hay còn gọi là, TDZ)
+    * Cuối Cùng Đã Được Khởi Tạo
+* Chương 6: Giới Hạn Phơi Bày Phạm Vi
+    * Phơi Bày Tối Thiểu
+    * Ẩn Trong Phạm Vi (Hàm) Đơn Giản
+    * Phạm Vi Hóa Với Các Khối
+    * Khai Báo Hàm Trong Các Khối
+    * Bị Chặn Lại
+* Chương 7: Sử Dụng Closures
+    * Nhìn Thấy Closure
+    * Vòng Đời Closure và Thu Gom Rác (GC)
+    * Một Quan Điểm Thay Thế
+    * Tại Sao Closure?
+    * Gần Hơn Với Closure
+* Chương 8: Mẫu Module
+    * Đóng Gói và Phơi Bày Tối Thiểu (POLE)
+    * Module Là Gì?
     * Node CommonJS Modules
     * Modern ES Modules (ESM)
-    * Exit Scope
-* Appendix A: Exploring Further
-    * Implied Scopes
-    * Anonymous vs. Named Functions
-    * Hoisting: Functions and Variables
-    * The Case for `var`
-    * What's the Deal with TDZ?
-    * Are Synchronous Callbacks Still Closures?
-    * Classic Module Variations
-* Appendix B: Practice
-    * Buckets of Marbles
-    * Closure (PART 1)
-    * Closure (PART 2)
-    * Closure (PART 3)
+    * Thoát Phạm Vi
+* Phụ Lục A: Khám Phá Thêm
+    * Phạm Vi Ngụ Ý
+    * Hàm Ẩn Danh vs. Hàm Được Đặt Tên
+    * Hoisting: Hàm và Biến
+    * Trường Hợp Cho `var`
+    * Vấn Đề Với TDZ Là Gì?
+    * Các Callback Đồng Bộ Có Còn Là Closures Không?
+    * Các Biến Thể Module Cổ Điển
+* Phụ Lục B: Thực Hành
+    * Thùng Bi (Buckets of Marbles)
+    * Closure (PHẦN 1)
+    * Closure (PHẦN 2)
+    * Closure (PHẦN 3)
     * Modules
-    * Suggested Solutions
+    * Giải Pháp Đề Xuất

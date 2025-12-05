@@ -1,25 +1,25 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Chapter 4: Around the Global Scope
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Chương 4: Xung Quanh Phạm Vi Toàn Cục
 
-Chapter 3 mentioned the "global scope" several times, but you may still be wondering why a program's outermost scope is all that important in modern JS. The vast majority of work is now done inside of functions and modules rather than globally.
+Chương 3 đã đề cập đến "phạm vi toàn cục" nhiều lần, nhưng bạn vẫn có thể tự hỏi tại sao phạm vi ngoài cùng của một chương trình lại quan trọng đến vậy trong JS hiện đại. Phần lớn công việc hiện nay được thực hiện bên trong các hàm và module thay vì toàn cục.
 
-Is it good enough to just assert, "Avoid using the global scope," and be done with it?
+Liệu có đủ tốt để chỉ khẳng định, "Tránh sử dụng phạm vi toàn cục," và xong việc?
 
-The global scope of a JS program is a rich topic, with much more utility and nuance than you would likely assume. This chapter first explores how the global scope is (still) useful and relevant to writing JS programs today, then looks at differences in where and *how to access* the global scope in different JS environments.
+Phạm vi toàn cục của một chương trình JS là một chủ đề phong phú, với nhiều tiện ích và sắc thái hơn bạn có thể cho là. Chương này đầu tiên khám phá cách phạm vi toàn cục (vẫn) hữu ích và liên quan đến việc viết các chương trình JS ngày nay, sau đó xem xét sự khác biệt về nơi và *cách truy cập* phạm vi toàn cục trong các môi trường JS khác nhau.
 
-Fully understanding the global scope is critical in your mastery of using lexical scope to structure your programs.
+Hiểu đầy đủ phạm vi toàn cục là rất quan trọng trong việc làm chủ việc sử dụng phạm vi từ vựng để cấu trúc các chương trình của bạn.
 
-## Why Global Scope?
+## Tại Sao Phạm Vi Toàn Cục?
 
-It's likely no surprise to readers that most applications are composed of multiple (sometimes many!) individual JS files. So how exactly do all those separate files get stitched together in a single runtime context by the JS engine?
+Có lẽ không có gì ngạc nhiên với độc giả rằng hầu hết các ứng dụng được tạo thành từ nhiều (đôi khi rất nhiều!) tệp JS riêng lẻ. Vậy chính xác tất cả các tệp riêng biệt đó được ghép lại với nhau trong một ngữ cảnh thời gian chạy duy nhất bởi công cụ JS như thế nào?
 
-With respect to browser-executed applications, there are three main ways.
+Đối với các ứng dụng được thực thi trên trình duyệt, có ba cách chính.
 
-First, if you're directly using ES modules (not transpiling them into some other module-bundle format), these files are loaded individually by the JS environment. Each module then `import`s references to whichever other modules it needs to access. The separate module files cooperate with each other exclusively through these shared imports, without needing any shared outer scope.
+Đầu tiên, nếu bạn đang sử dụng trực tiếp các module ES (không chuyển đổi chúng thành một số định dạng gói module khác), các tệp này được tải riêng lẻ bởi môi trường JS. Sau đó, mỗi module `import` tham chiếu đến bất kỳ module nào khác mà nó cần truy cập. Các tệp module riêng biệt hợp tác với nhau độc quyền thông qua các import được chia sẻ này, mà không cần bất kỳ phạm vi bên ngoài được chia sẻ nào.
 
-Second, if you're using a bundler in your build process, all the files are typically concatenated together before delivery to the browser and JS engine, which then only processes one big file. Even with all the pieces of the application co-located in a single file, some mechanism is necessary for each piece to register a *name* to be referred to by other pieces, as well as some facility for that access to occur.
+Thứ hai, nếu bạn đang sử dụng một bundler trong quá trình xây dựng của mình, tất cả các tệp thường được nối với nhau trước khi gửi đến trình duyệt và công cụ JS, sau đó chỉ xử lý một tệp lớn. Ngay cả khi tất cả các phần của ứng dụng được đặt cùng nhau trong một tệp duy nhất, một số cơ chế là cần thiết để mỗi phần đăng ký một *tên* để được tham chiếu bởi các phần khác, cũng như một số cơ sở để truy cập đó xảy ra.
 
-In some build setups, the entire contents of the file are wrapped in a single enclosing scope, such as a wrapper function, universal module (UMD—see Appendix A), etc. Each piece can register itself for access from other pieces by way of local variables in that shared scope. For example:
+Trong một số thiết lập xây dựng, toàn bộ nội dung của tệp được bao bọc trong một phạm vi bao quanh duy nhất, chẳng hạn như một hàm bao bọc, module phổ quát (UMD—xem Phụ lục A), v.v. Mỗi phần có thể đăng ký chính nó để truy cập từ các phần khác bằng cách các biến cục bộ trong phạm vi được chia sẻ đó. Ví dụ:
 
 ```js
 (function wrappingOuterScope(){
@@ -39,13 +39,13 @@ In some build setups, the entire contents of the file are wrapped in a single en
 })();
 ```
 
-As shown, the `moduleOne` and `moduleTwo` local variables inside the `wrappingOuterScope()` function scope are declared so that these modules can access each other for their cooperation.
+Như được hiển thị, các biến cục bộ `moduleOne` và `moduleTwo` bên trong phạm vi hàm `wrappingOuterScope()` được khai báo để các module này có thể truy cập lẫn nhau để hợp tác.
 
-While the scope of `wrappingOuterScope()` is a function and not the full environment global scope, it does act as a sort of "application-wide scope," a bucket where all the top-level identifiers can be stored, though not in the real global scope. It's kind of like a stand-in for the global scope in that respect.
+Mặc dù phạm vi của `wrappingOuterScope()` là một hàm chứ không phải phạm vi toàn cục môi trường đầy đủ, nó hoạt động như một loại "phạm vi toàn ứng dụng", một xô nơi tất cả các định danh cấp cao nhất có thể được lưu trữ, mặc dù không phải trong phạm vi toàn cục thực sự. Nó giống như một người thay thế cho phạm vi toàn cục trong khía cạnh đó.
 
-And finally, the third way: whether a bundler tool is used for an application, or whether the (non-ES module) files are simply loaded in the browser individually (via `<script>` tags or other dynamic JS resource loading), if there is no single surrounding scope encompassing all these pieces, the **global scope** is the only way for them to cooperate with each other:
+Và cuối cùng, cách thứ ba: cho dù một công cụ bundler được sử dụng cho một ứng dụng, hoặc cho dù các tệp (không phải module ES) chỉ đơn giản được tải trong trình duyệt riêng lẻ (thông qua thẻ `<script>` hoặc tải tài nguyên JS động khác), nếu không có phạm vi bao quanh duy nhất bao gồm tất cả các phần này, **phạm vi toàn cục** là cách duy nhất để chúng hợp tác với nhau:
 
-A bundled file of this sort often looks something like this:
+Một tệp được gói loại này thường trông giống như thế này:
 
 ```js
 var moduleOne = (function one(){
@@ -62,68 +62,42 @@ var moduleTwo = (function two(){
 })();
 ```
 
-Here, since there is no surrounding function scope, these `moduleOne` and `moduleTwo` declarations are simply dropped into the global scope. This is effectively the same as if the files hadn't been concatenated, but loaded separately:
+Ở đây, vì không có phạm vi hàm bao quanh, các khai báo `moduleOne` và `moduleTwo` này chỉ đơn giản được thả vào phạm vi toàn cục. Điều này thực sự giống như thể các tệp không được nối, mà được tải riêng biệt.
 
-module1.js:
+Ngoài việc (có khả năng) giải thích cho nơi mã của ứng dụng nằm trong thời gian chạy, và cách mỗi phần có thể truy cập các phần khác để hợp tác, phạm vi toàn cục cũng là nơi:
 
-```js
-var moduleOne = (function one(){
-    // ..
-})();
-```
-
-module2.js:
-
-```js
-var moduleTwo = (function two(){
-    // ..
-
-    function callModuleOne() {
-        moduleOne.someMethod();
-    }
-
-    // ..
-})();
-```
-
-If these files are loaded separately as normal standalone .js files in a browser environment, each top-level variable declaration will end up as a global variable, since the global scope is the only shared resource between these two separate files—they're independent programs, from the perspective of the JS engine.
-
-In addition to (potentially) accounting for where an application's code resides during runtime, and how each piece is able to access the other pieces to cooperate, the global scope is also where:
-
-* JS exposes its built-ins:
-
+* JS phơi bày các built-in của nó:
     - primitives: `undefined`, `null`, `Infinity`, `NaN`
-    - natives: `Date()`, `Object()`, `String()`, etc.
-    - global functions: `eval()`, `parseInt()`, etc.
+    - natives: `Date()`, `Object()`, `String()`, v.v.
+    - global functions: `eval()`, `parseInt()`, v.v.
     - namespaces: `Math`, `Atomics`, `JSON`
     - friends of JS: `Intl`, `WebAssembly`
 
-* The environment hosting the JS engine exposes its own built-ins:
+* Môi trường lưu trữ công cụ JS phơi bày các built-in riêng của nó:
+    - `console` (và các phương thức của nó)
+    - DOM (`window`, `document`, v.v.)
+    - timers (`setTimeout(..)`, v.v.)
+    - web platform APIs: `navigator`, `history`, geolocation, WebRTC, v.v.
 
-    - `console` (and its methods)
-    - the DOM (`window`, `document`, etc)
-    - timers (`setTimeout(..)`, etc)
-    - web platform APIs: `navigator`, `history`, geolocation, WebRTC, etc.
+Đây chỉ là một số trong nhiều *globals* mà các chương trình của bạn sẽ tương tác.
 
-These are just some of the many *globals* your programs will interact with.
-
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Node also exposes several elements "globally," but they're technically not in the `global` scope: `require()`, `__dirname`, `module`, `URL`, and so on. |
+| Node cũng phơi bày một số phần tử "toàn cục", nhưng về mặt kỹ thuật chúng không nằm trong phạm vi `global`: `require()`, `__dirname`, `module`, `URL`, v.v. |
 
-Most developers agree that the global scope shouldn't just be a dumping ground for every variable in your application. That's a mess of bugs just waiting to happen. But it's also undeniable that the global scope is an important *glue* for practically every JS application.
+Hầu hết các nhà phát triển đồng ý rằng phạm vi toàn cục không nên chỉ là một bãi rác cho mọi biến trong ứng dụng của bạn. Đó là một mớ hỗn độn của các lỗi chỉ chờ đợi để xảy ra. Nhưng cũng không thể phủ nhận rằng phạm vi toàn cục là một *keo dán* quan trọng cho hầu như mọi ứng dụng JS.
 
-## Where Exactly is this Global Scope?
+## Chính Xác Phạm Vi Toàn Cục Này Ở Đâu?
 
-It might seem obvious that the global scope is located in the outermost portion of a file; that is, not inside any function or other block. But it's not quite as simple as that.
+Có vẻ rõ ràng rằng phạm vi toàn cục nằm ở phần ngoài cùng của một tệp; tức là, không bên trong bất kỳ hàm hoặc khối nào khác. Nhưng nó không hoàn toàn đơn giản như vậy.
 
-Different JS environments handle the scopes of your programs, especially the global scope, differently. It's quite common for JS developers to harbor misconceptions without even realizing it.
+Các môi trường JS khác nhau xử lý các phạm vi của các chương trình của bạn, đặc biệt là phạm vi toàn cục, khác nhau. Khá phổ biến đối với các nhà phát triển JS có những quan niệm sai lầm mà thậm chí không nhận ra.
 
-### Browser "Window"
+### "Window" Trình Duyệt
 
-With respect to treatment of the global scope, the most *pure* environment JS can be run in is as a standalone .js file loaded in a web page environment in a browser. I don't mean "pure" as in nothing automatically added—lots may be added!—but rather in terms of minimal intrusion on the code or interference with its expected global scope behavior.
+Đối với việc xử lý phạm vi toàn cục, môi trường *thuần khiết* nhất mà JS có thể chạy là như một tệp .js độc lập được tải trong môi trường trang web trong trình duyệt. Tôi không có nghĩa là "thuần khiết" như trong không có gì được tự động thêm vào—rất nhiều có thể được thêm vào!—mà là về mặt xâm nhập tối thiểu vào mã hoặc can thiệp với hành vi phạm vi toàn cục mong đợi của nó.
 
-Consider this .js file:
+Hãy xem xét tệp .js này:
 
 ```js
 var studentName = "Kyle";
@@ -136,9 +110,9 @@ hello();
 // Hello, Kyle!
 ```
 
-This code may be loaded in a web page environment using an inline `<script>` tag, a `<script src=..>` script tag in the markup, or even a dynamically created `<script>` DOM element. In all three cases, the `studentName` and `hello` identifiers are declared in the global scope.
+Mã này có thể được tải trong môi trường trang web bằng thẻ `<script>` nội tuyến, thẻ script `<script src=..>` trong đánh dấu, hoặc thậm chí một phần tử DOM `<script>` được tạo động. Trong cả ba trường hợp, các định danh `studentName` và `hello` được khai báo trong phạm vi toàn cục.
 
-That means if you access the global object (commonly, `window` in the browser), you'll find properties of those same names there:
+Điều đó có nghĩa là nếu bạn truy cập đối tượng toàn cục (thường là `window` trong trình duyệt), bạn sẽ tìm thấy các thuộc tính có cùng tên ở đó:
 
 ```js
 var studentName = "Kyle";
@@ -151,15 +125,15 @@ window.hello();
 // Hello, Kyle!
 ```
 
-That's the default behavior one would expect from a reading of the JS specification: the outer scope *is* the global scope and `studentName` is legitimately created as global variable.
+Đó là hành vi mặc định mà người ta mong đợi từ việc đọc đặc tả JS: phạm vi bên ngoài *là* phạm vi toàn cục và `studentName` được tạo hợp pháp như biến toàn cục.
 
-That's what I mean by *pure*. But unfortunately, that won't always be true of all JS environments you encounter, and that's often surprising to JS developers.
+Đó là những gì tôi có nghĩa là *thuần khiết*. Nhưng thật không may, điều đó sẽ không phải lúc nào cũng đúng với tất cả các môi trường JS bạn gặp, và điều đó thường đáng ngạc nhiên đối với các nhà phát triển JS.
 
-#### Globals Shadowing Globals
+#### Toàn Cục Che Khuất Toàn Cục
 
-Recall the discussion of shadowing (and global unshadowing) from Chapter 3, where one variable declaration can override and prevent access to a declaration of the same name from an outer scope.
+Nhớ lại cuộc thảo luận về shadowing (và global unshadowing) từ Chương 3, nơi một khai báo biến có thể ghi đè và ngăn chặn truy cập vào một khai báo có cùng tên từ phạm vi bên ngoài.
 
-An unusual consequence of the difference between a global variable and a global property of the same name is that, within just the global scope itself, a global object property can be shadowed by a global variable:
+Một hậu quả bất thường của sự khác biệt giữa một biến toàn cục và một thuộc tính toàn cục có cùng tên là, chỉ trong phạm vi toàn cục, một thuộc tính đối tượng toàn cục có thể bị che khuất bởi một biến toàn cục:
 
 ```js
 window.something = 42;
@@ -173,69 +147,21 @@ console.log(window.something);
 // 42
 ```
 
-The `let` declaration adds a `something` global variable but not a global object property (see Chapter 3). The effect then is that the `something` lexical identifier shadows the `something` global object property.
+Khai báo `let` thêm một biến toàn cục `something` nhưng không phải là một thuộc tính đối tượng toàn cục (xem Chương 3). Hiệu ứng sau đó là định danh từ vựng `something` che khuất thuộc tính đối tượng toàn cục `something`.
 
-It's almost certainly a bad idea to create a divergence between the global object and the global scope. Readers of your code will almost certainly be tripped up.
+Gần như chắc chắn là một ý tưởng tồi để tạo ra sự khác biệt giữa đối tượng toàn cục và phạm vi toàn cục. Người đọc mã của bạn gần như chắc chắn sẽ bị vấp ngã.
 
-A simple way to avoid this gotcha with global declarations: always use `var` for globals. Reserve `let` and `const` for block scopes (see "Scoping with Blocks" in Chapter 6).
-
-#### DOM Globals
-
-I asserted that a browser-hosted JS environment has the most *pure* global scope behavior we'll see. However, it's not entirely *pure*.
-
-One surprising behavior in the global scope you may encounter with browser-based JS applications: a DOM element with an `id` attribute automatically creates a global variable that references it.
-
-Consider this markup:
-
-```text
-<ul id="my-todo-list">
-   <li id="first">Write a book</li>
-   ..
-</ul>
-```
-
-And the JS for that page could include:
-
-```js
-first;
-// <li id="first">..</li>
-
-window["my-todo-list"];
-// <ul id="my-todo-list">..</ul>
-```
-
-If the `id` value is a valid lexical name (like `first`), the lexical variable is created. If not, the only way to access that global is through the global object (`window[..]`).
-
-The auto-registration of all `id`-bearing DOM elements as global variables is an old legacy browser behavior that nevertheless must remain because so many old sites still rely on it. My advice is never to use these global variables, even though they will always be silently created.
-
-#### What's in a (Window) Name?
-
-Another global scope oddity in browser-based JS:
-
-```js
-var name = 42;
-
-console.log(name, typeof name);
-// "42" string
-```
-
-`window.name` is a pre-defined "global" in a browser context; it's a property on the global object, so it seems like a normal global variable (yet it's anything but "normal").
-
-We used `var` for our declaration, which **does not** shadow the pre-defined `name` global property. That means, effectively, the `var` declaration is ignored, since there's already a global scope object property of that name. As we discussed earlier, had we used `let name`, we would have shadowed `window.name` with a separate global `name` variable.
-
-But the truly surprising behavior is that even though we assigned the number `42` to `name` (and thus `window.name`), when we then retrieve its value, it's a string `"42"`! In this case, the weirdness is because `name` is actually a pre-defined getter/setter on the `window` object, which insists on its value being a string value. Yikes!
-
-With the exception of some rare corner cases like DOM element ID's and `window.name`, JS running as a standalone file in a browser page has some of the most *pure* global scope behavior we will encounter.
+Một cách đơn giản để tránh gotcha này với các khai báo toàn cục: luôn sử dụng `var` cho globals. Dành `let` và `const` cho phạm vi khối (xem "Phạm Vi với Khối" trong Chương 6).
 
 ### Web Workers
 
-Web Workers are a web platform extension on top of browser-JS behavior, which allows a JS file to run in a completely separate thread (operating system wise) from the thread that's running the main JS program.
+Web Workers là một phần mở rộng nền tảng web trên đỉnh hành vi browser-JS, cho phép một tệp JS chạy trong một luồng hoàn toàn riêng biệt (theo hệ điều hành) từ luồng đang chạy chương trình JS chính.
 
-Since these Web Worker programs run on a separate thread, they're restricted in their communications with the main application thread, to avoid/limit race conditions and other complications. Web Worker code does not have access to the DOM, for example. Some web APIs are, however, made available to the worker, such as `navigator`.
+Vì các chương trình Web Worker này chạy trên một luồng riêng biệt, chúng bị hạn chế trong giao tiếp của chúng với luồng ứng dụng chính, để tránh/giới hạn các điều kiện race và các biến chứng khác. Mã Web Worker không có quyền truy cập vào DOM, ví dụ. Tuy nhiên, một số web API được cung cấp cho worker, chẳng hạn như `navigator`.
 
-Since a Web Worker is treated as a wholly separate program, it does not share the global scope with the main JS program. However, the browser's JS engine is still running the code, so we can expect similar *purity* of its global scope behavior. Since there is no DOM access, the `window` alias for the global scope doesn't exist.
+Vì Web Worker được coi là một chương trình hoàn toàn riêng biệt, nó không chia sẻ phạm vi toàn cục với chương trình JS chính. Tuy nhiên, công cụ JS của trình duyệt vẫn đang chạy mã, vì vậy chúng ta có thể mong đợi *sự thuần khiết* tương tự của hành vi phạm vi toàn cục của nó. Vì không có quyền truy cập DOM, bí danh `window` cho phạm vi toàn cục không tồn tại.
 
-In a Web Worker, the global object reference is typically made using `self`:
+Trong Web Worker, tham chiếu đối tượng toàn cục thường được thực hiện bằng cách sử dụng `self`:
 
 ```js
 var studentName = "Kyle";
@@ -252,33 +178,13 @@ self.studentID;
 // undefined
 ```
 
-Just as with main JS programs, `var` and `function` declarations create mirrored properties on the global object (aka, `self`), where other declarations (`let`, etc) do not.
-
-So again, the global scope behavior we're seeing here is about as *pure* as it gets for running JS programs; perhaps it's even more *pure* since there's no DOM to muck things up!
-
-### Developer Tools Console/REPL
-
-Recall from Chapter 1 in *Get Started* that Developer Tools don't create a completely adherent JS environment. They do process JS code, but they also lean in favor of the UX interaction being most friendly to developers (aka, developer experience, or DX).
-
-In some cases, favoring DX when typing in short JS snippets, over the normal strict steps expected for processing a full JS program, produces observable differences in code behavior between programs and tools. For example, certain error conditions applicable to a JS program may be relaxed and not displayed when the code is entered into a developer tool.
-
-With respect to our discussions here about scope, such observable differences in behavior may include:
-
-* The behavior of the global scope
-
-* Hoisting (see Chapter 5)
-
-* Block-scoping declarators (`let` / `const`, see Chapter 6) when used in the outermost scope
-
-Although it might seem, while using the console/REPL, that statements entered in the outermost scope are being processed in the real global scope, that's not quite accurate. Such tools typically emulate the global scope position to an extent; it's emulation, not strict adherence. These tool environments prioritize developer convenience, which means that at times (such as with our current discussions regarding scope), observed behavior may deviate from the JS specification.
-
-The take-away is that Developer Tools, while optimized to be convenient and useful for a variety of developer activities, are **not** suitable environments to determine or verify explicit and nuanced behaviors of an actual JS program context.
+Giống như với các chương trình JS chính, các khai báo `var` và `function` tạo ra các thuộc tính được phản chiếu trên đối tượng toàn cục (hay còn gọi là `self`), trong khi các khai báo khác (`let`, v.v.) thì không.
 
 ### ES Modules (ESM)
 
-ES6 introduced first-class support for the module pattern (covered in Chapter 8). One of the most obvious impacts of using ESM is how it changes the behavior of the observably top-level scope in a file.
+ES6 đã giới thiệu hỗ trợ hạng nhất cho mẫu module (được đề cập trong Chương 8). Một trong những tác động rõ ràng nhất của việc sử dụng ESM là cách nó thay đổi hành vi của phạm vi cấp cao nhất có thể quan sát được trong một tệp.
 
-Recall this code snippet from earlier (which we'll adjust to ESM format by using the `export` keyword):
+Nhớ lại đoạn mã này từ trước đó (mà chúng ta sẽ điều chỉnh sang định dạng ESM bằng cách sử dụng từ khóa `export`):
 
 ```js
 var studentName = "Kyle";
@@ -293,23 +199,21 @@ hello();
 export hello;
 ```
 
-If that code is in a file that's loaded as an ES module, it will still run exactly the same. However, the observable effects, from the overall application perspective, will be different.
+Nếu mã đó nằm trong một tệp được tải như một module ES, nó vẫn sẽ chạy chính xác như vậy. Tuy nhiên, các hiệu ứng có thể quan sát được, từ quan điểm ứng dụng tổng thể, sẽ khác.
 
-Despite being declared at the top level of the (module) file, in the outermost obvious scope, `studentName` and `hello` are not global variables. Instead, they are module-wide, or if you prefer, "module-global."
+Mặc dù được khai báo ở cấp cao nhất của tệp (module), trong phạm vi rõ ràng ngoài cùng, `studentName` và `hello` không phải là biến toàn cục. Thay vào đó, chúng là toàn module, hoặc nếu bạn thích, "module-global".
 
-However, in a module there's no implicit "module-wide scope object" for these top-level declarations to be added to as properties, as there is when declarations appear in the top-level of non-module JS files. This is not to say that global variables cannot exist or be accessed in such programs. It's just that global variables don't get *created* by declaring variables in the top-level scope of a module.
+Tuy nhiên, trong một module không có "đối tượng phạm vi toàn module" ngầm định cho các khai báo cấp cao nhất này được thêm vào như thuộc tính, như có khi các khai báo xuất hiện ở cấp cao nhất của các tệp JS không phải module. Điều này không có nghĩa là các biến toàn cục không thể tồn tại hoặc được truy cập trong các chương trình như vậy. Chỉ là các biến toàn cục không được *tạo* bằng cách khai báo các biến trong phạm vi cấp cao nhất của một module.
 
-The module's top-level scope is descended from the global scope, almost as if the entire contents of the module were wrapped in a function. Thus, all variables that exist in the global scope (whether they're on the global object or not!) are available as lexical identifiers from inside the module's scope.
+Phạm vi cấp cao nhất của module được kế thừa từ phạm vi toàn cục, gần như thể toàn bộ nội dung của module được bao bọc trong một hàm. Do đó, tất cả các biến tồn tại trong phạm vi toàn cục (cho dù chúng có trên đối tượng toàn cục hay không!) đều có sẵn như các định danh từ vựng từ bên trong phạm vi của module.
 
-ESM encourages a minimization of reliance on the global scope, where you import whatever modules you may need for the current module to operate. As such, you less often see usage of the global scope or its global object.
-
-However, as noted earlier, there are still plenty of JS and web globals that you will continue to access from the global scope, whether you realize it or not!
+ESM khuyến khích giảm thiểu sự phụ thuộc vào phạm vi toàn cục, nơi bạn import bất kỳ module nào bạn có thể cần cho module hiện tại để hoạt động. Như vậy, bạn ít thấy việc sử dụng phạm vi toàn cục hoặc đối tượng toàn cục của nó hơn.
 
 ### Node
 
-One aspect of Node that often catches JS developers off-guard is that Node treats every single .js file that it loads, including the main one you start the Node process with, as a *module* (ES module or CommonJS module, see Chapter 8). The practical effect is that the top level of your Node programs **is never actually the global scope**, the way it is when loading a non-module file in the browser.
+Một khía cạnh của Node thường bắt các nhà phát triển JS không chuẩn bị là Node coi mọi tệp .js đơn lẻ mà nó tải, bao gồm cả tệp chính bạn bắt đầu quá trình Node, như một *module* (module ES hoặc module CommonJS, xem Chương 8). Hiệu ứng thực tế là cấp cao nhất của các chương trình Node của bạn **không bao giờ thực sự là phạm vi toàn cục**, theo cách nó khi tải một tệp không phải module trong trình duyệt.
 
-As of time of this writing, Node has recently added support for ES modules. But additionally, Node has from its beginning supported a module format referred to as "CommonJS", which looks like this:
+Tại thời điểm viết bài này, Node gần đây đã thêm hỗ trợ cho các module ES. Nhưng ngoài ra, Node đã từ đầu hỗ trợ một định dạng module được gọi là "CommonJS", trông như thế này:
 
 ```js
 var studentName = "Kyle";
@@ -324,9 +228,9 @@ hello();
 module.exports.hello = hello;
 ```
 
-Before processing, Node effectively wraps such code in a function, so that the `var` and `function` declarations are contained in that wrapping function's scope, **not** treated as global variables.
+Trước khi xử lý, Node thực sự bao bọc mã như vậy trong một hàm, để các khai báo `var` và `function` được chứa trong phạm vi hàm bao bọc đó, **không** được coi là biến toàn cục.
 
-Envision the preceding code as being seen by Node as this (illustrative, not actual):
+Hãy tưởng tượng mã trước đó được Node nhìn thấy như thế này (minh họa, không thực tế):
 
 ```js
 function Module(module,require,__dirname,...) {
@@ -343,13 +247,13 @@ function Module(module,require,__dirname,...) {
 }
 ```
 
-Node then essentially invokes the added `Module(..)` function to run your module. You can clearly see here why `studentName` and `hello` identifiers are not global, but rather declared in the module scope.
+Node sau đó về cơ bản gọi hàm `Module(..)` được thêm vào để chạy module của bạn. Bạn có thể thấy rõ ở đây tại sao các định danh `studentName` và `hello` không phải là toàn cục, mà được khai báo trong phạm vi module.
 
-As noted earlier, Node defines a number of "globals" like `require()`, but they're not actually identifiers in the global scope (nor properties of the global object). They're injected in the scope of every module, essentially a bit like the parameters listed in the `Module(..)` function declaration.
+Như đã lưu ý trước đó, Node định nghĩa một số "globals" như `require()`, nhưng chúng không thực sự là các định danh trong phạm vi toàn cục (cũng không phải là thuộc tính của đối tượng toàn cục). Chúng được tiêm vào phạm vi của mọi module, về cơ bản giống như các tham số được liệt kê trong khai báo hàm `Module(..)`.
 
-So how do you define actual global variables in Node? The only way to do so is to add properties to another of Node's automatically provided "globals," which is ironically called `global`. `global` is a reference to the real global scope object, somewhat like using `window` in a browser JS environment.
+Vậy làm thế nào để bạn định nghĩa các biến toàn cục thực sự trong Node? Cách duy nhất để làm như vậy là thêm các thuộc tính vào một "global" khác được Node tự động cung cấp, mà một cách trớ trêu được gọi là `global`. `global` là một tham chiếu đến đối tượng phạm vi toàn cục thực sự, hơi giống như sử dụng `window` trong môi trường JS trình duyệt.
 
-Consider:
+Hãy xem xét:
 
 ```js
 global.studentName = "Kyle";
@@ -364,40 +268,40 @@ hello();
 module.exports.hello = hello;
 ```
 
-Here we add `studentName` as a property on the `global` object, and then in the `console.log(..)` statement we're able to access `studentName` as a normal global variable.
+Ở đây chúng ta thêm `studentName` như một thuộc tính trên đối tượng `global`, và sau đó trong câu lệnh `console.log(..)` chúng ta có thể truy cập `studentName` như một biến toàn cục bình thường.
 
-Remember, the identifier `global` is not defined by JS; it's specifically defined by Node.
+Hãy nhớ rằng, định danh `global` không được định nghĩa bởi JS; nó được định nghĩa cụ thể bởi Node.
 
 ## Global This
 
-Reviewing the JS environments we've looked at so far, a program may or may not:
+Xem xét các môi trường JS mà chúng ta đã xem xét cho đến nay, một chương trình có thể hoặc không thể:
 
-* Declare a global variable in the top-level scope with `var` or `function` declarations—or `let`, `const`, and `class`.
+* Khai báo một biến toàn cục trong phạm vi cấp cao nhất với các khai báo `var` hoặc `function`—hoặc `let`, `const`, và `class`.
 
-* Also add global variables declarations as properties of the global scope object if `var` or `function` are used for the declaration.
+* Cũng thêm các khai báo biến toàn cục như thuộc tính của đối tượng phạm vi toàn cục nếu `var` hoặc `function` được sử dụng cho khai báo.
 
-* Refer to the global scope object (for adding or retrieving global variables, as properties) with `window`, `self`, or `global`.
+* Tham chiếu đến đối tượng phạm vi toàn cục (để thêm hoặc truy xuất các biến toàn cục, như thuộc tính) với `window`, `self`, hoặc `global`.
 
-I think it's fair to say that global scope access and behavior is more complicated than most developers assume, as the preceding sections have illustrated. But the complexity is never more obvious than in trying to nail down a universally applicable reference to the global scope object.
+Tôi nghĩ rằng công bằng khi nói rằng truy cập và hành vi phạm vi toàn cục phức tạp hơn hầu hết các nhà phát triển cho là, như các phần trước đã minh họa. Nhưng sự phức tạp không bao giờ rõ ràng hơn khi cố gắng xác định một tham chiếu có thể áp dụng phổ quát cho đối tượng phạm vi toàn cục.
 
-Yet another "trick" for obtaining a reference to the global scope object looks like:
+Một "thủ thuật" khác để có được một tham chiếu đến đối tượng phạm vi toàn cục trông như thế này:
 
 ```js
 const theGlobalScopeObject =
     (new Function("return this"))();
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| A function can be dynamically constructed from code stored in a string value with the `Function()` constructor, similar to `eval(..)` (see "Cheating: Runtime Scope Modifications" in Chapter 1). Such a function will automatically be run in non-strict-mode (for legacy reasons) when invoked with the normal `()` function invocation as shown; its `this` will point at the global object. See the third book in the series, *Objects & Classes*, for more information on determining `this` bindings. |
+| Một hàm có thể được xây dựng động từ mã được lưu trữ trong một giá trị chuỗi với constructor `Function()`, tương tự như `eval(..)` (xem "Gian Lận: Sửa Đổi Phạm Vi Thời Gian Chạy" trong Chương 1). Một hàm như vậy sẽ tự động được chạy trong chế độ không nghiêm ngặt (vì lý do di sản) khi được gọi với lệnh gọi hàm `()` bình thường như được hiển thị; `this` của nó sẽ trỏ đến đối tượng toàn cục. Xem cuốn sách thứ ba trong bộ, *Objects & Classes*, để biết thêm thông tin về xác định ràng buộc `this`. |
 
-So, we have `window`, `self`, `global`, and this ugly `new Function(..)` trick. That's a lot of different ways to try to get at this global object. Each has its pros and cons.
+Vì vậy, chúng ta có `window`, `self`, `global`, và thủ thuật xấu xí `new Function(..)` này. Đó là rất nhiều cách khác nhau để cố gắng đạt được đối tượng toàn cục này. Mỗi cái có ưu và nhược điểm của nó.
 
-Why not introduce yet another!?!?
+Tại sao không giới thiệu thêm một cái nữa!?!?
 
-As of ES2020, JS has finally defined a standardized reference to the global scope object, called `globalThis`. So, subject to the recency of the JS engines your code runs in, you can use `globalThis` in place of any of those other approaches.
+Kể từ ES2020, JS cuối cùng đã định nghĩa một tham chiếu tiêu chuẩn hóa cho đối tượng phạm vi toàn cục, được gọi là `globalThis`. Vì vậy, tùy thuộc vào tính gần đây của các công cụ JS mà mã của bạn chạy trong đó, bạn có thể sử dụng `globalThis` thay cho bất kỳ cách tiếp cận nào trong số đó.
 
-We could even attempt to define a cross-environment polyfill that's safer across pre-`globalThis` JS environments, such as:
+Chúng ta thậm chí có thể cố gắng định nghĩa một polyfill đa môi trường an toàn hơn trên các môi trường JS trước `globalThis`, chẳng hạn như:
 
 ```js
 const theGlobalScopeObject =
@@ -408,14 +312,12 @@ const theGlobalScopeObject =
     (new Function("return this"))();
 ```
 
-Phew! That's certainly not ideal, but it works if you find yourself needing a reliable global scope reference.
+Phew! Điều đó chắc chắn không lý tưởng, nhưng nó hoạt động nếu bạn thấy mình cần một tham chiếu phạm vi toàn cục đáng tin cậy.
 
-(The proposed name `globalThis` was fairly controversial while the feature was being added to JS. Specifically, I and many others felt the "this" reference in its name was misleading, since the reason you reference this object is to access to the global scope, never to access some sort of global/default `this` binding. There were many other names considered, but for a variety of reasons ruled out. Unfortunately, the name chosen ended up as a last resort. If you plan to interact with the global scope object in your programs, to reduce confusion, I strongly recommend choosing a better name, such as (the laughably long but accurate!) `theGlobalScopeObject` used here.)
+## Nhận Thức Toàn Cục
 
-## Globally Aware
+Phạm vi toàn cục có mặt và liên quan trong mọi chương trình JS, mặc dù các mẫu hiện đại để tổ chức mã thành các module giảm nhấn mạnh nhiều sự phụ thuộc vào việc lưu trữ các định danh trong không gian tên đó.
 
-The global scope is present and relevant in every JS program, even though modern patterns for organizing code into modules de-emphasizes much of the reliance on storing identifiers in that namespace.
+Tuy nhiên, khi mã của chúng ta lan rộng ngày càng nhiều ra ngoài giới hạn của trình duyệt, đặc biệt quan trọng là chúng ta có một sự nắm bắt vững chắc về sự khác biệt trong cách phạm vi toàn cục (và đối tượng phạm vi toàn cục!) hoạt động trên các môi trường JS khác nhau.
 
-Still, as our code proliferates more and more beyond the confines of the browser, it's especially important we have a solid grasp on the differences in how the global scope (and global scope object!) behave across different JS environments.
-
-With the big picture of global scope now sharper in focus, the next chapter again descends into the deeper details of lexical scope, examining how and when variables can be used.
+Với bức tranh toàn cảnh của phạm vi toàn cục bây giờ rõ nét hơn trong tiêu điểm, chương tiếp theo một lần nữa đi sâu vào các chi tiết sâu hơn của phạm vi từ vựng, kiểm tra cách và khi nào các biến có thể được sử dụng.

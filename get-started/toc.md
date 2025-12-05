@@ -1,45 +1,45 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 
-## Table of Contents
+## Mục lục
 
-* Foreword
-* Preface
-* Chapter 1: What Is JavaScript?
-    * About This Book
-    * What's With That Name?
-    * Language Specification
-    * Many Faces
-    * Backwards & Forwards
-    * What's in an Interpretation?
-    * Strictly Speaking
-    * Defined
-* Chapter 2: Surveying JS
-    * Each File is a Program
-    * Values
-    * Declaring and Using Variables
-    * Functions
-    * Comparisons
-    * How We Organize in JS
-    * The Rabbit Hole Deepens
-* Chapter 3: Digging To The Roots Of JS
-    * Iteration
+* Lời tựa
+* Lời nói đầu
+* Chương 1: JavaScript là gì?
+    * Về cuốn sách này
+    * Cái tên đó là sao?
+    * Đặc tả ngôn ngữ
+    * Nhiều bộ mặt
+    * Tương thích ngược & xuôi
+    * Có gì trong việc thông dịch?
+    * Nói một cách nghiêm túc
+    * Định nghĩa
+* Chương 2: Khảo sát JS
+    * Mỗi tập tin là một chương trình
+    * Giá trị
+    * Khai báo và sử dụng biến
+    * Hàm
+    * So sánh
+    * Cách chúng ta tổ chức trong JS
+    * Cái hố thỏ sâu hơn
+* Chương 3: Đào sâu vào gốc rễ của JS
+    * Lặp
     * Closure
-    * `this` Keyword
+    * Từ khóa `this`
     * Prototypes
-    * Asking "Why?"
-* Chapter 4: The Bigger Picture
-    * Pillar 1: Scope and Closure
-    * Pillar 2: Prototypes
-    * Pillar 3: Types and Coercion
-    * With the Grain
-    * In Order
-* Appendix A: Exploring Further
-    * Values vs. References
-    * So Many Function Forms
-    * Coercive Conditional Comparison
-    * Prototypal "Classes"
-* Appendix B: Practice, Practice, Practice!
-    * Practicing Comparisons
-    * Practicing Closure
-    * Practicing Prototypes
-    * Suggested Solutions
+    * Hỏi "Tại sao?"
+* Chương 4: Bức tranh toàn cảnh
+    * Trụ cột 1: Phạm vi và Closure
+    * Trụ cột 2: Prototypes
+    * Trụ cột 3: Kiểu và Ép kiểu
+    * Thuận theo tự nhiên
+    * Theo thứ tự
+* Phụ lục A: Khám phá thêm
+    * Giá trị và Tham chiếu
+    * Rất nhiều dạng hàm
+    * So sánh điều kiện ép kiểu
+    * "Lớp" theo kiểu Prototype
+* Phụ lục B: Luyện tập, Luyện tập, Luyện tập!
+    * Luyện tập so sánh
+    * Luyện tập Closure
+    * Luyện tập Prototypes
+    * Giải pháp gợi ý

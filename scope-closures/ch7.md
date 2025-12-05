@@ -1,37 +1,37 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Chapter 7: Using Closures
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Chương 7: Sử Dụng Closures
 
-Up to this point, we've focused on the ins and outs of lexical scope, and how that affects the organization and usage of variables in our programs.
+Đến thời điểm này, chúng ta đã tập trung vào các chi tiết của phạm vi từ vựng, và cách điều đó ảnh hưởng đến việc tổ chức và sử dụng các biến trong các chương trình của chúng ta.
 
-Our attention again shifts broader in abstraction, to the historically somewhat daunting topic of closure. Don't worry! You don't need an advanced computer science degree to make sense of it. Our broad goal in this book is not merely to understand scope, but to more effectively use it in the structure of our programs; closure is central to that effort.
+Sự chú ý của chúng ta một lần nữa chuyển sang sự trừu tượng rộng hơn, đến chủ đề lịch sử có phần đáng sợ của closure. Đừng lo lắng! Bạn không cần bằng cấp khoa học máy tính cao cấp để hiểu nó. Mục tiêu rộng lớn của chúng ta trong cuốn sách này không chỉ đơn thuần là hiểu phạm vi, mà còn sử dụng nó hiệu quả hơn trong cấu trúc các chương trình của chúng ta; closure là trung tâm của nỗ lực đó.
 
-Recall the main conclusion of Chapter 6: the *least exposure* principle (POLE) encourages us to use block (and function) scoping to limit the scope exposure of variables. This helps keep code understandable and maintainable, and helps avoid many scoping pitfalls (i.e., name collision, etc.).
+Nhớ lại kết luận chính của Chương 6: nguyên tắc *phơi bày tối thiểu* (POLE) khuyến khích chúng ta sử dụng phạm vi khối (và hàm) để hạn chế sự phơi bày phạm vi của các biến. Điều này giúp giữ cho mã dễ hiểu và dễ bảo trì, và giúp tránh nhiều cạm bẫy phạm vi (tức là, xung đột tên, v.v.).
 
-Closure builds on this approach: for variables we need to use over time, instead of placing them in larger outer scopes, we can encapsulate (more narrowly scope) them but still preserve access from inside functions, for broader use. Functions *remember* these referenced scoped variables via closure.
+Closure xây dựng trên cách tiếp cận này: đối với các biến chúng ta cần sử dụng theo thời gian, thay vì đặt chúng trong các phạm vi bên ngoài lớn hơn, chúng ta có thể đóng gói (phạm vi hẹp hơn) chúng nhưng vẫn bảo tồn quyền truy cập từ bên trong các hàm, để sử dụng rộng rãi hơn. Các hàm *nhớ* các biến phạm vi được tham chiếu này thông qua closure.
 
-We already saw an example of this kind of closure in the previous chapter (`factorial(..)` in Chapter 6), and you've almost certainly already used it in your own programs. If you've ever written a callback that accesses variables outside its own scope... guess what!? That's closure.
+Chúng ta đã thấy một ví dụ về loại closure này trong chương trước (`factorial(..)` trong Chương 6), và bạn gần như chắc chắn đã sử dụng nó trong các chương trình của riêng mình. Nếu bạn đã từng viết một callback truy cập các biến bên ngoài phạm vi riêng của nó... đoán xem!? Đó là closure.
 
-Closure is one of the most important language characteristics ever invented in programming—it underlies major programming paradigms, including Functional Programming (FP), modules, and even a bit of class-oriented design. Getting comfortable with closure is required for mastering JS and effectively leveraging many important design patterns throughout your code.
+Closure là một trong những đặc điểm ngôn ngữ quan trọng nhất từng được phát minh trong lập trình—nó làm nền tảng cho các mô hình lập trình chính, bao gồm Lập trình Hàm (FP), modules, và thậm chí một chút thiết kế hướng lớp. Làm quen với closure là bắt buộc để làm chủ JS và tận dụng hiệu quả nhiều mẫu thiết kế quan trọng trong suốt mã của bạn.
 
-Addressing all aspects of closure requires a daunting mountain of discussion and code throughout this chapter. Make sure to take your time and ensure you're comfortable with each bit before moving onto the next.
+Giải quyết tất cả các khía cạnh của closure đòi hỏi một núi thảo luận và mã đáng sợ trong suốt chương này. Hãy chắc chắn dành thời gian của bạn và đảm bảo bạn thoải mái với từng chút trước khi chuyển sang phần tiếp theo.
 
-## See the Closure
+## Nhìn Thấy Closure
 
-Closure is originally a mathematical concept, from lambda calculus. But I'm not going to list out math formulas or use a bunch of notation and jargon to define it.
+Closure ban đầu là một khái niệm toán học, từ phép tính lambda. Nhưng tôi sẽ không liệt kê các công thức toán học hoặc sử dụng một loạt các ký hiệu và biệt ngữ để định nghĩa nó.
 
-Instead, I'm going to focus on a practical perspective. We'll start by defining closure in terms of what we can observe in different behavior of our programs, as opposed to if closure was not present in JS. However, later in this chapter, we're going to flip closure around to look at it from an *alternative perspective*.
+Thay vào đó, tôi sẽ tập trung vào một quan điểm thực tế. Chúng ta sẽ bắt đầu bằng cách định nghĩa closure về mặt những gì chúng ta có thể quan sát trong hành vi khác nhau của các chương trình của chúng ta, trái ngược với nếu closure không có mặt trong JS. Tuy nhiên, sau này trong chương này, chúng ta sẽ lật ngược closure để nhìn nó từ một *quan điểm thay thế*.
 
-Closure is a behavior of functions and only functions. If you aren't dealing with a function, closure does not apply. An object cannot have closure, nor does a class have closure (though its functions/methods might). Only functions have closure.
+Closure là một hành vi của các hàm và chỉ các hàm. Nếu bạn không xử lý một hàm, closure không áp dụng. Một đối tượng không thể có closure, cũng như một lớp không có closure (mặc dù các hàm/phương thức của nó có thể). Chỉ các hàm mới có closure.
 
-For closure to be observed, a function must be invoked, and specifically it must be invoked in a different branch of the scope chain from where it was originally defined. A function executing in the same scope it was defined would not exhibit any observably different behavior with or without closure being possible; by the observational perspective and definition, that is not closure.
+Để closure được quan sát, một hàm phải được gọi, và cụ thể nó phải được gọi trong một nhánh khác của chuỗi phạm vi so với nơi nó được định nghĩa ban đầu. Một hàm thực thi trong cùng phạm vi nó được định nghĩa sẽ không thể hiện bất kỳ hành vi khác biệt nào có thể quan sát được với hoặc không có closure là có thể; theo quan điểm quan sát và định nghĩa, đó không phải là closure.
 
-Let's look at some code, annotated with its relevant scope bubble colors (see Chapter 2):
+Hãy xem một số mã, được chú thích với các màu bong bóng phạm vi liên quan của nó (xem Chương 2):
 
 ```js
-// outer/global scope: RED(1)
+// phạm vi bên ngoài/toàn cục: RED(1)
 
 function lookupStudent(studentID) {
-    // function scope: BLUE(2)
+    // phạm vi hàm: BLUE(2)
 
     var students = [
         { id: 14, name: "Kyle" },
@@ -41,7 +41,7 @@ function lookupStudent(studentID) {
     ];
 
     return function greetStudent(greeting){
-        // function scope: GREEN(3)
+        // phạm vi hàm: GREEN(3)
 
         var student = students.find(
             student => student.id == studentID
@@ -56,7 +56,7 @@ var chosenStudents = [
     lookupStudent(112)
 ];
 
-// accessing the function's name:
+// truy cập tên của hàm:
 chosenStudents[0].name;
 // greetStudent
 
@@ -67,47 +67,47 @@ chosenStudents[1]("Howdy");
 // Howdy, Frank!
 ```
 
-The first thing to notice about this code is that the `lookupStudent(..)` outer function creates and returns an inner function called `greetStudent(..)`. `lookupStudent(..)` is called twice, producing two separate instances of its inner `greetStudent(..)` function, both of which are saved into the `chosenStudents` array.
+Điều đầu tiên cần chú ý về mã này là hàm bên ngoài `lookupStudent(..)` tạo và trả về một hàm bên trong được gọi là `greetStudent(..)`. `lookupStudent(..)` được gọi hai lần, tạo ra hai thể hiện riêng biệt của hàm `greetStudent(..)` bên trong của nó, cả hai đều được lưu vào mảng `chosenStudents`.
 
-We verify that's the case by checking the `.name` property of the returned function saved in `chosenStudents[0]`, and it's indeed an instance of the inner `greetStudent(..)`.
+Chúng ta xác minh trường hợp đó bằng cách kiểm tra thuộc tính `.name` của hàm được trả về được lưu trong `chosenStudents[0]`, và nó thực sự là một thể hiện của `greetStudent(..)` bên trong.
 
-After each call to `lookupStudent(..)` finishes, it would seem like all its inner variables would be discarded and GC'd (garbage collected). The inner function is the only thing that seems to be returned and preserved. But here's where the behavior differs in ways we can start to observe.
+Sau khi mỗi cuộc gọi đến `lookupStudent(..)` kết thúc, có vẻ như tất cả các biến bên trong của nó sẽ bị loại bỏ và GC'd (thu gom rác). Hàm bên trong là thứ duy nhất có vẻ được trả về và bảo tồn. Nhưng đây là nơi hành vi khác biệt theo những cách chúng ta có thể bắt đầu quan sát.
 
-While `greetStudent(..)` does receive a single argument as the parameter named `greeting`, it also makes reference to both `students` and `studentID`, identifiers which come from the enclosing scope of `lookupStudent(..)`. Each of those references from the inner function to the variable in an outer scope is called a *closure*. In academic terms, each instance of `greetStudent(..)` *closes over* the outer variables `students` and `studentID`.
+Trong khi `greetStudent(..)` nhận một đối số duy nhất làm tham số có tên `greeting`, nó cũng tham chiếu đến cả `students` và `studentID`, các định danh đến từ phạm vi bao quanh của `lookupStudent(..)`. Mỗi tham chiếu đó từ hàm bên trong đến biến trong một phạm vi bên ngoài được gọi là một *closure*. Theo thuật ngữ học thuật, mỗi thể hiện của `greetStudent(..)` *đóng trên* (closes over) các biến bên ngoài `students` và `studentID`.
 
-So what do those closures do here, in a concrete, observable sense?
+Vậy các closure đó làm gì ở đây, theo nghĩa cụ thể, có thể quan sát được?
 
-Closure allows `greetStudent(..)` to continue to access those outer variables even after the outer scope is finished (when each call to `lookupStudent(..)` completes). Instead of the instances of `students` and `studentID` being GC'd, they stay around in memory. At a later time when either instance of the `greetStudent(..)` function is invoked, those variables are still there, holding their current values.
+Closure cho phép `greetStudent(..)` tiếp tục truy cập các biến bên ngoài đó ngay cả sau khi phạm vi bên ngoài đã kết thúc (khi mỗi cuộc gọi đến `lookupStudent(..)` hoàn thành). Thay vì các thể hiện của `students` và `studentID` bị GC'd, chúng ở lại trong bộ nhớ. Tại một thời điểm sau đó khi một trong hai thể hiện của hàm `greetStudent(..)` được gọi, các biến đó vẫn ở đó, giữ các giá trị hiện tại của chúng.
 
-If JS functions did not have closure, the completion of each `lookupStudent(..)` call would immediately tear down its scope and GC the `students` and `studentID` variables. When we later called one of the `greetStudent(..)` functions, what would then happen?
+Nếu các hàm JS không có closure, việc hoàn thành mỗi cuộc gọi `lookupStudent(..)` sẽ ngay lập tức phá bỏ phạm vi của nó và GC các biến `students` và `studentID`. Khi chúng ta sau đó gọi một trong các hàm `greetStudent(..)`, điều gì sẽ xảy ra sau đó?
 
-If `greetStudent(..)` tried to access what it thought was a BLUE(2) marble, but that marble did not actually exist (anymore), the reasonable assumption is we should get a `ReferenceError`, right?
+Nếu `greetStudent(..)` cố gắng truy cập những gì nó nghĩ là một viên bi BLUE(2), nhưng viên bi đó thực sự không tồn tại (nữa), giả định hợp lý là chúng ta nên nhận được một `ReferenceError`, đúng không?
 
-But we don't get an error. The fact that the execution of `chosenStudents[0]("Hello")` works and returns us the message "Hello, Sarah!", means it was still able to access the `students` and `studentID` variables. This is a direct observation of closure!
+Nhưng chúng ta không nhận được lỗi. Thực tế là việc thực thi `chosenStudents[0]("Hello")` hoạt động và trả về cho chúng ta thông báo "Hello, Sarah!", có nghĩa là nó vẫn có thể truy cập các biến `students` và `studentID`. Đây là một quan sát trực tiếp về closure!
 
-### Pointed Closure
+### Closure Được Chỉ Định
 
-Actually, we glossed over a little detail in the previous discussion which I'm guessing many readers missed!
+Thực ra, chúng ta đã lướt qua một chi tiết nhỏ trong cuộc thảo luận trước đó mà tôi đoán nhiều độc giả đã bỏ lỡ!
 
-Because of how terse the syntax for `=>` arrow functions is, it's easy to forget that they still create a scope (as asserted in "Arrow Functions" in Chapter 3). The `student => student.id == studentID` arrow function is creating another scope bubble inside the `greetStudent(..)` function scope.
+Bởi vì cú pháp cho các hàm mũi tên `=>` quá ngắn gọn, thật dễ quên rằng chúng vẫn tạo ra một phạm vi (như đã khẳng định trong "Hàm Mũi Tên" trong Chương 3). Hàm mũi tên `student => student.id == studentID` đang tạo ra một bong bóng phạm vi khác bên trong phạm vi hàm `greetStudent(..)`.
 
-Building on the metaphor of colored buckets and bubbles from Chapter 2, if we were creating a colored diagram for this code, there's a fourth scope at this innermost nesting level, so we'd need a fourth color; perhaps we'd pick ORANGE(4) for that scope:
+Xây dựng trên phép ẩn dụ về các xô và bong bóng màu từ Chương 2, nếu chúng ta đang tạo một sơ đồ màu cho mã này, có một phạm vi thứ tư ở mức lồng nhau trong cùng này, vì vậy chúng ta cần một màu thứ tư; có lẽ chúng ta sẽ chọn ORANGE(4) cho phạm vi đó:
 
 ```js
 var student = students.find(
     student =>
-        // function scope: ORANGE(4)
+        // phạm vi hàm: ORANGE(4)
         student.id == studentID
 );
 ```
 
-The BLUE(2) `studentID` reference is actually inside the ORANGE(4) scope rather than the GREEN(3) scope of `greetStudent(..)`; also, the `student` parameter of the arrow function is ORANGE(4), shadowing the GREEN(3) `student`.
+Tham chiếu BLUE(2) `studentID` thực sự nằm bên trong phạm vi ORANGE(4) thay vì phạm vi GREEN(3) của `greetStudent(..)`; ngoài ra, tham số `student` của hàm mũi tên là ORANGE(4), che khuất `student` GREEN(3).
 
-The consequence here is that this arrow function passed as a callback to the array's `find(..)` method has to hold the closure over `studentID`, rather than `greetStudent(..)` holding that closure. That's not too big of a deal, as everything still works as expected. It's just important not to skip over the fact that even tiny arrow functions can get in on the closure party.
+Hậu quả ở đây là hàm mũi tên này được truyền dưới dạng callback cho phương thức `find(..)` của mảng phải giữ closure trên `studentID`, thay vì `greetStudent(..)` giữ closure đó. Đó không phải là vấn đề quá lớn, vì mọi thứ vẫn hoạt động như mong đợi. Chỉ quan trọng là không bỏ qua thực tế rằng ngay cả các hàm mũi tên nhỏ bé cũng có thể tham gia vào bữa tiệc closure.
 
-### Adding Up Closures
+### Cộng Dồn Closures
 
-Let's examine one of the canonical examples often cited for closure:
+Hãy xem xét một trong những ví dụ kinh điển thường được trích dẫn cho closure:
 
 ```js
 function adder(num1) {
@@ -123,31 +123,31 @@ add10To(15);    // 25
 add42To(9);     // 51
 ```
 
-Each instance of the inner `addTo(..)` function is closing over its own `num1` variable (with values `10` and `42`, respectively), so those `num1`'s don't go away just because `adder(..)` finishes. When we later invoke one of those inner `addTo(..)` instances, such as the `add10To(15)` call, its closed-over `num1` variable still exists and still holds the original `10` value. The operation is thus able to perform `10 + 15` and return the answer `25`.
+Mỗi thể hiện của hàm `addTo(..)` bên trong đang đóng trên biến `num1` riêng của nó (với các giá trị `10` và `42`, tương ứng), vì vậy những `num1` đó không biến mất chỉ vì `adder(..)` kết thúc. Khi chúng ta sau đó gọi một trong những thể hiện `addTo(..)` bên trong đó, chẳng hạn như cuộc gọi `add10To(15)`, biến `num1` được đóng trên của nó vẫn tồn tại và vẫn giữ giá trị `10` ban đầu. Do đó, hoạt động có thể thực hiện `10 + 15` và trả về câu trả lời `25`.
 
-An important detail might have been too easy to gloss over in that previous paragraph, so let's reinforce it: closure is associated with an instance of a function, rather than its single lexical definition. In the preceding snippet, there's just one inner `addTo(..)` function defined inside `adder(..)`, so it might seem like that would imply a single closure.
+Một chi tiết quan trọng có thể đã quá dễ dàng để lướt qua trong đoạn trước, vì vậy hãy củng cố nó: closure được liên kết với một thể hiện của một hàm, thay vì định nghĩa từ vựng duy nhất của nó. Trong đoạn trích trước, chỉ có một hàm `addTo(..)` bên trong được định nghĩa bên trong `adder(..)`, vì vậy có vẻ như điều đó sẽ ngụ ý một closure duy nhất.
 
-But actually, every time the outer `adder(..)` function runs, a *new* inner `addTo(..)` function instance is created, and for each new instance, a new closure. So each inner function instance (labeled `add10To(..)` and `add42To(..)` in our program) has its own closure over its own instance of the scope environment from that execution of `adder(..)`.
+Nhưng thực ra, mỗi khi hàm `adder(..)` bên ngoài chạy, một thể hiện hàm `addTo(..)` bên trong *mới* được tạo ra, và cho mỗi thể hiện mới, một closure mới. Vì vậy, mỗi thể hiện hàm bên trong (được dán nhãn `add10To(..)` và `add42To(..)` trong chương trình của chúng ta) có closure riêng của nó trên thể hiện riêng của nó về môi trường phạm vi từ lần thực thi đó của `adder(..)`.
 
-Even though closure is based on lexical scope, which is handled at compile time, closure is observed as a runtime characteristic of function instances.
+Mặc dù closure dựa trên phạm vi từ vựng, được xử lý tại thời gian biên dịch, closure được quan sát như một đặc điểm thời gian chạy của các thể hiện hàm.
 
-### Live Link, Not a Snapshot
+### Liên Kết Trực Tiếp, Không Phải Ảnh Chụp Nhanh
 
-In both examples from the previous sections, we **read the value from a variable** that was held in a closure. That makes it feel like closure might be a snapshot of a value at some given moment. Indeed, that's a common misconception.
+Trong cả hai ví dụ từ các phần trước, chúng ta **đọc giá trị từ một biến** được giữ trong một closure. Điều đó làm cho nó cảm thấy như closure có thể là một ảnh chụp nhanh của một giá trị tại một thời điểm nhất định. Thật vậy, đó là một quan niệm sai lầm phổ biến.
 
-Closure is actually a live link, preserving access to the full variable itself. We're not limited to merely reading a value; the closed-over variable can be updated (re-assigned) as well! By closing over a variable in a function, we can keep using that variable (read and write) as long as that function reference exists in the program, and from anywhere we want to invoke that function. This is why closure is such a powerful technique used widely across so many areas of programming!
+Closure thực sự là một liên kết trực tiếp, bảo tồn quyền truy cập vào chính biến đầy đủ. Chúng ta không bị giới hạn chỉ đọc một giá trị; biến được đóng trên có thể được cập nhật (gán lại) nữa! Bằng cách đóng trên một biến trong một hàm, chúng ta có thể tiếp tục sử dụng biến đó (đọc và viết) miễn là tham chiếu hàm đó tồn tại trong chương trình, và từ bất cứ đâu chúng ta muốn gọi hàm đó. Đây là lý do tại sao closure là một kỹ thuật mạnh mẽ được sử dụng rộng rãi trên rất nhiều lĩnh vực lập trình!
 
-Figure 4 depicts the function instances and scope links:
+Hình 4 mô tả các thể hiện hàm và liên kết phạm vi:
 
 <figure>
-    <img src="images/fig4.png" width="400" alt="Function instances linked to scopes via closure" align="center">
-    <figcaption><em>Fig. 4: Visualizing Closures</em></figcaption>
+    <img src="images/fig4.png" width="400" alt="Các thể hiện hàm được liên kết với các phạm vi thông qua closure" align="center">
+    <figcaption><em>Hình 4: Hình Dung Closures</em></figcaption>
     <br><br>
 </figure>
 
-As shown in Figure 4, each call to `adder(..)` creates a new BLUE(2) scope containing a `num1` variable, as well as a new instance of `addTo(..)` function as a GREEN(3) scope. Notice that the function instances (`addTo10(..)` and `addTo42(..)`) are present in and invoked from the RED(1) scope.
+Như được hiển thị trong Hình 4, mỗi cuộc gọi đến `adder(..)` tạo ra một phạm vi BLUE(2) mới chứa một biến `num1`, cũng như một thể hiện mới của hàm `addTo(..)` như một phạm vi GREEN(3). Chú ý rằng các thể hiện hàm (`addTo10(..)` và `addTo42(..)`) có mặt trong và được gọi từ phạm vi RED(1).
 
-Now let's examine an example where the closed-over variable is updated:
+Bây giờ hãy xem xét một ví dụ nơi biến được đóng trên được cập nhật:
 
 ```js
 function makeCounter() {
@@ -161,23 +161,23 @@ function makeCounter() {
 
 var hits = makeCounter();
 
-// later
+// sau đó
 
 hits();     // 1
 
-// later
+// sau đó
 
 hits();     // 2
 hits();     // 3
 ```
 
-The `count` variable is closed over by the inner `getCurrent()` function, which keeps it around instead of it being subjected to GC. The `hits()` function calls access *and* update this variable, returning an incrementing count each time.
+Biến `count` được đóng trên bởi hàm `getCurrent()` bên trong, giữ nó xung quanh thay vì nó phải chịu GC. Các cuộc gọi hàm `hits()` truy cập *và* cập nhật biến này, trả về một số đếm tăng dần mỗi lần.
 
-Though the enclosing scope of a closure is typically from a function, that's not actually required; there only needs to be an inner function present inside an outer scope:
+Mặc dù phạm vi bao quanh của một closure thường là từ một hàm, điều đó thực sự không bắt buộc; chỉ cần có một hàm bên trong hiện diện bên trong một phạm vi bên ngoài:
 
 ```js
 var hits;
-{   // an outer scope (but not a function)
+{   // một phạm vi bên ngoài (nhưng không phải một hàm)
     let count = 0;
     hits = function getCurrent(){
         count = count + 1;
@@ -189,79 +189,79 @@ hits();     // 2
 hits();     // 3
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| I deliberately defined `getCurrent()` as a `function` expression instead of a `function` declaration. This isn't about closure, but with the dangerous quirks of FiB (Chapter 6). |
+| Tôi cố tình định nghĩa `getCurrent()` là một biểu thức `function` thay vì một khai báo `function`. Điều này không phải về closure, mà với những điều kỳ quặc nguy hiểm của FiB (Chương 6). |
 
-Because it's so common to mistake closure as value-oriented instead of variable-oriented, developers sometimes get tripped up trying to use closure to snapshot-preserve a value from some moment in time. Consider:
+Bởi vì rất phổ biến để nhầm lẫn closure là hướng giá trị thay vì hướng biến, các nhà phát triển đôi khi bị vấp ngã khi cố gắng sử dụng closure để bảo tồn ảnh chụp nhanh một giá trị từ một thời điểm nào đó. Hãy xem xét:
 
 ```js
 var studentName = "Frank";
 
 var greeting = function hello() {
-    // we are closing over `studentName`,
-    // not "Frank"
+    // chúng ta đang đóng trên `studentName`,
+    // không phải "Frank"
     console.log(
         `Hello, ${ studentName }!`
     );
 }
 
-// later
+// sau đó
 
 studentName = "Suzy";
 
-// later
+// sau đó
 
 greeting();
 // Hello, Suzy!
 ```
 
-By defining `greeting()` (aka, `hello()`) when `studentName` holds the value `"Frank"` (before the re-assignment to `"Suzy"`), the mistaken assumption is often that the closure will capture `"Frank"`. But `greeting()` is closed over the variable `studentName`, not its value. Whenever `greeting()` is invoked, the current value of the variable (`"Suzy"`, in this case) is reflected.
+Bằng cách định nghĩa `greeting()` (hay còn gọi là, `hello()`) khi `studentName` giữ giá trị `"Frank"` (trước khi gán lại thành `"Suzy"`), giả định sai lầm thường là closure sẽ bắt giữ `"Frank"`. Nhưng `greeting()` được đóng trên biến `studentName`, không phải giá trị của nó. Bất cứ khi nào `greeting()` được gọi, giá trị hiện tại của biến (`"Suzy"`, trong trường hợp này) được phản ánh.
 
-The classic illustration of this mistake is defining functions inside a loop:
+Minh họa cổ điển về sai lầm này là định nghĩa các hàm bên trong một vòng lặp:
 
 ```js
 var keeps = [];
 
 for (var i = 0; i < 3; i++) {
     keeps[i] = function keepI(){
-        // closure over `i`
+        // closure trên `i`
         return i;
     };
 }
 
-keeps[0]();   // 3 -- WHY!?
+keeps[0]();   // 3 -- TẠI SAO!?
 keeps[1]();   // 3
 keeps[2]();   // 3
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| This kind of closure illustration typically uses a `setTimeout(..)` or some other callback like an event handler, inside the loop. I've simplified the example by storing function references in an array, so that we don't need to consider asynchronous timing in our analysis. The closure principle is the same, regardless. |
+| Loại minh họa closure này thường sử dụng `setTimeout(..)` hoặc một số callback khác như trình xử lý sự kiện, bên trong vòng lặp. Tôi đã đơn giản hóa ví dụ bằng cách lưu trữ các tham chiếu hàm trong một mảng, để chúng ta không cần xem xét thời gian bất đồng bộ trong phân tích của mình. Nguyên tắc closure là giống nhau, bất kể. |
 
-You might have expected the `keeps[0]()` invocation to return `0`, since that function was created during the first iteration of the loop when `i` was `0`. But again, that assumption stems from thinking of closure as value-oriented rather than variable-oriented.
+Bạn có thể đã mong đợi cuộc gọi `keeps[0]()` trả về `0`, vì hàm đó được tạo ra trong lần lặp đầu tiên của vòng lặp khi `i` là `0`. Nhưng một lần nữa, giả định đó bắt nguồn từ việc nghĩ về closure là hướng giá trị thay vì hướng biến.
 
-Something about the structure of a `for`-loop can trick us into thinking that each iteration gets its own new `i` variable; in fact, this program only has one `i` since it was declared with `var`.
+Một cái gì đó về cấu trúc của một vòng lặp `for` có thể đánh lừa chúng ta nghĩ rằng mỗi lần lặp nhận được biến `i` mới riêng của nó; trên thực tế, chương trình này chỉ có một `i` vì nó được khai báo với `var`.
 
-Each saved function returns `3`, because by the end of the loop, the single `i` variable in the program has been assigned `3`. Each of the three functions in the `keeps` array do have individual closures, but they're all closed over that same shared `i` variable.
+Mỗi hàm được lưu trả về `3`, bởi vì vào cuối vòng lặp, biến `i` duy nhất trong chương trình đã được gán `3`. Mỗi trong ba hàm trong mảng `keeps` đều có các closure riêng lẻ, nhưng tất cả chúng đều được đóng trên cùng một biến `i` được chia sẻ đó.
 
-Of course, a single variable can only ever hold one value at any given moment. So if you want to preserve multiple values, you need a different variable for each.
+Tất nhiên, một biến duy nhất chỉ có thể giữ một giá trị tại bất kỳ thời điểm nào. Vì vậy, nếu bạn muốn bảo tồn nhiều giá trị, bạn cần một biến khác nhau cho mỗi giá trị.
 
-How could we do that in the loop snippet? Let's create a new variable for each iteration:
+Làm thế nào chúng ta có thể làm điều đó trong đoạn trích vòng lặp? Hãy tạo một biến mới cho mỗi lần lặp:
 
 ```js
 var keeps = [];
 
 for (var i = 0; i < 3; i++) {
-    // new `j` created each iteration, which gets
-    // a copy of the value of `i` at this moment
+    // `j` mới được tạo mỗi lần lặp, nhận được
+    // một bản sao của giá trị của `i` tại thời điểm này
     let j = i;
 
-    // the `i` here isn't being closed over, so
-    // it's fine to immediately use its current
-    // value in each loop iteration
+    // `i` ở đây không bị đóng trên, vì vậy
+    // hoàn toàn ổn khi sử dụng ngay giá trị hiện tại
+    // của nó trong mỗi lần lặp vòng lặp
     keeps[i] = function keepEachJ(){
-        // close over `j`, not `i`!
+        // đóng trên `j`, không phải `i`!
         return j;
     };
 }
@@ -270,18 +270,18 @@ keeps[1]();   // 1
 keeps[2]();   // 2
 ```
 
-Each function is now closed over a separate (new) variable from each iteration, even though all of them are named `j`. And each `j` gets a copy of the value of `i` at that point in the loop iteration; that `j` never gets re-assigned. So all three functions now return their expected values: `0`, `1`, and `2`!
+Mỗi hàm bây giờ được đóng trên một biến (mới) riêng biệt từ mỗi lần lặp, mặc dù tất cả chúng đều được đặt tên là `j`. Và mỗi `j` nhận được một bản sao của giá trị của `i` tại điểm đó trong lần lặp vòng lặp; `j` đó không bao giờ được gán lại. Vì vậy, cả ba hàm bây giờ trả về các giá trị mong đợi của chúng: `0`, `1`, và `2`!
 
-Again remember, even if we were using asynchrony in this program, such as passing each inner `keepEachJ()` function into `setTimeout(..)` or some event handler subscription, the same kind of closure behavior would still be observed.
+Một lần nữa hãy nhớ, ngay cả khi chúng ta đang sử dụng bất đồng bộ trong chương trình này, chẳng hạn như truyền mỗi hàm `keepEachJ()` bên trong vào `setTimeout(..)` hoặc một số đăng ký trình xử lý sự kiện, cùng một loại hành vi closure vẫn sẽ được quan sát.
 
-Recall the "Loops" section in Chapter 5, which illustrates how a `let` declaration in a `for` loop actually creates not just one variable for the loop, but actually creates a new variable for *each iteration* of the loop. That trick/quirk is exactly what we need for our loop closures:
+Nhớ lại phần "Vòng Lặp" trong Chương 5, minh họa cách một khai báo `let` trong một vòng lặp `for` thực sự tạo ra không chỉ một biến cho vòng lặp, mà thực sự tạo ra một biến mới cho *mỗi lần lặp* của vòng lặp. Thủ thuật/kỳ quặc đó chính xác là những gì chúng ta cần cho các closure vòng lặp của mình:
 
 ```js
 var keeps = [];
 
 for (let i = 0; i < 3; i++) {
-    // the `let i` gives us a new `i` for
-    // each iteration, automatically!
+    // `let i` cung cấp cho chúng ta một `i` mới cho
+    // mỗi lần lặp, tự động!
     keeps[i] = function keepEachI(){
         return i;
     };
@@ -291,11 +291,11 @@ keeps[1]();   // 1
 keeps[2]();   // 2
 ```
 
-Since we're using `let`, three `i`'s are created, one for each loop, so each of the three closures *just work* as expected.
+Vì chúng ta đang sử dụng `let`, ba `i` được tạo ra, một cho mỗi vòng lặp, vì vậy mỗi trong ba closure *chỉ hoạt động* như mong đợi.
 
-### Common Closures: Ajax and Events
+### Các Closure Phổ Biến: Ajax và Sự Kiện
 
-Closure is most commonly encountered with callbacks:
+Closure thường gặp nhất với các callback:
 
 ```js
 function lookupStudentRecord(studentID) {
@@ -313,11 +313,11 @@ lookupStudentRecord(114);
 // Frank (114)
 ```
 
-The `onRecord(..)` callback is going to be invoked at some point in the future, after the response from the Ajax call comes back. This invocation will happen from the internals of the `ajax(..)` utility, wherever that comes from. Furthermore, when that happens, the `lookupStudentRecord(..)` call will long since have completed.
+Callback `onRecord(..)` sẽ được gọi tại một thời điểm nào đó trong tương lai, sau khi phản hồi từ cuộc gọi Ajax quay trở lại. Cuộc gọi này sẽ xảy ra từ bên trong của tiện ích `ajax(..)`, bất kể nó đến từ đâu. Hơn nữa, khi điều đó xảy ra, cuộc gọi `lookupStudentRecord(..)` đã hoàn thành từ lâu.
 
-Why then is `studentID` still around and accessible to the callback? Closure.
+Vậy tại sao `studentID` vẫn còn xung quanh và có thể truy cập được đối với callback? Closure.
 
-Event handlers are another common usage of closure:
+Các trình xử lý sự kiện là một cách sử dụng phổ biến khác của closure:
 
 ```js
 function listenForClicks(btn,label) {
@@ -333,21 +333,21 @@ var submitBtn = document.getElementById("submit-btn");
 listenForClicks(submitBtn,"Checkout");
 ```
 
-The `label` parameter is closed over by the `onClick(..)` event handler callback. When the button is clicked, `label` still exists to be used. This is closure.
+Tham số `label` được đóng trên bởi callback trình xử lý sự kiện `onClick(..)`. Khi nút được nhấp, `label` vẫn tồn tại để được sử dụng. Đây là closure.
 
-### What If I Can't See It?
+### Điều Gì Xảy Ra Nếu Tôi Không Thể Nhìn Thấy Nó?
 
-You've probably heard this common adage:
+Bạn có thể đã nghe câu ngạn ngữ phổ biến này:
 
-> If a tree falls in the forest but nobody is around to hear it, does it make a sound?
+> Nếu một cái cây đổ trong rừng nhưng không có ai ở quanh để nghe thấy nó, nó có tạo ra âm thanh không?
 
-It's a silly bit of philosophical gymnastics. Of course from a scientific perspective, sound waves are created. But the real point: *does it matter* if the sound happens?
+Đó là một chút thể dục triết học ngớ ngẩn. Tất nhiên từ quan điểm khoa học, sóng âm thanh được tạo ra. Nhưng điểm thực sự: *có quan trọng không* nếu âm thanh xảy ra?
 
-Remember, the emphasis in our definition of closure is observability. If a closure exists (in a technical, implementation, or academic sense) but it cannot be observed in our programs, *does it matter?* No.
+Hãy nhớ, trọng tâm trong định nghĩa của chúng ta về closure là khả năng quan sát. Nếu một closure tồn tại (theo nghĩa kỹ thuật, triển khai, hoặc học thuật) nhưng nó không thể được quan sát trong các chương trình của chúng ta, *có quan trọng không?* Không.
 
-To reinforce this point, let's look at some examples that are *not* observably based on closure.
+Để củng cố điểm này, hãy xem một số ví dụ *không* dựa trên closure một cách có thể quan sát được.
 
-For example, invoking a function that makes use of lexical scope lookup:
+Ví dụ, gọi một hàm sử dụng tra cứu phạm vi từ vựng:
 
 ```js
 function say(myName) {
@@ -365,13 +365,13 @@ say("Kyle");
 // Hello, Kyle!
 ```
 
-The inner function `output()` accesses the variables `greeting` and `myName` from its enclosing scope. But the invocation of `output()` happens in that same scope, where of course `greeting` and `myName` are still available; that's just lexical scope, not closure.
+Hàm bên trong `output()` truy cập các biến `greeting` và `myName` từ phạm vi bao quanh của nó. Nhưng việc gọi `output()` xảy ra trong cùng phạm vi đó, nơi tất nhiên `greeting` và `myName` vẫn có sẵn; đó chỉ là phạm vi từ vựng, không phải closure.
 
-Any lexically scoped language whose functions didn't support closure would still behave this same way.
+Bất kỳ ngôn ngữ phạm vi từ vựng nào mà các hàm của nó không hỗ trợ closure vẫn sẽ hoạt động theo cùng cách này.
 
-In fact, global scope variables essentially cannot be (observably) closed over, because they're always accessible from everywhere. No function can ever be invoked in any part of the scope chain that is not a descendant of the global scope.
+Trên thực tế, các biến phạm vi toàn cục về cơ bản không thể bị đóng trên (một cách có thể quan sát được), bởi vì chúng luôn có thể truy cập được từ mọi nơi. Không có hàm nào có thể được gọi trong bất kỳ phần nào của chuỗi phạm vi mà không phải là hậu duệ của phạm vi toàn cục.
 
-Consider:
+Hãy xem xét:
 
 ```js
 var students = [
@@ -393,11 +393,11 @@ student();
 // Kyle
 ```
 
-The inner `firstStudent()` function does reference `students`, which is a variable outside its own scope. But since `students` happens to be from the global scope, no matter where that function is invoked in the program, its ability to access `students` is nothing more special than normal lexical scope.
+Hàm bên trong `firstStudent()` thực sự tham chiếu `students`, là một biến bên ngoài phạm vi riêng của nó. Nhưng vì `students` tình cờ đến từ phạm vi toàn cục, bất kể hàm đó được gọi ở đâu trong chương trình, khả năng truy cập `students` của nó không có gì đặc biệt hơn phạm vi từ vựng bình thường.
 
-All function invocations can access global variables, regardless of whether closure is supported by the language or not. Global variables don't need to be closed over.
+Tất cả các cuộc gọi hàm đều có thể truy cập các biến toàn cục, bất kể closure có được ngôn ngữ hỗ trợ hay không. Các biến toàn cục không cần phải được đóng trên.
 
-Variables that are merely present but never accessed don't result in closure:
+Các biến chỉ đơn thuần hiện diện nhưng không bao giờ được truy cập không dẫn đến closure:
 
 ```js
 function lookupStudent(studentID) {
@@ -413,11 +413,11 @@ student();
 // Nobody's here yet.
 ```
 
-The inner function `nobody()` doesn't close over any outer variables—it only uses its own variable `msg`. Even though `studentID` is present in the enclosing scope, `studentID` is not referred to by `nobody()`. The JS engine doesn't need to keep `studentID` around after `lookupStudent(..)` has finished running, so GC wants to clean up that memory!
+Hàm bên trong `nobody()` không đóng trên bất kỳ biến bên ngoài nào—nó chỉ sử dụng biến riêng của nó `msg`. Mặc dù `studentID` hiện diện trong phạm vi bao quanh, `studentID` không được tham chiếu bởi `nobody()`. Công cụ JS không cần giữ `studentID` xung quanh sau khi `lookupStudent(..)` đã chạy xong, vì vậy GC muốn dọn dẹp bộ nhớ đó!
 
-Whether JS functions support closure or not, this program would behave the same. Therefore, no observed closure here.
+Cho dù các hàm JS có hỗ trợ closure hay không, chương trình này sẽ hoạt động giống nhau. Do đó, không có closure được quan sát ở đây.
 
-If there's no function invocation, closure can't be observed:
+Nếu không có cuộc gọi hàm, closure không thể được quan sát:
 
 ```js
 function greetStudent(studentName) {
@@ -430,38 +430,38 @@ function greetStudent(studentName) {
 
 greetStudent("Kyle");
 
-// nothing else happens
+// không có gì khác xảy ra
 ```
 
-This one's tricky, because the outer function definitely does get invoked. But the inner function is the one that *could* have had closure, and yet it's never invoked; the returned function here is just thrown away. So even if technically the JS engine created closure for a brief moment, it was not observed in any meaningful way in this program.
+Cái này khó, bởi vì hàm bên ngoài chắc chắn được gọi. Nhưng hàm bên trong là hàm *có thể* đã có closure, nhưng nó không bao giờ được gọi; hàm được trả về ở đây chỉ bị vứt bỏ. Vì vậy, ngay cả khi về mặt kỹ thuật công cụ JS đã tạo closure trong một khoảnh khắc ngắn, nó không được quan sát theo bất kỳ cách có ý nghĩa nào trong chương trình này.
 
-A tree may have fallen... but we didn't hear it, so we don't care.
+Một cái cây có thể đã đổ... nhưng chúng ta không nghe thấy nó, vì vậy chúng ta không quan tâm.
 
-### Observable Definition
+### Định Nghĩa Có Thể Quan Sát
 
-We're now ready to define closure:
+Bây giờ chúng ta đã sẵn sàng để định nghĩa closure:
 
-> Closure is observed when a function uses variable(s) from outer scope(s) even while running in a scope where those variable(s) wouldn't be accessible.
+> Closure được quan sát khi một hàm sử dụng (các) biến từ (các) phạm vi bên ngoài ngay cả khi đang chạy trong một phạm vi nơi (các) biến đó sẽ không thể truy cập được.
 
-The key parts of this definition are:
+Các phần chính của định nghĩa này là:
 
-* Must be a function involved
+* Phải có một hàm tham gia
 
-* Must reference at least one variable from an outer scope
+* Phải tham chiếu ít nhất một biến từ một phạm vi bên ngoài
 
-* Must be invoked in a different branch of the scope chain from the variable(s)
+* Phải được gọi trong một nhánh khác của chuỗi phạm vi so với (các) biến
 
-This observation-oriented definition means we shouldn't dismiss closure as some indirect, academic trivia. Instead, we should look and plan for the direct, concrete effects closure has on our program behavior.
+Định nghĩa hướng quan sát này có nghĩa là chúng ta không nên bác bỏ closure như một chuyện vặt vãnh gián tiếp, học thuật. Thay vào đó, chúng ta nên xem xét và lập kế hoạch cho các hiệu ứng trực tiếp, cụ thể mà closure có đối với hành vi chương trình của chúng ta.
 
-## The Closure Lifecycle and Garbage Collection (GC)
+## Vòng Đời Closure và Thu Gom Rác (GC)
 
-Since closure is inherently tied to a function instance, its closure over a variable lasts as long as there is still a reference to that function.
+Vì closure vốn gắn liền với một thể hiện hàm, closure của nó trên một biến kéo dài chừng nào vẫn còn một tham chiếu đến hàm đó.
 
-If ten functions all close over the same variable, and over time nine of these function references are discarded, the lone remaining function reference still preserves that variable. Once that final function reference is discarded, the last closure over that variable is gone, and the variable itself is GC'd.
+Nếu mười hàm đều đóng trên cùng một biến, và theo thời gian chín trong số các tham chiếu hàm này bị loại bỏ, tham chiếu hàm duy nhất còn lại vẫn bảo tồn biến đó. Một khi tham chiếu hàm cuối cùng đó bị loại bỏ, closure cuối cùng trên biến đó biến mất, và chính biến đó bị GC'd.
 
-This has an important impact on building efficient and performant programs. Closure can unexpectedly prevent the GC of a variable that you're otherwise done with, which leads to run-away memory usage over time. That's why it's important to discard function references (and thus their closures) when they're not needed anymore.
+Điều này có tác động quan trọng đến việc xây dựng các chương trình hiệu quả và hiệu suất. Closure có thể ngăn chặn GC của một biến mà bạn đã xong việc một cách bất ngờ, dẫn đến việc sử dụng bộ nhớ chạy trốn theo thời gian. Đó là lý do tại sao quan trọng là phải loại bỏ các tham chiếu hàm (và do đó các closure của chúng) khi chúng không còn cần thiết nữa.
 
-Consider:
+Hãy xem xét:
 
 ```js
 function manageBtnClickEvents(btn) {
@@ -481,8 +481,8 @@ function manageBtnClickEvents(btn) {
             );
         }
         else {
-            // passing no callback unsubscribes
-            // all click handlers
+            // truyền không có callback hủy đăng ký
+            // tất cả các trình xử lý nhấp chuột
             for (let handler of clickHandlers) {
                 btn.removeEventListener(
                     "click",
@@ -499,34 +499,34 @@ function manageBtnClickEvents(btn) {
 var onSubmit = manageBtnClickEvents(mySubmitBtn);
 
 onSubmit(function checkout(evt){
-    // handle checkout
+    // xử lý thanh toán
 });
 
 onSubmit(function trackAction(evt){
-    // log action to analytics
+    // ghi lại hành động vào phân tích
 });
 
-// later, unsubscribe all handlers:
+// sau đó, hủy đăng ký tất cả các trình xử lý:
 onSubmit();
 ```
 
-In this program, the inner `onClick(..)` function holds a closure over the passed in `cb` (the provided event callback). That means the `checkout()` and `trackAction()` function expression references are held via closure (and cannot be GC'd) for as long as these event handlers are subscribed.
+Trong chương trình này, hàm `onClick(..)` bên trong giữ một closure trên `cb` được truyền vào (callback sự kiện được cung cấp). Điều đó có nghĩa là các tham chiếu biểu thức hàm `checkout()` và `trackAction()` được giữ thông qua closure (và không thể bị GC'd) chừng nào các trình xử lý sự kiện này được đăng ký.
 
-When we call `onSubmit()` with no input on the last line, all event handlers are unsubscribed, and the `clickHandlers` array is emptied. Once all click handler function references are discarded, the closures of `cb` references to `checkout()` and `trackAction()` are discarded.
+Khi chúng ta gọi `onSubmit()` không có đầu vào ở dòng cuối cùng, tất cả các trình xử lý sự kiện bị hủy đăng ký, và mảng `clickHandlers` bị làm trống. Một khi tất cả các tham chiếu hàm trình xử lý nhấp chuột bị loại bỏ, các closure của các tham chiếu `cb` đến `checkout()` và `trackAction()` bị loại bỏ.
 
-When considering the overall health and efficiency of the program, unsubscribing an event handler when it's no longer needed can be even more important than the initial subscription!
+Khi xem xét sức khỏe tổng thể và hiệu quả của chương trình, việc hủy đăng ký một trình xử lý sự kiện khi nó không còn cần thiết có thể còn quan trọng hơn cả việc đăng ký ban đầu!
 
-### Per Variable or Per Scope?
+### Theo Biến hay Theo Phạm Vi?
 
-Another question we need to tackle: should we think of closure as applied only to the referenced outer variable(s), or does closure preserve the entire scope chain with all its variables?
+Một câu hỏi khác chúng ta cần giải quyết: chúng ta nên nghĩ về closure như chỉ áp dụng cho (các) biến bên ngoài được tham chiếu, hay closure bảo tồn toàn bộ chuỗi phạm vi với tất cả các biến của nó?
 
-In other words, in the previous event subscription snippet, is the inner `onClick(..)` function closed over only `cb`, or is it also closed over `clickHandler`, `clickHandlers`, and `btn`?
+Nói cách khác, trong đoạn trích đăng ký sự kiện trước đó, hàm `onClick(..)` bên trong có được đóng trên chỉ `cb`, hay nó cũng được đóng trên `clickHandler`, `clickHandlers`, và `btn`?
 
-Conceptually, closure is **per variable** rather than *per scope*. Ajax callbacks, event handlers, and all other forms of function closures are typically assumed to close over only what they explicitly reference.
+Về mặt khái niệm, closure là **theo biến** thay vì *theo phạm vi*. Các callback Ajax, trình xử lý sự kiện, và tất cả các hình thức closure hàm khác thường được giả định chỉ đóng trên những gì chúng tham chiếu rõ ràng.
 
-But the reality is more complicated than that.
+Nhưng thực tế phức tạp hơn thế.
 
-Another program to consider:
+Một chương trình khác để xem xét:
 
 ```js
 function manageStudentGrades(studentRecords) {
@@ -541,12 +541,12 @@ function manageStudentGrades(studentRecords) {
     }
 
     function sortAndTrimGradesList() {
-        // sort by grades, descending
+        // sắp xếp theo điểm, giảm dần
         grades.sort(function desc(g1,g2){
             return g2 - g1;
         });
 
-        // only keep the top 10 grades
+        // chỉ giữ lại 10 điểm cao nhất
         grades = grades.slice(0,10);
     }
 
@@ -561,42 +561,42 @@ var addNextGrade = manageStudentGrades([
     { id: 14, name: "Kyle", grade: 86 },
     { id: 73, name: "Suzy", grade: 87 },
     { id: 112, name: "Frank", grade: 75 },
-    // ..many more records..
+    // ..nhiều bản ghi hơn..
     { id: 6, name: "Sarah", grade: 91 }
 ]);
 
-// later
+// sau đó
 
 addNextGrade(81);
 addNextGrade(68);
 // [ .., .., ... ]
 ```
 
-The outer function `manageStudentGrades(..)` takes a list of student records, and returns an `addGrade(..)` function reference, which we externally label `addNextGrade(..)`. Each time we call `addNextGrade(..)` with a new grade, we get back a current list of the top 10 grades, sorted numerically descending (see `sortAndTrimGradesList()`).
+Hàm bên ngoài `manageStudentGrades(..)` nhận một danh sách các bản ghi sinh viên, và trả về một tham chiếu hàm `addGrade(..)`, mà chúng ta dán nhãn bên ngoài là `addNextGrade(..)`. Mỗi lần chúng ta gọi `addNextGrade(..)` với một điểm mới, chúng ta nhận lại một danh sách hiện tại của 10 điểm cao nhất, được sắp xếp theo số giảm dần (xem `sortAndTrimGradesList()`).
 
-From the end of the original `manageStudentGrades(..)` call, and between the multiple `addNextGrade(..)` calls, the `grades` variable is preserved inside `addGrade(..)` via closure; that's how the running list of top grades is maintained. Remember, it's a closure over the variable `grades` itself, not the array it holds.
+Từ cuối cuộc gọi `manageStudentGrades(..)` ban đầu, và giữa nhiều cuộc gọi `addNextGrade(..)`, biến `grades` được bảo tồn bên trong `addGrade(..)` thông qua closure; đó là cách danh sách điểm cao nhất đang chạy được duy trì. Hãy nhớ, đó là một closure trên chính biến `grades`, không phải mảng mà nó giữ.
 
-That's not the only closure involved, however. Can you spot other variables being closed over?
+Tuy nhiên, đó không phải là closure duy nhất liên quan. Bạn có thể phát hiện các biến khác đang bị đóng trên không?
 
-Did you spot that `addGrade(..)` references `sortAndTrimGradesList`? That means it's also closed over that identifier, which happens to hold a reference to the `sortAndTrimGradesList()` function. That second inner function has to stay around so that `addGrade(..)` can keep calling it, which also means any variables *it* closes over stick around—though, in this case, nothing extra is closed over there.
+Bạn có phát hiện ra rằng `addGrade(..)` tham chiếu `sortAndTrimGradesList` không? Điều đó có nghĩa là nó cũng được đóng trên định danh đó, tình cờ giữ một tham chiếu đến hàm `sortAndTrimGradesList()`. Hàm bên trong thứ hai đó phải ở lại để `addGrade(..)` có thể tiếp tục gọi nó, điều này cũng có nghĩa là bất kỳ biến nào *nó* đóng trên cũng ở lại—mặc dù, trong trường hợp này, không có gì thêm được đóng trên ở đó.
 
-What else is closed over?
+Cái gì khác được đóng trên?
 
-Consider the `getGrade` variable (and its function); is it closed over? It's referenced in the outer scope of `manageStudentGrades(..)` in the `.map(getGrade)` call. But it's not referenced in `addGrade(..)` or `sortAndTrimGradesList()`.
+Hãy xem xét biến `getGrade` (và hàm của nó); nó có bị đóng trên không? Nó được tham chiếu trong phạm vi bên ngoài của `manageStudentGrades(..)` trong cuộc gọi `.map(getGrade)`. Nhưng nó không được tham chiếu trong `addGrade(..)` hoặc `sortAndTrimGradesList()`.
 
-What about the (potentially) large list of student records we pass in as `studentRecords`? Is that variable closed over? If it is, the array of student records is never getting GC'd, which leads to this program holding onto a larger amount of memory than we might assume. But if we look closely again, none of the inner functions reference `studentRecords`.
+Còn về danh sách (có khả năng) lớn các bản ghi sinh viên mà chúng ta truyền vào dưới dạng `studentRecords` thì sao? Biến đó có bị đóng trên không? Nếu có, mảng các bản ghi sinh viên không bao giờ bị GC'd, dẫn đến chương trình này giữ một lượng bộ nhớ lớn hơn chúng ta có thể giả định. Nhưng nếu chúng ta nhìn kỹ lại, không có hàm bên trong nào tham chiếu `studentRecords`.
 
-According to the *per variable* definition of closure, since `getGrade` and `studentRecords` are *not* referenced by the inner functions, they're not closed over. They should be freely available for GC right after the `manageStudentGrades(..)` call completes.
+Theo định nghĩa *theo biến* của closure, vì `getGrade` và `studentRecords` *không* được tham chiếu bởi các hàm bên trong, chúng không bị đóng trên. Chúng nên có sẵn miễn phí cho GC ngay sau khi cuộc gọi `manageStudentGrades(..)` hoàn thành.
 
-Indeed, try debugging this code in a recent JS engine, like v8 in Chrome, placing a breakpoint inside the `addGrade(..)` function. You may notice that the inspector **does not** list the `studentRecords` variable. That's proof, debugging-wise anyway, that the engine does not maintain `studentRecords` via closure. Phew!
+Thật vậy, hãy thử gỡ lỗi mã này trong một công cụ JS gần đây, như v8 trong Chrome, đặt một điểm ngắt bên trong hàm `addGrade(..)`. Bạn có thể nhận thấy rằng trình kiểm tra **không** liệt kê biến `studentRecords`. Đó là bằng chứng, về mặt gỡ lỗi, rằng công cụ không duy trì `studentRecords` thông qua closure. Phù!
 
-But how reliable is this observation as proof? Consider this (rather contrived!) program:
+Nhưng quan sát này đáng tin cậy đến mức nào như bằng chứng? Hãy xem xét chương trình (khá gượng ép!) này:
 
 ```js
 function storeStudentInfo(id,name,grade) {
     return function getInfo(whichValue){
-        // warning:
-        //   using `eval(..)` is a bad idea!
+        // cảnh báo:
+        //   sử dụng `eval(..)` là một ý tưởng tồi!
         var val = eval(whichValue);
         return val;
     };
@@ -611,26 +611,26 @@ info("grade");
 // 87
 ```
 
-Notice that the inner function `getInfo(..)` is not explicitly closed over any of `id`, `name`, or `grade` variables. And yet, calls to `info(..)` seem to still be able to access the variables, albeit through use of the `eval(..)` lexical scope cheat (see Chapter 1).
+Chú ý rằng hàm bên trong `getInfo(..)` không được đóng trên rõ ràng bất kỳ biến `id`, `name`, hoặc `grade` nào. Tuy nhiên, các cuộc gọi đến `info(..)` dường như vẫn có thể truy cập các biến, mặc dù thông qua việc sử dụng gian lận phạm vi từ vựng `eval(..)` (xem Chương 1).
 
-So all the variables were definitely preserved via closure, despite not being explicitly referenced by the inner function. So does that disprove the *per variable* assertion in favor of *per scope*? Depends.
+Vì vậy, tất cả các biến chắc chắn đã được bảo tồn thông qua closure, mặc dù không được tham chiếu rõ ràng bởi hàm bên trong. Vậy điều đó có bác bỏ khẳng định *theo biến* ủng hộ *theo phạm vi* không? Tùy thuộc.
 
-Many modern JS engines do apply an *optimization* that removes any variables from a closure scope that aren't explicitly referenced. However, as we see with `eval(..)`, there are situations where such an optimization cannot be applied, and the closure scope continues to contain all its original variables. In other words, closure must be *per scope*, implementation wise, and then an optional optimization trims down the scope to only what was closed over (a similar outcome as *per variable* closure).
+Nhiều công cụ JS hiện đại áp dụng một *tối ưu hóa* loại bỏ bất kỳ biến nào khỏi phạm vi closure mà không được tham chiếu rõ ràng. Tuy nhiên, như chúng ta thấy với `eval(..)`, có những tình huống mà tối ưu hóa như vậy không thể được áp dụng, và phạm vi closure tiếp tục chứa tất cả các biến ban đầu của nó. Nói cách khác, closure phải là *theo phạm vi*, về mặt triển khai, và sau đó một tối ưu hóa tùy chọn cắt giảm phạm vi xuống chỉ những gì đã được đóng trên (một kết quả tương tự như closure *theo biến*).
 
-Even as recent as a few years ago, many JS engines did not apply this optimization; it's possible your websites may still run in such browsers, especially on older or lower-end devices. That means it's possible that long-lived closures such as event handlers may be holding onto memory much longer than we would have assumed.
+Ngay cả gần đây như vài năm trước, nhiều công cụ JS đã không áp dụng tối ưu hóa này; có thể các trang web của bạn vẫn chạy trong các trình duyệt như vậy, đặc biệt là trên các thiết bị cũ hơn hoặc cấp thấp hơn. Điều đó có nghĩa là có thể các closure sống lâu như trình xử lý sự kiện có thể đang giữ bộ nhớ lâu hơn nhiều so với chúng ta giả định.
 
-And the fact that it's an optional optimization in the first place, rather than a requirement of the specification, means that we shouldn't just casually over-assume its applicability.
+Và thực tế là nó là một tối ưu hóa tùy chọn ngay từ đầu, thay vì một yêu cầu của đặc tả, có nghĩa là chúng ta không nên chỉ tình cờ giả định quá mức khả năng áp dụng của nó.
 
-In cases where a variable holds a large value (like an object or array) and that variable is present in a closure scope, if you don't need that value anymore and don't want that memory held, it's safer (memory usage) to manually discard the value rather than relying on closure optimization/GC.
+Trong các trường hợp một biến giữ một giá trị lớn (như một đối tượng hoặc mảng) và biến đó có mặt trong một phạm vi closure, nếu bạn không cần giá trị đó nữa và không muốn bộ nhớ đó bị giữ, an toàn hơn (sử dụng bộ nhớ) để loại bỏ giá trị thủ công thay vì dựa vào tối ưu hóa closure/GC.
 
-Let's apply a *fix* to the earlier `manageStudentGrades(..)` example to ensure the potentially large array held in `studentRecords` is not caught up in a closure scope unnecessarily:
+Hãy áp dụng một *bản sửa lỗi* cho ví dụ `manageStudentGrades(..)` trước đó để đảm bảo mảng có khả năng lớn được giữ trong `studentRecords` không bị kẹt trong một phạm vi closure một cách không cần thiết:
 
 ```js
 function manageStudentGrades(studentRecords) {
     var grades = studentRecords.map(getGrade);
 
-    // unset `studentRecords` to prevent unwanted
-    // memory retention in the closure
+    // bỏ đặt `studentRecords` để ngăn chặn
+    // giữ lại bộ nhớ không mong muốn trong closure
     studentRecords = null;
 
     return addGrade;
@@ -638,28 +638,28 @@ function manageStudentGrades(studentRecords) {
 }
 ```
 
-We're not removing `studentRecords` from the closure scope; that we cannot control. We're ensuring that even if `studentRecords` remains in the closure scope, that variable is no longer referencing the potentially large array of data; the array can be GC'd.
+Chúng ta không loại bỏ `studentRecords` khỏi phạm vi closure; điều đó chúng ta không thể kiểm soát. Chúng ta đang đảm bảo rằng ngay cả khi `studentRecords` vẫn còn trong phạm vi closure, biến đó không còn tham chiếu đến mảng dữ liệu có khả năng lớn nữa; mảng có thể bị GC'd.
 
-Again, in many cases JS might automatically optimize the program to the same effect. But it's still a good habit to be careful and explicitly make sure we don't keep any significant amount of device memory tied up any longer than necessary.
+Một lần nữa, trong nhiều trường hợp JS có thể tự động tối ưu hóa chương trình để có cùng hiệu quả. Nhưng vẫn là một thói quen tốt để cẩn thận và đảm bảo rõ ràng chúng ta không giữ bất kỳ lượng bộ nhớ thiết bị đáng kể nào bị ràng buộc lâu hơn mức cần thiết.
 
-As a matter of fact, we also technically don't need the function `getGrade()` anymore after the `.map(getGrade)` call completes. If profiling our application showed this was a critical area of excess memory use, we could possibly eek out a tiny bit more memory by freeing up that reference so its value isn't tied up either. That's likely unnecessary in this toy example, but this is a general technique to keep in mind if you're optimizing the memory footprint of your application.
+Thực tế là, chúng ta cũng về mặt kỹ thuật không cần hàm `getGrade()` nữa sau khi cuộc gọi `.map(getGrade)` hoàn thành. Nếu hồ sơ ứng dụng của chúng ta cho thấy đây là một khu vực quan trọng của việc sử dụng bộ nhớ dư thừa, chúng ta có thể có thể tiết kiệm thêm một chút bộ nhớ bằng cách giải phóng tham chiếu đó để giá trị của nó cũng không bị ràng buộc. Điều đó có thể không cần thiết trong ví dụ đồ chơi này, nhưng đây là một kỹ thuật chung cần ghi nhớ nếu bạn đang tối ưu hóa dấu chân bộ nhớ của ứng dụng của mình.
 
-The takeaway: it's important to know where closures appear in our programs, and what variables are included. We should manage these closures carefully so we're only holding onto what's minimally needed and not wasting memory.
+Điều rút ra: quan trọng là phải biết nơi các closure xuất hiện trong các chương trình của chúng ta, và những biến nào được bao gồm. Chúng ta nên quản lý các closure này cẩn thận để chúng ta chỉ giữ lại những gì cần thiết tối thiểu và không lãng phí bộ nhớ.
 
-## An Alternative Perspective
+## Một Quan Điểm Thay Thế
 
-Reviewing our working definition for closure, the assertion is that functions are "first-class values" that can be passed around the program, just like any other value. Closure is the link-association that connects that function to the scope/variables outside of itself, no matter where that function goes.
+Xem xét lại định nghĩa làm việc của chúng ta cho closure, khẳng định là các hàm là "giá trị hạng nhất" có thể được truyền xung quanh chương trình, giống như bất kỳ giá trị nào khác. Closure là liên kết-kết hợp kết nối hàm đó với phạm vi/biến bên ngoài chính nó, bất kể hàm đó đi đâu.
 
-Let's recall a code example from earlier in this chapter, again with relevant scope bubble colors annotated:
+Hãy nhớ lại một ví dụ mã từ đầu chương này, một lần nữa với các màu bong bóng phạm vi liên quan được chú thích:
 
 ```js
-// outer/global scope: RED(1)
+// phạm vi bên ngoài/toàn cục: RED(1)
 
 function adder(num1) {
-    // function scope: BLUE(2)
+    // phạm vi hàm: BLUE(2)
 
     return function addTo(num2){
-        // function scope: GREEN(3)
+        // phạm vi hàm: GREEN(3)
 
         return num1 + num2;
     };
@@ -672,51 +672,51 @@ add10To(15);    // 25
 add42To(9);     // 51
 ```
 
-Our current perspective suggests that wherever a function is passed and invoked, closure preserves a hidden link back to the original scope to facilitate the access to the closed-over variables. Figure 4, repeated here for convenience, illustrates this notion:
+Quan điểm hiện tại của chúng ta gợi ý rằng bất cứ nơi nào một hàm được truyền và gọi, closure bảo tồn một liên kết ẩn trở lại phạm vi ban đầu để tạo điều kiện cho việc truy cập vào các biến được đóng trên. Hình 4, lặp lại ở đây để thuận tiện, minh họa khái niệm này:
 
 <figure>
-    <img src="images/fig4.png" width="400" alt="Function instances linked to scopes via closure" align="center">
-    <figcaption><em>Fig. 4 (repeat): Visualizing Closures</em></figcaption>
+    <img src="images/fig4.png" width="400" alt="Các thể hiện hàm được liên kết với các phạm vi thông qua closure" align="center">
+    <figcaption><em>Hình 4 (lặp lại): Hình Dung Closures</em></figcaption>
     <br><br>
 </figure>
 
-But there's another way of thinking about closure, and more precisely the nature of functions being *passed around*, that may help deepen the mental models.
+Nhưng có một cách khác để suy nghĩ về closure, và chính xác hơn là bản chất của các hàm được *truyền xung quanh*, có thể giúp làm sâu sắc thêm các mô hình tinh thần.
 
-This alternative model de-emphasizes "functions as first-class values," and instead embraces how functions (like all non-primitive values) are held by reference in JS, and assigned/passed by reference-copy—see Appendix A of the *Get Started* book for more information.
+Mô hình thay thế này giảm nhấn mạnh "các hàm như giá trị hạng nhất," và thay vào đó nắm lấy cách các hàm (như tất cả các giá trị không nguyên thủy) được giữ bằng tham chiếu trong JS, và được gán/truyền bằng sao chép tham chiếu—xem Phụ lục A của cuốn sách *Get Started* để biết thêm thông tin.
 
-Instead of thinking about the inner function instance of `addTo(..)` moving to the outer RED(1) scope via the `return` and assignment, we can envision that function instances actually just stay in place in their own scope environment, of course with their scope-chain intact.
+Thay vì nghĩ về thể hiện hàm bên trong của `addTo(..)` di chuyển đến phạm vi RED(1) bên ngoài thông qua `return` và gán, chúng ta có thể hình dung rằng các thể hiện hàm thực sự chỉ ở lại vị trí trong môi trường phạm vi riêng của chúng, tất nhiên với chuỗi phạm vi của chúng nguyên vẹn.
 
-What gets *sent* to the RED(1) scope is **just a reference** to the in-place function instance, rather than the function instance itself. Figure 5 depicts the inner function instances remaining in place, pointed to by the RED(1) `addTo10` and `addTo42` references, respectively:
+Những gì được *gửi* đến phạm vi RED(1) là **chỉ một tham chiếu** đến thể hiện hàm tại chỗ, thay vì chính thể hiện hàm. Hình 5 mô tả các thể hiện hàm bên trong vẫn ở vị trí, được trỏ đến bởi các tham chiếu RED(1) `addTo10` và `addTo42`, tương ứng:
 
 <figure>
-    <img src="images/fig5.png" width="400" alt="Function instances inside scopes via closure, linked to by references" align="center">
-    <figcaption><em>Fig. 5: Visualizing Closures (Alternative)</em></figcaption>
+    <img src="images/fig5.png" width="400" alt="Các thể hiện hàm bên trong các phạm vi thông qua closure, được liên kết bởi các tham chiếu" align="center">
+    <figcaption><em>Hình 5: Hình Dung Closures (Thay Thế)</em></figcaption>
     <br><br>
 </figure>
 
-As shown in Figure 5, each call to `adder(..)` still creates a new BLUE(2) scope containing a `num1` variable, as well as an instance of the GREEN(3) `addTo(..)` scope. But what's different from Figure 4 is, now these GREEN(3) instances remain in place, naturally nested inside of their BLUE(2) scope instances. The `addTo10` and `addTo42` references are moved to the RED(1) outer scope, not the function instances themselves.
+Như được hiển thị trong Hình 5, mỗi cuộc gọi đến `adder(..)` vẫn tạo ra một phạm vi BLUE(2) mới chứa một biến `num1`, cũng như một thể hiện của phạm vi GREEN(3) `addTo(..)`. Nhưng điều khác biệt so với Hình 4 là, bây giờ các thể hiện GREEN(3) này vẫn ở vị trí, lồng nhau một cách tự nhiên bên trong các thể hiện phạm vi BLUE(2) của chúng. Các tham chiếu `addTo10` và `addTo42` được di chuyển đến phạm vi bên ngoài RED(1), không phải chính các thể hiện hàm.
 
-When `addTo10(15)` is called, the `addTo(..)` function instance (still in place in its original BLUE(2) scope environment) is invoked. Since the function instance itself never moved, of course it still has natural access to its scope chain. Same with the `addTo42(9)` call—nothing special here beyond lexical scope.
+Khi `addTo10(15)` được gọi, thể hiện hàm `addTo(..)` (vẫn ở vị trí trong môi trường phạm vi BLUE(2) ban đầu của nó) được gọi. Vì chính thể hiện hàm không bao giờ di chuyển, tất nhiên nó vẫn có quyền truy cập tự nhiên vào chuỗi phạm vi của nó. Tương tự với cuộc gọi `addTo42(9)`—không có gì đặc biệt ở đây ngoài phạm vi từ vựng.
 
-So what then *is* closure, if not the *magic* that lets a function maintain a link to its original scope chain even as that function moves around in other scopes? In this alternative model, functions stay in place and keep accessing their original scope chain just like they always could.
+Vậy thì *là* closure, nếu không phải là *phép thuật* cho phép một hàm duy trì một liên kết đến chuỗi phạm vi ban đầu của nó ngay cả khi hàm đó di chuyển xung quanh trong các phạm vi khác? Trong mô hình thay thế này, các hàm ở lại vị trí và tiếp tục truy cập chuỗi phạm vi ban đầu của chúng giống như chúng luôn có thể.
 
-Closure instead describes the *magic* of **keeping alive a function instance**, along with its whole scope environment and chain, for as long as there's at least one reference to that function instance floating around in any other part of the program.
+Closure thay vào đó mô tả *phép thuật* của việc **giữ cho một thể hiện hàm sống**, cùng với toàn bộ môi trường phạm vi và chuỗi của nó, chừng nào còn ít nhất một tham chiếu đến thể hiện hàm đó trôi nổi trong bất kỳ phần nào khác của chương trình.
 
-That definition of closure is less observational and a bit less familiar-sounding compared to the traditional academic perspective. But it's nonetheless still useful, because the benefit is that we simplify explanation of closure to a straightforward combination of references and in-place function instances.
+Định nghĩa đó về closure ít quan sát hơn và nghe có vẻ ít quen thuộc hơn một chút so với quan điểm học thuật truyền thống. Nhưng nó vẫn hữu ích, bởi vì lợi ích là chúng ta đơn giản hóa việc giải thích closure thành một sự kết hợp đơn giản của các tham chiếu và các thể hiện hàm tại chỗ.
 
-The previous model (Figure 4) is not *wrong* at describing closure in JS. It's just more conceptually inspired, an academic perspective on closure. By contrast, the alternative model (Figure 5) could be described as a bit more implementation focused, how JS actually works.
+Mô hình trước đó (Hình 4) không *sai* khi mô tả closure trong JS. Nó chỉ được truyền cảm hứng về mặt khái niệm hơn, một quan điểm học thuật về closure. Ngược lại, mô hình thay thế (Hình 5) có thể được mô tả là tập trung vào triển khai hơn một chút, cách JS thực sự hoạt động.
 
-Both perspectives/models are useful in understanding closure, but the reader may find one a little easier to hold than the other. Whichever you choose, the observable outcomes in our program are the same.
+Cả hai quan điểm/mô hình đều hữu ích trong việc hiểu closure, nhưng người đọc có thể thấy cái này dễ nắm bắt hơn cái kia một chút. Dù bạn chọn cái nào, kết quả có thể quan sát được trong chương trình của chúng ta là giống nhau.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| This alternative model for closure does affect whether we classify synchronous callbacks as examples of closure or not. More on this nuance in Appendix A. |
+| Mô hình thay thế này cho closure có ảnh hưởng đến việc liệu chúng ta phân loại các callback đồng bộ là ví dụ về closure hay không. Thêm về sắc thái này trong Phụ lục A. |
 
-## Why Closure?
+## Tại Sao Closure?
 
-Now that we have a well-rounded sense of what closure is and how it works, let's explore some ways it can improve the code structure and organization of an example program.
+Bây giờ chúng ta đã có một cảm giác toàn diện về closure là gì và nó hoạt động như thế nào, hãy khám phá một số cách nó có thể cải thiện cấu trúc mã và tổ chức của một chương trình ví dụ.
 
-Imagine you have a button on a page that when clicked, should retrieve and send some data via an Ajax request. Without using closure:
+Hãy tưởng tượng bạn có một nút trên một trang mà khi được nhấp, nên truy xuất và gửi một số dữ liệu thông qua một yêu cầu Ajax. Không sử dụng closure:
 
 ```js
 var APIendpoints = {
@@ -745,9 +745,9 @@ function makeRequest(evt) {
 btn.addEventListener("click",makeRequest);
 ```
 
-The `makeRequest(..)` utility only receives an `evt` object from a click event. From there, it has to retrieve the `data-kind` attribute from the target button element, and use that value to lookup both a URL for the API endpoint as well as what data should be included in the Ajax request.
+Tiện ích `makeRequest(..)` chỉ nhận một đối tượng `evt` từ một sự kiện nhấp chuột. Từ đó, nó phải truy xuất thuộc tính `data-kind` từ phần tử nút mục tiêu, và sử dụng giá trị đó để tra cứu cả URL cho điểm cuối API cũng như dữ liệu nào nên được bao gồm trong yêu cầu Ajax.
 
-This works OK, but it's unfortunate (inefficient, more confusing) that the event handler has to read a DOM attribute each time it's fired. Why couldn't an event handler *remember* this value? Let's try using closure to improve the code:
+Điều này hoạt động OK, nhưng thật không may (kém hiệu quả, khó hiểu hơn) khi trình xử lý sự kiện phải đọc một thuộc tính DOM mỗi khi nó được kích hoạt. Tại sao một trình xử lý sự kiện không thể *nhớ* giá trị này? Hãy thử sử dụng closure để cải thiện mã:
 
 ```js
 var APIendpoints = {
@@ -782,15 +782,15 @@ function setupButtonHandler(btn) {
 setupButtonHandler(btn);
 ```
 
-With the `setupButtonHandler(..)` approach, the `data-kind` attribute is retrieved once and assigned to the `recordKind` variable at initial setup. `recordKind` is then closed over by the inner `makeRequest(..)` click handler, and its value is used on each event firing to look up the URL and data that should be sent.
+Với cách tiếp cận `setupButtonHandler(..)`, thuộc tính `data-kind` được truy xuất một lần và gán cho biến `recordKind` tại thiết lập ban đầu. `recordKind` sau đó được đóng trên bởi trình xử lý nhấp chuột `makeRequest(..)` bên trong, và giá trị của nó được sử dụng trên mỗi lần kích hoạt sự kiện để tra cứu URL và dữ liệu nên được gửi.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| `evt` is still passed to `makeRequest(..)`, though in this case we're not using it anymore. It's still listed, for consistency with the previous snippet. |
+| `evt` vẫn được truyền cho `makeRequest(..)`, mặc dù trong trường hợp này chúng ta không sử dụng nó nữa. Nó vẫn được liệt kê, để nhất quán với đoạn trích trước. |
 
-By placing `recordKind` inside `setupButtonHandler(..)`, we limit the scope exposure of that variable to a more appropriate subset of the program; storing it globally would have been worse for code organization and readability. Closure lets the inner `makeRequest()` function instance *remember* this variable and access whenever it's needed.
+Bằng cách đặt `recordKind` bên trong `setupButtonHandler(..)`, chúng ta hạn chế sự phơi bày phạm vi của biến đó cho một tập hợp con thích hợp hơn của chương trình; lưu trữ nó toàn cục sẽ tồi tệ hơn cho tổ chức mã và khả năng đọc. Closure cho phép thể hiện hàm `makeRequest()` bên trong *nhớ* biến này và truy cập bất cứ khi nào nó cần.
 
-Building on this pattern, we could have looked up both the URL and data once, at setup:
+Xây dựng trên mẫu này, chúng ta có thể đã tra cứu cả URL và dữ liệu một lần, tại thiết lập:
 
 ```js
 function setupButtonHandler(btn) {
@@ -807,13 +807,13 @@ function setupButtonHandler(btn) {
 }
 ```
 
-Now `makeRequest(..)` is closed over `requestURL` and `requestData`, which is a little bit cleaner to understand, and also slightly more performant.
+Bây giờ `makeRequest(..)` được đóng trên `requestURL` và `requestData`, điều này sạch hơn một chút để hiểu, và cũng hiệu quả hơn một chút.
 
-Two similar techniques from the Functional Programming (FP) paradigm that rely on closure are partial application and currying. Briefly, with these techniques, we alter the *shape* of functions that require multiple inputs so some inputs are provided up front, and other inputs are provided later; the initial inputs are remembered via closure. Once all inputs have been provided, the underlying action is performed.
+Hai kỹ thuật tương tự từ mô hình Lập trình Hàm (FP) dựa vào closure là ứng dụng một phần (partial application) và currying. Tóm lại, với các kỹ thuật này, chúng ta thay đổi *hình dạng* của các hàm yêu cầu nhiều đầu vào để một số đầu vào được cung cấp trước, và các đầu vào khác được cung cấp sau; các đầu vào ban đầu được nhớ thông qua closure. Một khi tất cả các đầu vào đã được cung cấp, hành động cơ bản được thực hiện.
 
-By creating a function instance that encapsulates some information inside (via closure), the function-with-stored-information can later be used directly without needing to re-provide that input. This makes that part of the code cleaner, and also offers the opportunity to label partially applied functions with better semantic names.
+Bằng cách tạo một thể hiện hàm đóng gói một số thông tin bên trong (thông qua closure), hàm-với-thông-tin-được-lưu-trữ sau đó có thể được sử dụng trực tiếp mà không cần cung cấp lại đầu vào đó. Điều này làm cho phần mã đó sạch hơn, và cũng cung cấp cơ hội để dán nhãn các hàm được ứng dụng một phần với các tên ngữ nghĩa tốt hơn.
 
-Adapting partial application, we can further improve the preceding code:
+Thích ứng ứng dụng một phần, chúng ta có thể cải thiện thêm mã trước đó:
 
 ```js
 function defineHandler(requestURL,requestData) {
@@ -832,24 +832,24 @@ function setupButtonHandler(btn) {
 }
 ```
 
-The `requestURL` and `requestData` inputs are provided ahead of time, resulting in the `makeRequest(..)` partially applied function, which we locally label `handler`. When the event eventually fires, the final input (`evt`, even though it's ignored) is passed to `handler()`, completing its inputs and triggering the underlying Ajax request.
+Các đầu vào `requestURL` và `requestData` được cung cấp trước thời hạn, dẫn đến hàm được ứng dụng một phần `makeRequest(..)`, mà chúng ta dán nhãn cục bộ là `handler`. Khi sự kiện cuối cùng kích hoạt, đầu vào cuối cùng (`evt`, ngay cả khi nó bị bỏ qua) được truyền cho `handler()`, hoàn thành các đầu vào của nó và kích hoạt yêu cầu Ajax cơ bản.
 
-Behavior-wise, this program is pretty similar to the previous one, with the same type of closure. But by isolating the creation of `makeRequest(..)` in a separate utility (`defineHandler(..)`), we make that definition more reusable across the program. We also explicitly limit the closure scope to only the two variables needed.
+Về mặt hành vi, chương trình này khá giống với chương trình trước, với cùng loại closure. Nhưng bằng cách cô lập việc tạo `makeRequest(..)` trong một tiện ích riêng biệt (`defineHandler(..)`), chúng ta làm cho định nghĩa đó có thể tái sử dụng nhiều hơn trên toàn bộ chương trình. Chúng ta cũng giới hạn rõ ràng phạm vi closure chỉ cho hai biến cần thiết.
 
-## Closer to Closure
+## Gần Hơn Với Closure
 
-As we close down a dense chapter, take some deep breaths let it all sink in. Seriously, that's a lot of information for anyone to consume!
+Khi chúng ta đóng lại một chương dày đặc, hãy hít thở sâu để tất cả chìm vào. Nghiêm túc mà nói, đó là rất nhiều thông tin cho bất cứ ai tiêu thụ!
 
-We explored two models for mentally tackling closure:
+Chúng ta đã khám phá hai mô hình để giải quyết closure về mặt tinh thần:
 
-* Observational: closure is a function instance remembering its outer variables even as that function is passed to and **invoked in** other scopes.
+* Quan sát: closure là một thể hiện hàm nhớ các biến bên ngoài của nó ngay cả khi hàm đó được truyền đến và **được gọi trong** các phạm vi khác.
 
-* Implementational: closure is a function instance and its scope environment preserved in-place while any references to it are passed around and **invoked from** other scopes.
+* Triển khai: closure là một thể hiện hàm và môi trường phạm vi của nó được bảo tồn tại chỗ trong khi bất kỳ tham chiếu nào đến nó được truyền xung quanh và **được gọi từ** các phạm vi khác.
 
-Summarizing the benefits to our programs:
+Tóm tắt các lợi ích cho các chương trình của chúng ta:
 
-* Closure can improve efficiency by allowing a function instance to remember previously determined information instead of having to compute it each time.
+* Closure có thể cải thiện hiệu quả bằng cách cho phép một thể hiện hàm nhớ thông tin đã xác định trước đó thay vì phải tính toán nó mỗi lần.
 
-* Closure can improve code readability, bounding scope-exposure by encapsulating variable(s) inside function instances, while still making sure the information in those variables is accessible for future use. The resultant narrower, more specialized function instances are cleaner to interact with, since the preserved information doesn't need to be passed in every invocation.
+* Closure có thể cải thiện khả năng đọc mã, giới hạn phơi bày phạm vi bằng cách đóng gói (các) biến bên trong các thể hiện hàm, trong khi vẫn đảm bảo thông tin trong các biến đó có thể truy cập được cho việc sử dụng trong tương lai. Các thể hiện hàm hẹp hơn, chuyên biệt hơn kết quả sạch hơn để tương tác, vì thông tin được bảo tồn không cần phải được truyền vào mỗi lần gọi.
 
-Before you move on, take some time to restate this summary *in your own words*, explaining what closure is and why it's helpful in your programs. The main book text concludes with a final chapter that builds on top of closure with the module pattern.
+Trước khi bạn tiếp tục, hãy dành chút thời gian để trình bày lại tóm tắt này *bằng lời của riêng bạn*, giải thích closure là gì và tại sao nó hữu ích trong các chương trình của bạn. Văn bản sách chính kết thúc với một chương cuối cùng xây dựng trên closure với mẫu module.

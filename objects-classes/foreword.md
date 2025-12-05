@@ -1,15 +1,15 @@
-# You Don't Know JS Yet: Objects & Classes - 2nd Edition
-# Foreword
+# You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
+# Lời Tựa
 
-Kyle Simpson has an unmatched brilliance in the art of explanation.
+Kyle Simpson có một tài năng vô song trong nghệ thuật giải thích.
 
-In April of 2015 I was honored to author the foreword for Kyle's book [You Don't Know JS: ES6 & Beyond](https://www.oreilly.com/library/view/you-dont-know/9781491905241/), an exciting and detailed deep-dive into new JavaScript language features that hadn't even yet been ratified by Ecma (that wouldn't happen until June 2015), but had already made their way out into the world. At the time, there was gap in meaningful documentation and educational resources, and I declared that no better person had stepped up to fill it. I stand by everything I wrote in 2015, and I'm here in 2022 to double down for [You Don't Know JS Yet: Objects & Classes]().
+Vào tháng 4 năm 2015, tôi đã vinh dự được viết lời tựa cho cuốn sách của Kyle [You Don't Know JS: ES6 & Beyond](https://www.oreilly.com/library/view/you-dont-know/9781491905241/), một cuốn sách thú vị và chi tiết đi sâu vào các tính năng ngôn ngữ JavaScript mới thậm chí còn chưa được Ecma phê chuẩn (điều đó sẽ không xảy ra cho đến tháng 6 năm 2015), nhưng đã được đưa ra thế giới. Vào thời điểm đó, có một khoảng cách về tài liệu ý nghĩa và tài nguyên giáo dục, và tôi đã tuyên bố rằng không có người nào tốt hơn đã bước lên để lấp đầy nó. Tôi giữ vững mọi thứ tôi đã viết vào năm 2015, và tôi ở đây vào năm 2022 để khẳng định lại gấp đôi cho [You Don't Know JS Yet: Objects & Classes]().
 
-We are all better off for the time, effort and resources that Kyle pours into forming a better understanding of the JavaScript programming language for himself, and for the betterment of his peers: learning, honing and distilling complex semantics into easily digestable concepts that can be built upon in infinite, myriad ways. And that's exactly what we witness here: Kyle becomes an expert in programming subject matter by consuming it at every level. By probing the semantics of new language features, luring them out from the shadows, releasing them from arcane origins and freeing them for our consumption and growth.
+Tất cả chúng ta đều tốt hơn nhờ thời gian, nỗ lực và nguồn lực mà Kyle đổ vào việc hình thành sự hiểu biết tốt hơn về ngôn ngữ lập trình JavaScript cho chính mình, và vì sự tốt đẹp hơn của các đồng nghiệp: học hỏi, trau dồi và chắt lọc ngữ nghĩa phức tạp thành các khái niệm dễ tiêu hóa có thể được xây dựng theo vô số cách. Và đó chính xác là những gì chúng ta chứng kiến ở đây: Kyle trở thành một chuyên gia về chủ đề lập trình bằng cách tiêu thụ nó ở mọi cấp độ. Bằng cách thăm dò ngữ nghĩa của các tính năng ngôn ngữ mới, dụ chúng ra khỏi bóng tối, giải phóng chúng khỏi nguồn gốc bí ẩn và giải phóng chúng cho sự tiêu thụ và phát triển của chúng ta.
 
-Even as a successful professional software engineer, I keep Kyle's works close at hand. At times these tomes are helpful in explaining deeply complex concepts to teammates and peers, while other times they serve as refreshers for myself, because there's always some interesting take-away or new perspective to gain.
+Ngay cả khi là một kỹ sư phần mềm chuyên nghiệp thành công, tôi vẫn giữ các tác phẩm của Kyle trong tầm tay. Đôi khi những cuốn sách này hữu ích trong việc giải thích các khái niệm phức tạp sâu sắc cho đồng đội và đồng nghiệp, trong khi những lần khác chúng đóng vai trò là người nhắc nhở cho chính tôi, bởi vì luôn có một số điều thú vị hoặc quan điểm mới để đạt được.
 
 Rick Waldron (@rwaldron)<br>
-Lead Software Engineer<br>
+Kỹ sư Phần mềm Chính<br>
 Lightning Web Security<br>
 Salesforce

@@ -1,128 +1,128 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
-# Chapter 4: The Bigger Picture
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
+# Chương 4: Bức tranh Lớn hơn
 
-This book surveys what you need to be aware of as you *get started* with JS. The goal is to fill in gaps that readers newer to JS might have tripped over in their early encounters with the language. I also hope that we've hinted at enough deeper detail throughout to pique your curiosity to want to dig more into the language.
+Cuốn sách này khảo sát những gì bạn cần biết khi bạn *bắt đầu* với JS. Mục tiêu là lấp đầy những khoảng trống mà những độc giả mới làm quen với JS có thể đã vấp phải trong những lần tiếp xúc đầu tiên với ngôn ngữ. Tôi cũng hy vọng rằng chúng tôi đã gợi ý đủ chi tiết sâu hơn trong suốt cuốn sách để khơi dậy sự tò mò của bạn muốn tìm hiểu thêm về ngôn ngữ.
 
-The rest of the books in this series are where we will unpack all of the rest of the language, in far greater detail than we could have done in a few brief chapters here.
+Phần còn lại của các cuốn sách trong bộ sách này là nơi chúng tôi sẽ giải nén tất cả phần còn lại của ngôn ngữ, chi tiết hơn nhiều so với những gì chúng tôi có thể làm trong một vài chương ngắn ở đây.
 
-Remember to take your time, though. Rather than rushing onto the next book in an attempt to churn through all the books expediently, spend some time going back over the material in this book. Spend some more time looking through code in your current projects, and comparing what you see to what's been discussed so far.
+Tuy nhiên, hãy nhớ dành thời gian của bạn. Thay vì vội vã chuyển sang cuốn sách tiếp theo trong nỗ lực nghiền ngẫm tất cả các cuốn sách một cách nhanh chóng, hãy dành chút thời gian xem lại tài liệu trong cuốn sách này. Dành thêm thời gian xem qua mã trong các dự án hiện tại của bạn và so sánh những gì bạn thấy với những gì đã được thảo luận cho đến nay.
 
-When you're ready, this final chapter divides the organization of the JS language into three main pillars, then offers a brief roadmap of what to expect from the rest of the book series, and how I suggest you proceed. Also, don't skip the appendices, especially Appendix B, "Practice, Practice, Practice!".
+Khi bạn đã sẵn sàng, chương cuối cùng này chia tổ chức của ngôn ngữ JS thành ba trụ cột chính, sau đó đưa ra một lộ trình ngắn gọn về những gì có thể mong đợi từ phần còn lại của bộ sách và cách tôi đề nghị bạn tiến hành. Ngoài ra, đừng bỏ qua các phụ lục, đặc biệt là Phụ lục B, "Thực hành, Thực hành, Thực hành!".
 
-## Pillar 1: Scope and Closure
+## Trụ cột 1: Phạm vi và Closure
 
-The organization of variables into units of scope (functions, blocks) is one of the most foundational characteristics of any language; perhaps no other characteristic has a greater impact on how programs behave.
+Việc tổ chức các biến thành các đơn vị phạm vi (hàm, khối) là một trong những đặc điểm nền tảng nhất của bất kỳ ngôn ngữ nào; có lẽ không có đặc điểm nào khác có tác động lớn hơn đến cách các chương trình hoạt động.
 
-Scopes are like buckets, and variables are like marbles you put into those buckets. The scope model of a language is like the rules that help you determine which color marbles go in which matching-color buckets.
+Phạm vi giống như những chiếc xô, và các biến giống như những viên bi bạn bỏ vào những chiếc xô đó. Mô hình phạm vi của một ngôn ngữ giống như các quy tắc giúp bạn xác định viên bi màu nào đi vào xô màu tương ứng nào.
 
-Scopes nest inside each other, and for any given expression or statement, only variables at that level of scope nesting, or in higher/outer scopes, are accessible; variables from lower/inner scopes are hidden and inaccessible.
+Các phạm vi lồng vào nhau, và đối với bất kỳ biểu thức hoặc câu lệnh nào, chỉ các biến ở cấp độ lồng phạm vi đó, hoặc trong các phạm vi cao hơn/bên ngoài, mới có thể truy cập được; các biến từ các phạm vi thấp hơn/bên trong bị ẩn và không thể truy cập được.
 
-This is how scopes behave in most languages, which is called lexical scope. The scope unit boundaries, and how variables are organized in them, is determined at the time the program is parsed (compiled). In other words, it's an author-time decision: where you locate a function/scope in the program determines what the scope structure of that part of the program will be.
+Đây là cách các phạm vi hoạt động trong hầu hết các ngôn ngữ, được gọi là phạm vi từ vựng (lexical scope). Các ranh giới đơn vị phạm vi, và cách các biến được tổ chức trong chúng, được xác định tại thời điểm chương trình được phân tích cú pháp (biên dịch). Nói cách khác, đó là một quyết định tại thời điểm tác giả: nơi bạn đặt một hàm/phạm vi trong chương trình xác định cấu trúc phạm vi của phần đó của chương trình sẽ là gì.
 
-JS is lexically scoped, though many claim it isn't, because of two particular characteristics of its model that are not present in other lexically scoped languages.
+JS có phạm vi từ vựng, mặc dù nhiều người cho rằng không phải vậy, vì hai đặc điểm cụ thể của mô hình của nó không có trong các ngôn ngữ có phạm vi từ vựng khác.
 
-The first is commonly called *hoisting*: when all variables declared anywhere in a scope are treated as if they're declared at the beginning of the scope. The other is that `var`-declared variables are function scoped, even if they appear inside a block.
+Đầu tiên thường được gọi là *hoisting*: khi tất cả các biến được khai báo ở bất kỳ đâu trong một phạm vi được coi như thể chúng được khai báo ở đầu phạm vi. Thứ hai là các biến được khai báo bằng `var` có phạm vi hàm, ngay cả khi chúng xuất hiện bên trong một khối.
 
-Neither hoisting nor function-scoped `var` are sufficient to back the claim that JS is not lexically scoped. `let`/`const` declarations have a peculiar error behavior called the "Temporal Dead Zone" (TDZ) which results in observable but unusable variables. Though TDZ can be strange to encounter, it's *also* not an invalidation of lexical scoping. All of these are just unique parts of the language that should be learned and understood by all JS developers.
+Cả hoisting và `var` phạm vi hàm đều không đủ để chứng minh cho tuyên bố rằng JS không có phạm vi từ vựng. Các khai báo `let`/`const` có một hành vi lỗi đặc biệt gọi là "Vùng Chết Tạm thời" (Temporal Dead Zone - TDZ) dẫn đến các biến có thể quan sát được nhưng không sử dụng được. Mặc dù TDZ có thể lạ lẫm khi gặp phải, nhưng nó *cũng* không phải là sự vô hiệu hóa của phạm vi từ vựng. Tất cả những điều này chỉ là những phần độc đáo của ngôn ngữ mà tất cả các nhà phát triển JS nên học và hiểu.
 
-Closure is a natural result of lexical scope when the language has functions as first-class values, as JS does. When a function makes reference to variables from an outer scope, and that function is passed around as a value and executed in other scopes, it maintains access to its original scope variables; this is closure.
+Closure là kết quả tự nhiên của phạm vi từ vựng khi ngôn ngữ có các hàm là giá trị hạng nhất, như JS. Khi một hàm tham chiếu đến các biến từ một phạm vi bên ngoài, và hàm đó được truyền đi như một giá trị và được thực thi trong các phạm vi khác, nó vẫn duy trì quyền truy cập vào các biến phạm vi ban đầu của nó; đây là closure.
 
-Across all of programming, but especially in JS, closure drives many of the most important programming patterns, including modules. As I see it, modules are as *with the grain* as you can get, when it comes to code organization in JS.
+Trên tất cả các lập trình, nhưng đặc biệt là trong JS, closure thúc đẩy nhiều mẫu lập trình quan trọng nhất, bao gồm cả các mô-đun. Theo tôi thấy, các mô-đun là *thuận theo tự nhiên* nhất có thể, khi nói đến tổ chức mã trong JS.
 
-To dig further into scope, closures, and how modules work, read Book 2, *Scope & Closures*.
+Để tìm hiểu sâu hơn về phạm vi, closures và cách các mô-đun hoạt động, hãy đọc Cuốn 2, *Phạm vi & Closures*.
 
-## Pillar 2: Prototypes
+## Trụ cột 2: Nguyên mẫu (Prototypes)
 
-The second pillar of the language is the prototypes system. We covered this topic in-depth in Chapter 3 ("Prototypes"), but I just want to make a few more comments about its importance.
+Trụ cột thứ hai của ngôn ngữ là hệ thống nguyên mẫu. Chúng ta đã đề cập sâu đến chủ đề này trong Chương 3 ("Nguyên mẫu"), nhưng tôi chỉ muốn đưa ra thêm một vài nhận xét về tầm quan trọng của nó.
 
-JS is one of very few languages where you have the option to create objects directly and explicitly, without first defining their structure in a class.
+JS là một trong số rất ít ngôn ngữ mà bạn có tùy chọn tạo các đối tượng trực tiếp và rõ ràng, mà không cần xác định cấu trúc của chúng trong một lớp trước.
 
-For many years, people implemented the class design pattern on top of prototypes—so-called "prototypal inheritance" (see Appendix A, "Prototypal 'Classes'")—and then with the advent of ES6's `class` keyword, the language doubled-down on its inclination toward OO/class-style programming.
+Trong nhiều năm, mọi người đã triển khai mẫu thiết kế lớp trên các nguyên mẫu—cái gọi là "kế thừa nguyên mẫu" (xem Phụ lục A, "Các 'Lớp' Nguyên mẫu")—và sau đó với sự ra đời của từ khóa `class` của ES6, ngôn ngữ đã tăng gấp đôi xu hướng lập trình theo phong cách OO/lớp.
 
-But I think that focus has obscured the beauty and power of the prototype system: the ability for two objects to simply connect with each other and cooperate dynamically (during function/method execution) through sharing a `this` context.
+Nhưng tôi nghĩ rằng sự tập trung đó đã che khuất vẻ đẹp và sức mạnh của hệ thống nguyên mẫu: khả năng cho hai đối tượng chỉ cần kết nối với nhau và hợp tác động (trong quá trình thực thi hàm/phương thức) thông qua việc chia sẻ ngữ cảnh `this`.
 
-Classes are just one pattern you can build on top of such power. But another approach, in a very different direction, is to simply embrace objects as objects, forget classes altogether, and let objects cooperate through the prototype chain. This is called *behavior delegation*. I think delegation is more powerful than class inheritance, as a means for organizing behavior and data in our programs.
+Các lớp chỉ là một mẫu bạn có thể xây dựng dựa trên sức mạnh đó. Nhưng một cách tiếp cận khác, theo một hướng rất khác, là chỉ cần nắm lấy các đối tượng như là các đối tượng, quên hoàn toàn các lớp, và để các đối tượng hợp tác thông qua chuỗi nguyên mẫu. Điều này được gọi là *ủy quyền hành vi* (behavior delegation). Tôi nghĩ rằng ủy quyền mạnh mẽ hơn kế thừa lớp, như một phương tiện để tổ chức hành vi và dữ liệu trong các chương trình của chúng ta.
 
-But class inheritance gets almost all the attention. And the rest goes to functional programming (FP), as the sort of "anti-class" way of designing programs. This saddens me, because it snuffs out any chance for exploration of delegation as a viable alternative.
+Nhưng kế thừa lớp nhận được gần như tất cả sự chú ý. Và phần còn lại dành cho lập trình hàm (FP), như một loại cách "chống lớp" để thiết kế các chương trình. Điều này làm tôi buồn, vì nó dập tắt mọi cơ hội khám phá ủy quyền như một sự thay thế khả thi.
 
-I encourage you to spend plenty of time deep in Book 3, *Objects & Classes*, to see how object delegation holds far more potential than we've perhaps realized. This isn't an anti-`class` message, but it is intentionally a "classes aren't the only way to use objects" message that I want more JS developers to consider.
+Tôi khuyến khích bạn dành nhiều thời gian sâu trong Cuốn 3, *Đối tượng & Lớp*, để xem cách ủy quyền đối tượng nắm giữ tiềm năng lớn hơn nhiều so với những gì chúng ta có thể đã nhận ra. Đây không phải là một thông điệp chống `class`, nhưng nó cố ý là một thông điệp "các lớp không phải là cách duy nhất để sử dụng các đối tượng" mà tôi muốn nhiều nhà phát triển JS xem xét hơn.
 
-Object delegation is, I would argue, far more *with the grain* of JS, than classes (more on *grains* in a bit).
+Ủy quyền đối tượng, tôi sẽ tranh luận, *thuận theo tự nhiên* của JS hơn nhiều so với các lớp (thêm về *tự nhiên* một chút nữa).
 
-## Pillar 3: Types and Coercion
+## Trụ cột 3: Các loại và Ép kiểu
 
-The third pillar of JS is by far the most overlooked part of JS's nature.
+Trụ cột thứ ba của JS cho đến nay là phần bị bỏ qua nhiều nhất trong bản chất của JS.
 
-The vast majority of developers have strong misconceptions about how *types* work in programming languages, and especially how they work in JS. A tidal wave of interest in the broader JS community has begun to shift to "static typing" approaches, using type-aware tooling like TypeScript or Flow.
+Đại đa số các nhà phát triển có những quan niệm sai lầm mạnh mẽ về cách các *loại* (types) hoạt động trong các ngôn ngữ lập trình, và đặc biệt là cách chúng hoạt động trong JS. Một làn sóng quan tâm trong cộng đồng JS rộng lớn hơn đã bắt đầu chuyển sang các cách tiếp cận "gõ tĩnh" (static typing), sử dụng các công cụ nhận biết loại như TypeScript hoặc Flow.
 
-I agree that JS developers should learn more about types, and should learn more about how JS manages type conversions. I also agree that type-aware tooling can help developers, assuming they have gained and used this knowledge in the first place!
+Tôi đồng ý rằng các nhà phát triển JS nên tìm hiểu thêm về các loại, và nên tìm hiểu thêm về cách JS quản lý chuyển đổi loại. Tôi cũng đồng ý rằng các công cụ nhận biết loại có thể giúp các nhà phát triển, giả sử họ đã đạt được và sử dụng kiến thức này ngay từ đầu!
 
-But I don't agree at all that the inevitable conclusion of this is to decide JS's type mechanism is bad and that we need to cover up JS's types with solutions outside the language. We don't have to follow the "static typing" way to be smart and solid with types in our programs. There are other options, if you're just willing to go *against the grain* of the crowd, and *with the grain* of JS (again, more on that to come).
+Nhưng tôi hoàn toàn không đồng ý rằng kết luận tất yếu của điều này là quyết định cơ chế loại của JS là tồi và chúng ta cần che đậy các loại của JS bằng các giải pháp bên ngoài ngôn ngữ. Chúng ta không cần phải tuân theo cách "gõ tĩnh" để trở nên thông minh và vững chắc với các loại trong các chương trình của mình. Có những lựa chọn khác, nếu bạn chỉ sẵn sàng đi *ngược lại dòng chảy* của đám đông, và *thuận theo tự nhiên* của JS (một lần nữa, sẽ có thêm về điều đó).
 
-Arguably, this pillar is more important than the other two, in the sense that no JS program will do anything useful if it doesn't properly leverage JS's value types, as well as the conversion (coercion) of values between types.
+Có thể cho rằng, trụ cột này quan trọng hơn hai trụ cột kia, theo nghĩa là không có chương trình JS nào sẽ làm bất cứ điều gì hữu ích nếu nó không tận dụng đúng cách các loại giá trị của JS, cũng như việc chuyển đổi (ép kiểu) các giá trị giữa các loại.
 
-Even if you love TypeScript/Flow, you are not going to get the most out of those tools or coding approaches if you aren't deeply familiar with how the language itself manages value types.
+Ngay cả khi bạn yêu thích TypeScript/Flow, bạn sẽ không tận dụng tối đa các công cụ hoặc cách tiếp cận mã hóa đó nếu bạn không quen thuộc sâu sắc với cách chính ngôn ngữ quản lý các loại giá trị.
 
-To learn more about JS types and coercion, check out Book 4, *Types & Grammar*. But please don't skip over this topic just because you've always heard that we should use `===` and forget about the rest.
+Để tìm hiểu thêm về các loại và ép kiểu JS, hãy xem Cuốn 4, *Các loại & Ngữ pháp*. Nhưng xin đừng bỏ qua chủ đề này chỉ vì bạn luôn nghe nói rằng chúng ta nên sử dụng `===` và quên đi phần còn lại.
 
-Without learning this pillar, your foundation in JS is shaky and incomplete at best.
+Nếu không học trụ cột này, nền tảng của bạn trong JS là lung lay và không đầy đủ nhất.
 
-## With the Grain
+## Thuận theo Tự nhiên
 
-I have some advice to share on continuing your learning journey with JS, and your path through the rest of this book series: be aware of the *grain* (recall various references to *grain* earlier in this chapter).
+Tôi có một số lời khuyên để chia sẻ về việc tiếp tục hành trình học tập của bạn với JS, và con đường của bạn qua phần còn lại của bộ sách này: hãy nhận thức về *tự nhiên* (grain) (nhớ lại các tham chiếu khác nhau đến *tự nhiên* trước đó trong chương này).
 
-First, consider the *grain* (as in, wood) of how most people approach and use JS. You've probably already noticed that these books cut against that *grain* in many respects. In YDKJSY, I respect you the reader enough to explain all the parts of JS, not only some select popular parts. I believe you're both capable and deserving of that knowledge.
+Đầu tiên, hãy xem xét *tự nhiên* (như trong gỗ) của cách hầu hết mọi người tiếp cận và sử dụng JS. Bạn có thể đã nhận thấy rằng những cuốn sách này đi ngược lại *tự nhiên* đó ở nhiều khía cạnh. Trong YDKJSY, tôi tôn trọng bạn, độc giả, đủ để giải thích tất cả các phần của JS, không chỉ một số phần phổ biến được chọn lọc. Tôi tin rằng bạn vừa có khả năng vừa xứng đáng với kiến thức đó.
 
-But that is not what you'll find from a lot of other material out there. It also means that the more you follow and adhere to the guidance from these books—that you think carefully and analyze for yourself what's best in your code—the more you will stand out. That can be a good and bad thing. If you ever want to break out from the crowd, you're going to have to break from how the crowd does it!
+Nhưng đó không phải là những gì bạn sẽ tìm thấy từ rất nhiều tài liệu khác ngoài kia. Điều đó cũng có nghĩa là bạn càng làm theo và tuân thủ hướng dẫn từ những cuốn sách này—rằng bạn suy nghĩ cẩn thận và tự phân tích xem điều gì là tốt nhất trong mã của mình—bạn sẽ càng nổi bật. Đó có thể là một điều tốt và xấu. Nếu bạn muốn thoát khỏi đám đông, bạn sẽ phải phá vỡ cách đám đông làm điều đó!
 
-But I've also had many people tell me that they quoted some topic/explanation from these books during a job interview, and the interviewer told the candidate they were wrong; indeed, people have reportedly lost out on job offers as a result.
+Nhưng tôi cũng đã có nhiều người nói với tôi rằng họ đã trích dẫn một số chủ đề/giải thích từ những cuốn sách này trong một cuộc phỏng vấn xin việc, và người phỏng vấn nói với ứng viên rằng họ đã sai; thực sự, mọi người đã được báo cáo là mất cơ hội việc làm do kết quả đó.
 
-As much as possible, I endeavor in these books to provide completely accurate information about JS, informed generally from the specification itself. But I also dose out quite a bit of my opinions on how you can interpret and use JS to the best benefit in your programs. I don't present opinion as fact, or vice versa. You'll always know which is which in these books.
+Càng nhiều càng tốt, tôi nỗ lực trong những cuốn sách này để cung cấp thông tin hoàn toàn chính xác về JS, được thông báo chung từ chính đặc tả. Nhưng tôi cũng đưa ra khá nhiều ý kiến của mình về cách bạn có thể diễn giải và sử dụng JS để mang lại lợi ích tốt nhất trong các chương trình của mình. Tôi không trình bày ý kiến như là sự thật, hoặc ngược lại. Bạn sẽ luôn biết cái nào là cái nào trong những cuốn sách này.
 
-Facts about JS are not really up for debate. Either the specification says something, or it doesn't. If you don't like what the specification says, or my relaying of it, take that up with TC39! If you're in an interview and they claim you're wrong on the facts, ask them right then and there if you can look it up in the specification. If the interviewer won't re-consider, then you shouldn't want to work there anyway.
+Sự thật về JS không thực sự để tranh luận. Hoặc là đặc tả nói điều gì đó, hoặc nó không. Nếu bạn không thích những gì đặc tả nói, hoặc việc tôi chuyển tiếp nó, hãy giải quyết vấn đề đó với TC39! Nếu bạn đang trong một cuộc phỏng vấn và họ cho rằng bạn sai về sự thật, hãy hỏi họ ngay tại đó và sau đó nếu bạn có thể tra cứu nó trong đặc tả. Nếu người phỏng vấn sẽ không xem xét lại, thì dù sao bạn cũng không nên muốn làm việc ở đó.
 
-But if you choose to align with my opinions, you have to be prepared to back up those choices with *why* you feel that way. Don't just parrot what I say. Own your opinions. Defend them. And if someone you were hoping to work with disagrees, walk away with your head still held high. It's a big JS, and there's plenty of room for lots of different ways.
+Nhưng nếu bạn chọn đồng ý với ý kiến của tôi, bạn phải chuẩn bị để sao lưu những lựa chọn đó với *lý do tại sao* bạn cảm thấy như vậy. Đừng chỉ vẹt lại những gì tôi nói. Sở hữu ý kiến của bạn. Bảo vệ chúng. Và nếu ai đó bạn đang hy vọng làm việc cùng không đồng ý, hãy bước đi với cái đầu vẫn ngẩng cao. Đó là một JS lớn, và có rất nhiều chỗ cho rất nhiều cách khác nhau.
 
-In other words, don't be afraid to go against the *grain*, as I have done with these books and all my teachings. Nobody can tell you how you will best make use of JS; that's for you to decide. I'm merely trying to empower you in coming to your own conclusions, no matter what they are.
+Nói cách khác, đừng ngại đi ngược lại *tự nhiên*, như tôi đã làm với những cuốn sách này và tất cả các bài giảng của tôi. Không ai có thể cho bạn biết cách bạn sẽ sử dụng tốt nhất JS; đó là để bạn quyết định. Tôi chỉ đang cố gắng trao quyền cho bạn để đi đến kết luận của riêng bạn, bất kể chúng là gì.
 
-On the other hand, there's a *grain* you really should pay attention to and follow: the *grain* of how JS works, at the language level. There are things that work well and naturally in JS, given the right practice and approach, and there are things you really shouldn't try to do in the language.
+Mặt khác, có một *tự nhiên* bạn thực sự nên chú ý và tuân theo: *tự nhiên* của cách JS hoạt động, ở cấp độ ngôn ngữ. Có những thứ hoạt động tốt và tự nhiên trong JS, với sự thực hành và cách tiếp cận đúng đắn, và có những thứ bạn thực sự không nên cố gắng làm trong ngôn ngữ.
 
-Can you make your JS program look like a Java, C#, or Perl program? What about Python or Ruby, or even PHP? To varying degrees, sure you can. But should you?
+Bạn có thể làm cho chương trình JS của mình trông giống như một chương trình Java, C#, hoặc Perl không? Còn Python hoặc Ruby, hoặc thậm chí PHP thì sao? Ở các mức độ khác nhau, chắc chắn bạn có thể. Nhưng bạn có nên không?
 
-No, I don't think you should. I think you should learn and embrace the JS way, and make your JS programs as JS'y as is practical. Some will think that means sloppy and informal programming, but I don't mean that at all. I just mean that JS has a lot of patterns and idioms that are recognizably "JS," and going with that *grain* is the general path to the best success.
+Không, tôi không nghĩ bạn nên. Tôi nghĩ bạn nên học và nắm lấy cách của JS, và làm cho các chương trình JS của bạn trở nên "JS" nhất có thể. Một số người sẽ nghĩ rằng điều đó có nghĩa là lập trình cẩu thả và không chính thức, nhưng tôi hoàn toàn không có ý đó. Tôi chỉ có ý rằng JS có rất nhiều mẫu và thành ngữ có thể nhận ra là "JS", và đi theo *tự nhiên* đó là con đường chung để đạt được thành công tốt nhất.
 
-Finally, maybe the most important *grain* to recognize is how the existing program(s) you're working on, and developers you're working with, do stuff. Don't read these books and then try to change *all that grain* in your existing projects over night. That approach will always fail.
+Cuối cùng, có lẽ *tự nhiên* quan trọng nhất để nhận ra là cách (các) chương trình hiện có mà bạn đang làm việc, và các nhà phát triển bạn đang làm việc cùng, làm mọi thứ. Đừng đọc những cuốn sách này và sau đó cố gắng thay đổi *tất cả tự nhiên đó* trong các dự án hiện tại của bạn qua đêm. Cách tiếp cận đó sẽ luôn thất bại.
 
-You'll have to shift these things little by little, over time. Work on building consensus with your fellow developers on why it's important to re-visit and re-consider an approach. But do so with just one small topic at a time, and let before-and-after code comparisons do most of the talking. Bring everyone on the team together to discuss, and push for decisions that are based on analysis and evidence from the code rather than the inertia of "our senior devs have always done it this way."
+Bạn sẽ phải thay đổi những điều này từng chút một, theo thời gian. Làm việc để xây dựng sự đồng thuận với các nhà phát triển đồng nghiệp của bạn về lý do tại sao việc xem lại và xem xét lại một cách tiếp cận là quan trọng. Nhưng hãy làm như vậy với chỉ một chủ đề nhỏ tại một thời điểm, và để các so sánh mã trước và sau thực hiện hầu hết các cuộc nói chuyện. Đưa mọi người trong nhóm lại với nhau để thảo luận, và thúc đẩy các quyết định dựa trên phân tích và bằng chứng từ mã thay vì quán tính của "các nhà phát triển cao cấp của chúng tôi luôn làm theo cách này".
 
-That's the most important advice I can impart to help you learn JS. Always keep looking for better ways to use what JS gives us to author more readable code. Everyone who works on your code, including your future self, will thank you!
+Đó là lời khuyên quan trọng nhất tôi có thể truyền đạt để giúp bạn học JS. Luôn tiếp tục tìm kiếm những cách tốt hơn để sử dụng những gì JS cung cấp cho chúng ta để viết mã dễ đọc hơn. Mọi người làm việc trên mã của bạn, bao gồm cả bản thân bạn trong tương lai, sẽ cảm ơn bạn!
 
-## In Order
+## Theo Thứ tự
 
-So now you've got a broader perspective on what's left to explore in JS, and the right attitude to approach the rest of your journey.
+Vì vậy, bây giờ bạn đã có một cái nhìn rộng hơn về những gì còn lại để khám phá trong JS, và thái độ đúng đắn để tiếp cận phần còn lại của hành trình của bạn.
 
-But one of the most common practical questions I get at this point is, "What order should I read the books?" There is a straightforward answer... but it also depends.
+Nhưng một trong những câu hỏi thực tế phổ biến nhất tôi nhận được tại thời điểm này là, "Tôi nên đọc các cuốn sách theo thứ tự nào?" Có một câu trả lời thẳng thắn... nhưng nó cũng phụ thuộc.
 
-My suggestion for most readers is to proceed through this series in this order:
+Đề xuất của tôi cho hầu hết độc giả là tiến hành qua loạt bài này theo thứ tự sau:
 
-1. Get started with a solid foundation of JS from *Get Started* (Book 1) -- good news, you've already almost finished this book!
+1. Bắt đầu với một nền tảng vững chắc của JS từ *Bắt đầu* (Cuốn 1) -- tin tốt, bạn đã gần hoàn thành cuốn sách này!
 
-2. In *Scope & Closures* (Book 2), dig into the first pillar of JS: lexical scope, how that supports closure, and how the module pattern organizes code.
+2. Trong *Phạm vi & Closures* (Cuốn 2), đào sâu vào trụ cột đầu tiên của JS: phạm vi từ vựng, cách điều đó hỗ trợ closure, và cách mẫu mô-đun tổ chức mã.
 
-3. In *Objects & Classes* (Book 3), focus on the second pillar of JS: how JS's `this` works, how object prototypes support delegation, and how prototypes enable the `class` mechanism for OO-style code organization.
+3. Trong *Đối tượng & Lớp* (Cuốn 3), tập trung vào trụ cột thứ hai của JS: cách `this` của JS hoạt động, cách các nguyên mẫu đối tượng hỗ trợ ủy quyền, và cách các nguyên mẫu cho phép cơ chế `class` cho tổ chức mã theo phong cách OO.
 
-4. In *Types & Grammar* (Book 4), tackle the third and final pillar of JS: types and type coercion, as well as how JS's syntax and grammar define how we write our code.
+4. Trong *Các loại & Ngữ pháp* (Cuốn 4), giải quyết trụ cột thứ ba và cuối cùng của JS: các loại và ép kiểu, cũng như cách cú pháp và ngữ pháp của JS xác định cách chúng ta viết mã của mình.
 
-5. With the **three pillars** solidly in place, *Sync & Async* (Book 5) then explores how we use flow control to model state change in our programs, both synchronously (right away) and asynchronously (over time).
+5. Với **ba trụ cột** vững chắc tại chỗ, *Đồng bộ & Không đồng bộ* (Cuốn 5) sau đó khám phá cách chúng ta sử dụng kiểm soát luồng để mô hình hóa thay đổi trạng thái trong các chương trình của mình, cả đồng bộ (ngay lập tức) và không đồng bộ (theo thời gian).
 
-6. The series concludes with *ES.Next & Beyond* (Book 6), a forward look at the near- and mid-term future of JS, including a variety of features likely coming to your JS programs before too long.
+6. Bộ sách kết thúc với *ES.Next & Beyond* (Cuốn 6), một cái nhìn về tương lai gần và trung hạn của JS, bao gồm một loạt các tính năng có khả năng đến với các chương trình JS của bạn trước khi quá lâu.
 
-That's the intended order to read this book series.
+Đó là thứ tự dự định để đọc bộ sách này.
 
-However, Books 2, 3, and 4 can generally be read in any order, depending on which topic you feel most curious about and comfortable exploring first. But I don't recommend you skip any of these three books—not even *Types & Grammar*, as some of you will be tempted to do!—even if you think you already have that topic down.
+Tuy nhiên, các Cuốn 2, 3, và 4 thường có thể được đọc theo bất kỳ thứ tự nào, tùy thuộc vào chủ đề nào bạn cảm thấy tò mò nhất và thoải mái khám phá trước. Nhưng tôi không khuyên bạn bỏ qua bất kỳ cuốn nào trong ba cuốn sách này—thậm chí không phải *Các loại & Ngữ pháp*, như một số bạn sẽ bị cám dỗ để làm!—ngay cả khi bạn nghĩ rằng bạn đã nắm vững chủ đề đó.
 
-Book 5 (*Sync & Async*) is crucial for deeply understanding JS, but if you start digging in and find it's too intimidating, this book can be deferred until you're more experienced with the language. The more JS you've written (and struggled with!), the more you'll come to appreciate this book. So don't be afraid to come back to it at a later time.
+Cuốn 5 (*Đồng bộ & Không đồng bộ*) rất quan trọng để hiểu sâu về JS, nhưng nếu bạn bắt đầu đào sâu và thấy nó quá đáng sợ, cuốn sách này có thể được hoãn lại cho đến khi bạn có kinh nghiệm hơn với ngôn ngữ. Bạn càng viết nhiều JS (và vật lộn với nó!), bạn sẽ càng đánh giá cao cuốn sách này. Vì vậy, đừng ngại quay lại với nó vào một thời điểm sau đó.
 
-The final book in the series, *ES.Next & Beyond*, in some respects stands alone. It can be read at the end, as I suggest, or right after *Getting Started* if you're looking for a shortcut to broaden your radar of what JS is all about. This book will also be more likely to receive updates in the future, so you'll probably want to re-visit it occasionally.
+Cuốn sách cuối cùng trong bộ sách, *ES.Next & Beyond*, ở một số khía cạnh đứng một mình. Nó có thể được đọc ở cuối, như tôi đề nghị, hoặc ngay sau *Bắt đầu* nếu bạn đang tìm kiếm một lối tắt để mở rộng radar của mình về những gì JS là tất cả. Cuốn sách này cũng sẽ có nhiều khả năng nhận được cập nhật trong tương lai, vì vậy bạn có thể sẽ muốn xem lại nó thỉnh thoảng.
 
-However you choose to proceed with YDKJSY, check out the appendices of this book first, especially practicing the snippets in Appendix B, "Practice, Practice, Practice!" Did I mention you should go practice!? There's no better way to learn code than to write it.
+Dù bạn chọn tiến hành với YDKJSY như thế nào, hãy xem các phụ lục của cuốn sách này trước, đặc biệt là thực hành các đoạn mã trong Phụ lục B, "Thực hành, Thực hành, Thực hành!" Tôi đã đề cập rằng bạn nên đi thực hành chưa!? Không có cách nào tốt hơn để học mã hơn là viết nó.

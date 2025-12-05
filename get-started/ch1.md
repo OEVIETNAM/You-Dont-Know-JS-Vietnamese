@@ -1,221 +1,221 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
-# Chapter 1: What *Is* JavaScript?
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
+# Chương 1: JavaScript *Là* Gì?
 
-You don't know JS, yet. Neither do I, not fully anyway. None of us do. But we can all start getting to know JS better.
+Bạn chưa biết JS đâu. Tôi cũng vậy, không hoàn toàn. Không ai trong chúng ta biết hết cả. Nhưng tất cả chúng ta đều có thể bắt đầu tìm hiểu JS tốt hơn.
 
-In this first chapter of the first book of the *You Don't Know JS Yet* (YDKJSY) series, we will take some time to build a foundation to move forward on. We need to start by covering a variety of important background housekeeping details, clearing up some myths and misconceptions about what the language really is (and isn't!).
+Trong chương đầu tiên của cuốn sách đầu tiên thuộc bộ *You Don't Know JS Yet* (YDKJSY) này, chúng ta sẽ dành chút thời gian để xây dựng nền tảng để tiến về phía trước. Chúng ta cần bắt đầu bằng cách bao quát một loạt các chi tiết dọn dẹp nền tảng quan trọng, làm sáng tỏ một số huyền thoại và quan niệm sai lầm về ngôn ngữ thực sự là gì (và không phải là gì!).
 
-This is valuable insight into the identity and process of how JS is organized and maintained; all JS developers should understand it. If you want to get to know JS, this is how to *get started* taking the first steps in that journey.
+Đây là cái nhìn sâu sắc có giá trị về bản sắc và quy trình tổ chức cũng như duy trì JS; tất cả các nhà phát triển JS nên hiểu điều đó. Nếu bạn muốn tìm hiểu JS, đây là cách để *bắt đầu* thực hiện những bước đầu tiên trong hành trình đó.
 
-## About This Book
+## Về cuốn sách này
 
-I emphasize the word journey because *knowing JS* is not a destination, it's a direction. No matter how much time you spend with the language, you will always be able to find something else to learn and understand a little better. So don't look at this book as something to rush through for a quick achievement. Instead, patience and persistence are best as you take these first few steps.
+Tôi nhấn mạnh từ hành trình bởi vì *biết JS* không phải là một điểm đến, nó là một hướng đi. Bất kể bạn dành bao nhiêu thời gian cho ngôn ngữ này, bạn sẽ luôn có thể tìm thấy điều gì đó khác để học và hiểu rõ hơn một chút. Vì vậy, đừng coi cuốn sách này là thứ gì đó để lướt qua nhanh chóng nhằm đạt được thành tích. Thay vào đó, sự kiên nhẫn và bền bỉ là tốt nhất khi bạn thực hiện những bước đầu tiên này.
 
-Following this background chapter, the rest of the book lays out a high-level map of what you will find as you dig into and study JS with the YDKJSY books.
+Tiếp theo chương nền tảng này, phần còn lại của cuốn sách đưa ra một bản đồ cấp cao về những gì bạn sẽ tìm thấy khi đào sâu và nghiên cứu JS với các cuốn sách YDKJSY.
 
-In particular, Chapter 4 identifies three main pillars around which the JS language is organized: scope/closures, prototypes/objects, and types/coercion. JS is a broad and sophisticated language, with many features and capabilities. But all of JS is founded on these three foundational pillars.
+Cụ thể, Chương 4 xác định ba trụ cột chính mà ngôn ngữ JS được tổ chức xung quanh: phạm vi/closure, prototype/đối tượng, và kiểu/ép kiểu. JS là một ngôn ngữ rộng lớn và tinh vi, với nhiều tính năng và khả năng. Nhưng tất cả JS đều được thành lập dựa trên ba trụ cột nền tảng này.
 
-Keep in mind that even though this book is titled "Get Started," it's **not intended as a beginner/intro book**. This book's main job is to get you ready for studying JS deeply throughout the rest of the series; it's written assuming you already have familiarity with JS over at least several months experience before moving on in YDKJSY. So to get the most out of *Get Started*, make sure you spend plenty of time writing JS code to build up your experience.
+Hãy nhớ rằng mặc dù cuốn sách này có tiêu đề "Bắt đầu", nhưng nó **không nhằm mục đích là một cuốn sách cho người mới bắt đầu/nhập môn**. Công việc chính của cuốn sách này là giúp bạn sẵn sàng nghiên cứu sâu về JS trong suốt phần còn lại của bộ sách; nó được viết với giả định rằng bạn đã quen thuộc với JS qua ít nhất vài tháng kinh nghiệm trước khi tiếp tục với YDKJSY. Vì vậy, để tận dụng tối đa *Bắt đầu*, hãy chắc chắn rằng bạn dành nhiều thời gian viết mã JS để tích lũy kinh nghiệm.
 
-Even if you've already written a lot of JS before, this book should not be skimmed over or skipped; take your time to fully process the material here. **A good start always depends on a solid first step.**
+Ngay cả khi bạn đã viết rất nhiều JS trước đây, cuốn sách này không nên bị đọc lướt hoặc bỏ qua; hãy dành thời gian để xử lý đầy đủ tài liệu ở đây. **Một khởi đầu tốt luôn phụ thuộc vào bước đầu tiên vững chắc.**
 
-## What's With That Name?
+## Cái tên đó là sao?
 
-The name JavaScript is probably the most mistaken and misunderstood programming language name.
+Cái tên JavaScript có lẽ là tên ngôn ngữ lập trình bị nhầm lẫn và hiểu lầm nhiều nhất.
 
-Is this language related to Java? Is it only the script form for Java? Is it only for writing scripts and not real programs?
+Ngôn ngữ này có liên quan đến Java không? Nó có phải chỉ là dạng script cho Java không? Nó có phải chỉ để viết script chứ không phải chương trình thực sự không?
 
-The truth is, the name JavaScript is an artifact of marketing shenanigans. When Brendan Eich first conceived of the language, he code-named it Mocha. Internally at Netscape, the brand LiveScript was used. But when it came time to publicly name the language, "JavaScript" won the vote.
+Sự thật là, cái tên JavaScript là một sản phẩm của những trò lừa gạt tiếp thị. Khi Brendan Eich lần đầu tiên hình thành ngôn ngữ này, ông đặt tên mã cho nó là Mocha. Trong nội bộ Netscape, thương hiệu LiveScript đã được sử dụng. Nhưng khi đến lúc công khai đặt tên cho ngôn ngữ, "JavaScript" đã giành chiến thắng.
 
-Why? Because this language was originally designed to appeal to an audience of mostly Java programmers, and because the word "script" was popular at the time to refer to lightweight programs. These lightweight "scripts" would be the first ones to embed inside of pages on this new thing called the web!
+Tại sao? Bởi vì ngôn ngữ này ban đầu được thiết kế để thu hút đối tượng chủ yếu là các lập trình viên Java, và bởi vì từ "script" rất phổ biến vào thời điểm đó để chỉ các chương trình nhẹ. Những "script" nhẹ này sẽ là những thứ đầu tiên được nhúng vào bên trong các trang trên thứ mới mẻ gọi là web!
 
-In other words, JavaScript was a marketing ploy to try to position this language as a palatable alternative to writing the heavier and more well-known Java of the day. It could just as easily have been called "WebJava," for that matter.
+Nói cách khác, JavaScript là một mánh khóe tiếp thị để cố gắng định vị ngôn ngữ này như một sự thay thế dễ chịu cho việc viết Java nặng nề và nổi tiếng hơn vào thời điểm đó. Nó cũng có thể dễ dàng được gọi là "WebJava", về vấn đề đó.
 
-There are some superficial resemblances between JavaScript's code and Java code. Those similarities don't particularly come from shared development, but from both languages targeting developers with assumed syntax expectations from C (and to an extent, C++).
+Có một số điểm tương đồng hời hợt giữa mã của JavaScript và mã của Java. Những điểm tương đồng đó không đặc biệt đến từ sự phát triển chung, mà từ cả hai ngôn ngữ đều nhắm đến các nhà phát triển với những kỳ vọng về cú pháp giả định từ C (và ở một mức độ nào đó, C++).
 
-For example, we use the `{` to begin a block of code and the `}` to end that block of code, just like C/C++ and Java. We also use the `;` to punctuate the end of a statement.
+Ví dụ, chúng ta sử dụng `{` để bắt đầu một khối mã và `}` để kết thúc khối mã đó, giống như C/C++ và Java. Chúng ta cũng sử dụng `;` để ngắt câu lệnh.
 
-In some ways, legal relationships run even deeper than the syntax. Oracle (via Sun), the company that still owns and runs Java, also owns the official trademark for the name "JavaScript" (via Netscape). This trademark is almost never enforced, and likely couldn't be at this point.
+Theo một số cách, các mối quan hệ pháp lý còn sâu sắc hơn cả cú pháp. Oracle (thông qua Sun), công ty vẫn sở hữu và điều hành Java, cũng sở hữu nhãn hiệu chính thức cho cái tên "JavaScript" (thông qua Netscape). Nhãn hiệu này hầu như không bao giờ được thực thi, và có khả năng là không thể vào thời điểm này.
 
-For these reasons, some have suggested we use JS instead of JavaScript. That is a very common shorthand, if not a good candidate for an official language branding itself. Indeed, these books use JS almost exclusively to refer to the language.
+Vì những lý do này, một số người đã đề xuất chúng ta sử dụng JS thay vì JavaScript. Đó là một cách viết tắt rất phổ biến, nếu không muốn nói là một ứng cử viên sáng giá cho việc xây dựng thương hiệu ngôn ngữ chính thức. Thật vậy, những cuốn sách này sử dụng JS gần như độc quyền để chỉ ngôn ngữ.
 
-Further distancing the language from the Oracle-owned trademark, the official name of the language specified by TC39 and formalized by the ECMA standards body is **ECMAScript**. And indeed, since 2016, the official language name has also been suffixed by the revision year; as of this writing, that's ECMAScript 2019, or otherwise abbreviated ES2019.
+Xa hơn nữa việc tách ngôn ngữ khỏi nhãn hiệu do Oracle sở hữu, tên chính thức của ngôn ngữ được quy định bởi TC39 và được chính thức hóa bởi cơ quan tiêu chuẩn ECMA là **ECMAScript**. Và thực sự, kể từ năm 2016, tên ngôn ngữ chính thức cũng đã được thêm hậu tố là năm sửa đổi; tính đến thời điểm viết bài này, đó là ECMAScript 2019, hoặc viết tắt là ES2019.
 
-In other words, the JavaScript/JS that runs in your browser or in Node.js, is *an* implementation of the ES2019 standard.
+Nói cách khác, JavaScript/JS chạy trong trình duyệt của bạn hoặc trong Node.js, là *một* triển khai của tiêu chuẩn ES2019.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Don't use terms like "JS6" or "ES8" to refer to the language. Some do, but those terms only serve to perpetuate confusion. "ES20xx" or just "JS" are what you should stick to. |
+| Đừng sử dụng các thuật ngữ như "JS6" hoặc "ES8" để chỉ ngôn ngữ. Một số người làm vậy, nhưng những thuật ngữ đó chỉ phục vụ để duy trì sự nhầm lẫn. "ES20xx" hoặc chỉ "JS" là những gì bạn nên tuân theo. |
 
-Whether you call it JavaScript, JS, ECMAScript, or ES2019, it's most definitely not a variant of the Java language!
+Cho dù bạn gọi nó là JavaScript, JS, ECMAScript hay ES2019, nó chắc chắn không phải là một biến thể của ngôn ngữ Java!
 
-> "Java is to JavaScript as ham is to hamster." --Jeremy Keith, 2009
+> "Java đối với JavaScript cũng giống như Ham (thịt giăm bông) đối với Hamster (chuột lang)." --Jeremy Keith, 2009
 
-## Language Specification
+## Đặc tả ngôn ngữ
 
-I mentioned TC39, the technical steering committee that manages JS. Their primary task is managing the official specification for the language. They meet regularly to vote on any agreed changes, which they then submit to ECMA, the standards organization.
+Tôi đã đề cập đến TC39, ủy ban chỉ đạo kỹ thuật quản lý JS. Nhiệm vụ chính của họ là quản lý đặc tả chính thức cho ngôn ngữ. Họ họp thường xuyên để bỏ phiếu về bất kỳ thay đổi nào đã được thống nhất, sau đó họ gửi cho ECMA, tổ chức tiêu chuẩn.
 
-JS's syntax and behavior are defined in the ES specification.
+Cú pháp và hành vi của JS được định nghĩa trong đặc tả ES.
 
-ES2019 happens to be the 10th major numbered specification/revision since JS's inception in 1995, so in the specification's official URL as hosted by ECMA, you'll find "10.0":
+ES2019 tình cờ là đặc tả/bản sửa đổi được đánh số chính thứ 10 kể từ khi JS ra đời vào năm 1995, vì vậy trong URL chính thức của đặc tả do ECMA lưu trữ, bạn sẽ thấy "10.0":
 
 https://www.ecma-international.org/ecma-262/10.0/
 
-The TC39 committee is comprised of between 50 and about 100 different people from a broad section of web-invested companies, such as browser makers (Mozilla, Google, Apple) and device makers (Samsung, etc). All members of the committee are volunteers, though many of them are employees of these companies and so may receive compensation in part for their duties on the committee.
+Ủy ban TC39 bao gồm từ 50 đến khoảng 100 người khác nhau từ một bộ phận rộng lớn các công ty đầu tư vào web, chẳng hạn như các nhà sản xuất trình duyệt (Mozilla, Google, Apple) và các nhà sản xuất thiết bị (Samsung, v.v.). Tất cả các thành viên của ủy ban đều là tình nguyện viên, mặc dù nhiều người trong số họ là nhân viên của các công ty này và do đó có thể nhận được một phần thù lao cho nhiệm vụ của họ trong ủy ban.
 
-TC39 meets generally about every other month, usually for about three days, to review work done by members since the last meeting, discuss issues, and vote on proposals. Meeting locations rotate among member companies willing to host.
+TC39 thường họp khoảng hai tháng một lần, thường là khoảng ba ngày, để xem xét công việc do các thành viên thực hiện kể từ cuộc họp trước, thảo luận về các vấn đề và bỏ phiếu cho các đề xuất. Địa điểm họp luân phiên giữa các công ty thành viên sẵn sàng đăng cai.
 
-All TC39 proposals progress through a five-stage process—of course, since we're programmers, it's 0-based!—Stage 0 through Stage 4. You can read more about the Stage process here: https://tc39.es/process-document/
+Tất cả các đề xuất của TC39 đều tiến triển qua quy trình năm giai đoạn—tất nhiên, vì chúng ta là lập trình viên, nên nó bắt đầu từ 0!—Giai đoạn 0 đến Giai đoạn 4. Bạn có thể đọc thêm về quy trình Giai đoạn tại đây: https://tc39.es/process-document/
 
-Stage 0 means roughly, someone on TC39 thinks it's a worthy idea and plans to champion and work on it. That means lots of ideas that non-TC39 members "propose," through informal means such as social media or blog posts, are really "pre-stage 0." You have to get a TC39 member to champion a proposal for it to be considered "Stage 0" officially.
+Giai đoạn 0 có nghĩa đại khái là, ai đó trong TC39 nghĩ rằng đó là một ý tưởng xứng đáng và có kế hoạch ủng hộ và thực hiện nó. Điều đó có nghĩa là rất nhiều ý tưởng mà các thành viên không thuộc TC39 "đề xuất", thông qua các phương tiện không chính thức như mạng xã hội hoặc bài đăng trên blog, thực sự là "tiền giai đoạn 0". Bạn phải có một thành viên TC39 ủng hộ một đề xuất để nó được coi là "Giai đoạn 0" một cách chính thức.
 
-Once a proposal reaches "Stage 4" status, it is eligible to be included in the next yearly revision of the language. It can take anywhere from several months to a few years for a proposal to work its way through these stages.
+Khi một đề xuất đạt đến trạng thái "Giai đoạn 4", nó đủ điều kiện để được đưa vào bản sửa đổi hàng năm tiếp theo của ngôn ngữ. Có thể mất từ vài tháng đến vài năm để một đề xuất đi qua các giai đoạn này.
 
-All proposals are managed in the open, on TC39's Github repository: https://github.com/tc39/proposals
+Tất cả các đề xuất được quản lý công khai, trên kho lưu trữ Github của TC39: https://github.com/tc39/proposals
 
-Anyone, whether on TC39 or not, is welcome to participate in these public discussions and the processes for working on the proposals. However, only TC39 members can attend meetings and vote on the proposals and changes. So in effect, the voice of a TC39 member carries a lot of weight in where JS will go.
+Bất kỳ ai, dù có thuộc TC39 hay không, đều được hoan nghênh tham gia vào các cuộc thảo luận công khai này và các quy trình làm việc trên các đề xuất. Tuy nhiên, chỉ các thành viên TC39 mới có thể tham dự các cuộc họp và bỏ phiếu cho các đề xuất và thay đổi. Vì vậy, trên thực tế, tiếng nói của một thành viên TC39 có trọng lượng rất lớn trong việc JS sẽ đi về đâu.
 
-Contrary to some established and frustratingly perpetuated myth, there are *not* multiple versions of JavaScript in the wild. There's just **one JS**, the official standard as maintained by TC39 and ECMA.
+Trái ngược với một số huyền thoại đã được thiết lập và duy trì một cách đáng thất vọng, *không* có nhiều phiên bản JavaScript trong tự nhiên. Chỉ có **một JS**, tiêu chuẩn chính thức được duy trì bởi TC39 và ECMA.
 
-Back in the early 2000s, when Microsoft maintained a forked and reverse-engineered (and not entirely compatible) version of JS called "JScript," there were legitimately "multiple versions" of JS. But those days are long gone. It's outdated and inaccurate to make such claims about JS today.
+Quay trở lại đầu những năm 2000, khi Microsoft duy trì một phiên bản JS được phân nhánh và thiết kế ngược (và không hoàn toàn tương thích) có tên là "JScript", đã có "nhiều phiên bản" JS một cách hợp pháp. Nhưng những ngày đó đã qua lâu rồi. Thật lỗi thời và không chính xác khi đưa ra những tuyên bố như vậy về JS ngày nay.
 
-All major browsers and device makers have committed to keeping their JS implementations compliant with this one central specification. Of course, engines implement features at different times. But it should never be the case that the v8 engine (Chrome's JS engine) implements a specified feature differently or incompatibly as compared to the SpiderMonkey engine (Mozilla's JS engine).
+Tất cả các trình duyệt chính và nhà sản xuất thiết bị đã cam kết giữ cho việc triển khai JS của họ tuân thủ đặc tả trung tâm này. Tất nhiên, các engine triển khai các tính năng vào những thời điểm khác nhau. Nhưng không bao giờ có trường hợp engine v8 (engine JS của Chrome) triển khai một tính năng được chỉ định khác hoặc không tương thích so với engine SpiderMonkey (engine JS của Mozilla).
 
-That means you can learn **one JS**, and rely on that same JS everywhere.
+Điều đó có nghĩa là bạn có thể học **một JS**, và dựa vào cùng một JS đó ở mọi nơi.
 
-### The Web Rules Everything About (JS)
+### Web thống trị mọi thứ về (JS)
 
-While the array of environments that run JS is constantly expanding (from browsers, to servers (Node.js), to robots, to lightbulbs, to...), the one environment that rules JS is the web. In other words, how JS is implemented for web browsers is, in all practicality, the only reality that matters.
+Trong khi mảng các môi trường chạy JS không ngừng mở rộng (từ trình duyệt, đến máy chủ (Node.js), đến robot, đến bóng đèn, đến...), môi trường duy nhất thống trị JS là web. Nói cách khác, cách JS được triển khai cho các trình duyệt web, về mặt thực tế, là thực tế duy nhất quan trọng.
 
-For the most part, the JS defined in the specification and the JS that runs in browser-based JS engines is the same. But there are some differences that must be considered.
+Về phần lớn, JS được định nghĩa trong đặc tả và JS chạy trong các engine JS dựa trên trình duyệt là giống nhau. Nhưng có một số khác biệt cần được xem xét.
 
-Sometimes the JS specification will dictate some new or refined behavior, and yet that won't exactly match with how it works in browser-based JS engines. Such a mismatch is historical: JS engines have had 20+ years of observable behaviors around corner cases of features that have come to be relied on by web content. As such, sometimes the JS engines will refuse to conform to a specification-dictated change because it would break that web content.
+Đôi khi đặc tả JS sẽ ra lệnh cho một số hành vi mới hoặc tinh chỉnh, nhưng điều đó sẽ không khớp chính xác với cách nó hoạt động trong các engine JS dựa trên trình duyệt. Sự không khớp như vậy mang tính lịch sử: Các engine JS đã có hơn 20 năm hành vi có thể quan sát được xung quanh các trường hợp góc của các tính năng đã được nội dung web dựa vào. Như vậy, đôi khi các engine JS sẽ từ chối tuân thủ thay đổi do đặc tả quy định vì nó sẽ phá vỡ nội dung web đó.
 
-In these cases, often TC39 will backtrack and simply choose to conform the specification to the reality of the web. For example, TC39 planned to add a `contains(..)` method for Arrays, but it was found that this name conflicted with old JS frameworks still in use on some sites, so they changed the name to a non-conflicting `includes(..)`. The same happened with a comedic/tragic JS *community crisis* dubbed "smooshgate," where the planned `flatten(..)` method was eventually renamed `flat(..)`.
+Trong những trường hợp này, TC39 thường sẽ quay lại và đơn giản là chọn tuân thủ đặc tả theo thực tế của web. Ví dụ: TC39 đã lên kế hoạch thêm phương thức `contains(..)` cho Mảng, nhưng người ta thấy rằng tên này xung đột với các framework JS cũ vẫn đang được sử dụng trên một số trang web, vì vậy họ đã đổi tên thành `includes(..)` không xung đột. Điều tương tự cũng xảy ra với một *cuộc khủng hoảng cộng đồng* JS hài hước/bi thảm được đặt tên là "smooshgate", nơi phương thức `flatten(..)` đã lên kế hoạch cuối cùng được đổi tên thành `flat(..)`.
 
-But occasionally, TC39 will decide the specification should stick firm on some point even though it is unlikely that browser-based JS engines will ever conform.
+Nhưng thỉnh thoảng, TC39 sẽ quyết định đặc tả nên giữ vững lập trường về một số điểm ngay cả khi không có khả năng các engine JS dựa trên trình duyệt sẽ tuân thủ.
 
-The solution? Appendix B, "Additional ECMAScript Features for Web Browsers".[^specApB] The JS specification includes this appendix to detail out any known mismatches between the official JS specification and the reality of JS on the web. In other words, these are exceptions that are allowed *only* for web JS; other JS environments must stick to the letter of the law.
+Giải pháp? Phụ lục B, "Các tính năng ECMAScript bổ sung cho trình duyệt Web".[^specApB] Đặc tả JS bao gồm phụ lục này để chi tiết hóa mọi sự không khớp đã biết giữa đặc tả JS chính thức và thực tế của JS trên web. Nói cách khác, đây là những ngoại lệ được phép *chỉ* đối với JS web; các môi trường JS khác phải tuân thủ đúng luật.
 
-Section B.1 and B.2 cover *additions* to JS (syntax and APIs) that web JS includes, again for historical reasons, but which TC39 does not plan to formally specify in the core of JS. Examples include `0`-prefixed octal literals, the global `escape(..)` / `unescape(..)` utilities, String "helpers" like `anchor(..)` and `blink()`, and the RegExp `compile(..)` method.
+Phần B.1 và B.2 bao gồm các *bổ sung* cho JS (cú pháp và API) mà JS web bao gồm, một lần nữa vì lý do lịch sử, nhưng TC39 không có kế hoạch quy định chính thức trong cốt lõi của JS. Các ví dụ bao gồm các literal bát phân có tiền tố `0`, các tiện ích `escape(..)` / `unescape(..)` toàn cục, các "trình trợ giúp" Chuỗi như `anchor(..)` và `blink()`, và phương thức RegExp `compile(..)`.
 
-Section B.3 includes some conflicts where code may run in both web and non-web JS engines, but where the behavior *could* be observably different, resulting in different outcomes. Most of the listed changes involve situations that are labeled as early errors when code is running in strict mode.
+Phần B.3 bao gồm một số xung đột trong đó mã có thể chạy trong cả engine JS web và không phải web, nhưng hành vi *có thể* khác biệt rõ rệt, dẫn đến kết quả khác nhau. Hầu hết các thay đổi được liệt kê liên quan đến các tình huống được gắn nhãn là lỗi sớm khi mã đang chạy ở chế độ nghiêm ngặt (strict mode).
 
-Appendix B *gotchas* aren't encountered very often, but it's still a good idea to avoid these constructs to be future safe. Wherever possible, adhere to the JS specification and don't rely on behavior that's only applicable in certain JS engine environments.
+Các *gotcha* (bẫy) trong Phụ lục B không thường xuyên gặp phải, nhưng vẫn là một ý tưởng hay để tránh các cấu trúc này để an toàn trong tương lai. Bất cứ khi nào có thể, hãy tuân thủ đặc tả JS và đừng dựa vào hành vi chỉ áp dụng trong một số môi trường engine JS nhất định.
 
-### Not All (Web) JS...
+### Không phải tất cả đều là (Web) JS...
 
-Is this code a JS program?
+Đoạn mã này có phải là một chương trình JS không?
 
 ```js
 alert("Hello, JS!");
 ```
 
-Depends on how you look at things. The `alert(..)` function shown here is not included in the JS specification, but it *is* in all web JS environments. Yet, you won't find it in Appendix B, so what gives?
+Tùy thuộc vào cách bạn nhìn nhận mọi thứ. Hàm `alert(..)` hiển thị ở đây không được bao gồm trong đặc tả JS, nhưng nó *có* trong tất cả các môi trường JS web. Tuy nhiên, bạn sẽ không tìm thấy nó trong Phụ lục B, vậy chuyện gì đang xảy ra?
 
-Various JS environments (like browser JS engines, Node.js, etc.) add APIs into the global scope of your JS programs that give you environment-specific capabilities, like being able to pop an alert-style box in the user's browser.
+Nhiều môi trường JS khác nhau (như engine JS trình duyệt, Node.js, v.v.) thêm các API vào phạm vi toàn cục của các chương trình JS của bạn, cung cấp cho bạn các khả năng cụ thể của môi trường, như khả năng bật lên một hộp kiểu cảnh báo trong trình duyệt của người dùng.
 
-In fact, a wide range of JS-looking APIs, like `fetch(..)`, `getCurrentLocation(..)`, and `getUserMedia(..)`, are all web APIs that look like JS. In Node.js, we can access hundreds of API methods from various built-in modules, like `fs.write(..)`.
+Trên thực tế, một loạt các API trông giống JS, như `fetch(..)`, `getCurrentLocation(..)`, và `getUserMedia(..)`, đều là các API web trông giống như JS. Trong Node.js, chúng ta có thể truy cập hàng trăm phương thức API từ các mô-đun tích hợp khác nhau, như `fs.write(..)`.
 
-Another common example is `console.log(..)` (and all the other `console.*` methods!). These are not specified in JS, but because of their universal utility are defined by pretty much every JS environment, according to a roughly agreed consensus.
+Một ví dụ phổ biến khác là `console.log(..)` (và tất cả các phương thức `console.*` khác!). Những thứ này không được quy định trong JS, nhưng vì tiện ích phổ quát của chúng, chúng được định nghĩa bởi hầu hết mọi môi trường JS, theo một sự đồng thuận đã được thống nhất đại khái.
 
-So `alert(..)` and `console.log(..)` are not defined by JS. But they *look* like JS. They are functions and object methods and they obey JS syntax rules. The behaviors behind them are controlled by the environment running the JS engine, but on the surface they definitely have to abide by JS to be able to play in the JS playground.
+Vì vậy, `alert(..)` và `console.log(..)` không được định nghĩa bởi JS. Nhưng chúng *trông* giống như JS. Chúng là các hàm và phương thức đối tượng và chúng tuân theo các quy tắc cú pháp JS. Các hành vi đằng sau chúng được kiểm soát bởi môi trường chạy engine JS, nhưng trên bề mặt, chúng chắc chắn phải tuân thủ JS để có thể chơi trong sân chơi JS.
 
-Most of the cross-browser differences people complain about with "JS is so inconsistent!" claims are actually due to differences in how those environment behaviors work, not in how the JS itself works.
+Hầu hết các khác biệt giữa các trình duyệt mà mọi người phàn nàn với các tuyên bố "JS quá không nhất quán!" thực sự là do sự khác biệt trong cách các hành vi môi trường đó hoạt động, không phải ở cách bản thân JS hoạt động.
 
-So an `alert(..)` call *is* JS, but `alert` itself is really just a guest, not part of the official JS specification.
+Vì vậy, một lệnh gọi `alert(..)` *là* JS, nhưng bản thân `alert` thực sự chỉ là một vị khách, không phải là một phần của đặc tả JS chính thức.
 
-### It's Not Always JS
+### Không phải lúc nào cũng là JS
 
-Using the console/REPL (Read-Evaluate-Print-Loop) in your browser's Developer Tools (or Node) feels like a pretty straightforward JS environment at first glance. But it's not, really.
+Sử dụng console/REPL (Read-Evaluate-Print-Loop) trong Công cụ dành cho nhà phát triển của trình duyệt (hoặc Node) thoạt nhìn có vẻ giống như một môi trường JS khá đơn giản. Nhưng thực sự không phải vậy.
 
-Developer Tools are... tools for developers. Their primary purpose is to make life easier for developers. They prioritize DX (Developer Experience). It is *not* a goal of such tools to accurately and purely reflect all nuances of strict-spec JS behavior. As such, there's many quirks that may act as "gotchas" if you're treating the console as a *pure* JS environment.
+Công cụ dành cho nhà phát triển là... công cụ dành cho nhà phát triển. Mục đích chính của chúng là làm cho cuộc sống của các nhà phát triển dễ dàng hơn. Chúng ưu tiên DX (Trải nghiệm nhà phát triển). *Không* phải là mục tiêu của các công cụ như vậy để phản ánh chính xác và thuần túy tất cả các sắc thái của hành vi JS theo đặc tả nghiêm ngặt. Như vậy, có nhiều điều kỳ quặc có thể đóng vai trò là "gotcha" nếu bạn coi console là một môi trường JS *thuần túy*.
 
-This convenience is a good thing, by the way! I'm glad Developer Tools make developers' lives easier! I'm glad we have nice UX charms like auto-complete of variables/properties, etc. I'm just pointing out that we can't and shouldn't expect such tools to *always* adhere strictly to the way JS programs are handled, because that's not the purpose of these tools.
+Sự tiện lợi này là một điều tốt, nhân tiện! Tôi rất vui vì Công cụ dành cho nhà phát triển làm cho cuộc sống của các nhà phát triển dễ dàng hơn! Tôi rất vui vì chúng ta có những nét hấp dẫn UX tốt như tự động hoàn thành các biến/thuộc tính, v.v. Tôi chỉ chỉ ra rằng chúng ta không thể và không nên mong đợi các công cụ như vậy *luôn* tuân thủ nghiêm ngặt cách các chương trình JS được xử lý, bởi vì đó không phải là mục đích của các công cụ này.
 
-Since such tools vary in behavior from browser to browser, and since they change (sometimes rather frequently), I'm not going to "hardcode" any of the specific details into this text, thereby ensuring this book text is outdated quickly.
+Vì các công cụ như vậy khác nhau về hành vi từ trình duyệt này sang trình duyệt khác và vì chúng thay đổi (đôi khi khá thường xuyên), tôi sẽ không "hardcode" bất kỳ chi tiết cụ thể nào vào văn bản này, do đó đảm bảo văn bản cuốn sách này nhanh chóng bị lỗi thời.
 
-But I'll just hint at some examples of quirks that have been true at various points in different JS console environments, to reinforce my point about not assuming native JS behavior while using them:
+Nhưng tôi sẽ chỉ gợi ý một số ví dụ về những điều kỳ quặc đã đúng tại các thời điểm khác nhau trong các môi trường console JS khác nhau, để củng cố quan điểm của tôi về việc không giả định hành vi JS gốc trong khi sử dụng chúng:
 
-* Whether a `var` or `function` declaration in the top-level "global scope" of the console actually creates a real global variable (and mirrored `window` property, and vice versa!).
+* Liệu một khai báo `var` hoặc `function` trong "phạm vi toàn cục" cấp cao nhất của console có thực sự tạo ra một biến toàn cục thực sự (và thuộc tính `window` được phản chiếu, và ngược lại!) hay không.
 
-* What happens with multiple `let` and `const` declarations in the top-level "global scope."
+* Điều gì xảy ra với nhiều khai báo `let` và `const` trong "phạm vi toàn cục" cấp cao nhất.
 
-* Whether `"use strict";` on one line-entry (pressing `<enter>` after) enables strict mode for the rest of that console session, the way it would on the first line of a .js file, as well as whether you can use `"use strict";` beyond the "first line" and still get strict mode turned on for that session.
+* Liệu `"use strict";` trên một dòng nhập (nhấn `<enter>` sau đó) có kích hoạt chế độ nghiêm ngặt cho phần còn lại của phiên console đó hay không, theo cách nó sẽ làm trên dòng đầu tiên của tệp .js, cũng như liệu bạn có thể sử dụng `"use strict";` ngoài "dòng đầu tiên" mà vẫn bật chế độ nghiêm ngặt cho phiên đó hay không.
 
-* How non-strict mode `this` default-binding works for function calls, and whether the "global object" used will contain expected global variables.
+* Cách liên kết mặc định `this` ở chế độ không nghiêm ngặt hoạt động đối với các lệnh gọi hàm và liệu "đối tượng toàn cục" được sử dụng có chứa các biến toàn cục dự kiến hay không.
 
-* How hoisting (see Book 2, *Scope & Closures*) works across multiple line entries.
+* Cách hoisting (xem Quyển 2, *Phạm vi & Closures*) hoạt động trên nhiều dòng nhập.
 
-* ...several others
+* ...một số cái khác
 
-The developer console is not trying to pretend to be a JS compiler that handles your entered code exactly the same way the JS engine handles a .js file. It's trying to make it easy for you to quickly enter a few lines of code and see the results immediately. These are entirely different use cases, and as such, it's unreasonable to expect one tool to handle both equally.
+Console của nhà phát triển không cố gắng giả vờ là một trình biên dịch JS xử lý mã đã nhập của bạn giống hệt như cách engine JS xử lý tệp .js. Nó đang cố gắng giúp bạn dễ dàng nhập nhanh một vài dòng mã và xem kết quả ngay lập tức. Đây là những trường hợp sử dụng hoàn toàn khác nhau, và như vậy, thật vô lý khi mong đợi một công cụ xử lý cả hai như nhau.
 
-Don't trust what behavior you see in a developer console as representing *exact* to-the-letter JS semantics; for that, read the specification. Instead, think of the console as a "JS-friendly" environment. That's useful in its own right.
+Đừng tin vào hành vi bạn thấy trong console của nhà phát triển là đại diện cho ngữ nghĩa JS *chính xác* đến từng chữ; để làm điều đó, hãy đọc đặc tả. Thay vào đó, hãy nghĩ về console như một môi trường "thân thiện với JS". Điều đó hữu ích theo cách riêng của nó.
 
-## Many Faces
+## Nhiều bộ mặt
 
-The term "paradigm" in programming language context refers to a broad (almost universal) mindset and approach to structuring code. Within a paradigm, there are myriad variations of style and form that distinguish programs, including countless different libraries and frameworks that leave their unique signature on any given code.
+Thuật ngữ "mô hình" (paradigm) trong bối cảnh ngôn ngữ lập trình đề cập đến một tư duy và cách tiếp cận rộng lớn (gần như phổ quát) để cấu trúc mã. Trong một mô hình, có vô số biến thể về phong cách và hình thức phân biệt các chương trình, bao gồm vô số thư viện và framework khác nhau để lại dấu ấn độc đáo của chúng trên bất kỳ mã nào.
 
-But no matter what a program's individual style may be, the big picture divisions around paradigms are almost always evident at first glance of any program.
+Nhưng bất kể phong cách cá nhân của một chương trình có thể là gì, sự phân chia bức tranh lớn xung quanh các mô hình hầu như luôn hiển nhiên ngay từ cái nhìn đầu tiên về bất kỳ chương trình nào.
 
-Typical paradigm-level code categories include procedural, object-oriented (OO/classes), and functional (FP):
+Các danh mục mã cấp mô hình điển hình bao gồm thủ tục, hướng đối tượng (OO/lớp) và hàm (FP):
 
-* Procedural style organizes code in a top-down, linear progression through a pre-determined set of operations, usually collected together in related units called procedures.
+* Phong cách thủ tục tổ chức mã theo tiến trình tuyến tính, từ trên xuống dưới thông qua một tập hợp các hoạt động được xác định trước, thường được thu thập cùng nhau trong các đơn vị liên quan được gọi là thủ tục.
 
-* OO style organizes code by collecting logic and data together into units called classes.
+* Phong cách OO tổ chức mã bằng cách thu thập logic và dữ liệu lại với nhau thành các đơn vị được gọi là lớp.
 
-* FP style organizes code into functions (pure computations as opposed to procedures), and the adaptations of those functions as values.
+* Phong cách FP tổ chức mã thành các hàm (tính toán thuần túy trái ngược với thủ tục) và sự thích ứng của các hàm đó dưới dạng giá trị.
 
-Paradigms are neither right nor wrong. They're orientations that guide and mold how programmers approach problems and solutions, how they structure and maintain their code.
+Các mô hình không đúng cũng không sai. Chúng là những định hướng hướng dẫn và định hình cách các lập trình viên tiếp cận vấn đề và giải pháp, cách họ cấu trúc và duy trì mã của mình.
 
-Some languages are heavily slanted toward one paradigm—C is procedural, Java/C++ are almost entirely class oriented, and Haskell is FP through and through.
+Một số ngôn ngữ nghiêng hẳn về một mô hình—C là thủ tục, Java/C++ gần như hoàn toàn hướng lớp và Haskell là FP từ đầu đến cuối.
 
-But many languages also support code patterns that can come from, and even mix and match from, different paradigms. So called "multi-paradigm languages" offer ultimate flexibility. In some cases, a single program can even have two or more expressions of these paradigms sitting side by side.
+Nhưng nhiều ngôn ngữ cũng hỗ trợ các mẫu mã có thể đến từ, và thậm chí trộn lẫn và kết hợp từ, các mô hình khác nhau. Cái gọi là "ngôn ngữ đa mô hình" cung cấp sự linh hoạt tối đa. Trong một số trường hợp, một chương trình duy nhất thậm chí có thể có hai hoặc nhiều biểu hiện của các mô hình này nằm cạnh nhau.
 
-JavaScript is most definitely a multi-paradigm language. You can write procedural, class-oriented, or FP-style code, and you can make those decisions on a line-by-line basis instead of being forced into an all-or-nothing choice.
+JavaScript chắc chắn là một ngôn ngữ đa mô hình. Bạn có thể viết mã theo phong cách thủ tục, hướng lớp hoặc FP và bạn có thể đưa ra những quyết định đó trên cơ sở từng dòng thay vì bị buộc phải lựa chọn tất cả hoặc không có gì.
 
-## Backwards & Forwards
+## Tương thích ngược & xuôi
 
-One of the most foundational principles that guides JavaScript is preservation of *backwards compatibility*. Many are confused by the implications of this term, and often confuse it with a related but different term: *forwards compatibility*.
+Một trong những nguyên tắc nền tảng nhất hướng dẫn JavaScript là bảo tồn *tương thích ngược*. Nhiều người nhầm lẫn về ý nghĩa của thuật ngữ này và thường nhầm lẫn nó với một thuật ngữ liên quan nhưng khác biệt: *tương thích xuôi*.
 
-Let's set the record straight.
+Hãy làm rõ vấn đề này.
 
-Backwards compatibility means that once something is accepted as valid JS, there will not be a future change to the language that causes that code to become invalid JS. Code written in 1995—however primitive or limited it may have been!—should still work today. As TC39 members often proclaim, "we don't break the web!"
+Tương thích ngược có nghĩa là một khi thứ gì đó được chấp nhận là JS hợp lệ, sẽ không có thay đổi nào trong tương lai đối với ngôn ngữ khiến mã đó trở thành JS không hợp lệ. Mã được viết vào năm 1995—dù sơ khai hay hạn chế đến đâu!—vẫn sẽ hoạt động cho đến ngày nay. Như các thành viên TC39 thường tuyên bố, "chúng tôi không phá vỡ web!"
 
-The idea is that JS developers can write code with confidence that their code won't stop working unpredictably because a browser update is released. This makes the decision to choose JS for a program a more wise and safe investment, for years into the future.
+Ý tưởng là các nhà phát triển JS có thể viết mã với sự tự tin rằng mã của họ sẽ không ngừng hoạt động một cách khó lường vì bản cập nhật trình duyệt được phát hành. Điều này làm cho quyết định chọn JS cho một chương trình trở thành một khoản đầu tư khôn ngoan và an toàn hơn, trong nhiều năm tới trong tương lai.
 
-That "guarantee" is no small thing. Maintaining backwards compatibility, stretched out across almost 25 years of the language's history, creates an enormous burden and a whole slew of unique challenges. You'd be hard pressed to find many other examples in computing of such a commitment to backwards compatibility.
+"Sự đảm bảo" đó không phải là chuyện nhỏ. Việc duy trì khả năng tương thích ngược, kéo dài suốt gần 25 năm lịch sử của ngôn ngữ, tạo ra gánh nặng to lớn và hàng loạt thách thức độc đáo. Bạn sẽ khó tìm thấy nhiều ví dụ khác trong máy tính về cam kết tương thích ngược như vậy.
 
-The costs of sticking to this principle should not be casually dismissed. It necessarily creates a very high bar to including changing or extending the language; any decision becomes effectively permanent, mistakes and all. Once it's in JS, it can't be taken out because it might break programs, even if we'd really, really like to remove it!
+Chi phí của việc tuân thủ nguyên tắc này không nên bị gạt bỏ một cách tùy tiện. Nó nhất thiết tạo ra một rào cản rất cao để bao gồm việc thay đổi hoặc mở rộng ngôn ngữ; bất kỳ quyết định nào cũng trở nên vĩnh viễn, sai lầm và tất cả. Một khi nó có trong JS, nó không thể bị loại bỏ vì nó có thể phá vỡ các chương trình, ngay cả khi chúng ta thực sự, thực sự muốn loại bỏ nó!
 
-There are some small exceptions to this rule. JS has had some backwards-incompatible changes, but TC39 is extremely cautious in doing so. They study existing code on the web (via browser data gathering) to estimate the impact of such breakage, and browsers ultimately decide and vote on whether they're willing to take the heat from users for a very small-scale breakage weighed against the benefits of fixing or improving some aspect of the language for many more sites (and users).
+Có một số ngoại lệ nhỏ đối với quy tắc này. JS đã có một số thay đổi không tương thích ngược, nhưng TC39 cực kỳ thận trọng khi làm như vậy. Họ nghiên cứu mã hiện có trên web (thông qua thu thập dữ liệu trình duyệt) để ước tính tác động của sự đổ vỡ như vậy và các trình duyệt cuối cùng quyết định và bỏ phiếu xem liệu họ có sẵn sàng chịu sự chỉ trích từ người dùng cho một sự đổ vỡ quy mô rất nhỏ so với lợi ích của việc sửa chữa hoặc cải thiện một số khía cạnh của ngôn ngữ cho nhiều trang web (và người dùng) hơn hay không.
 
-These kinds of changes are rare, and are almost always in corner cases of usage that are unlikely to be observably breaking in many sites.
+Những loại thay đổi này rất hiếm và hầu như luôn nằm trong các trường hợp sử dụng góc cạnh khó có thể quan sát thấy sự đổ vỡ trong nhiều trang web.
 
-Compare *backwards compatibility* to its counterpart, *forwards compatibility*. Being forwards-compatible means that including a new addition to the language in a program would not cause that program to break if it were run in an older JS engine. **JS is not forwards-compatible**, despite many wishing such, and even incorrectly believing the myth that it is.
+So sánh *tương thích ngược* với đối tác của nó, *tương thích xuôi*. Tương thích xuôi có nghĩa là việc bao gồm một bổ sung mới cho ngôn ngữ trong một chương trình sẽ không khiến chương trình đó bị hỏng nếu nó được chạy trong một engine JS cũ hơn. **JS không tương thích xuôi**, bất chấp nhiều người mong muốn như vậy, và thậm chí tin tưởng sai lầm vào huyền thoại rằng nó là như vậy.
 
-HTML and CSS, by contrast, are forwards-compatible but not backwards-compatible. If you dug up some HTML or CSS written back in 1995, it's entirely possible it would not work (or work the same) today. But, if you use a new feature from 2019 in a browser from 2010, the page isn't "broken" -- the unrecognized CSS/HTML is skipped over, while the rest of the CSS/HTML would be processed accordingly.
+HTML và CSS, ngược lại, tương thích xuôi nhưng không tương thích ngược. Nếu bạn đào bới một số HTML hoặc CSS được viết lại vào năm 1995, hoàn toàn có thể nó sẽ không hoạt động (hoặc hoạt động giống như vậy) ngày nay. Nhưng, nếu bạn sử dụng một tính năng mới từ năm 2019 trong trình duyệt từ năm 2010, trang sẽ không bị "hỏng" -- CSS/HTML không được công nhận sẽ bị bỏ qua, trong khi phần còn lại của CSS/HTML sẽ được xử lý tương ứng.
 
-It may seem desirable for forwards-compatibility to be included in programming language design, but it's generally impractical to do so. Markup (HTML) or styling (CSS) are declarative in nature, so it's much easier to "skip over" unrecognized declarations with minimal impact to other recognized declarations.
+Có vẻ như mong muốn khả năng tương thích xuôi được đưa vào thiết kế ngôn ngữ lập trình, nhưng nói chung là không thực tế để làm như vậy. Đánh dấu (HTML) hoặc kiểu dáng (CSS) có bản chất khai báo, vì vậy việc "bỏ qua" các khai báo không được công nhận dễ dàng hơn nhiều với tác động tối thiểu đến các khai báo được công nhận khác.
 
-But chaos and non-determinism would ensue if a programming language engine selectively skipped statements (or even expressions!) that it didn't understand, as it's impossible to ensure that a subsequent part of the program wasn't expecting the skipped-over part to have been processed.
+Nhưng sự hỗn loạn và không xác định sẽ xảy ra nếu một engine ngôn ngữ lập trình chọn lọc bỏ qua các câu lệnh (hoặc thậm chí các biểu thức!) mà nó không hiểu, vì không thể đảm bảo rằng một phần tiếp theo của chương trình không mong đợi phần bị bỏ qua đã được xử lý.
 
-Though JS isn't, and can't be, forwards-compatible, it's critical to recognize JS's backwards compatibility, including the enduring benefits to the web and the constraints and difficulties it places on JS as a result.
+Mặc dù JS không, và không thể, tương thích xuôi, nhưng điều quan trọng là phải nhận ra khả năng tương thích ngược của JS, bao gồm những lợi ích lâu dài cho web và những hạn chế cũng như khó khăn mà nó đặt ra cho JS như một kết quả.
 
-### Jumping the Gaps
+### Nhảy qua các khoảng trống
 
-Since JS is not forwards-compatible, it means that there is always the potential for a gap between code that you can write that's valid JS, and the oldest engine that your site or application needs to support. If you run a program that uses an ES2019 feature in an engine from 2016, you're very likely to see the program break and crash.
+Vì JS không tương thích xuôi, điều đó có nghĩa là luôn có khả năng xảy ra khoảng cách giữa mã mà bạn có thể viết là JS hợp lệ và engine cũ nhất mà trang web hoặc ứng dụng của bạn cần hỗ trợ. Nếu bạn chạy một chương trình sử dụng tính năng ES2019 trong một engine từ năm 2016, bạn rất có thể sẽ thấy chương trình bị hỏng và gặp sự cố.
 
-If the feature is a new syntax, the program will in general completely fail to compile and run, usually throwing a syntax error. If the feature is an API (such as ES6's `Object.is(..)`), the program may run up to a point but then throw a runtime exception and stop once it encounters the reference to the unknown API.
+Nếu tính năng này là một cú pháp mới, chương trình nói chung sẽ hoàn toàn không biên dịch và chạy được, thường ném ra lỗi cú pháp. Nếu tính năng này là một API (chẳng hạn như `Object.is(..)` của ES6), chương trình có thể chạy đến một điểm nhưng sau đó ném ra một ngoại lệ runtime và dừng lại khi gặp tham chiếu đến API không xác định.
 
-Does this mean JS developers should always lag behind the pace of progress, using only code that is on the trailing edge of the oldest JS engine environments they need to support? No!
+Điều này có nghĩa là các nhà phát triển JS nên luôn tụt hậu so với tốc độ tiến bộ, chỉ sử dụng mã nằm ở rìa sau của các môi trường engine JS cũ nhất mà họ cần hỗ trợ? Không!
 
-But it does mean that JS developers need to take special care to address this gap.
+Nhưng điều đó có nghĩa là các nhà phát triển JS cần đặc biệt quan tâm để giải quyết khoảng cách này.
 
-For new and incompatible syntax, the solution is transpiling. Transpiling is a contrived and community-invented term to describe using a tool to convert the source code of a program from one form to another (but still as textual source code). Typically, forwards-compatibility problems related to syntax are solved by using a transpiler (the most common one being Babel (https://babeljs.io)) to convert from that newer JS syntax version to an equivalent older syntax.
+Đối với cú pháp mới và không tương thích, giải pháp là transpiling (chuyển đổi mã). Transpiling là một thuật ngữ được phát minh bởi cộng đồng và có phần gượng ép để mô tả việc sử dụng một công cụ để chuyển đổi mã nguồn của một chương trình từ dạng này sang dạng khác (nhưng vẫn là mã nguồn văn bản). Thông thường, các vấn đề tương thích xuôi liên quan đến cú pháp được giải quyết bằng cách sử dụng một transpiler (phổ biến nhất là Babel (https://babeljs.io)) để chuyển đổi từ phiên bản cú pháp JS mới hơn đó sang một cú pháp cũ hơn tương đương.
 
-For example, a developer may write a snippet of code like:
+Ví dụ, một nhà phát triển có thể viết một đoạn mã như:
 
 ```js
 if (something) {
@@ -228,7 +228,7 @@ else {
 }
 ```
 
-This is how the code would look in the source code tree for that application. But when producing the file(s) to deploy to the public website, the Babel transpiler might convert that code to look like this:
+Đây là cách mã sẽ trông như thế nào trong cây mã nguồn cho ứng dụng đó. Nhưng khi tạo (các) tệp để triển khai lên trang web công cộng, transpiler Babel có thể chuyển đổi mã đó trông giống như thế này:
 
 ```js
 var x$0, x$1;
@@ -242,39 +242,39 @@ else {
 }
 ```
 
-The original snippet relied on `let` to create block-scoped `x` variables in both the `if` and `else` clauses which did not interfere with each other. An equivalent program (with minimal re-working) that Babel can produce just chooses to name two different variables with unique names, producing the same non-interference outcome.
+Đoạn mã gốc dựa vào `let` để tạo các biến `x` có phạm vi khối trong cả hai mệnh đề `if` và `else` mà không can thiệp lẫn nhau. Một chương trình tương đương (với việc làm lại tối thiểu) mà Babel có thể tạo ra chỉ cần chọn đặt tên cho hai biến khác nhau với tên duy nhất, tạo ra cùng một kết quả không can thiệp.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The `let` keyword was added in ES6 (in 2015). The preceding example of transpiling would only need to apply if an application needed to run in a pre-ES6 supporting JS environment. The example here is just for simplicity of illustration. When ES6 was new, the need for such a transpilation was quite prevalent, but in 2020 it's much less common to need to support pre-ES6 environments. The "target" used for transpilation is thus a sliding window that shifts upward only as decisions are made for a site/application to stop supporting some old browser/engine. |
+| Từ khóa `let` đã được thêm vào trong ES6 (vào năm 2015). Ví dụ trước về transpiling sẽ chỉ cần áp dụng nếu một ứng dụng cần chạy trong môi trường JS hỗ trợ trước ES6. Ví dụ ở đây chỉ để đơn giản hóa minh họa. Khi ES6 còn mới, nhu cầu transpilation như vậy khá phổ biến, nhưng vào năm 2020, việc cần hỗ trợ các môi trường trước ES6 ít phổ biến hơn nhiều. Do đó, "mục tiêu" được sử dụng cho transpilation là một cửa sổ trượt chỉ dịch chuyển lên trên khi các quyết định được đưa ra cho một trang web/ứng dụng ngừng hỗ trợ một số trình duyệt/engine cũ. |
 
-You may wonder: why go to the trouble of using a tool to convert from a newer syntax version to an older one? Couldn't we just write the two variables and skip using the `let` keyword? The reason is, it's strongly recommended that developers use the latest version of JS so that their code is clean and communicates its ideas most effectively.
+Bạn có thể tự hỏi: tại sao phải rắc rối sử dụng một công cụ để chuyển đổi từ phiên bản cú pháp mới hơn sang phiên bản cũ hơn? Chúng ta không thể chỉ viết hai biến và bỏ qua việc sử dụng từ khóa `let` sao? Lý do là, các nhà phát triển được khuyến khích mạnh mẽ sử dụng phiên bản JS mới nhất để mã của họ sạch sẽ và truyền đạt ý tưởng hiệu quả nhất.
 
-Developers should focus on writing the clean, new syntax forms, and let the tools take care of producing a forwards-compatible version of that code that is suitable to deploy and run on the oldest-supported JS engine environments.
+Các nhà phát triển nên tập trung vào việc viết các dạng cú pháp mới, sạch sẽ và để các công cụ lo việc tạo ra một phiên bản tương thích xuôi của mã đó phù hợp để triển khai và chạy trên các môi trường engine JS được hỗ trợ cũ nhất.
 
-### Filling the Gaps
+### Lấp đầy các khoảng trống
 
-If the forwards-compatibility issue is not related to new syntax, but rather to a missing API method that was only recently added, the most common solution is to provide a definition for that missing API method that stands in and acts as if the older environment had already had it natively defined. This pattern is called a polyfill (aka "shim").
+Nếu vấn đề tương thích xuôi không liên quan đến cú pháp mới, mà là do thiếu phương thức API chỉ mới được thêm vào gần đây, giải pháp phổ biến nhất là cung cấp một định nghĩa cho phương thức API còn thiếu đó, thay thế và hoạt động như thể môi trường cũ hơn đã có nó được định nghĩa nguyên bản. Mẫu này được gọi là polyfill (hay còn gọi là "shim").
 
-Consider this code:
+Hãy xem xét mã này:
 
 ```js
-// getSomeRecords() returns us a promise for some
-// data it will fetch
+// getSomeRecords() trả về cho chúng ta một promise cho một số
+// dữ liệu nó sẽ tìm nạp
 var pr = getSomeRecords();
 
-// show the UI spinner while we get the data
+// hiển thị spinner UI trong khi chúng ta lấy dữ liệu
 startSpinner();
 
 pr
-.then(renderRecords)   // render if successful
-.catch(showError)      // show an error if not
-.finally(hideSpinner)  // always hide the spinner
+.then(renderRecords)   // render nếu thành công
+.catch(showError)      // hiển thị lỗi nếu không
+.finally(hideSpinner)  // luôn ẩn spinner
 ```
 
-This code uses an ES2019 feature, the `finally(..)` method on the promise prototype. If this code were used in a pre-ES2019 environment, the `finally(..)` method would not exist, and an error would occur.
+Mã này sử dụng một tính năng ES2019, phương thức `finally(..)` trên prototype promise. Nếu mã này được sử dụng trong môi trường trước ES2019, phương thức `finally(..)` sẽ không tồn tại và lỗi sẽ xảy ra.
 
-A polyfill for `finally(..)` in pre-ES2019 environments could look like this:
+Một polyfill cho `finally(..)` trong môi trường trước ES2019 có thể trông như thế này:
 
 ```js
 if (!Promise.prototype.finally) {
@@ -297,176 +297,176 @@ if (!Promise.prototype.finally) {
 }
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| This is only a simple illustration of a basic (not entirely spec-compliant) polyfill for `finally(..)`. Don't use this polyfill in your code; always use a robust, official polyfill wherever possible, such as the collection of polyfills/shims in ES-Shim. |
+| Đây chỉ là một minh họa đơn giản về một polyfill cơ bản (không hoàn toàn tuân thủ đặc tả) cho `finally(..)`. Đừng sử dụng polyfill này trong mã của bạn; luôn sử dụng một polyfill chính thức, mạnh mẽ bất cứ khi nào có thể, chẳng hạn như bộ sưu tập polyfill/shim trong ES-Shim. |
 
-The `if` statement protects the polyfill definition by preventing it from running in any environment where the JS engine has already defined that method. In older environments, the polyfill is defined, but in newer environments the `if` statement is quietly skipped.
+Câu lệnh `if` bảo vệ định nghĩa polyfill bằng cách ngăn nó chạy trong bất kỳ môi trường nào mà engine JS đã định nghĩa phương thức đó. Trong các môi trường cũ hơn, polyfill được định nghĩa, nhưng trong các môi trường mới hơn, câu lệnh `if` bị bỏ qua một cách lặng lẽ.
 
-Transpilers like Babel typically detect which polyfills your code needs and provide them automatically for you. But occasionally you may need to include/define them explicitly, which works similar to the snippet we just looked at.
+Các transpiler như Babel thường phát hiện polyfill nào mã của bạn cần và cung cấp chúng tự động cho bạn. Nhưng đôi khi bạn có thể cần bao gồm/định nghĩa chúng một cách rõ ràng, hoạt động tương tự như đoạn mã chúng ta vừa xem xét.
 
-Always write code using the most appropriate features to communicate its ideas and intent effectively. In general, this means using the most recent stable JS version. Avoid negatively impacting the code's readability by trying to manually adjust for the syntax/API gaps. That's what tools are for!
+Luôn viết mã sử dụng các tính năng phù hợp nhất để truyền đạt ý tưởng và ý định của nó một cách hiệu quả. Nói chung, điều này có nghĩa là sử dụng phiên bản JS ổn định gần đây nhất. Tránh tác động tiêu cực đến khả năng đọc của mã bằng cách cố gắng điều chỉnh thủ công cho các khoảng trống cú pháp/API. Đó là những gì các công cụ dùng để làm!
 
-Transpilation and polyfilling are two highly effective techniques for addressing that gap between code that uses the latest stable features in the language and the old environments a site or application needs to still support. Since JS isn't going to stop improving, the gap will never go away. Both techniques should be embraced as a standard part of every JS project's production chain going forward.
+Transpilation và polyfilling là hai kỹ thuật hiệu quả cao để giải quyết khoảng cách đó giữa mã sử dụng các tính năng ổn định mới nhất trong ngôn ngữ và các môi trường cũ mà một trang web hoặc ứng dụng vẫn cần hỗ trợ. Vì JS sẽ không ngừng cải thiện, khoảng cách sẽ không bao giờ biến mất. Cả hai kỹ thuật nên được chấp nhận như một phần tiêu chuẩn của chuỗi sản xuất của mọi dự án JS trong tương lai.
 
-## What's in an Interpretation?
+## Có gì trong việc thông dịch?
 
-A long-debated question for code written in JS: is it an interpreted script or a compiled program? The majority opinion seems to be that JS is an interpreted (scripting) language. But the truth is more complicated than that.
+Một câu hỏi được tranh luận từ lâu đối với mã được viết bằng JS: nó là một script được thông dịch hay một chương trình được biên dịch? Ý kiến đa số dường như cho rằng JS là một ngôn ngữ thông dịch (scripting). Nhưng sự thật phức tạp hơn thế.
 
-For much of the history of programming languages, "interpreted" languages and "scripting" languages have been looked down on as inferior compared to their compiled counterparts. The reasons for this acrimony are numerous, including the perception that there is a lack of performance optimization, as well as dislike of certain language characteristics, such as scripting languages generally using dynamic typing instead of the "more mature" statically typed languages.
+Trong phần lớn lịch sử của các ngôn ngữ lập trình, các ngôn ngữ "thông dịch" và ngôn ngữ "scripting" đã bị coi thường là kém hơn so với các đối tác được biên dịch của chúng. Lý do cho sự gay gắt này rất nhiều, bao gồm nhận thức rằng thiếu tối ưu hóa hiệu suất, cũng như không thích một số đặc điểm ngôn ngữ nhất định, chẳng hạn như các ngôn ngữ scripting thường sử dụng kiểu động thay vì các ngôn ngữ kiểu tĩnh "trưởng thành hơn".
 
-Languages regarded as "compiled" usually produce a portable (binary) representation of the program that is distributed for execution later. Since we don't really observe that kind of model with JS (we distribute the source code, not the binary form), many claim that disqualifies JS from the category. In reality, the distribution model for a program's "executable" form has become drastically more varied and also less relevant over the last few decades; to the question at hand, it doesn't really matter so much anymore what form of a program gets passed around.
+Các ngôn ngữ được coi là "biên dịch" thường tạo ra một biểu diễn di động (nhị phân) của chương trình được phân phối để thực thi sau này. Vì chúng ta không thực sự quan sát thấy loại mô hình đó với JS (chúng ta phân phối mã nguồn, không phải dạng nhị phân), nhiều người cho rằng điều đó loại JS khỏi danh mục này. Trên thực tế, mô hình phân phối cho dạng "có thể thực thi" của một chương trình đã trở nên đa dạng hơn đáng kể và cũng ít liên quan hơn trong vài thập kỷ qua; đối với câu hỏi hiện tại, thực sự không còn quan trọng lắm về việc dạng nào của một chương trình được truyền đi.
 
-These misinformed claims and criticisms should be set aside. The real reason it matters to have a clear picture on whether JS is interpreted or compiled relates to the nature of how errors are handled.
+Những tuyên bố và chỉ trích sai lầm này nên được gạt sang một bên. Lý do thực sự quan trọng để có một bức tranh rõ ràng về việc JS được thông dịch hay biên dịch liên quan đến bản chất của cách xử lý lỗi.
 
-Historically, scripted or interpreted languages were executed in generally a top-down and line-by-line fashion; there's typically not an initial pass through the program to process it before execution begins (see Figure 1).
+Về mặt lịch sử, các ngôn ngữ script hoặc thông dịch được thực thi theo kiểu từ trên xuống dưới và từng dòng; thường không có bước đầu tiên qua chương trình để xử lý nó trước khi bắt đầu thực thi (xem Hình 1).
 
 <figure>
-    <img src="images/fig1.png" width="650" alt="Interpreting a script to execute it" align="center">
-    <figcaption><em>Fig. 1: Interpreted/Scripted Execution</em></figcaption>
+    <img src="images/fig1.png" width="650" alt="Thông dịch một script để thực thi nó" align="center">
+    <figcaption><em>Hình 1: Thực thi Thông dịch/Script</em></figcaption>
     <br><br>
 </figure>
 
-In scripted or interpreted languages, an error on line 5 of a program won't be discovered until lines 1 through 4 have already executed. Notably, the error on line 5 might be due to a runtime condition, such as some variable or value having an unsuitable value for an operation, or it may be due to a malformed statement/command on that line. Depending on context, deferring error handling to the line the error occurs on may be a desirable or undesirable effect.
+Trong các ngôn ngữ script hoặc thông dịch, lỗi ở dòng 5 của chương trình sẽ không được phát hiện cho đến khi các dòng từ 1 đến 4 đã được thực thi. Đáng chú ý, lỗi ở dòng 5 có thể do điều kiện runtime, chẳng hạn như một số biến hoặc giá trị có giá trị không phù hợp cho một thao tác, hoặc có thể do câu lệnh/lệnh bị lỗi trên dòng đó. Tùy thuộc vào ngữ cảnh, việc trì hoãn xử lý lỗi đến dòng xảy ra lỗi có thể là một hiệu ứng mong muốn hoặc không mong muốn.
 
-Compare that to languages which do go through a processing step (typically, called parsing) before any execution occurs, as illustrated in Figure 2:
+So sánh điều đó với các ngôn ngữ trải qua bước xử lý (thường được gọi là phân tích cú pháp - parsing) trước khi bất kỳ quá trình thực thi nào xảy ra, như được minh họa trong Hình 2:
 
 <figure>
-    <img src="images/fig2.png" width="650" alt="Parsing, compiling, and executing a program" align="center">
-    <figcaption><em>Fig. 2: Parsing + Compilation + Execution</em></figcaption>
+    <img src="images/fig2.png" width="650" alt="Phân tích cú pháp, biên dịch và thực thi một chương trình" align="center">
+    <figcaption><em>Hình 2: Phân tích cú pháp + Biên dịch + Thực thi</em></figcaption>
     <br><br>
 </figure>
 
-In this processing model, an invalid command (such as broken syntax) on line 5 would be caught during the parsing phase, before any execution has begun, and none of the program would run. For catching syntax (or otherwise "static") errors, generally it's preferred to know about them ahead of any doomed partial execution.
+Trong mô hình xử lý này, một lệnh không hợp lệ (chẳng hạn như cú pháp bị hỏng) trên dòng 5 sẽ bị bắt trong giai đoạn phân tích cú pháp, trước khi bất kỳ quá trình thực thi nào bắt đầu và không có phần nào của chương trình sẽ chạy. Để bắt các lỗi cú pháp (hoặc nói cách khác là "tĩnh"), nhìn chung, tốt hơn là nên biết về chúng trước bất kỳ quá trình thực thi một phần nào bị hủy hoại.
 
-So what do "parsed" languages have in common with "compiled" languages? First, all compiled languages are parsed. So a parsed language is quite a ways down the road toward being compiled already. In classic compilation theory, the last remaining step after parsing is code generation: producing an executable form.
+Vậy các ngôn ngữ "được phân tích cú pháp" có điểm gì chung với các ngôn ngữ "được biên dịch"? Đầu tiên, tất cả các ngôn ngữ biên dịch đều được phân tích cú pháp. Vì vậy, một ngôn ngữ được phân tích cú pháp đã đi được một chặng đường dài để được biên dịch rồi. Trong lý thuyết biên dịch cổ điển, bước cuối cùng còn lại sau khi phân tích cú pháp là tạo mã: tạo ra một dạng có thể thực thi.
 
-Once any source program has been fully parsed, it's very common that its subsequent execution will, in some form or fashion, include a translation from the parsed form of the program—usually called an Abstract Syntax Tree (AST)—to that executable form.
+Khi bất kỳ chương trình nguồn nào đã được phân tích cú pháp đầy đủ, rất phổ biến là quá trình thực thi tiếp theo của nó, dưới một hình thức hoặc kiểu cách nào đó, sẽ bao gồm một bản dịch từ dạng đã phân tích cú pháp của chương trình—thường được gọi là Cây cú pháp trừu tượng (AST)—sang dạng có thể thực thi đó.
 
-In other words, parsed languages usually also perform code generation before execution, so it's not that much of a stretch to say that, in spirit, they're compiled languages.
+Nói cách khác, các ngôn ngữ được phân tích cú pháp thường cũng thực hiện tạo mã trước khi thực thi, vì vậy không quá lời khi nói rằng, về mặt tinh thần, chúng là các ngôn ngữ biên dịch.
 
-JS source code is parsed before it is executed. The specification requires as much, because it calls for "early errors"—statically determined errors in code, such as a duplicate parameter name—to be reported before the code starts executing. Those errors cannot be recognized without the code having been parsed.
+Mã nguồn JS được phân tích cú pháp trước khi nó được thực thi. Đặc tả yêu cầu nhiều như vậy, bởi vì nó kêu gọi các "lỗi sớm"—các lỗi được xác định tĩnh trong mã, chẳng hạn như tên tham số trùng lặp—phải được báo cáo trước khi mã bắt đầu thực thi. Những lỗi đó không thể được nhận ra nếu mã không được phân tích cú pháp.
 
-So **JS is a parsed language**, but is it *compiled*?
+Vì vậy, **JS là một ngôn ngữ được phân tích cú pháp**, nhưng nó có được *biên dịch* không?
 
-The answer is closer to yes than no. The parsed JS is converted to an optimized (binary) form, and that "code" is subsequently executed (Figure 2); the engine does not commonly switch back into line-by-line execution (like Figure 1) mode after it has finished all the hard work of parsing—most languages/engines wouldn't, because that would be highly inefficient.
+Câu trả lời gần với có hơn là không. JS đã phân tích cú pháp được chuyển đổi thành dạng tối ưu hóa (nhị phân), và "mã" đó sau đó được thực thi (Hình 2); engine thường không chuyển trở lại chế độ thực thi từng dòng (như Hình 1) sau khi đã hoàn thành tất cả công việc khó khăn của việc phân tích cú pháp—hầu hết các ngôn ngữ/engine sẽ không làm vậy, vì điều đó sẽ rất kém hiệu quả.
 
-To be specific, this "compilation" produces a binary byte code (of sorts), which is then handed to the "JS virtual machine" to execute. Some like to say this VM is "interpreting" the byte code. But then that means Java, and a dozen other JVM-driven languages, for that matter, are interpreted rather than compiled. Of course, that contradicts the typical assertion that Java/etc are compiled languages.
+Cụ thể, quá trình "biên dịch" này tạo ra một mã byte nhị phân (đại loại vậy), sau đó được chuyển cho "máy ảo JS" để thực thi. Một số người thích nói rằng VM này đang "thông dịch" mã byte. Nhưng điều đó có nghĩa là Java, và hàng tá ngôn ngữ dựa trên JVM khác, về vấn đề đó, được thông dịch thay vì biên dịch. Tất nhiên, điều đó mâu thuẫn với khẳng định điển hình rằng Java/v.v. là các ngôn ngữ biên dịch.
 
-Interestingly, while Java and JavaScript are very different languages, the question of interpreted/compiled is pretty closely related between them!
+Thật thú vị, trong khi Java và JavaScript là những ngôn ngữ rất khác nhau, câu hỏi về thông dịch/biên dịch lại khá liên quan chặt chẽ giữa chúng!
 
-Another wrinkle is that JS engines can employ multiple passes of JIT (Just-In-Time) processing/optimization on the generated code (post parsing), which again could reasonably be labeled either "compilation" or "interpretation" depending on perspective. It's actually a fantastically complex situation under the hood of a JS engine.
+Một vấn đề khác là các engine JS có thể sử dụng nhiều lượt xử lý/tối ưu hóa JIT (Just-In-Time) trên mã được tạo (sau khi phân tích cú pháp), một lần nữa có thể được dán nhãn hợp lý là "biên dịch" hoặc "thông dịch" tùy thuộc vào quan điểm. Nó thực sự là một tình huống cực kỳ phức tạp bên dưới nắp ca-pô của một engine JS.
 
-So what do these nitty-gritty details boil down to? Step back and consider the entire flow of a JS source program:
+Vậy những chi tiết vụn vặt này tóm lại là gì? Hãy lùi lại và xem xét toàn bộ luồng của một chương trình nguồn JS:
 
-1. After a program leaves a developer's editor, it gets transpiled by Babel, then packed by Webpack (and perhaps half a dozen other build processes), then it gets delivered in that very different form to a JS engine.
+1. Sau khi một chương trình rời khỏi trình soạn thảo của nhà phát triển, nó được transpiled bởi Babel, sau đó được đóng gói bởi Webpack (và có lẽ là nửa tá quy trình build khác), sau đó nó được chuyển đến engine JS dưới dạng rất khác đó.
 
-2. The JS engine parses the code to an AST.
+2. Engine JS phân tích cú pháp mã thành AST.
 
-3. Then the engine converts that AST to a kind-of byte code, a binary intermediate representation (IR), which is then refined/converted even further by the optimizing JIT compiler.
+3. Sau đó, engine chuyển đổi AST đó thành một loại mã byte, một biểu diễn trung gian nhị phân (IR), sau đó được tinh chỉnh/chuyển đổi thêm bởi trình biên dịch tối ưu hóa JIT.
 
-4. Finally, the JS VM executes the program.
+4. Cuối cùng, JS VM thực thi chương trình.
 
-To visualize those steps, again:
+Để hình dung lại các bước đó:
 
 <figure>
-    <img src="images/fig3.png" width="650" alt="Steps of JS compilation and execution" align="center">
-    <figcaption><em>Fig. 3: Parsing, Compiling, and Executing JS</em></figcaption>
+    <img src="images/fig3.png" width="650" alt="Các bước biên dịch và thực thi JS" align="center">
+    <figcaption><em>Hình 3: Phân tích cú pháp, Biên dịch và Thực thi JS</em></figcaption>
     <br><br>
 </figure>
 
-Is JS handled more like an interpreted, line-by-line script, as in Figure 1, or is it handled more like a compiled language that's processed in one-to-several passes first, before execution (as in Figures 2 and 3)?
+Liệu JS được xử lý giống như một script từng dòng, được thông dịch, như trong Hình 1, hay nó được xử lý giống như một ngôn ngữ biên dịch được xử lý trong một đến vài lượt đầu tiên, trước khi thực thi (như trong Hình 2 và 3)?
 
-I think it's clear that in spirit, if not in practice, **JS is a compiled language**.
+Tôi nghĩ rõ ràng là về mặt tinh thần, nếu không phải trong thực tế, **JS là một ngôn ngữ biên dịch**.
 
-And again, the reason that matters is, since JS is compiled, we are informed of static errors (such as malformed syntax) before our code is executed. That is a substantively different interaction model than we get with traditional "scripting" programs, and arguably more helpful!
+Và một lần nữa, lý do quan trọng là, vì JS được biên dịch, chúng ta được thông báo về các lỗi tĩnh (chẳng hạn như cú pháp sai) trước khi mã của chúng ta được thực thi. Đó là một mô hình tương tác khác biệt đáng kể so với những gì chúng ta nhận được với các chương trình "scripting" truyền thống, và được cho là hữu ích hơn!
 
 ### Web Assembly (WASM)
 
-One dominating concern that has driven a significant amount of JS's evolution is performance, both how quickly JS can be parsed/compiled and how quickly that compiled code can be executed.
+Một mối quan tâm chi phối đã thúc đẩy một lượng đáng kể sự phát triển của JS là hiệu suất, cả tốc độ JS có thể được phân tích cú pháp/biên dịch và tốc độ mã biên dịch đó có thể được thực thi.
 
-In 2013, engineers from Mozilla Firefox demonstrated a port of the Unreal 3 game engine from C to JS. The ability for this code to run in a browser JS engine at full 60fps performance was predicated on a set of optimizations that the JS engine could perform specifically because the JS version of the Unreal engine's code used a style of code that favored a subset of the JS language, named "ASM.js".
+Vào năm 2013, các kỹ sư từ Mozilla Firefox đã trình diễn một bản port của engine game Unreal 3 từ C sang JS. Khả năng mã này chạy trong engine JS trình duyệt ở hiệu suất 60 khung hình/giây đầy đủ được dự đoán dựa trên một tập hợp các tối ưu hóa mà engine JS có thể thực hiện cụ thể vì phiên bản JS của mã engine Unreal sử dụng một kiểu mã ưa thích một tập hợp con của ngôn ngữ JS, có tên là "ASM.js".
 
-This subset is valid JS written in ways that are somewhat uncommon in normal coding, but which signal certain important typing information to the engine that allow it to make key optimizations. ASM.js was introduced as one way of addressing the pressures on the runtime performance of JS.
+Tập hợp con này là JS hợp lệ được viết theo những cách hơi lạ trong mã hóa thông thường, nhưng báo hiệu một số thông tin kiểu quan trọng nhất định cho engine cho phép nó thực hiện các tối ưu hóa chính. ASM.js được giới thiệu như một cách để giải quyết áp lực về hiệu suất runtime của JS.
 
-But it's important to note that ASM.js was never intended to be code that was authored by developers, but rather a representation of a program having been transpiled from another language (such as C), where these typing "annotations" were inserted automatically by the tooling.
+Nhưng điều quan trọng cần lưu ý là ASM.js chưa bao giờ được dự định là mã do các nhà phát triển biên soạn, mà là một biểu diễn của một chương trình đã được transpiled từ một ngôn ngữ khác (như C), trong đó các "chú thích" kiểu này được chèn tự động bởi công cụ.
 
-Several years after ASM.js demonstrated the validity of tooling-created versions of programs that can be processed more efficiently by the JS engine, another group of engineers (also, initially, from Mozilla) released Web Assembly (WASM).
+Vài năm sau khi ASM.js chứng minh tính hợp lệ của các phiên bản chương trình do công cụ tạo ra có thể được xử lý hiệu quả hơn bởi engine JS, một nhóm kỹ sư khác (ban đầu cũng từ Mozilla) đã phát hành Web Assembly (WASM).
 
-WASM is similar to ASM.js in that its original intent was to provide a path for non-JS programs (C, etc.) to be converted to a form that could run in the JS engine. Unlike ASM.js, WASM chose to additionally get around some of the inherent delays in JS parsing/compilation before a program can execute, by representing the program in a form that is entirely unlike JS.
+WASM tương tự như ASM.js ở chỗ mục đích ban đầu của nó là cung cấp một đường dẫn cho các chương trình không phải JS (C, v.v.) được chuyển đổi sang một dạng có thể chạy trong engine JS. Không giống như ASM.js, WASM đã chọn giải quyết thêm một số độ trễ vốn có trong quá trình phân tích cú pháp/biên dịch JS trước khi một chương trình có thể thực thi, bằng cách biểu diễn chương trình ở một dạng hoàn toàn không giống JS.
 
-WASM is a representation format more akin to Assembly (hence, its name) that can be processed by a JS engine by skipping the parsing/compilation that the JS engine normally does. The parsing/compilation of a WASM-targeted program happen ahead of time (AOT); what's distributed is a binary-packed program ready for the JS engine to execute with very minimal processing.
+WASM là một định dạng biểu diễn giống với Assembly hơn (do đó có tên như vậy) có thể được xử lý bởi engine JS bằng cách bỏ qua quá trình phân tích cú pháp/biên dịch mà engine JS thường làm. Việc phân tích cú pháp/biên dịch một chương trình nhắm mục tiêu WASM diễn ra trước thời hạn (AOT); những gì được phân phối là một chương trình được đóng gói nhị phân sẵn sàng để engine JS thực thi với quá trình xử lý rất tối thiểu.
 
-An initial motivation for WASM was clearly the potential performance improvements. While that continues to be a focus, WASM is additionally motivated by the desire to bring more parity for non-JS languages to the web platform. For example, if a language like Go supports threaded programming, but JS (the language) does not, WASM offers the potential for such a Go program to be converted to a form the JS engine can understand, without needing a threads feature in the JS language itself.
+Một động lực ban đầu cho WASM rõ ràng là những cải tiến hiệu suất tiềm năng. Mặc dù đó vẫn tiếp tục là trọng tâm, WASM còn được thúc đẩy bởi mong muốn mang lại sự ngang bằng hơn cho các ngôn ngữ không phải JS đối với nền tảng web. Ví dụ, nếu một ngôn ngữ như Go hỗ trợ lập trình luồng, nhưng JS (ngôn ngữ) thì không, WASM cung cấp tiềm năng cho một chương trình Go như vậy được chuyển đổi sang một dạng mà engine JS có thể hiểu được, mà không cần tính năng luồng trong chính ngôn ngữ JS.
 
-In other words, WASM relieves the pressure to add features to JS that are mostly/exclusively intended to be used by transpiled programs from other languages. That means JS feature development can be judged (by TC39) without being skewed by interests/demands in other language ecosystems, while still letting those languages have a viable path onto the web.
+Nói cách khác, WASM làm giảm áp lực phải thêm các tính năng vào JS chủ yếu/dành riêng cho các chương trình được transpiled từ các ngôn ngữ khác sử dụng. Điều đó có nghĩa là sự phát triển tính năng JS có thể được đánh giá (bởi TC39) mà không bị lệch lạc bởi lợi ích/nhu cầu trong các hệ sinh thái ngôn ngữ khác, trong khi vẫn cho phép các ngôn ngữ đó có một con đường khả thi vào web.
 
-Another perspective on WASM that's emerging is, interestingly, not even directly related to the web (W). WASM is evolving to become a cross-platform virtual machine (VM) of sorts, where programs can be compiled once and run in a variety of different system environments.
+Một quan điểm khác về WASM đang nổi lên, thật thú vị, thậm chí không liên quan trực tiếp đến web (W). WASM đang phát triển để trở thành một máy ảo (VM) đa nền tảng, nơi các chương trình có thể được biên dịch một lần và chạy trong nhiều môi trường hệ thống khác nhau.
 
-So, WASM isn't only for the web, and WASM also isn't JS. Ironically, even though WASM runs in the JS engine, the JS language is one of the least suitable languages to source WASM programs with, because WASM relies heavily on static typing information. Even TypeScript (TS)—ostensibly, JS + static types—is not quite suitable (as it stands) to transpile to WASM, though language variants like AssemblyScript are attempting to bridge the gap between JS/TS and WASM.
+Vì vậy, WASM không chỉ dành cho web và WASM cũng không phải là JS. Trớ trêu thay, mặc dù WASM chạy trong engine JS, ngôn ngữ JS là một trong những ngôn ngữ ít phù hợp nhất để tạo nguồn cho các chương trình WASM, bởi vì WASM dựa nhiều vào thông tin kiểu tĩnh. Ngay cả TypeScript (TS)—bề ngoài là JS + các kiểu tĩnh—cũng không hoàn toàn phù hợp (như hiện tại) để transpile sang WASM, mặc dù các biến thể ngôn ngữ như AssemblyScript đang cố gắng thu hẹp khoảng cách giữa JS/TS và WASM.
 
-This book isn't about WASM, so I won't spend much more time discussing it, except to make one final point. *Some* folks have suggested WASM points to a future where JS is excised from, or minimized in, the web. These folks often harbor ill feelings about JS, and want some other language—any other language!—to replace it. Since WASM lets other languages run in the JS engine, on its face this isn't an entirely fanciful fairytale.
+Cuốn sách này không nói về WASM, vì vậy tôi sẽ không dành nhiều thời gian thảo luận về nó, ngoại trừ việc đưa ra một điểm cuối cùng. *Một số* người đã gợi ý rằng WASM chỉ ra một tương lai nơi JS bị loại bỏ khỏi, hoặc giảm thiểu trong, web. Những người này thường nuôi dưỡng những cảm xúc tồi tệ về JS và muốn một ngôn ngữ khác—bất kỳ ngôn ngữ nào khác!—thay thế nó. Vì WASM cho phép các ngôn ngữ khác chạy trong engine JS, về mặt hình thức, đây không phải là một câu chuyện cổ tích hoàn toàn viển vông.
 
-But let me just state simply: WASM will not replace JS. WASM significantly augments what the web (including JS) can accomplish. That's a great thing, entirely orthogonal to whether some people will use it as an escape hatch from having to write JS.
+Nhưng hãy để tôi nói đơn giản: WASM sẽ không thay thế JS. WASM tăng cường đáng kể những gì web (bao gồm cả JS) có thể thực hiện. Đó là một điều tuyệt vời, hoàn toàn trực giao với việc liệu một số người có sử dụng nó như một lối thoát khỏi việc phải viết JS hay không.
 
-## *Strict*ly Speaking
+## Nói một cách *Nghiêm túc*
 
-Back in 2009 with the release of ES5, JS added *strict mode* as an opt-in mechanism for encouraging better JS programs.
+Quay trở lại năm 2009 với việc phát hành ES5, JS đã thêm *chế độ nghiêm ngặt* (strict mode) như một cơ chế chọn tham gia để khuyến khích các chương trình JS tốt hơn.
 
-The benefits of strict mode far outweigh the costs, but old habits die hard and the inertia of existing (aka "legacy") code bases is really hard to shift. So sadly, more than 10 years later, strict mode's *optionality* means that it's still not necessarily the default for JS programmers.
+Lợi ích của chế độ nghiêm ngặt vượt xa chi phí, nhưng thói quen cũ khó bỏ và quán tính của các cơ sở mã hiện có (hay còn gọi là "kế thừa") thực sự khó thay đổi. Vì vậy, thật đáng buồn, hơn 10 năm sau, *tính tùy chọn* của chế độ nghiêm ngặt có nghĩa là nó vẫn chưa nhất thiết phải là mặc định cho các lập trình viên JS.
 
-Why strict mode? Strict mode shouldn't be thought of as a restriction on what you can't do, but rather as a guide to the best way to do things so that the JS engine has the best chance of optimizing and efficiently running the code. Most JS code is worked on by teams of developers, so the *strict*-ness of strict mode (along with tooling like linters!) often helps collaboration on code by avoiding some of the more problematic mistakes that slip by in non-strict mode.
+Tại sao lại là chế độ nghiêm ngặt? Chế độ nghiêm ngặt không nên được coi là một hạn chế về những gì bạn không thể làm, mà là một hướng dẫn về cách tốt nhất để làm mọi việc để engine JS có cơ hội tốt nhất để tối ưu hóa và chạy mã hiệu quả. Hầu hết mã JS được thực hiện bởi các nhóm nhà phát triển, vì vậy *tính nghiêm ngặt* của chế độ nghiêm ngặt (cùng với các công cụ như linter!) thường giúp cộng tác trên mã bằng cách tránh một số sai lầm có vấn đề hơn trượt qua trong chế độ không nghiêm ngặt.
 
-Most strict mode controls are in the form of *early errors*, meaning errors that aren't strictly syntax errors but are still thrown at compile time (before the code is run). For example, strict mode disallows naming two function parameters the same, and results in an early error. Some other strict mode controls are only observable at runtime, such as how `this` defaults to `undefined` instead of the global object.
+Hầu hết các kiểm soát chế độ nghiêm ngặt đều ở dạng *lỗi sớm*, nghĩa là các lỗi không hoàn toàn là lỗi cú pháp nhưng vẫn bị ném ra tại thời điểm biên dịch (trước khi mã được chạy). Ví dụ, chế độ nghiêm ngặt không cho phép đặt tên hai tham số hàm giống nhau và dẫn đến lỗi sớm. Một số kiểm soát chế độ nghiêm ngặt khác chỉ có thể quan sát được khi runtime, chẳng hạn như cách `this` mặc định là `undefined` thay vì đối tượng toàn cục.
 
-Rather than fighting and arguing with strict mode, like a kid who just wants to defy whatever their parents tell them not to do, the best mindset is that strict mode is like a linter reminding you how JS *should* be written to have the highest quality and best chance at performance. If you find yourself feeling handcuffed, trying to work around strict mode, that should be a blaring red warning flag that you need to back up and rethink the whole approach.
+Thay vì chiến đấu và tranh luận với chế độ nghiêm ngặt, giống như một đứa trẻ chỉ muốn thách thức bất cứ điều gì cha mẹ chúng bảo chúng không được làm, tư duy tốt nhất là chế độ nghiêm ngặt giống như một linter nhắc nhở bạn cách JS *nên* được viết để có chất lượng cao nhất và cơ hội tốt nhất về hiệu suất. Nếu bạn thấy mình cảm thấy bị còng tay, cố gắng làm việc xung quanh chế độ nghiêm ngặt, đó sẽ là một lá cờ cảnh báo đỏ rực rằng bạn cần phải lùi lại và suy nghĩ lại toàn bộ cách tiếp cận.
 
-Strict mode is switched on per file with a special pragma (nothing allowed before it except comments/whitespace):
+Chế độ nghiêm ngặt được bật trên mỗi tệp với một pragma đặc biệt (không có gì được phép trước nó ngoại trừ nhận xét/khoảng trắng):
 
 ```js
-// only whitespace and comments are allowed
-// before the use-strict pragma
+// chỉ khoảng trắng và nhận xét được phép
+// trước pragma use-strict
 "use strict";
-// the rest of the file runs in strict mode
+// phần còn lại của tệp chạy ở chế độ nghiêm ngặt
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Something to be aware of is that even a stray `;` all by itself appearing before the strict mode pragma will render the pragma useless; no errors are thrown because it's valid JS to have a string literal expression in a statement position, but it also will silently *not* turn on strict mode! |
+| Một điều cần lưu ý là ngay cả một dấu `;` đi lạc nằm một mình xuất hiện trước pragma chế độ nghiêm ngặt sẽ khiến pragma trở nên vô dụng; không có lỗi nào bị ném ra vì việc có một biểu thức literal chuỗi ở vị trí câu lệnh là JS hợp lệ, nhưng nó cũng sẽ âm thầm *không* bật chế độ nghiêm ngặt! |
 
-Strict mode can alternatively be turned on per-function scope, with exactly the same rules about its surroundings:
+Chế độ nghiêm ngặt có thể thay thế được bật trên phạm vi mỗi hàm, với các quy tắc chính xác tương tự về môi trường xung quanh nó:
 
 ```js
 function someOperations() {
-    // whitespace and comments are fine here
+    // khoảng trắng và nhận xét đều ổn ở đây
     "use strict";
 
-    // all this code will run in strict mode
+    // tất cả mã này sẽ chạy ở chế độ nghiêm ngặt
 }
 ```
 
-Interestingly, if a file has strict mode turned on, the function-level strict mode pragmas are disallowed. So you have to pick one or the other.
+Thật thú vị, nếu một tệp đã bật chế độ nghiêm ngặt, các pragma chế độ nghiêm ngặt cấp hàm sẽ không được phép. Vì vậy, bạn phải chọn cái này hoặc cái kia.
 
-The **only** valid reason to use a per-function approach to strict mode is when you are converting an existing non-strict mode program file and need to make the changes little by little over time. Otherwise, it's vastly better to simply turn strict mode on for the entire file/program.
+Lý do hợp lệ **duy nhất** để sử dụng cách tiếp cận mỗi hàm đối với chế độ nghiêm ngặt là khi bạn đang chuyển đổi một tệp chương trình chế độ không nghiêm ngặt hiện có và cần thực hiện các thay đổi từng chút một theo thời gian. Nếu không, tốt hơn hết là chỉ cần bật chế độ nghiêm ngặt cho toàn bộ tệp/chương trình.
 
-Many have wondered if there would ever be a time when JS made strict mode the default? The answer is, almost certainly not. As we discussed earlier around backwards compatibility, if a JS engine update started assuming code was strict mode even if it's not marked as such, it's possible that this code would break as a result of strict mode's controls.
+Nhiều người đã tự hỏi liệu có bao giờ JS biến chế độ nghiêm ngặt thành mặc định không? Câu trả lời là, gần như chắc chắn là không. Như chúng ta đã thảo luận trước đó xung quanh khả năng tương thích ngược, nếu bản cập nhật engine JS bắt đầu giả định mã là chế độ nghiêm ngặt ngay cả khi nó không được đánh dấu như vậy, có thể mã này sẽ bị hỏng do các kiểm soát của chế độ nghiêm ngặt.
 
-However, there are a few factors that reduce the future impact of this non-default "obscurity" of strict mode.
+Tuy nhiên, có một vài yếu tố làm giảm tác động trong tương lai của "sự tối nghĩa" không mặc định này của chế độ nghiêm ngặt.
 
-For one, virtually all transpiled code ends up in strict mode even if the original source code isn't written as such. Most JS code in production has been transpiled, so that means most JS is already adhering to strict mode. It's possible to undo that assumption, but you really have to go out of your way to do so, so it's highly unlikely.
+Thứ nhất, hầu như tất cả mã được transpiled đều kết thúc ở chế độ nghiêm ngặt ngay cả khi mã nguồn gốc không được viết như vậy. Hầu hết mã JS trong sản xuất đã được transpiled, vì vậy điều đó có nghĩa là hầu hết JS đã tuân thủ chế độ nghiêm ngặt. Có thể hoàn tác giả định đó, nhưng bạn thực sự phải nỗ lực để làm như vậy, vì vậy rất khó xảy ra.
 
-Moreover, a wide shift is happening toward more/most new JS code being written using the ES6 module format. ES6 modules assume strict mode, so all code in such files is automatically defaulted to strict mode.
+Hơn nữa, một sự thay đổi rộng rãi đang diễn ra theo hướng nhiều/hầu hết mã JS mới được viết bằng định dạng mô-đun ES6. Các mô-đun ES6 giả định chế độ nghiêm ngặt, vì vậy tất cả mã trong các tệp như vậy sẽ tự động được mặc định là chế độ nghiêm ngặt.
 
-Taken together, strict mode is largely the de facto default even though technically it's not actually the default.
+Kết hợp lại với nhau, chế độ nghiêm ngặt phần lớn là mặc định thực tế mặc dù về mặt kỹ thuật nó thực sự không phải là mặc định.
 
-## Defined
+## Định nghĩa
 
-JS is an implementation of the ECMAScript standard (version ES2019 as of this writing), which is guided by the TC39 committee and hosted by ECMA. It runs in browsers and other JS environments such as Node.js.
+JS là một triển khai của tiêu chuẩn ECMAScript (phiên bản ES2019 tính đến thời điểm viết bài này), được hướng dẫn bởi ủy ban TC39 và được lưu trữ bởi ECMA. Nó chạy trong các trình duyệt và các môi trường JS khác như Node.js.
 
-JS is a multi-paradigm language, meaning the syntax and capabilities allow a developer to mix and match (and bend and reshape!) concepts from various major paradigms, such as procedural, object-oriented (OO/classes), and functional (FP).
+JS là một ngôn ngữ đa mô hình, nghĩa là cú pháp và khả năng cho phép nhà phát triển trộn và kết hợp (và uốn cong và định hình lại!) các khái niệm từ các mô hình chính khác nhau, chẳng hạn như thủ tục, hướng đối tượng (OO/lớp) và hàm (FP).
 
-JS is a compiled language, meaning the tools (including the JS engine) process and verify a program (reporting any errors!) before it executes.
+JS là một ngôn ngữ biên dịch, nghĩa là các công cụ (bao gồm cả engine JS) xử lý và xác minh một chương trình (báo cáo bất kỳ lỗi nào!) trước khi nó thực thi.
 
-With our language now *defined*, let's start getting to know its ins and outs.
+Với ngôn ngữ của chúng ta hiện đã được *định nghĩa*, hãy bắt đầu tìm hiểu những điều cơ bản của nó.
 
-[^specApB]: ECMAScript 2019 Language Specification, Appendix B: Additional ECMAScript Features for Web Browsers, https://www.ecma-international.org/ecma-262/10.0/#sec-additional-ecmascript-features-for-web-browsers (latest as of time of this writing in January 2020)
+[^specApB]: Đặc tả ngôn ngữ ECMAScript 2019, Phụ lục B: Các tính năng ECMAScript bổ sung cho trình duyệt Web, https://www.ecma-international.org/ecma-262/10.0/#sec-additional-ecmascript-features-for-web-browsers (mới nhất tính đến thời điểm viết bài này vào tháng 1 năm 2020)

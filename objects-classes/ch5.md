@@ -1,51 +1,51 @@
-# You Don't Know JS Yet: Objects & Classes - 2nd Edition
-# Chapter 5: Delegation
+# You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
+# Chương 5: Ủy Quyền (Delegation)
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang trong quá trình thực hiện |
 
-We've thoroughly explored objects, prototypes, classes, and now the `this` keyword. But we're now going to revisit what we've learned so far from a bit of a different perspective.
+Chúng ta đã khám phá kỹ lưỡng các đối tượng, nguyên mẫu, lớp, và bây giờ là từ khóa `this`. Nhưng bây giờ chúng ta sẽ xem xét lại những gì chúng ta đã học được cho đến nay từ một góc nhìn hơi khác.
 
-What if you could leverage all the power of the objects, prototypes, and dynamic `this` mechanisms together, without ever using `class` or any of its descendants?
+Điều gì sẽ xảy ra nếu bạn có thể tận dụng tất cả sức mạnh của các cơ chế đối tượng, nguyên mẫu và `this` động cùng nhau, mà không bao giờ sử dụng `class` hoặc bất kỳ hậu duệ nào của nó?
 
-In fact, I would argue JS is inherently less class-oriented than the `class` keyword might appear. Because JS is a dynamic, prototypal language, its strong suit is actually... *delegation*.
+Trên thực tế, tôi sẽ lập luận rằng JS vốn dĩ ít định hướng lớp hơn so với những gì từ khóa `class` có thể thể hiện. Bởi vì JS là một ngôn ngữ nguyên mẫu, động, thế mạnh của nó thực sự là... *ủy quyền* (delegation).
 
-## Preamble
+## Lời Mở Đầu (Preamble)
 
-Before we begin looking at delegation, I want to offer a word of caution. This perspective on JS's object `[[Prototype]]` and `this` function context mechanisms is *not* mainstream. It's *not* how framework authors and libraries utilize JS. You won't, to my knowledge, find any big apps out there using this pattern.
+Trước khi chúng ta bắt đầu xem xét ủy quyền, tôi muốn đưa ra một lời cảnh báo. Góc nhìn này về các cơ chế `[[Prototype]]` của đối tượng và ngữ cảnh hàm `this` của JS *không phải* là chính thống. Đó *không phải* là cách các tác giả khung và thư viện sử dụng JS. Theo hiểu biết của tôi, bạn sẽ không tìm thấy bất kỳ ứng dụng lớn nào ngoài kia sử dụng mẫu này.
 
-So why on earth would I devote a chapter to such a pattern, if it's so unpopular?
+Vậy tại sao tôi lại dành một chương cho một mẫu như vậy, nếu nó không phổ biến đến thế?
 
-Good question. The cheeky answer is: because it's my book and I can do what I feel like!
+Câu hỏi hay. Câu trả lời táo tợn là: bởi vì đó là cuốn sách của tôi và tôi có thể làm những gì tôi thích!
 
-But the deeper answer is, because I think developing *this* understanding of one of the language's core pillars helps you *even if* all you ever do is use `class`-style JS patterns.
+Nhưng câu trả lời sâu sắc hơn là, bởi vì tôi nghĩ rằng việc phát triển sự hiểu biết *này* về một trong những trụ cột cốt lõi của ngôn ngữ sẽ giúp bạn *ngay cả khi* tất cả những gì bạn từng làm là sử dụng các mẫu JS kiểu `class`.
 
-To be clear, delegation is not my invention. It's been around as a design pattern for decades. And for a long time, developers argued that prototypal delegation was *just* the dynamic form of inheritance.[^TreatyOfOrlando] But I think that was a mistake to conflate the two.[^ClassVsPrototype]
+Để rõ ràng, ủy quyền không phải là phát minh của tôi. Nó đã tồn tại như một mẫu thiết kế trong nhiều thập kỷ. Và trong một thời gian dài, các nhà phát triển lập luận rằng ủy quyền nguyên mẫu *chỉ* là dạng thừa kế động.[^TreatyOfOrlando] Nhưng tôi nghĩ rằng đó là một sai lầm khi gộp hai thứ đó lại với nhau.[^ClassVsPrototype]
 
-For the purposes of this chapter, I'm going to present delegation, as implemented via JS mechanics, as an alternative design pattern, positioned somewhere between class-orientation and object-closure/module patterns.
+Đối với mục đích của chương này, tôi sẽ trình bày ủy quyền, như được triển khai thông qua cơ học JS, như một mẫu thiết kế thay thế, được định vị ở đâu đó giữa định hướng lớp và các mẫu đối tượng-đóng/mô-đun.
 
-The first step is to *de-construct* the `class` mechanism down to its individual parts. Then we'll cherry-pick and mix the parts a bit differently.
+Bước đầu tiên là *giải cấu trúc* (de-construct) cơ chế `class` xuống các phần riêng lẻ của nó. Sau đó, chúng ta sẽ chọn lọc và trộn các phần hơi khác một chút.
 
-## What's A Constructor, Anyway?
+## Dù Sao Thì Constructor Là Gì? (What's A Constructor, Anyway?)
 
-In Chapter 3, we saw `constructor(..)` as the main entry point for construction of a `class` instance. But the `constructor(..)` doesn't actually do any *creation* work, it's only *initialization* work. In other words, the instance is already created by the time the `constructor(..)` runs and initializes it -- e.g., `this.whatever` types of assignments.
+Trong Chương 3, chúng ta đã thấy `constructor(..)` là điểm nhập chính cho việc xây dựng một thể hiện `class`. Nhưng `constructor(..)` thực sự không thực hiện bất kỳ công việc *tạo* nào, nó chỉ là công việc *khởi tạo*. Nói cách khác, thể hiện đã được tạo vào thời điểm `constructor(..)` chạy và khởi tạo nó -- ví dụ: các kiểu gán `this.whatever`.
 
-So where does the *creation* work actually happen? In the `new` operator. As the section "New Context Invocation" in Chapter 4 explains, there are four steps the `new` keyword performs; the first of those is the creation of a new empty object (the instance). The `constructor(..)` isn't even invoked until step 3 of `new`'s efforts.
+Vậy công việc *tạo* thực sự diễn ra ở đâu? Trong toán tử `new`. Như phần "Gọi Ngữ cảnh Mới" trong Chương 4 giải thích, có bốn bước mà từ khóa `new` thực hiện; bước đầu tiên trong số đó là tạo một đối tượng rỗng mới (thể hiện). `constructor(..)` thậm chí không được gọi cho đến bước 3 trong các nỗ lực của `new`.
 
-But `new` is not the only -- or perhaps even, best -- way to *create* an object "instance". Consider:
+Nhưng `new` không phải là cách duy nhất -- hoặc thậm chí có lẽ là tốt nhất -- để *tạo* một "thể hiện" đối tượng. Hãy xem xét:
 
 ```js
-// a non-class "constructor"
+// một "constructor" không phải lớp
 function Point2d(x,y) {
-    // create an object (1)
+    // tạo một đối tượng (1)
     var instance = {};
 
-    // initialize the instance (3)
+    // khởi tạo thể hiện (3)
     instance.x = x;
     instance.y = y;
 
-    // return the instance (4)
+    // trả về thể hiện (4)
     return instance;
 }
 
@@ -55,15 +55,15 @@ point.x;                    // 3
 point.y;                    // 4
 ```
 
-There's no `class`, just a regular function definition (`Point2d(..)`). There's no `new` invocation, just a regular function call (`Point2d(3,4)`). And there's no `this` references, just regular object property assignments (`instance.x = ..`).
+Không có `class`, chỉ là một định nghĩa hàm thông thường (`Point2d(..)`). Không có lệnh gọi `new`, chỉ là một lệnh gọi hàm thông thường (`Point2d(3,4)`). Và không có tham chiếu `this`, chỉ là các gán thuộc tính đối tượng thông thường (`instance.x = ..`).
 
-The term that's most often used to refer to this pattern of code is that `Point2d(..)` here is a *factory function*. Invoking it causes the construction (creation and initialization) of an object, and returns that back to us. That's an extremely common pattern, at least as common as class-oriented code.
+Thuật ngữ thường được sử dụng nhất để chỉ mẫu mã này là `Point2d(..)` ở đây là một *hàm factory* (factory function). Việc gọi nó gây ra việc xây dựng (tạo và khởi tạo) một đối tượng, và trả lại đối tượng đó cho chúng ta. Đó là một mẫu cực kỳ phổ biến, ít nhất cũng phổ biến như mã định hướng lớp.
 
-I comment-annotated `(1)`, `(3)`, and `(4)` in that snippet, which roughly correspond to steps 1, 3, and 4 of the `new` operation. But where's step 2?
+Tôi đã chú thích nhận xét `(1)`, `(3)`, và `(4)` trong đoạn mã đó, tương ứng đại khái với các bước 1, 3 và 4 của hoạt động `new`. Nhưng bước 2 ở đâu?
 
-If you recall, step 2 of `new` is about linking the object (created in step 1) to another object, via its `[[Prototype]]` slot (see Chapter 2). So what object might we want to link our `instance` object to? We could link it to an object that holds functions we'd like to associate/use with our instance.
+Nếu bạn nhớ lại, bước 2 của `new` là về việc liên kết đối tượng (được tạo ở bước 1) với một đối tượng khác, thông qua khe `[[Prototype]]` của nó (xem Chương 2). Vậy chúng ta có thể muốn liên kết đối tượng `instance` của mình với đối tượng nào? Chúng ta có thể liên kết nó với một đối tượng chứa các hàm mà chúng ta muốn liên kết/sử dụng với thể hiện của mình.
 
-Let's amend the previous snippet:
+Hãy sửa đổi đoạn mã trước:
 
 ```js
 var prototypeObj = {
@@ -72,19 +72,19 @@ var prototypeObj = {
     },
 }
 
-// a non-class "constructor"
+// một "constructor" không phải lớp
 function Point2d(x,y) {
-    // create an object (1)
+    // tạo một đối tượng (1)
     var instance = {
-        // link the instance's [[Prototype]] (2)
+        // liên kết [[Prototype]] của thể hiện (2)
         __proto__: prototypeObj,
     };
 
-    // initialize the instance (3)
+    // khởi tạo thể hiện (3)
     instance.x = x;
     instance.y = y;
 
-    // return the instance (4)
+    // trả về thể hiện (4)
     return instance;
 }
 
@@ -93,11 +93,11 @@ var point = Point2d(3,4);
 point.toString();           // (3,4)
 ```
 
-Now you see the `__proto__` assignment that's setting up the internal `[[Prototype]]` linkage, which was the missing step 2. I used the `__proto__` here merely for illustration purposes; using `setPrototypeOf(..)` as shown in Chapter 4 would have accomplished the same task.
+Bây giờ bạn thấy gán `__proto__` đang thiết lập liên kết `[[Prototype]]` nội bộ, đó là bước 2 còn thiếu. Tôi đã sử dụng `__proto__` ở đây chỉ nhằm mục đích minh họa; sử dụng `setPrototypeOf(..)` như được hiển thị trong Chương 4 sẽ hoàn thành nhiệm vụ tương tự.
 
-### *New* Factory Instance
+### Thể Hiện Factory *Mới* (*New* Factory Instance)
 
-What do you think would happen if we used `new` to invoke the `Point2d(..)` function as shown here?
+Bạn nghĩ điều gì sẽ xảy ra nếu chúng ta sử dụng `new` để gọi hàm `Point2d(..)` như được hiển thị ở đây?
 
 ```js
 var anotherPoint = new Point2d(5,6);
@@ -105,20 +105,20 @@ var anotherPoint = new Point2d(5,6);
 anotherPoint.toString(5,6);         // (5,6)
 ```
 
-Wait! What's going on here? A regular, non-`class` factory function in invoked with the `new` keyword, as if it was a `class`. Does that change anything about the outcome of the code?
+Chờ đã! Chuyện gì đang xảy ra ở đây? Một hàm factory thông thường, không phải `class` được gọi với từ khóa `new`, như thể nó là một `class`. Điều đó có thay đổi bất cứ điều gì về kết quả của mã không?
 
-No... and yes. `anotherPoint` here is exactly the same object as it would have been had I not used `new`. But! The object that `new` creates, links, and assigns as `this` context? *That* object was completely ignored and thrown away, ultimately to be garbage collected by JS. Unfortunately, the JS engine cannot predict that you're not going to use the object that you asked `new` to create, so it always still gets cteated even if it goes unused.
+Không... và có. `anotherPoint` ở đây chính xác là cùng một đối tượng như thể tôi không sử dụng `new`. Nhưng! Đối tượng mà `new` tạo ra, liên kết và gán làm ngữ cảnh `this`? Đối tượng *đó* hoàn toàn bị bỏ qua và vứt đi, cuối cùng sẽ được bộ thu gom rác của JS thu hồi. Thật không may, công cụ JS không thể dự đoán rằng bạn sẽ không sử dụng đối tượng mà bạn đã yêu cầu `new` tạo ra, vì vậy nó luôn vẫn được tạo ra ngay cả khi nó không được sử dụng.
 
-That's right! Using a `new` keyword against a factory function might *feel* more ergonomic or familiar, but it's quite wasteful, in that it creates **two** objects, and wastefully throws one of them away.
+Đúng vậy! Sử dụng từ khóa `new` đối với một hàm factory có thể *cảm thấy* tiện dụng hoặc quen thuộc hơn, nhưng nó khá lãng phí, ở chỗ nó tạo ra **hai** đối tượng, và lãng phí vứt bỏ một trong số chúng.
 
-### Factory Initialization
+### Khởi Tạo Factory (Factory Initialization)
 
-In the current code example, the `Point2d(..)` function still looks an awful lot like a normal `constructor(..)` of a `class` definition. But what if we moved the initialization code to a separate function, say named `init(..)`:
+Trong ví dụ mã hiện tại, hàm `Point2d(..)` vẫn trông rất giống một `constructor(..)` bình thường của một định nghĩa `class`. Nhưng điều gì sẽ xảy ra nếu chúng ta chuyển mã khởi tạo sang một hàm riêng biệt, giả sử có tên là `init(..)`:
 
 ```js
 var prototypeObj = {
     init(x,y) {
-        // initialize the instance (3)
+        // khởi tạo thể hiện (3)
         this.x = x;
         this.y = y;
     },
@@ -127,18 +127,18 @@ var prototypeObj = {
     },
 }
 
-// a non-class "constructor"
+// một "constructor" không phải lớp
 function Point2d(x,y) {
-    // create an object (1)
+    // tạo một đối tượng (1)
     var instance = {
-        // link the instance's [[Prototype]] (2)
+        // liên kết [[Prototype]] của thể hiện (2)
         __proto__: prototypeObj,
     };
 
-    // initialize the instance (3)
+    // khởi tạo thể hiện (3)
     instance.init(x,y);
 
-    // return the instance (4)
+    // trả về thể hiện (4)
     return instance;
 }
 
@@ -147,14 +147,14 @@ var point = Point2d(3,4);
 point.toString();           // (3,4)
 ```
 
-The `instance.init(..)` call makes use of the `[[Prototype]]` linkage set up via `__proto__` assignment. Thus, it *delegates* up the prototype chain to `prototypeObj.init(..)`, and invokes it with a `this` context of `instance` -- via *implicit context* assignment (see Chapter 4).
+Lệnh gọi `instance.init(..)` sử dụng liên kết `[[Prototype]]` được thiết lập thông qua gán `__proto__`. Do đó, nó *ủy quyền* lên chuỗi nguyên mẫu đến `prototypeObj.init(..)`, và gọi nó với ngữ cảnh `this` của `instance` -- thông qua gán *ngữ cảnh ngầm định* (xem Chương 4).
 
-Let's continue the deconstruction. Get ready for a switcheroo!
+Hãy tiếp tục giải cấu trúc. Hãy sẵn sàng cho một sự thay đổi!
 
 ```js
 var Point2d = {
     init(x,y) {
-        // initialize the instance (3)
+        // khởi tạo thể hiện (3)
         this.x = x;
         this.y = y;
     },
@@ -164,41 +164,41 @@ var Point2d = {
 };
 ```
 
-Whoa, what!? I discarded the `Point2d(..)` function, and instead renamed the `prototypeObj` as `Point2d`. Weird.
+Whoa, cái gì!? Tôi đã loại bỏ hàm `Point2d(..)`, và thay vào đó đổi tên `prototypeObj` thành `Point2d`. Kỳ lạ.
 
-But let's look at the rest of the code now:
+Nhưng hãy nhìn vào phần còn lại của mã bây giờ:
 
 ```js
-// steps 1, 2, and 4
+// các bước 1, 2, và 4
 var point = { __proto__: Point2d, };
 
-// step 3
+// bước 3
 point.init(3,4);
 
 point.toString();           // (3,4)
 ```
 
-And one last refinement: let's use a built-in utility JS provides us, called `Object.create(..)`:
+Và một tinh chỉnh cuối cùng: hãy sử dụng một tiện ích tích hợp mà JS cung cấp cho chúng ta, gọi là `Object.create(..)`:
 
 ```js
-// steps 1, 2, and 4
+// các bước 1, 2, và 4
 var point = Object.create(Point2d);
 
-// step 3
+// bước 3
 point.init(3,4);
 
 point.toString();           // (3,4)
 ```
 
-What operations does `Object.create(..)` perform?
+`Object.create(..)` thực hiện những thao tác nào?
 
-1. create a brand new empty object, out of thin air.
+1. tạo một đối tượng rỗng hoàn toàn mới, từ hư không.
 
-2. link the `[[Prototype]]` of that new empty object to the function's `.prototype` object.
+2. liên kết `[[Prototype]]` của đối tượng rỗng mới đó với đối tượng `.prototype` của hàm.
 
-If those look familiar, it's because those are exactly the same first two steps of the `new` keyword (see Chapter 4).
+Nếu những điều đó trông quen thuộc, đó là bởi vì đó chính xác là hai bước đầu tiên giống nhau của từ khóa `new` (xem Chương 4).
 
-Let's put this back together now:
+Hãy đặt cái này lại với nhau ngay bây giờ:
 
 ```js
 var Point2d = {
@@ -218,13 +218,13 @@ point.init(3,4);
 point.toString();           // (3,4)
 ```
 
-Hmmm. Take a few moments to ponder what's been derived here. How does it compare to the `class` approach?
+Hmmm. Hãy dành một chút thời gian để suy ngẫm về những gì đã được bắt nguồn ở đây. Nó so sánh như thế nào với cách tiếp cận `class`?
 
-This pattern ditches the `class` and `new` keywords, but accomplishes the exact same outcome. The *cost*? The single `new` operation was broken up into two statements: `Object.create(Point2d)` and `point.init(3,4)`.
+Mẫu này loại bỏ các từ khóa `class` và `new`, nhưng hoàn thành kết quả chính xác tương tự. *Chi phí*? Hoạt động `new` đơn lẻ đã được chia thành hai câu lệnh: `Object.create(Point2d)` và `point.init(3,4)`.
 
-#### Help Me Reconstruct!
+#### Giúp Tôi Tái Cấu Trúc! (Help Me Reconstruct!)
 
-If having those two operations separate bothers you -- is it *too deconstructed*!? -- they can always be recombined in a little factory helper:
+Nếu việc tách rời hai hoạt động đó làm phiền bạn -- liệu nó có *quá bị giải cấu trúc* không!? -- chúng luôn có thể được kết hợp lại trong một trình trợ giúp factory nhỏ:
 
 ```js
 function make(objType,...args) {
@@ -238,11 +238,11 @@ var point = make(Point2d,3,4);
 point.toString();           // (3,4)
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| Such a `make(..)` factory function helper works generally for any object-type, as long as you follow the implied convention that each `objType` you link to has a function named `init(..)` on it. |
+| Một trình trợ giúp hàm factory `make(..)` như vậy hoạt động chung cho bất kỳ loại đối tượng nào, miễn là bạn tuân theo quy ước ngụ ý rằng mỗi `objType` bạn liên kết đến đều có một hàm tên là `init(..)` trên đó. |
 
-And of course, you can still create as many instances as you'd like:
+Và tất nhiên, bạn vẫn có thể tạo bao nhiêu thể hiện tùy thích:
 
 ```js
 var point = make(Point2d,3,4);
@@ -250,27 +250,27 @@ var point = make(Point2d,3,4);
 var anotherPoint = make(Point2d,5,6);
 ```
 
-## Ditching Class Thinking
+## Từ Bỏ Tư Duy Lớp (Ditching Class Thinking)
 
-Quite frankly, the *deconstruction* we just went through only ends up in slightly different, and maybe slightly better or slightly worse, code as compared to the `class` style. If that's all delegation was about, it probably wouldn't even be useful enough for more than a footnote, much less a whole chapter.
+Thành thật mà nói, việc *giải cấu trúc* mà chúng ta vừa trải qua chỉ kết thúc bằng mã hơi khác một chút, và có thể tốt hơn một chút hoặc tệ hơn một chút, so với kiểu `class`. Nếu đó là tất cả những gì ủy quyền hướng tới, nó có lẽ thậm chí sẽ không đủ hữu ích cho nhiều hơn một chú thích, chứ đừng nói đến cả một chương.
 
-But here's where we're going to really start pushing the class-oriented thinking itself, not just the syntax, aside.
+Nhưng đây là nơi chúng ta sẽ thực sự bắt đầu đẩy tư duy định hướng lớp, không chỉ cú pháp, sang một bên.
 
-Class-oriented design inherently creates a hierarchy of *classification*, meaning how we divide up and group characteristics, and then stack them vertically in an inheritance chain. Moreover, defining a subclass is a specialization of the generalized base class. Instantiating is a specialization of the generalized class.
+Thiết kế định hướng lớp vốn dĩ tạo ra một hệ thống phân cấp *phân loại*, nghĩa là cách chúng ta phân chia và nhóm các đặc điểm, và sau đó xếp chồng chúng theo chiều dọc trong một chuỗi thừa kế. Hơn nữa, việc định nghĩa một lớp con là một sự chuyên biệt hóa của lớp cơ sở tổng quát. Khởi tạo là một sự chuyên biệt hóa của lớp tổng quát.
 
-Behavior in a traditional class hierarchy is a vertical composition through the layers of the inheritance chain. Attempts have been made over the decades, and even become rather popular at times, to flatten out deep hierarchies of inheritance, and favor a more horizontal composition through *mixins* and related ideas.
+Hành vi trong một hệ thống phân cấp lớp truyền thống là một thành phần dọc thông qua các lớp của chuỗi thừa kế. Những nỗ lực đã được thực hiện trong nhiều thập kỷ, và thậm chí trở nên khá phổ biến vào những thời điểm nhất định, để làm phẳng các hệ thống phân cấp thừa kế sâu, và ủng hộ một thành phần ngang hơn thông qua *mixins* và các ý tưởng liên quan.
 
-I'm not asserting there's anything wrong with those ways of approaching code. But I am saying that they aren't *naturally* how JS works, so adopting them in JS has been a long, winding, complicated road, and has variously accreted lots of nuanced syntax to retrofit on top of JS's core `[[Prototype]]` and `this` pillar.
+Tôi không khẳng định có bất cứ điều gì sai với những cách tiếp cận mã đó. Nhưng tôi đang nói rằng chúng không phải là cách JS hoạt động *tự nhiên*, vì vậy việc áp dụng chúng trong JS là một con đường dài, quanh co, phức tạp, và đã tích lũy nhiều cú pháp sắc thái khác nhau để trang bị thêm trên đỉnh trụ cột `[[Prototype]]` và `this` cốt lõi của JS.
 
-For the rest of this chapter, I intend to discard both the syntax of `class` *and* the thinking of *class*.
+Đối với phần còn lại của chương này, tôi dự định loại bỏ cả cú pháp của `class` *và* tư duy của *lớp*.
 
-## Delegation Illustrated
+## Minh Họa Ủy Quyền (Delegation Illustrated)
 
-So what is delegation about? At its core, it's about two or more *things* sharing the effort of completing a task.
+Vậy ủy quyền là gì? Về cốt lõi, đó là về hai hoặc nhiều *thứ* chia sẻ nỗ lực hoàn thành một nhiệm vụ.
 
-Instead of defining a `Point2d` general parent *thing* that represents shared behavior that a set of one or more child `point` / `anotherPoint` *things* inherit from, delegation moves us to building our program with discrete peer *things* that cooperate with each other.
+Thay vì định nghĩa một *thứ* cha chung `Point2d` đại diện cho hành vi được chia sẻ mà một tập hợp một hoặc nhiều *thứ* con `point` / `anotherPoint` kế thừa từ đó, ủy quyền chuyển chúng ta sang việc xây dựng chương trình của mình với các *thứ* ngang hàng rời rạc hợp tác với nhau.
 
-I'll sketch that out in some code:
+Tôi sẽ phác thảo điều đó trong một số mã:
 
 ```js
 var Coordinates = {
@@ -303,49 +303,49 @@ anotherPoint.setXY(5,6);
 Inspect.toString.call(anotherPoint);  // (5,6)
 ```
 
-Let's break down what's happening here.
+Hãy phân tích những gì đang xảy ra ở đây.
 
-I've defined `Coordinates` as a concrete object that holds some behaviors I associate with setting point coordinates (`x` and `y`). I've also defined `Inspect` as a concrete object that holds some debug inspection logic, such as `toString()`.
+Tôi đã định nghĩa `Coordinates` là một đối tượng cụ thể chứa một số hành vi tôi liên kết với việc thiết lập tọa độ điểm (`x` và `y`). Tôi cũng đã định nghĩa `Inspect` là một đối tượng cụ thể chứa một số logic kiểm tra gỡ lỗi, chẳng hạn như `toString()`.
 
-I then create two more concrete objects, `point` and `anotherPoint`.
+Sau đó, tôi tạo thêm hai đối tượng cụ thể nữa, `point` và `anotherPoint`.
 
-`point` has no specific `[[Prototype]]` (default: `Object.prototype`). Using *explicit context* assignment (see Chapter 4), I invoke the `Coordinates.setXY(..)` and `Inspect.toString()` utilities in the context of `point`. That is what I call *explicit delegation*.
+`point` không có `[[Prototype]]` cụ thể (mặc định: `Object.prototype`). Sử dụng gán *ngữ cảnh rõ ràng* (xem Chương 4), tôi gọi các tiện ích `Coordinates.setXY(..)` và `Inspect.toString()` trong ngữ cảnh của `point`. Đó là những gì tôi gọi là *ủy quyền rõ ràng*.
 
-`anotherPoint` is `[[Prototype]]` linked to `Coordinates`, mostly for a bit of convenience. That lets me use *implicit context* assignment with `anotherPoint.setXY(..)`. But I can still *explicitly* share `anotherPoint` as context for the `Inspect.toString()` call. That's what I call *implicit delegation*.
+`anotherPoint` được liên kết `[[Prototype]]` với `Coordinates`, chủ yếu để thuận tiện một chút. Điều đó cho phép tôi sử dụng gán *ngữ cảnh ngầm định* với `anotherPoint.setXY(..)`. Nhưng tôi vẫn có thể chia sẻ *rõ ràng* `anotherPoint` làm ngữ cảnh cho lệnh gọi `Inspect.toString()`. Đó là những gì tôi gọi là *ủy quyền ngầm định*.
 
-**Don't miss *this*:** We still accomplished composition: we composed the behaviors from `Coordinates` and `Inspect`, during runtime function invocations with `this` context sharing. We didn't have to author-combine those behaviors into a single `class` (or base-subclass `class` hierarchy) for `point` / `anotherPoint` to inherit from. I like to call this runtime composition, **virtual composition**.
+**Đừng bỏ lỡ điều *này*:** Chúng ta vẫn hoàn thành việc soạn thảo (composition): chúng ta đã soạn thảo các hành vi từ `Coordinates` và `Inspect`, trong quá trình gọi hàm thời gian chạy với chia sẻ ngữ cảnh `this`. Chúng ta không cần phải kết hợp tác giả các hành vi đó vào một `class` duy nhất (hoặc hệ thống phân cấp `class` cơ sở-lớp con) để `point` / `anotherPoint` kế thừa. Tôi thích gọi thành phần thời gian chạy này là, **thành phần ảo** (virtual composition).
 
-The *point* here is: none of these four objects is a parent or child. They're all peers of each other, and they all have different purposes. We can organize our behavior in logical chunks (on each respective object), and share the context via `this` (and, optionally `[[Prototype]]` linkage), which ends up with the same composition outcomes as the other patterns we've examined thus far in the book.
+*Điểm* ở đây là: không có đối tượng nào trong số bốn đối tượng này là cha hoặc con. Tất cả chúng đều là ngang hàng của nhau, và tất cả đều có mục đích khác nhau. Chúng ta có thể tổ chức hành vi của mình thành các phần logic (trên mỗi đối tượng tương ứng), và chia sẻ ngữ cảnh thông qua `this` (và, tùy chọn liên kết `[[Prototype]]`), kết thúc với cùng kết quả thành phần như các mẫu khác mà chúng ta đã kiểm tra cho đến nay trong cuốn sách.
 
-*That* is the heart of the **delegation** pattern, as JS embodies it.
+*Đó* là trái tim của mẫu **ủy quyền**, như JS thể hiện nó.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| In the first edition of this book series, this book ("this & Object Prototypes") coined a term, "OLOO", which stands for "Objects Linked to Other Objects" -- to stand in contrast to "OO" ("Object Oriented"). In this preceding example, you can see the essence of OLOO: all we have are objects, linked to and cooperating with, other objects. I find this beautiful in its simplicity. |
+| Trong ấn bản đầu tiên của bộ sách này, cuốn sách này ("this & Object Prototypes") đã đặt ra một thuật ngữ, "OLOO", viết tắt của "Objects Linked to Other Objects" (Các đối tượng được liên kết với các đối tượng khác) -- để đứng đối lập với "OO" ("Object Oriented" - Hướng đối tượng). Trong ví dụ trước, bạn có thể thấy bản chất của OLOO: tất cả những gì chúng ta có là các đối tượng, được liên kết và hợp tác với, các đối tượng khác. Tôi thấy điều này đẹp trong sự đơn giản của nó. |
 
-## Composing Peer Objects
+## Soạn Thảo Các Đối Tượng Ngang Hàng (Composing Peer Objects)
 
-Let's take *this delegation* even further.
+Hãy đưa *ủy quyền này* đi xa hơn nữa.
 
-In the preceding snippet, `point` and `anotherPoint` merely held data, and the behaviors they delegated to were on other objects (`Coordinates` and `Inspect`). But we can add behaviors directly to any of the objects in a delegation chain, and those behaviors can even interact with each other, all through the magic of *virtual composition* (`this` context sharing).
+Trong đoạn mã trước, `point` và `anotherPoint` chỉ đơn thuần giữ dữ liệu, và các hành vi mà chúng ủy quyền nằm trên các đối tượng khác (`Coordinates` và `Inspect`). Nhưng chúng ta có thể thêm các hành vi trực tiếp vào bất kỳ đối tượng nào trong chuỗi ủy quyền, và các hành vi đó thậm chí có thể tương tác với nhau, tất cả thông qua sự kỳ diệu của *thành phần ảo* (chia sẻ ngữ cảnh `this`).
 
-To illustrate, we'll evolve our current *point* example a fair bit. And as a bonus we'll actually draw our points on a `<canvas>` element in the DOM. Let's take a look:
+Để minh họa, chúng ta sẽ phát triển ví dụ *điểm* hiện tại của mình lên một chút. Và như một phần thưởng, chúng ta thực sự sẽ vẽ các điểm của mình trên một phần tử `<canvas>` trong DOM. Hãy xem:
 
 ```js
 var Canvas = {
     setOrigin(x,y) {
         this.ctx.translate(x,y);
 
-        // flip the canvas context vertically,
-        // so coordinates work like on a normal
-        // 2d (x,y) graph
+        // lật ngữ cảnh canvas theo chiều dọc,
+        // để tọa độ hoạt động giống như trên
+        // biểu đồ 2d (x,y) bình thường
         this.ctx.scale(1,-1);
     },
     pixel(x,y) {
         this.ctx.fillRect(x,y,1,1);
     },
     renderScene() {
-        // clear the canvas
+        // xóa canvas
         var matrix = this.ctx.getTransform();
         this.ctx.resetTransform();
         this.ctx.clearRect(
@@ -355,7 +355,7 @@ var Canvas = {
         );
         this.ctx.setTransform(matrix);
 
-        this.draw();  // <-- where is draw()?
+        this.draw();  // <-- draw() ở đâu?
     },
 };
 
@@ -369,16 +369,16 @@ var Coordinates = {
     setXY(x,y) {
         this.setX(x);
         this.setY(y);
-        this.render();   // <-- where is render()?
+        this.render();   // <-- render() ở đâu?
     },
 };
 
 var ControlPoint = {
-    // delegate to Coordinates
+    // ủy quyền cho Coordinates
     __proto__: Coordinates,
 
-    // NOTE: must have a <canvas id="my-canvas">
-    // element in the DOM
+    // LƯU Ý: phải có một phần tử <canvas id="my-canvas">
+    // trong DOM
     ctx: document.getElementById("my-canvas")
         .getContext("2d"),
 
@@ -390,55 +390,55 @@ var ControlPoint = {
         this.setXY(rotatedX,rotatedY);
     },
     draw() {
-        // plot the point
+        // vẽ điểm
         Canvas.pixel.call(this,this.x,this.y);
     },
     render() {
-        // clear the canvas, and re-render
-        // our control-point
+        // xóa canvas, và hiển thị lại
+        // control-point của chúng ta
         Canvas.renderScene.call(this);
     },
 };
 
-// set the logical (0,0) origin at this
-// physical location on the canvas
+// đặt gốc tọa độ logic (0,0) tại vị trí
+// vật lý này trên canvas
 Canvas.setOrigin.call(ControlPoint,100,100);
 
 ControlPoint.setXY(30,40);
-// [renders point (30,40) on the canvas]
+// [hiển thị điểm (30,40) trên canvas]
 
 // ..
-// later:
+// sau đó:
 
-// rotate the point about the (0,0) origin
-// 90 degrees counter-clockwise
+// xoay điểm quanh gốc tọa độ (0,0)
+// 90 độ ngược chiều kim đồng hồ
 ControlPoint.rotate(Math.PI / 2);
-// [renders point (-40,30) on the canvas]
+// [hiển thị điểm (-40,30) trên canvas]
 ```
 
-OK, that's a lot of code to digest. Take your time and re-read the snippet several times. I added a couple of new concrete objects (`Canvas` and `ControlPoint`) alongside the previous `Coordinates` object.
+OK, đó là rất nhiều mã để tiêu hóa. Hãy dành thời gian của bạn và đọc lại đoạn mã nhiều lần. Tôi đã thêm một vài đối tượng cụ thể mới (`Canvas` và `ControlPoint`) cùng với đối tượng `Coordinates` trước đó.
 
-Make sure you see and understand the interactions between these three concrete objects.
+Hãy chắc chắn rằng bạn nhìn thấy và hiểu sự tương tác giữa ba đối tượng cụ thể này.
 
-`ControlPoint` is linked (via `__proto__`) to *implicitly delegate* (`[[Prototype]]` chain) to `Coordinates`.
+`ControlPoint` được liên kết (thông qua `__proto__`) để *ủy quyền ngầm định* (chuỗi `[[Prototype]]`) cho `Coordinates`.
 
-Here's an *explicit delegation*: `Canvas.setOrigin.call(ControlPoint,100,100);`; I'm invoking the `Canvas.setOrigin(..)` call in the context of `ControlPoint`. That has the effect of sharing `ctx` with `setOrigin(..)`, via `this`.
+Đây là một *ủy quyền rõ ràng*: `Canvas.setOrigin.call(ControlPoint,100,100);`; Tôi đang gọi lệnh gọi `Canvas.setOrigin(..)` trong ngữ cảnh của `ControlPoint`. Điều đó có tác dụng chia sẻ `ctx` với `setOrigin(..)`, thông qua `this`.
 
-`ControlPoint.setXY(..)` delegates *implicitly* to `Coordinates.setXY(..)`, but still in the context of `ControlPoint`. Here's a key detail that's easy to miss: see the `this.render()` inside of `Coordinates.setXY(..)`? Where does that come from? Since the `this` context is `ControlPoint` (not `Coordinates`), it's invoking `ControlPoint.render()`.
+`ControlPoint.setXY(..)` ủy quyền *ngầm định* cho `Coordinates.setXY(..)`, nhưng vẫn trong ngữ cảnh của `ControlPoint`. Đây là một chi tiết quan trọng dễ bị bỏ qua: bạn có thấy `this.render()` bên trong `Coordinates.setXY(..)` không? Nó đến từ đâu? Vì ngữ cảnh `this` là `ControlPoint` (không phải `Coordinates`), nó đang gọi `ControlPoint.render()`.
 
-`ControlPoint.render()` *explicitly delegates* to `Canvas.renderScene()`, again still in the `ControlPoint` context. `renderScene()` calls `this.draw()`, but where does that come from? Yep, still from `ControlPoint` (via `this` context).
+`ControlPoint.render()` *ủy quyền rõ ràng* cho `Canvas.renderScene()`, một lần nữa vẫn trong ngữ cảnh `ControlPoint`. `renderScene()` gọi `this.draw()`, nhưng nó đến từ đâu? Đúng vậy, vẫn từ `ControlPoint` (thông qua ngữ cảnh `this`).
 
-And `ControlPoint.draw()`? It *explicitly delegates* to `Canvas.pixel(..)`, yet again still in the `ControlPoint` context.
+Và `ControlPoint.draw()`? Nó *ủy quyền rõ ràng* cho `Canvas.pixel(..)`, lại một lần nữa vẫn trong ngữ cảnh `ControlPoint`.
 
-All three objects have methods that end up invoking each other. But these calls aren't particularly hard-wired. `Canvas.renderScene()` doesn't call `ControlPoint.draw()`, it calls `this.draw()`. That's important, because it means that `Canvas.renderScene()` is more flexible to use in a different `this` context -- e.g., against another kind of *point* object besides `ControlPoint`.
+Cả ba đối tượng đều có các phương thức kết thúc bằng việc gọi lẫn nhau. Nhưng các cuộc gọi này không đặc biệt được nối cứng. `Canvas.renderScene()` không gọi `ControlPoint.draw()`, nó gọi `this.draw()`. Điều đó quan trọng, bởi vì nó có nghĩa là `Canvas.renderScene()` linh hoạt hơn để sử dụng trong một ngữ cảnh `this` khác -- ví dụ, đối với một loại đối tượng *điểm* khác ngoài `ControlPoint`.
 
-It's through the `this` context, and the `[[Prototype]]` chain, that these three objects basically are mixed (composed) virtually together, as needed at each step, so that they work together **as if they're one object rather than three seperate objects**.
+Chính thông qua ngữ cảnh `this`, và chuỗi `[[Prototype]]`, ba đối tượng này về cơ bản được trộn lẫn (soạn thảo) ảo cùng nhau, khi cần thiết ở mỗi bước, để chúng hoạt động cùng nhau **như thể chúng là một đối tượng thay vì ba đối tượng riêng biệt**.
 
-That's the *beauty* of virtual composition as realized by the delegation pattern in JS.
+Đó là *vẻ đẹp* của thành phần ảo được hiện thực hóa bởi mẫu ủy quyền trong JS.
 
-### Flexible Context
+### Ngữ Cảnh Linh Hoạt (Flexible Context)
 
-I mentioned above that we can pretty easily add other concrete objects into the mix. Here's an example:
+Tôi đã đề cập ở trên rằng chúng ta có thể khá dễ dàng thêm các đối tượng cụ thể khác vào hỗn hợp. Đây là một ví dụ:
 
 ```js
 var Coordinates = { /* .. */ };
@@ -463,8 +463,8 @@ function lineAnchor(x,y) {
 }
 
 var GuideLine = {
-    // NOTE: must have a <canvas id="my-canvas">
-    // element in the DOM
+    // LƯU Ý: phải có một phần tử <canvas id="my-canvas">
+    // trong DOM
     ctx: document.getElementById("my-canvas")
         .getContext("2d"),
 
@@ -474,40 +474,40 @@ var GuideLine = {
         this.render();
     },
     draw() {
-        // plot the point
+        // vẽ điểm
         Canvas.line.call(this,this.start,this.end);
     },
     render() {
-        // clear the canvas, and re-render
-        // our line
+        // xóa canvas, và hiển thị lại
+        // dòng của chúng ta
         Canvas.renderScene.call(this);
     },
 };
 
-// set the logical (0,0) origin at this
-// physical location on the canvas
+// đặt gốc tọa độ logic (0,0) tại vị trí
+// vật lý này trên canvas
 Canvas.setOrigin.call(GuideLine,100,100);
 
 GuideLine.setAnchors(-30,65,45,-17);
-// [renders line from (-30,65) to (45,-17)
-//   on the canvas]
+// [hiển thị dòng từ (-30,65) đến (45,-17)
+//   trên canvas]
 ```
 
-That's pretty nice, I think!
+Tôi nghĩ điều đó khá tuyệt!
 
-But I think another less-obvious benefit is that having objects linked dynamically via `this` context tends to make testing different parts of the program independently, somewhat easier.
+Nhưng tôi nghĩ một lợi ích khác ít rõ ràng hơn là việc có các đối tượng được liên kết động thông qua ngữ cảnh `this` có xu hướng làm cho việc kiểm tra các phần khác nhau của chương trình một cách độc lập, phần nào dễ dàng hơn.
 
-For example, `Object.setPrototypeOf(..)` can be used to dynamically change the `[[Prototype]]` linkage of an object, delegating it to a different object such as a mock object. Or you could dynamically redefine `GuideLine.draw()` and `GuideLine.render()` to *explicitly delegate* to a `MockCanvas` instead of `Canvas`.
+Ví dụ, `Object.setPrototypeOf(..)` có thể được sử dụng để thay đổi động liên kết `[[Prototype]]` của một đối tượng, ủy quyền nó cho một đối tượng khác như một đối tượng giả (mock object). Hoặc bạn có thể định nghĩa lại động `GuideLine.draw()` và `GuideLine.render()` để *ủy quyền rõ ràng* cho một `MockCanvas` thay vì `Canvas`.
 
-The `this` keyword, and the `[[Prototype]]` link, are a tremendously flexible mechanism when you understand and leverage them fully.
+Từ khóa `this`, và liên kết `[[Prototype]]`, là một cơ chế cực kỳ linh hoạt khi bạn hiểu và tận dụng chúng một cách đầy đủ.
 
-## Why *This*?
+## Tại Sao Là *This*? (Why *This*?)
 
-OK, so it's hopefully clear that the delegation pattern leans heavily on implicit input, sharing context via `this` rather than through an explicit parameter.
+OK, vì vậy hy vọng rõ ràng là mẫu ủy quyền dựa nhiều vào đầu vào ngầm định, chia sẻ ngữ cảnh thông qua `this` thay vì thông qua một tham số rõ ràng.
 
-You might rightly ask, why not just always pass around that context explicitly? We can certainly do so, but... to manually pass along the necessary context, we'll have to change pretty much every single function signature, and any corresponding call-sites.
+Bạn có thể hỏi một cách đúng đắn, tại sao không chỉ luôn truyền ngữ cảnh đó xung quanh một cách rõ ràng? Chúng ta chắc chắn có thể làm như vậy, nhưng... để truyền ngữ cảnh cần thiết theo cách thủ công, chúng ta sẽ phải thay đổi khá nhiều chữ ký hàm đơn lẻ, và bất kỳ vị trí gọi tương ứng nào.
 
-Let's revisit the earlier `ControlPoint` delegation example, and implement it without any delegation-oriented `this` context sharing. Pay careful attention to the differences:
+Hãy xem lại ví dụ ủy quyền `ControlPoint` trước đó, và triển khai nó mà không có bất kỳ chia sẻ ngữ cảnh `this` định hướng ủy quyền nào. Hãy chú ý cẩn thận đến sự khác biệt:
 
 ```js
 var Canvas = {
@@ -519,7 +519,7 @@ var Canvas = {
         ctx.fillRect(x,y,1,1);
     },
     renderScene(ctx,entity) {
-        // clear the canvas
+        // xóa canvas
         var matrix = ctx.getTransform();
         ctx.resetTransform();
         ctx.clearRect(
@@ -548,8 +548,8 @@ var Coordinates = {
 };
 
 var ControlPoint = {
-    // NOTE: must have a <canvas id="my-canvas">
-    // element in the DOM
+    // LƯU Ý: phải có một phần tử <canvas id="my-canvas">
+    // trong DOM
     ctx: document.getElementById("my-canvas")
         .getContext("2d"),
 
@@ -564,30 +564,30 @@ var ControlPoint = {
         this.setXY(rotatedX,rotatedY);
     },
     draw() {
-        // plot the point
+        // vẽ điểm
         Canvas.pixel(this.ctx,this.x,this.y);
     },
     render() {
-        // clear the canvas, and re-render
-        // our control-point
+        // xóa canvas, và hiển thị lại
+        // control-point của chúng ta
         Canvas.renderScene(this.ctx,this);
     },
 };
 
-// set the logical (0,0) origin at this
-// physical location on the canvas
+// đặt gốc tọa độ logic (0,0) tại vị trí
+// vật lý này trên canvas
 Canvas.setOrigin(ControlPoint.ctx,100,100);
 
 // ..
 ```
 
-To be honest, some of you may prefer that style of code. And that's OK if you're in that camp. This snippet avoids `[[Prototype]]` entirely, and only relies on far fewer basic `this.`-style references to properties and methods.
+Thành thật mà nói, một số bạn có thể thích phong cách mã đó hơn. Và điều đó ổn nếu bạn ở trong phe đó. Đoạn mã này tránh `[[Prototype]]` hoàn toàn, và chỉ dựa vào ít hơn nhiều các tham chiếu kiểu `this.` cơ bản đến các thuộc tính và phương thức.
 
-By contrast, the delegation style I'm advocating for in this chapter is unfamiliar and uses `[[Prototype]]` and `this` sharing in ways you're not likely familiar with. To use such a style effectively, you'll have to invest the time and practice to build a deeper familiarity.
+Ngược lại, phong cách ủy quyền mà tôi đang ủng hộ trong chương này là không quen thuộc và sử dụng chia sẻ `[[Prototype]]` và `this` theo những cách mà bạn có thể không quen thuộc. Để sử dụng một phong cách như vậy một cách hiệu quả, bạn sẽ phải đầu tư thời gian và thực hành để xây dựng sự quen thuộc sâu sắc hơn.
 
-But in my opinion, the "cost" of avoiding virtual composition through delegation can be felt across all the function signatures and call-sites; I find them way more cluttered. That explicit context passing is quite a tax.
+Nhưng theo ý kiến của tôi, "chi phí" của việc tránh thành phần ảo thông qua ủy quyền có thể được cảm nhận trên tất cả các chữ ký hàm và vị trí gọi; tôi thấy chúng lộn xộn hơn nhiều. Việc truyền ngữ cảnh rõ ràng đó là một khoản thuế khá lớn.
 
-In fact, I'd never advocate that style of code at all. If you want to avoid delegation, it's probably best to just stick to `class` style code, as seen in Chapter 3. As an exercise left to the reader, try to convert the earlier `ControlPoint` / `GuideLine` code snippets to use `class`.
+Trên thực tế, tôi sẽ không bao giờ ủng hộ phong cách mã đó. Nếu bạn muốn tránh ủy quyền, có lẽ tốt nhất là chỉ nên gắn bó với mã kiểu `class`, như đã thấy trong Chương 3. Như một bài tập dành cho người đọc, hãy thử chuyển đổi các đoạn mã `ControlPoint` / `GuideLine` trước đó để sử dụng `class`.
 
 [^TreatyOfOrlando]: "Treaty of Orlando"; Henry Lieberman, Lynn Andrea Stein, David Ungar; Oct 6, 1987; https://web.media.mit.edu/~lieber/Publications/Treaty-of-Orlando-Treaty-Text.pdf ; PDF; Accessed July 2022
 

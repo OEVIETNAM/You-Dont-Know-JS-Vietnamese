@@ -1,47 +1,47 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Appendix B: Practice
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Phụ Lục B: Thực Hành
 
-This appendix aims to give you some challenging and interesting exercises to test and solidify your understanding of the main topics from this book. It's a good idea to try out the exercises yourself—in an actual code editor!—instead of skipping straight to the solutions at the end. No cheating!
+Phụ lục này nhằm cung cấp cho bạn một số bài tập thú vị và đầy thử thách để kiểm tra và củng cố sự hiểu biết của bạn về các chủ đề chính từ cuốn sách này. Đó là một ý tưởng tốt để tự mình thử các bài tập—trong một trình soạn thảo mã thực tế!—thay vì bỏ qua thẳng đến các giải pháp ở cuối. Không gian lận!
 
-These exercises don't have a specific right answer that you have to get exactly. Your approach may differ some (or a lot!) from the solutions presented, and that's OK.
+Những bài tập này không có một câu trả lời đúng cụ thể mà bạn phải đạt được chính xác. Cách tiếp cận của bạn có thể khác một chút (hoặc rất nhiều!) so với các giải pháp được trình bày, và điều đó là ổn.
 
-There's no judging you on how you write your code. My hope is that you come away from this book feeling confident that you can tackle these sorts of coding tasks built on a strong foundation of knowledge. That's the only objective, here. If you're happy with your code, I am, too!
+Không có sự đánh giá nào về cách bạn viết mã của mình. Hy vọng của tôi là bạn rời khỏi cuốn sách này cảm thấy tự tin rằng bạn có thể giải quyết các loại nhiệm vụ mã hóa này được xây dựng trên một nền tảng kiến thức vững chắc. Đó là mục tiêu duy nhất, ở đây. Nếu bạn hài lòng với mã của mình, tôi cũng vậy!
 
-## Buckets of Marbles
+## Thùng Bi (Buckets of Marbles)
 
-Remember Figure 2 from back in Chapter 2?
+Nhớ Hình 2 từ Chương 2 chứ?
 
 <figure>
-    <img src="images/fig2.png" width="300" alt="Colored Scope Bubbles" align="center">
-    <figcaption><em>Fig. 2 (Ch. 2): Colored Scope Bubbles</em></figcaption>
+    <img src="images/fig2.png" width="300" alt="Bong Bóng Phạm Vi Có Màu" align="center">
+    <figcaption><em>Hình 2 (Chương 2): Bong Bóng Phạm Vi Có Màu</em></figcaption>
     <br><br>
 </figure>
 
-This exercise asks you to write a program—any program!—that contains nested functions and block scopes, which satisfies these constraints:
+Bài tập này yêu cầu bạn viết một chương trình—bất kỳ chương trình nào!—chứa các hàm lồng nhau và phạm vi khối, thỏa mãn các ràng buộc sau:
 
-* If you color all the scopes (including the global scope!) different colors, you need at least six colors. Make sure to add a code comment labeling each scope with its color.
+* Nếu bạn tô màu tất cả các phạm vi (bao gồm cả phạm vi toàn cục!) các màu khác nhau, bạn cần ít nhất sáu màu. Hãy chắc chắn thêm một nhận xét mã dán nhãn cho mỗi phạm vi với màu của nó.
 
-    BONUS: identify any implied scopes your code may have.
+    BONUS: xác định bất kỳ phạm vi ngụ ý nào mà mã của bạn có thể có.
 
-* Each scope has at least one identifier.
+* Mỗi phạm vi có ít nhất một định danh.
 
-* Contains at least two function scopes and at least two block scopes.
+* Chứa ít nhất hai phạm vi hàm và ít nhất hai phạm vi khối.
 
-* At least one variable from an outer scope must be shadowed by a nested scope variable (see Chapter 3).
+* Ít nhất một biến từ phạm vi bên ngoài phải bị che khuất bởi một biến phạm vi lồng nhau (xem Chương 3).
 
-* At least one variable reference must resolve to a variable declaration at least two levels higher in the scope chain.
+* Ít nhất một tham chiếu biến phải phân giải thành một khai báo biến ở ít nhất hai cấp cao hơn trong chuỗi phạm vi.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| You *can* just write junk foo/bar/baz-type code for this exercise, but I suggest you try to come up with some sort of non-trivial real'ish code that at least does something kind of reasonable. |
+| Bạn *có thể* chỉ cần viết mã rác loại foo/bar/baz cho bài tập này, nhưng tôi khuyên bạn nên cố gắng nghĩ ra một loại mã thực tế không tầm thường nào đó ít nhất làm điều gì đó hợp lý. |
 
-Try the exercise for yourself, then check out the suggested solution at the end of this appendix.
+Hãy tự mình thử bài tập, sau đó xem giải pháp được đề xuất ở cuối phụ lục này.
 
-## Closure (PART 1)
+## Closure (PHẦN 1)
 
-Let's first practice closure with some common computer-math operations: determining if a value is prime (has no divisors other than 1 and itself), and generating a list of prime factors (divisors) for a given number.
+Đầu tiên hãy thực hành closure với một số phép toán máy tính phổ biến: xác định xem một giá trị có phải là số nguyên tố (không có ước số nào khác ngoài 1 và chính nó), và tạo danh sách các thừa số nguyên tố (ước số) cho một số đã cho.
 
-For example:
+Ví dụ:
 
 ```js
 isPrime(11);        // true
@@ -51,7 +51,7 @@ factorize(11);      // [ 11 ]
 factorize(12);      // [ 3, 2, 2 ] --> 3*2*2=12
 ```
 
-Here's an implementation of `isPrime(..)`, adapted from the Math.js library: [^MathJSisPrime]
+Đây là một triển khai của `isPrime(..)`, được điều chỉnh từ thư viện Math.js: [^MathJSisPrime]
 
 ```js
 function isPrime(v) {
@@ -71,7 +71,7 @@ function isPrime(v) {
 }
 ```
 
-And here's a somewhat basic implementation of `factorize(..)` (not to be confused with `factorial(..)` from Chapter 6):
+Và đây là một triển khai hơi cơ bản của `factorize(..)` (không nên nhầm lẫn với `factorial(..)` từ Chương 6):
 
 ```js
 function factorize(v) {
@@ -89,39 +89,39 @@ function factorize(v) {
 }
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| I call this basic because it's not optimized for performance. It's binary-recursive (which isn't tail-call optimizable), and it creates a lot of intermediate array copies. It also doesn't order the discovered factors in any way. There are many, many other algorithms for this task, but I wanted to use something short and roughly understandable for our exercise. |
+| Tôi gọi đây là cơ bản vì nó không được tối ưu hóa cho hiệu suất. Nó là đệ quy nhị phân (không thể tối ưu hóa gọi đuôi), và nó tạo ra rất nhiều bản sao mảng trung gian. Nó cũng không sắp xếp các thừa số được phát hiện theo bất kỳ cách nào. Có rất nhiều, rất nhiều thuật toán khác cho nhiệm vụ này, nhưng tôi muốn sử dụng một cái gì đó ngắn gọn và dễ hiểu cho bài tập của chúng ta. |
 
-If you were to call `isPrime(4327)` multiple times in a program, you can see that it would go through all its dozens of comparison/computation steps every time. If you consider `factorize(..)`, it's calling `isPrime(..)` many times as it computes the list of factors. And there's a good chance most of those calls are repeats. That's a lot of wasted work!
+Nếu bạn gọi `isPrime(4327)` nhiều lần trong một chương trình, bạn có thể thấy rằng nó sẽ trải qua tất cả hàng tá bước so sánh/tính toán mỗi lần. Nếu bạn xem xét `factorize(..)`, nó đang gọi `isPrime(..)` nhiều lần khi nó tính toán danh sách các thừa số. Và có khả năng cao hầu hết các cuộc gọi đó là lặp lại. Đó là rất nhiều công việc lãng phí!
 
-The first part of this exercise is to use closure to implement a cache to remember the results of `isPrime(..)`, so that the primality (`true` or `false`) of a given number is only ever computed once. Hint: we already showed this sort of caching in Chapter 6 with `factorial(..)`.
+Phần đầu tiên của bài tập này là sử dụng closure để triển khai bộ nhớ cache để nhớ kết quả của `isPrime(..)`, để tính nguyên tố (`true` hoặc `false`) của một số nhất định chỉ bao giờ được tính toán một lần. Gợi ý: chúng ta đã trình bày loại bộ nhớ cache này trong Chương 6 với `factorial(..)`.
 
-If you look at `factorize(..)`, it's implemented with recursion, meaning it calls itself repeatedly. That again means we may likely see a lot of wasted calls to compute prime factors for the same number. So the second part of the exercise is to use the same closure cache technique for `factorize(..)`.
+Nếu bạn nhìn vào `factorize(..)`, nó được triển khai với đệ quy, nghĩa là nó gọi chính nó lặp đi lặp lại. Điều đó một lần nữa có nghĩa là chúng ta có thể thấy rất nhiều cuộc gọi lãng phí để tính toán các thừa số nguyên tố cho cùng một số. Vì vậy, phần thứ hai của bài tập là sử dụng cùng một kỹ thuật bộ nhớ cache closure cho `factorize(..)`.
 
-Use separate closures for caching of `isPrime(..)` and `factorize(..)`, rather than putting them inside a single scope.
+Sử dụng các closure riêng biệt để lưu trữ bộ nhớ cache của `isPrime(..)` và `factorize(..)`, thay vì đặt chúng bên trong một phạm vi duy nhất.
 
-Try the exercise for yourself, then check out the suggested solution at the end of this appendix.
+Hãy tự mình thử bài tập, sau đó xem giải pháp được đề xuất ở cuối phụ lục này.
 
-### A Word About Memory
+### Một Lời Về Bộ Nhớ
 
-I want to share a little quick note about this closure cache technique and the impacts it has on your application's performance.
+Tôi muốn chia sẻ một ghi chú nhanh nhỏ về kỹ thuật bộ nhớ cache closure này và những tác động của nó đối với hiệu suất ứng dụng của bạn.
 
-We can see that in saving the repeated calls, we improve computation speed (in some cases, by a dramatic amount). But this usage of closure is making an explicit trade-off that you should be very aware of.
+Chúng ta có thể thấy rằng trong việc lưu các cuộc gọi lặp lại, chúng ta cải thiện tốc độ tính toán (trong một số trường hợp, một lượng đáng kể). Nhưng việc sử dụng closure này đang thực hiện một sự đánh đổi rõ ràng mà bạn nên rất ý thức.
 
-The trade-off is memory. We're essentially growing our cache (in memory) unboundedly. If the functions in question were called many millions of times with mostly unique inputs, we'd be chewing up a lot of memory. This can definitely be worth the expense, but only if we think it's likely we see repetition of common inputs so that we're taking advantage of the cache.
+Sự đánh đổi là bộ nhớ. Chúng ta về cơ bản đang phát triển bộ nhớ cache của mình (trong bộ nhớ) không giới hạn. Nếu các hàm đang được đề cập được gọi hàng triệu lần với hầu hết các đầu vào duy nhất, chúng ta sẽ ngốn rất nhiều bộ nhớ. Điều này chắc chắn có thể đáng giá chi phí, nhưng chỉ khi chúng ta nghĩ rằng có khả năng chúng ta thấy sự lặp lại của các đầu vào phổ biến để chúng ta đang tận dụng bộ nhớ cache.
 
-If most every call will have a unique input, and the cache is essentially never *used* to any benefit, this is an inappropriate technique to employ.
+Nếu hầu hết mọi cuộc gọi sẽ có một đầu vào duy nhất, và bộ nhớ cache về cơ bản không bao giờ được *sử dụng* cho bất kỳ lợi ích nào, đây là một kỹ thuật không phù hợp để sử dụng.
 
-It also might be a good idea to have a more sophisticated caching approach, such as an LRU (least recently used) cache, that limits its size; as it runs up to the limit, an LRU evicts the values that are... well, least recently used!
+Cũng có thể là một ý tưởng tốt để có một cách tiếp cận bộ nhớ cache tinh vi hơn, chẳng hạn như bộ nhớ cache LRU (ít được sử dụng gần đây nhất), giới hạn kích thước của nó; khi nó chạy đến giới hạn, một LRU trục xuất các giá trị... chà, ít được sử dụng gần đây nhất!
 
-The downside here is that LRU is quite non-trivial in its own right. You'll want to use a highly optimized implementation of LRU, and be keenly aware of all the trade-offs at play.
+Nhược điểm ở đây là LRU khá không tầm thường theo đúng nghĩa của nó. Bạn sẽ muốn sử dụng một triển khai LRU được tối ưu hóa cao, và nhận thức sâu sắc về tất cả các sự đánh đổi đang diễn ra.
 
-## Closure (PART 2)
+## Closure (PHẦN 2)
 
-In this exercise, we're going to again practice closure by defining a `toggle(..)` utility that gives us a value toggler.
+Trong bài tập này, chúng ta sẽ lại thực hành closure bằng cách định nghĩa một tiện ích `toggle(..)` cung cấp cho chúng ta một bộ chuyển đổi giá trị.
 
-You will pass one or more values (as arguments) into `toggle(..)`, and get back a function. That returned function will alternate/rotate between all the passed-in values in order, one at a time, as it's called repeatedly.
+Bạn sẽ truyền một hoặc nhiều giá trị (dưới dạng đối số) vào `toggle(..)`, và nhận lại một hàm. Hàm được trả về đó sẽ xen kẽ/xoay vòng giữa tất cả các giá trị được truyền vào theo thứ tự, mỗi lần một giá trị, khi nó được gọi lặp đi lặp lại.
 
 ```js
 function toggle(/* .. */) {
@@ -145,13 +145,13 @@ speed();      // "fast"
 speed();      // "slow"
 ```
 
-The corner case of passing in no values to `toggle(..)` is not very important; such a toggler instance could just always return `undefined`.
+Trường hợp góc của việc không truyền giá trị nào vào `toggle(..)` không quan trọng lắm; một thể hiện bộ chuyển đổi như vậy có thể chỉ luôn trả về `undefined`.
 
-Try the exercise for yourself, then check out the suggested solution at the end of this appendix.
+Hãy tự mình thử bài tập, sau đó xem giải pháp được đề xuất ở cuối phụ lục này.
 
-## Closure (PART 3)
+## Closure (PHẦN 3)
 
-In this third and final exercise on closure, we're going to implement a basic calculator. The `calculator()` function will produce an instance of a calculator that maintains its own state, in the form of a function (`calc(..)`, below):
+Trong bài tập thứ ba và cuối cùng này về closure, chúng ta sẽ triển khai một máy tính cơ bản. Hàm `calculator()` sẽ tạo ra một thể hiện của một máy tính duy trì trạng thái riêng của nó, dưới dạng một hàm (`calc(..)`, bên dưới):
 
 ```js
 function calculator() {
@@ -161,13 +161,13 @@ function calculator() {
 var calc = calculator();
 ```
 
-Each time `calc(..)` is called, you'll pass in a single character that represents a keypress of a calculator button. To keep things more straightforward, we'll restrict our calculator to supporting entering only digits (0-9), arithmetic operations (+, -, \*, /), and "=" to compute the operation. Operations are processed strictly in the order entered; there's no "( )" grouping or operator precedence.
+Mỗi lần `calc(..)` được gọi, bạn sẽ truyền vào một ký tự duy nhất đại diện cho một lần nhấn phím của nút máy tính. Để giữ cho mọi thứ đơn giản hơn, chúng ta sẽ hạn chế máy tính của mình chỉ hỗ trợ nhập các chữ số (0-9), các phép toán số học (+, -, \*, /), và "=" để tính toán phép toán. Các phép toán được xử lý nghiêm ngặt theo thứ tự đã nhập; không có nhóm "( )" hoặc ưu tiên toán tử.
 
-We don't support entering decimals, but the divide operation can result in them. We don't support entering negative numbers, but the "-" operation can result in them. So, you should be able to produce any negative or decimal number by first entering an operation to compute it. You can then keep computing with that value.
+Chúng ta không hỗ trợ nhập số thập phân, nhưng phép chia có thể dẫn đến chúng. Chúng ta không hỗ trợ nhập số âm, nhưng phép toán "-" có thể dẫn đến chúng. Vì vậy, bạn sẽ có thể tạo ra bất kỳ số âm hoặc số thập phân nào bằng cách nhập một phép toán để tính toán nó trước. Sau đó, bạn có thể tiếp tục tính toán với giá trị đó.
 
-The return of `calc(..)` calls should mimic what would be shown on a real calculator, like reflecting what was just pressed, or computing the total when pressing "=".
+Việc trả về của các cuộc gọi `calc(..)` nên bắt chước những gì sẽ được hiển thị trên một máy tính thực, như phản ánh những gì vừa được nhấn, hoặc tính tổng khi nhấn "=".
 
-For example:
+Ví dụ:
 
 ```js
 calc("4");     // 4
@@ -186,7 +186,7 @@ calc("5");     // 5
 calc("=");     // 0
 ```
 
-Since this usage is a bit clumsy, here's a `useCalc(..)` helper, that runs the calculator with characters one at a time from a string, and computes the display each time:
+Vì cách sử dụng này hơi vụng về, đây là một trình trợ giúp `useCalc(..)`, chạy máy tính với các ký tự mỗi lần một ký tự từ một chuỗi, và tính toán hiển thị mỗi lần:
 
 ```js
 function useCalc(calc,keys) {
@@ -216,35 +216,35 @@ useCalc(calc,"+3=");            // +3=ERR
 useCalc(calc,"51=");            // 51
 ```
 
-The most sensible usage of this `useCalc(..)` helper is to always have "=" be the last character entered.
+Cách sử dụng hợp lý nhất của trình trợ giúp `useCalc(..)` này là luôn có "=" là ký tự cuối cùng được nhập.
 
-Some of the formatting of the totals displayed by the calculator require special handling. I'm providing this `formatTotal(..)` function, which your calculator should use whenever it's going to return a current computed total (after an `"="` is entered):
+Một số định dạng của tổng số được hiển thị bởi máy tính yêu cầu xử lý đặc biệt. Tôi đang cung cấp hàm `formatTotal(..)` này, mà máy tính của bạn nên sử dụng bất cứ khi nào nó sẽ trả về tổng số được tính toán hiện tại (sau khi `"="` được nhập):
 
 ```js
 function formatTotal(display) {
     if (Number.isFinite(display)) {
-        // constrain display to max 11 chars
+        // giới hạn hiển thị tối đa 11 ký tự
         let maxDigits = 11;
-        // reserve space for "e+" notation?
+        // dành không gian cho ký hiệu "e+"?
         if (Math.abs(display) > 99999999999) {
             maxDigits -= 6;
         }
-        // reserve space for "-"?
+        // dành không gian cho "-"?
         if (display < 0) {
             maxDigits--;
         }
 
-        // whole number?
+        // số nguyên?
         if (Number.isInteger(display)) {
             display = display
                 .toPrecision(maxDigits)
                 .replace(/\.0+$/,"");
         }
-        // decimal
+        // số thập phân
         else {
-            // reserve space for "."
+            // dành không gian cho "."
             maxDigits--;
-            // reserve space for leading "0"?
+            // dành không gian cho số "0" dẫn đầu?
             if (
                 Math.abs(display) >= 0 &&
                 Math.abs(display) < 1
@@ -263,30 +263,30 @@ function formatTotal(display) {
 }
 ```
 
-Don't worry too much about how `formatTotal(..)` works. Most of its logic is a bunch of handling to limit the calculator display to 11 characters max, even if negatives, repeating decimals, or even "e+" exponential notation is required.
+Đừng lo lắng quá nhiều về cách `formatTotal(..)` hoạt động. Hầu hết logic của nó là một loạt các xử lý để giới hạn hiển thị máy tính tối đa 11 ký tự, ngay cả khi số âm, số thập phân lặp lại, hoặc thậm chí ký hiệu mũ "e+" là bắt buộc.
 
-Again, don't get too mired in the mud around calculator-specific behavior. Focus on the *memory* of closure.
+Một lần nữa, đừng quá sa lầy vào bùn xung quanh hành vi cụ thể của máy tính. Tập trung vào *bộ nhớ* của closure.
 
-Try the exercise for yourself, then check out the suggested solution at the end of this appendix.
+Hãy tự mình thử bài tập, sau đó xem giải pháp được đề xuất ở cuối phụ lục này.
 
 ## Modules
 
-This exercise is to convert the calculator from Closure (PART 3) into a module.
+Bài tập này là chuyển đổi máy tính từ Closure (PHẦN 3) thành một module.
 
-We're not adding any additional functionality to the calculator, only changing its interface. Instead of calling a single function `calc(..)`, we'll be calling specific methods on the public API for each "keypress" of our calculator. The outputs stay the same.
+Chúng ta không thêm bất kỳ chức năng bổ sung nào vào máy tính, chỉ thay đổi giao diện của nó. Thay vì gọi một hàm duy nhất `calc(..)`, chúng ta sẽ gọi các phương thức cụ thể trên API công khai cho mỗi "lần nhấn phím" của máy tính của chúng ta. Các đầu ra vẫn giữ nguyên.
 
-This module should be expressed as a classic module factory function called `calculator()`, instead of a singleton IIFE, so that multiple calculators can be created if desired.
+Module này nên được thể hiện như một hàm nhà máy module cổ điển gọi là `calculator()`, thay vì một singleton IIFE, để nhiều máy tính có thể được tạo ra nếu muốn.
 
-The public API should include the following methods:
+API công khai nên bao gồm các phương thức sau:
 
-* `number(..)` (input: the character/number "pressed")
+* `number(..)` (đầu vào: ký tự/số "được nhấn")
 * `plus()`
 * `minus()`
 * `mult()`
 * `div()`
 * `eq()`
 
-Usage would look like:
+Cách sử dụng sẽ trông giống như:
 
 ```js
 var calc = calculator();
@@ -300,7 +300,7 @@ calc.number("2");     // 2
 calc.eq();            // 75
 ```
 
-`formatTotal(..)` remains the same from that previous exercise. But the `useCalc(..)` helper needs to be adjusted to work with the module API:
+`formatTotal(..)` vẫn giữ nguyên từ bài tập trước đó. Nhưng trình trợ giúp `useCalc(..)` cần được điều chỉnh để làm việc với API module:
 
 ```js
 function useCalc(calc,keys) {
@@ -339,31 +339,31 @@ useCalc(calc,"+3=");            // +3=ERR
 useCalc(calc,"51=");            // 51
 ```
 
-Try the exercise for yourself, then check out the suggested solution at the end of this appendix.
+Hãy tự mình thử bài tập, sau đó xem giải pháp được đề xuất ở cuối phụ lục này.
 
-As you work on this exercise, also spend some time considering the pros/cons of representing the calculator as a module as opposed to the closure-function approach from the previous exercise.
+Khi bạn làm việc trên bài tập này, cũng hãy dành một chút thời gian xem xét những ưu/nhược điểm của việc thể hiện máy tính như một module trái ngược với cách tiếp cận hàm closure từ bài tập trước.
 
-BONUS: write out a few sentences explaining your thoughts.
+BONUS: viết ra một vài câu giải thích suy nghĩ của bạn.
 
-BONUS #2: try converting your module to other module formats, including: UMD, CommonJS, and ESM (ES Modules).
+BONUS #2: thử chuyển đổi module của bạn sang các định dạng module khác, bao gồm: UMD, CommonJS, và ESM (ES Modules).
 
-## Suggested Solutions
+## Giải Pháp Đề Xuất
 
-Hopefully you've tried out the exercises before you're reading this far. No cheating!
+Hy vọng bạn đã thử các bài tập trước khi bạn đọc đến đây. Không gian lận!
 
-Remember, each suggested solution is just one of a bunch of different ways to approach the problems. They're not "the right answer," but they do illustrate a reasonable way to approach each exercise.
+Hãy nhớ rằng, mỗi giải pháp được đề xuất chỉ là một trong một loạt các cách khác nhau để tiếp cận các vấn đề. Chúng không phải là "câu trả lời đúng," nhưng chúng minh họa một cách hợp lý để tiếp cận mỗi bài tập.
 
-The most important benefit you can get from reading these suggested solutions is to compare them to your code and analyze why we each made similar or different choices. Don't get into too much bikeshedding; try to stay focused on the main topic rather than the small details.
+Lợi ích quan trọng nhất bạn có thể nhận được từ việc đọc các giải pháp được đề xuất này là so sánh chúng với mã của bạn và phân tích lý do tại sao mỗi chúng ta đưa ra các lựa chọn tương tự hoặc khác nhau. Đừng đi quá sâu vào chi tiết nhỏ nhặt; hãy cố gắng tập trung vào chủ đề chính thay vì các chi tiết nhỏ.
 
-### Suggested: Buckets of Marbles
+### Đề Xuất: Thùng Bi (Buckets of Marbles)
 
-The *Buckets of Marbles Exercise* can be solved like this:
+*Bài Tập Thùng Bi* có thể được giải quyết như thế này:
 
 ```js
 // RED(1)
 const howMany = 100;
 
-// Sieve of Eratosthenes
+// Sàng Eratosthenes
 function findPrimes(howMany) {
     // BLUE(2)
     var sieve = Array(howMany).fill(true);
@@ -403,9 +403,9 @@ findPrimes(howMany);
 // ]
 ```
 
-### Suggested: Closure (PART 1)
+### Đề Xuất: Closure (PHẦN 1)
 
-The *Closure Exercise (PART 1)* for `isPrime(..)` and `factorize(..)`, can be solved like this:
+*Bài Tập Closure (PHẦN 1)* cho `isPrime(..)` và `factorize(..)`, có thể được giải quyết như thế này:
 
 ```js
 var isPrime = (function isPrime(v){
@@ -453,19 +453,19 @@ var factorize = (function factorize(v){
 })();
 ```
 
-The general steps I used for each utility:
+Các bước chung tôi đã sử dụng cho mỗi tiện ích:
 
-1. Wrap an IIFE to define the scope for the cache variable to reside.
+1. Bọc một IIFE để định nghĩa phạm vi cho biến bộ nhớ cache cư trú.
 
-2. In the underlying call, first check the cache, and if a result is already known, return.
+2. Trong cuộc gọi cơ bản, trước tiên hãy kiểm tra bộ nhớ cache, và nếu kết quả đã được biết, hãy trả về.
 
-3. At each place where a `return` was happening originally, assign to the cache and just return the results of that assignment operation—this is a space savings trick mostly just for brevity in the book.
+3. Tại mỗi nơi mà một `return` đang xảy ra ban đầu, gán cho bộ nhớ cache và chỉ trả về kết quả của hoạt động gán đó—đây là một thủ thuật tiết kiệm không gian chủ yếu chỉ để ngắn gọn trong cuốn sách.
 
-I also renamed the inner function from `factorize(..)` to `findFactors(..)`. That's not technically necessary, but it helps it make clearer which function the recursive calls invoke.
+Tôi cũng đã đổi tên hàm bên trong từ `factorize(..)` thành `findFactors(..)`. Điều đó về mặt kỹ thuật không cần thiết, nhưng nó giúp làm rõ hơn hàm nào các cuộc gọi đệ quy gọi.
 
-### Suggested: Closure (PART 2)
+### Đề Xuất: Closure (PHẦN 2)
 
-The *Closure Exercise (PART 2)* `toggle(..)` can be solved like this:
+*Bài Tập Closure (PHẦN 2)* `toggle(..)` có thể được giải quyết như thế này:
 
 ```js
 function toggle(...vals) {
@@ -473,8 +473,8 @@ function toggle(...vals) {
     var cur = unset;
 
     return function next(){
-        // save previous value back at
-        // the end of the list
+        // lưu giá trị trước đó trở lại
+        // cuối danh sách
         if (cur != unset) {
             vals.push(cur);
         }
@@ -500,12 +500,12 @@ speed();      // "fast"
 speed();      // "slow"
 ```
 
-### Suggested: Closure (PART 3)
+### Đề Xuất: Closure (PHẦN 3)
 
-The *Closure Exercise (PART 3)* `calculator()` can be solved like this:
+*Bài Tập Closure (PHẦN 3)* `calculator()` có thể được giải quyết như thế này:
 
 ```js
-// from earlier:
+// từ trước đó:
 //
 // function useCalc(..) { .. }
 // function formatTotal(..) { .. }
@@ -520,19 +520,19 @@ function calculator() {
     // ********************
 
     function pressKey(key){
-        // number key?
+        // phím số?
         if (/\d/.test(key)) {
             currentVal += key;
             return key;
         }
-        // operator key?
+        // phím toán tử?
         else if (/[+*/-]/.test(key)) {
-            // multiple operations in a series?
+            // nhiều phép toán trong một chuỗi?
             if (
                 currentOper != "=" &&
                 currentVal != ""
             ) {
-                // implied '=' keypress
+                // ngụ ý nhấn phím '='
                 pressKey("=");
             }
             else if (currentVal != "") {
@@ -542,7 +542,7 @@ function calculator() {
             currentVal = "";
             return key;
         }
-        // = key?
+        // phím =?
         else if (
             key == "=" &&
             currentOper != "="
@@ -561,8 +561,8 @@ function calculator() {
 
     function op(val1,oper,val2) {
         var ops = {
-            // NOTE: using arrow functions
-            // only for brevity in the book
+            // LƯU Ý: sử dụng hàm mũi tên
+            // chỉ để ngắn gọn trong cuốn sách
             "+": (v1,v2) => v1 + v2,
             "-": (v1,v2) => v1 - v2,
             "*": (v1,v2) => v1 * v2,
@@ -583,16 +583,16 @@ useCalc(calc,"+3=");            // +3=ERR
 useCalc(calc,"51=");            // 51
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Remember: this exercise is about closure. Don't focus too much on the actual mechanics of a calculator, but rather on whether you are properly *remembering* the calculator state across function calls. |
+| Hãy nhớ: bài tập này là về closure. Đừng tập trung quá nhiều vào cơ chế thực tế của một máy tính, mà thay vào đó là liệu bạn có đang *nhớ* trạng thái máy tính đúng cách qua các cuộc gọi hàm hay không. |
 
-### Suggested: Modules
+### Đề Xuất: Modules
 
-The *Modules Exercise* `calculator()` can be solved like this:
+*Bài Tập Modules* `calculator()` có thể được giải quyết như thế này:
 
 ```js
-// from earlier:
+// từ trước đó:
 //
 // function useCalc(..) { .. }
 // function formatTotal(..) { .. }
@@ -616,7 +616,7 @@ function calculator() {
     // ********************
 
     function number(key) {
-        // number key?
+        // phím số?
         if (/\d/.test(key)) {
             currentVal += key;
             return key;
@@ -624,7 +624,7 @@ function calculator() {
     }
 
     function eq() {
-        // = key?
+        // phím =?
         if (currentOper != "=") {
             currentTotal = op(
                 currentTotal,
@@ -639,12 +639,12 @@ function calculator() {
     }
 
     function operator(key) {
-        // multiple operations in a series?
+        // nhiều phép toán trong một chuỗi?
         if (
             currentOper != "=" &&
             currentVal != ""
         ) {
-            // implied '=' keypress
+            // ngụ ý nhấn phím '='
             eq();
         }
         else if (currentVal != "") {
@@ -657,8 +657,8 @@ function calculator() {
 
     function op(val1,oper,val2) {
         var ops = {
-            // NOTE: using arrow functions
-            // only for brevity in the book
+            // LƯU Ý: sử dụng hàm mũi tên
+            // chỉ để ngắn gọn trong cuốn sách
             "+": (v1,v2) => v1 + v2,
             "-": (v1,v2) => v1 - v2,
             "*": (v1,v2) => v1 * v2,
@@ -679,6 +679,6 @@ useCalc(calc,"+3=");            // +3=ERR
 useCalc(calc,"51=");            // 51
 ```
 
-That's it for this book, congratulations on your achievement! When you're ready, move on to Book 3, *Objects & Classes*.
+Đó là tất cả cho cuốn sách này, chúc mừng thành tích của bạn! Khi bạn đã sẵn sàng, hãy chuyển sang Cuốn 3, *Đối Tượng & Lớp* (Objects & Classes).
 
 [^MathJSisPrime]: *Math.js: isPrime(..)*, https://github.com/josdejong/mathjs/blob/develop/src/function/utils/isPrime.js, 3 March 2020.

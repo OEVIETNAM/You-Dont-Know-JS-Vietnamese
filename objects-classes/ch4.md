@@ -1,95 +1,95 @@
-# You Don't Know JS Yet: Objects & Classes - 2nd Edition
-# Chapter 4: This Works
+# You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
+# Chương 4: `this` Hoạt Động
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang trong quá trình thực hiện |
 
-We've seen the `this` keyword used quite a bit so far, but haven't really dug in to understand exactly how it works in JS. It's time we do so.
+Chúng ta đã thấy từ khóa `this` được sử dụng khá nhiều cho đến nay, nhưng chưa thực sự đào sâu để hiểu chính xác cách nó hoạt động trong JS. Đã đến lúc chúng ta làm điều đó.
 
-But to properly understand `this` in JS, you need to set aside any preconceptions you may have, especially assumptions from how `this` works in other programming languages you may have experience in.
+Nhưng để hiểu đúng về `this` trong JS, bạn cần gạt sang một bên bất kỳ định kiến nào bạn có thể có, đặc biệt là các giả định từ cách `this` hoạt động trong các ngôn ngữ lập trình khác mà bạn có thể có kinh nghiệm.
 
-Here's the most important thing to understand about `this`: the determination of what value (usually, object) `this` points at is not made at author time, but rather determined at runtime. That means you cannot simply look at a `this`-aware function (even a method in a `class` definition) and know for sure what `this` will hold while that function runs.
+Đây là điều quan trọng nhất cần hiểu về `this`: việc xác định giá trị nào (thường là đối tượng) mà `this` trỏ vào không được thực hiện tại thời điểm viết mã (author time), mà được xác định tại thời điểm chạy (runtime). Điều đó có nghĩa là bạn không thể chỉ nhìn vào một hàm nhận biết `this` (ngay cả một phương thức trong định nghĩa `class`) và biết chắc chắn `this` sẽ giữ gì trong khi hàm đó chạy.
 
-Instead, you have to find each place the function is invoked, and look at *how* it's invoked (not even *where* matters). That's the only way to fully answer what `this` will point to.
+Thay vào đó, bạn phải tìm từng nơi hàm được gọi, và xem xét *cách* nó được gọi (thậm chí *ở đâu* cũng không quan trọng). Đó là cách duy nhất để trả lời đầy đủ `this` sẽ trỏ đến cái gì.
 
-In fact, a single `this`-aware function can be invoked at least four different ways, and any of those approaches will end up assigning a different `this` for that particular function invocation.
+Trên thực tế, một hàm nhận biết `this` duy nhất có thể được gọi theo ít nhất bốn cách khác nhau, và bất kỳ cách tiếp cận nào trong số đó cũng sẽ dẫn đến việc gán một `this` khác nhau cho lệnh gọi hàm cụ thể đó.
 
-So the typical question we might ask when reading code -- "What does `this` point to the function?" -- is not actually a valid question. The question you really have to ask is, "When the function is invoked a certain way, what `this` will be assigned for that invocation?"
+Vì vậy, câu hỏi điển hình mà chúng ta có thể hỏi khi đọc mã -- "`this` trỏ đến cái gì trong hàm?" -- thực sự không phải là một câu hỏi hợp lệ. Câu hỏi bạn thực sự phải hỏi là, "Khi hàm được gọi theo một cách nhất định, `this` nào sẽ được gán cho lệnh gọi đó?"
 
-If your brain is already twisting around just reading this chapter intro... good! Settle in for a rewiring of how you think about `this` in JS.
+Nếu não bạn đã xoắn lại chỉ khi đọc phần giới thiệu chương này... tốt! Hãy chuẩn bị cho việc nối lại dây thần kinh về cách bạn nghĩ về `this` trong JS.
 
-## This Aware
+## Nhận biết `this` (This Aware)
 
-I used the phrase `this`-aware just a moment ago. But what exactly do I mean by that?
+Tôi đã sử dụng cụm từ nhận biết `this` (this-aware) một lúc trước. Nhưng chính xác ý tôi là gì?
 
-Any function that has a `this` keyword in it.
+Bất kỳ hàm nào có từ khóa `this` trong đó.
 
-If a function does not have `this` in it anywhere, then the rules of how `this` behaves don't affect that function in any way. But if it *does* have even a single `this` in it, then you absolutely cannot determine how the function will behave without figuring out, for each invocation of the function, what `this` will point to.
+Nếu một hàm không có `this` trong đó ở bất cứ đâu, thì các quy tắc về cách `this` hành xử không ảnh hưởng đến hàm đó theo bất kỳ cách nào. Nhưng nếu nó *có* dù chỉ một `this` trong đó, thì bạn hoàn toàn không thể xác định hàm sẽ hành xử như thế nào mà không tìm ra, cho mỗi lần gọi hàm, `this` sẽ trỏ đến cái gì.
 
-It's sort of like the `this` keyword is a placeholder in a template. That placeholder's value-replacement doesn't get determined when we author the code; it gets determined while the code is running.
+Nó giống như từ khóa `this` là một trình giữ chỗ (placeholder) trong một mẫu. Việc thay thế giá trị của trình giữ chỗ đó không được xác định khi chúng ta viết mã; nó được xác định trong khi mã đang chạy.
 
-You might think I'm just playing word games here. Of course, when you write the program, you write out all the calls to each function, so you've already determined what the `this` is going to be when you authored the code, right? Right!?
+Bạn có thể nghĩ rằng tôi chỉ đang chơi trò chơi chữ ở đây. Tất nhiên, khi bạn viết chương trình, bạn viết ra tất cả các lệnh gọi đến từng hàm, vì vậy bạn đã xác định `this` sẽ là gì khi bạn viết mã, phải không? Phải không!?
 
-Not so fast!
+Không nhanh thế đâu!
 
-First of all, you don't always write all the code that invokes your function(s). Your `this`-aware function(s) might be passed as a callback(s) to some other code, either in your code base, or in a third-party framework/utility, or even inside a native built-in mechanism of the language or environment that's hosting your program.
+Trước hết, bạn không phải lúc nào cũng viết tất cả mã gọi (các) hàm của mình. (Các) hàm nhận biết `this` của bạn có thể được truyền dưới dạng callback cho một số mã khác, hoặc trong cơ sở mã của bạn, hoặc trong khung/tiện ích của bên thứ ba, hoặc thậm chí bên trong cơ chế tích hợp sẵn của ngôn ngữ hoặc môi trường đang lưu trữ chương trình của bạn.
 
-But even aside from passing functions as callbacks, several mechanisms in JS allow for conditional runtime behaviors to determine which value (again, usually object) will be set for the `this` of a particular function invocation. So even though you may have written all that code, you *at best* will have to mentally execute the different conditions/paths that end up affecting the function invocation.
+Nhưng ngay cả khi không truyền các hàm dưới dạng callback, một số cơ chế trong JS cho phép các hành vi thời gian chạy có điều kiện xác định giá trị nào (một lần nữa, thường là đối tượng) sẽ được đặt cho `this` của một lệnh gọi hàm cụ thể. Vì vậy, mặc dù bạn có thể đã viết tất cả mã đó, bạn *tốt nhất* sẽ phải thực thi trong đầu các điều kiện/đường dẫn khác nhau dẫn đến việc ảnh hưởng đến lệnh gọi hàm.
 
-And why does all this matter?
+Và tại sao tất cả điều này lại quan trọng?
 
-Because it's not just you, the author of the code, that needs to figure this stuff out. It's *every single reader* of your code, forever. If anyone (even your future self) wants to read a piece of code that defines a `this`-aware function, that inevitably means that, to fully understand and predict its behavior, that person will have to find, read, and understand every single invocation of that function.
+Bởi vì không chỉ bạn, tác giả của mã, cần phải tìm ra những thứ này. Đó là *mọi độc giả* của mã của bạn, mãi mãi. Nếu bất kỳ ai (thậm chí là bản thân bạn trong tương lai) muốn đọc một đoạn mã định nghĩa một hàm nhận biết `this`, điều đó chắc chắn có nghĩa là, để hiểu đầy đủ và dự đoán hành vi của nó, người đó sẽ phải tìm, đọc và hiểu từng lệnh gọi của hàm đó.
 
-### This Confuses Me
+### `this` Làm Tôi Bối Rối (This Confuses Me)
 
-Now, in fairness, that's already partially true if we consider a function's parameters. To understand how a function is going to work, we need to know what is being passed into it. So any function with at least one parameter is, in a similar sense, *argument*-aware -- meaning, what argument(s) is/are passed in and assigned to the parameter(s) of the function.
+Bây giờ, công bằng mà nói, điều đó đã đúng một phần nếu chúng ta xem xét các tham số của một hàm. Để hiểu một hàm sẽ hoạt động như thế nào, chúng ta cần biết những gì đang được truyền vào nó. Vì vậy, bất kỳ hàm nào có ít nhất một tham số, theo một nghĩa tương tự, là nhận biết *đối số* -- nghĩa là, (các) đối số nào được truyền vào và gán cho (các) tham số của hàm.
 
-But with parameters, we often have a bit more of a hint from the function itself what the parameters will do and hold.
+Nhưng với các tham số, chúng ta thường có thêm một chút gợi ý từ chính hàm về những gì các tham số sẽ làm và giữ.
 
-We often see the names of the parameters declared right in the function header, which goes a long way to explaining their nature/purpose. And if there are defaults for the parameters, we often see them declared inline with `= whatever` clauses. Moreover, depending on the code style of the author, we may see in the first several lines of the function a set of logic that applies to these parameters; this could be assertions about the values (disallowed values, etc), or even modifications (type conversion, formatting, etc).
+Chúng ta thường thấy tên của các tham số được khai báo ngay trong tiêu đề hàm, điều này giúp ích rất nhiều trong việc giải thích bản chất/mục đích của chúng. Và nếu có các giá trị mặc định cho các tham số, chúng ta thường thấy chúng được khai báo nội tuyến với các mệnh đề `= whatever`. Hơn nữa, tùy thuộc vào phong cách mã của tác giả, chúng ta có thể thấy trong vài dòng đầu tiên của hàm một tập hợp logic áp dụng cho các tham số này; đây có thể là các khẳng định về các giá trị (các giá trị không được phép, v.v.), hoặc thậm chí các sửa đổi (chuyển đổi kiểu, định dạng, v.v.).
 
-Actually, `this` is very much like a parameter to a function, but it's an implicit parameter rather than an explicit one. You don't see any signal that `this` is going to be used, in the function header anywhere. You have to read the entire function body to see if `this` appears anywhere.
+Thực ra, `this` rất giống một tham số cho một hàm, nhưng nó là một tham số ngầm định thay vì một tham số rõ ràng. Bạn không thấy bất kỳ tín hiệu nào cho thấy `this` sẽ được sử dụng, trong tiêu đề hàm ở bất cứ đâu. Bạn phải đọc toàn bộ thân hàm để xem liệu `this` có xuất hiện ở đâu không.
 
-The "parameter" name is always `this`, so we don't get much of a hint as to its nature/purpose from such a general name. In fact, there's historically a lot of confusion of what "this" even is supposed to mean. And we rarely see much if anything done to validate/convert/etc the `this` value applied to a function invocation. In fact, virtually all `this`-aware code I've seen just neatly assumes the `this` "parameter" is holding exactly what value is expected. Talk about **a trap for unexpected bugs!**
+Tên "tham số" luôn là `this`, vì vậy chúng ta không nhận được nhiều gợi ý về bản chất/mục đích của nó từ một cái tên chung chung như vậy. Trên thực tế, về mặt lịch sử, có rất nhiều sự nhầm lẫn về việc "this" thậm chí được cho là có nghĩa gì. Và chúng ta hiếm khi thấy nhiều nếu có bất cứ điều gì được thực hiện để xác thực/chuyển đổi/v.v. giá trị `this` được áp dụng cho một lệnh gọi hàm. Trên thực tế, hầu như tất cả mã nhận biết `this` mà tôi từng thấy chỉ giả định gọn gàng rằng "tham số" `this` đang giữ chính xác giá trị được mong đợi. Nói về **một cái bẫy cho các lỗi không mong muốn!**
 
-### So What Is This?
+### Vậy `this` Là Gì? (So What Is This?)
 
-If `this` is an implicit parameter, what's its purpose? What's being passed in?
+Nếu `this` là một tham số ngầm định, mục đích của nó là gì? Cái gì đang được truyền vào?
 
-Hopefully you have already read the "Scope & Closures" book of this series. If not, I strongly encourage you to circle back and read that one once you've finished this one. In that book, I explained at length how scopes (and closures!) work, an especially important characteristic of functions.
+Hy vọng rằng bạn đã đọc cuốn sách "Phạm vi & Closures" của bộ này. Nếu chưa, tôi thực sự khuyến khích bạn quay lại và đọc cuốn đó sau khi bạn hoàn thành cuốn này. Trong cuốn sách đó, tôi đã giải thích rất dài về cách phạm vi (và closures!) hoạt động, một đặc điểm đặc biệt quan trọng của các hàm.
 
-Lexical scope (including all the variables closed over) represents a *static* context for the function's lexical identifier references to be evaluated against. It's fixed/static because at author time, when you place functions and variable declarations in various (nested) scopes, those decisions are fixed, and unaffected by any runtime conditions.
+Phạm vi từ vựng (bao gồm tất cả các biến được đóng lại) đại diện cho một ngữ cảnh *tĩnh* để các tham chiếu định danh từ vựng của hàm được đánh giá dựa trên đó. Nó cố định/tĩnh bởi vì tại thời điểm viết mã, khi bạn đặt các hàm và khai báo biến trong các phạm vi (lồng nhau) khác nhau, các quyết định đó là cố định, và không bị ảnh hưởng bởi bất kỳ điều kiện thời gian chạy nào.
 
-By contrast, a different programming language might offer *dynamic* scope, where the context for a function's variable references is not determined by author-time decisions but by runtime conditions. Such a system would be undoubtedly more flexible than static context -- though with flexibility often comes complexity.
+Ngược lại, một ngôn ngữ lập trình khác có thể cung cấp phạm vi *động*, trong đó ngữ cảnh cho các tham chiếu biến của một hàm không được xác định bởi các quyết định tại thời điểm viết mã mà bởi các điều kiện thời gian chạy. Một hệ thống như vậy chắc chắn sẽ linh hoạt hơn ngữ cảnh tĩnh -- mặc dù sự linh hoạt thường đi kèm với sự phức tạp.
 
-To be clear: JS scope is always and only lexical and *static* (if we ignore non-strict mode cheats like `eval(..)` and `with`). However, one of the truly powerful things about JS is that it offers another mechanism with similar flexibility and capabilities to *dynamic* scope.
+Để rõ ràng: phạm vi JS luôn luôn và chỉ là từ vựng và *tĩnh* (nếu chúng ta bỏ qua các trò gian lận chế độ không nghiêm ngặt như `eval(..)` và `with`). Tuy nhiên, một trong những điều thực sự mạnh mẽ về JS là nó cung cấp một cơ chế khác với sự linh hoạt và khả năng tương tự như phạm vi *động*.
 
-The `this` mechanism is, effectively, *dynamic* context (not scope); it's how a `this`-aware function can be dynamically invoked against different contexts -- something that's impossible with closure and lexical scope identifiers!
+Cơ chế `this`, thực sự, là ngữ cảnh *động* (không phải phạm vi); đó là cách một hàm nhận biết `this` có thể được gọi động dựa trên các ngữ cảnh khác nhau -- điều không thể thực hiện được với closure và các định danh phạm vi từ vựng!
 
-### Why Is This So Implicit?
+### Tại Sao `this` Lại Ngầm Định Như Vậy?
 
-You might wonder why something as important as a *dynamic* context is handled as an implicit input to a function, rather than being an explicit argument passed in.
+Bạn có thể tự hỏi tại sao một cái gì đó quan trọng như một ngữ cảnh *động* lại được xử lý như một đầu vào ngầm định cho một hàm, thay vì là một đối số rõ ràng được truyền vào.
 
-That's a very important question, but it's not one we can quite answer, yet. Hold onto that question though.
+Đó là một câu hỏi rất quan trọng, nhưng nó không phải là câu hỏi chúng ta có thể trả lời ngay bây giờ. Tuy nhiên, hãy giữ câu hỏi đó.
 
-### Can We Get On With This?
+### Chúng Ta Có Thể Tiếp Tục Với Điều Này Không? (Can We Get On With This?)
 
-So why have I belabored *this* subject for a couple of pages now? You get it, right!? You're ready to move on.
+Vậy tại sao tôi lại nói dông dài về chủ đề *này* trong vài trang rồi? Bạn hiểu rồi, phải không!? Bạn đã sẵn sàng để tiếp tục.
 
-My point is, you the author of code, and all other readers of the code even years or decades in the future, need to be `this`-aware. That's the choice, the burden, you place on the reading of such code. And yes, that goes for the choice to use `class` (see Chapter 3), as most class methods will be `this`-aware out of necessity.
+Quan điểm của tôi là, bạn, tác giả của mã, và tất cả những người đọc mã khác thậm chí nhiều năm hoặc nhiều thập kỷ trong tương lai, cần phải nhận biết `this`. Đó là sự lựa chọn, gánh nặng, mà bạn đặt lên việc đọc mã như vậy. Và vâng, điều đó cũng áp dụng cho sự lựa chọn sử dụng `class` (xem Chương 3), vì hầu hết các phương thức lớp sẽ nhận biết `this` do sự cần thiết.
 
-Be aware of *this* `this` choice in code you write. Do it intentionally, and do it in such a way as to produce more outcome benefit than burden. Make sure `this` usage in your code *carries its own weight*.
+Hãy nhận biết về sự lựa chọn `this` *này* trong mã bạn viết. Hãy làm điều đó một cách có chủ ý, và làm điều đó theo cách tạo ra nhiều lợi ích kết quả hơn là gánh nặng. Hãy chắc chắn rằng việc sử dụng `this` trong mã của bạn *xứng đáng với trọng lượng của nó*.
 
-Let me put it *this* way: don't use `this`-aware code unless you really can justify it, and you've carefully weighed the costs. Just because you've seen a lot of code examples slinging around `this` in others' code, doesn't mean that `this` belongs in *this* code you're writing.
+Hãy để tôi nói theo cách *này*: đừng sử dụng mã nhận biết `this` trừ khi bạn thực sự có thể biện minh cho nó, và bạn đã cân nhắc kỹ lưỡng các chi phí. Chỉ vì bạn đã thấy rất nhiều ví dụ mã sử dụng `this` trong mã của người khác, không có nghĩa là `this` thuộc về mã *này* mà bạn đang viết.
 
-The `this` mechanism in JS, paired with `[[Prototype]]` delegation, is an extremely powerful pillar of the language. But as the cliche goes: "with great power comes great responsibility". Anecdotally, even though I really like and appreciate *this* pillar of JS, probably less than 5% of the JS code I ever write uses it. And when I do, it's with restraint. It's not my default, go-to JS capability.
+Cơ chế `this` trong JS, kết hợp với ủy quyền `[[Prototype]]`, là một trụ cột cực kỳ mạnh mẽ của ngôn ngữ. Nhưng như câu nói sáo rỗng: "sức mạnh lớn đi kèm với trách nhiệm lớn". Theo giai thoại, mặc dù tôi thực sự thích và đánh giá cao trụ cột *này* của JS, có lẽ ít hơn 5% mã JS tôi từng viết sử dụng nó. Và khi tôi làm vậy, đó là với sự kiềm chế. Nó không phải là khả năng JS mặc định, hay dùng của tôi.
 
-## This Is It!
+## Chính Là Nó! (This Is It!)
 
-OK, enough of the wordy lecture. You're ready to dive into `this` code, right?
+OK, đủ bài giảng dài dòng rồi. Bạn đã sẵn sàng để đi sâu vào mã `this`, phải không?
 
-Let's revisit (and extend) `Point2d` from Chapter 3, but just as an object with data properties and functions on it, instead of using `class`:
+Hãy xem lại (và mở rộng) `Point2d` từ Chương 3, nhưng chỉ như một đối tượng với các thuộc tính dữ liệu và hàm trên đó, thay vì sử dụng `class`:
 
 ```js
 var point = {
@@ -114,52 +114,52 @@ var point = {
 };
 ```
 
-As you can see, the `init(..)`, `rotate(..)`, and `toString()` functions are `this`-aware. You might be in the habit of assuming that the `this` reference will obviously always hold the `point` object. But that's not guaranteed in any way.
+Như bạn có thể thấy, các hàm `init(..)`, `rotate(..)`, và `toString()` là nhận biết `this`. Bạn có thể có thói quen giả định rằng tham chiếu `this` rõ ràng sẽ luôn giữ đối tượng `point`. Nhưng điều đó không được đảm bảo theo bất kỳ cách nào.
 
-Keep reminding yourself as you go through the rest of this chapter: the `this` value for a function is determined by *how* the function is invoked. That means you can't look at the function's definition, nor where the function is defined (not even the enclosing `class`!). In fact, it doesn't even matter where the function is called from.
+Hãy tiếp tục nhắc nhở bản thân khi bạn đi qua phần còn lại của chương này: giá trị `this` cho một hàm được xác định bởi *cách* hàm được gọi. Điều đó có nghĩa là bạn không thể nhìn vào định nghĩa của hàm, cũng như nơi hàm được định nghĩa (thậm chí không phải `class` bao quanh!). Trên thực tế, thậm chí không quan trọng hàm được gọi từ đâu.
 
-We only need to look at *how* the functions are called; that's the only factor that matters.
+Chúng ta chỉ cần nhìn vào *cách* các hàm được gọi; đó là yếu tố duy nhất quan trọng.
 
-### Implicit Context Invocation
+### Gọi Ngữ cảnh Ngầm định (Implicit Context Invocation)
 
-Consider this call:
+Hãy xem xét cuộc gọi này:
 
 ```js
 point.init(3,4);
 ```
 
-We're invoking the `init(..)` function, but notice the `point.` in front of it? This is an *implicit context* binding. It says to JS: invoke the `init(..)` function with `this` referencing `point`.
+Chúng ta đang gọi hàm `init(..)`, nhưng hãy chú ý đến `point.` ở phía trước nó? Đây là một ràng buộc *ngữ cảnh ngầm định*. Nó nói với JS: gọi hàm `init(..)` với `this` tham chiếu đến `point`.
 
-That is the *normal* way we'd expect a `this` to work, and that's also one of the most common ways we invoke functions. So the typical invocation gives us the intuitive outcome. That's a good thing!
+Đó là cách *bình thường* chúng ta mong đợi một `this` hoạt động, và đó cũng là một trong những cách phổ biến nhất chúng ta gọi các hàm. Vì vậy, lệnh gọi điển hình mang lại cho chúng ta kết quả trực quan. Đó là một điều tốt!
 
-### Default Context Invocation
+### Gọi Ngữ cảnh Mặc định (Default Context Invocation)
 
-But what happens if we do this?
+Nhưng điều gì xảy ra nếu chúng ta làm điều này?
 
 ```js
 const init = point.init;
 init(3,4);
 ```
 
-You might assume that we'd get the same outcome as the previous snippet. But that's not how JS `this` assignment works.
+Bạn có thể cho rằng chúng ta sẽ nhận được kết quả tương tự như đoạn mã trước. Nhưng đó không phải là cách gán `this` của JS hoạt động.
 
-The *call-site* for the function is `init(3,4)`, which is different than `point.init(3,4)`. When there's no *implicit context* (`point.`), nor any other kind of `this` assignment mechanism, the *default context* assignment occurs.
+*Vị trí gọi* (call-site) cho hàm là `init(3,4)`, khác với `point.init(3,4)`. Khi không có *ngữ cảnh ngầm định* (`point.`), cũng như bất kỳ cơ chế gán `this` nào khác, việc gán *ngữ cảnh mặc định* sẽ xảy ra.
 
-What will `this` reference when `init(3,4)` is invoked like that?
+`this` sẽ tham chiếu đến cái gì khi `init(3,4)` được gọi như vậy?
 
-*It depends.*
+*Nó phụ thuộc.*
 
-Uh oh. Depends? That sounds confusing.
+Ồ ồ. Phụ thuộc? Nghe có vẻ khó hiểu.
 
-Don't worry, it's not as bad as it sounds. The *default context* assignment depends on whether the code is in strict-mode or not. But thankfully, virtually all JS code these days is running in strict-mode; for example, ESM (ES Modules) always run in strict-mode, as does code inside a `class` block. And virtually all transpiled JS code (via Babel, TypeScript, etc) is written to declare strict-mode.
+Đừng lo lắng, nó không tệ như bạn nghĩ đâu. Việc gán *ngữ cảnh mặc định* phụ thuộc vào việc mã có ở chế độ nghiêm ngặt (strict-mode) hay không. Nhưng rất may, hầu như tất cả mã JS ngày nay đều đang chạy ở chế độ nghiêm ngặt; ví dụ, ESM (ES Modules) luôn chạy ở chế độ nghiêm ngặt, cũng như mã bên trong một khối `class`. Và hầu như tất cả mã JS được chuyển mã (transpiled) (thông qua Babel, TypeScript, v.v.) đều được viết để khai báo chế độ nghiêm ngặt.
 
-So almost all of the time, modern JS code will be running in strict-mode, and thus the *default assignment* context won't "depend" on anything; it's pretty straightforward: `undefined`. That's it!
+Vì vậy, hầu như mọi lúc, mã JS hiện đại sẽ chạy ở chế độ nghiêm ngặt, và do đó ngữ cảnh *gán mặc định* sẽ không "phụ thuộc" vào bất cứ điều gì; nó khá đơn giản: `undefined`. Thế thôi!
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Keep in mind: `undefined` does not mean "not defined"; it means, "defined with the special empty `undefined` value". I know, I know... the name and meaning are mismatched. That's language legacy baggage, for you. (shrugging shoulders) |
+| Hãy nhớ rằng: `undefined` không có nghĩa là "không được định nghĩa"; nó có nghĩa là, "được định nghĩa với giá trị `undefined` rỗng đặc biệt". Tôi biết, tôi biết... tên và ý nghĩa không khớp nhau. Đó là hành lý di sản ngôn ngữ, dành cho bạn. (nhún vai) |
 
-That means `init(3,4)`, if run in strict-mode, would throw an exception. Why? Because the `this.x` reference in `init(..)` is a `.x` property access on `undefined` (i.e., `undefined.x`), which is not allowed:
+Điều đó có nghĩa là `init(3,4)`, nếu chạy ở chế độ nghiêm ngặt, sẽ ném ra một ngoại lệ. Tại sao? Bởi vì tham chiếu `this.x` trong `init(..)` là một truy cập thuộc tính `.x` trên `undefined` (tức là `undefined.x`), điều này không được phép:
 
 ```js
 "use strict";
@@ -172,14 +172,14 @@ init(3,4);
 // undefined (setting 'x')
 ```
 
-Stop for a moment and consider: why would JS choose to default the context to `undefined`, so that any *default context* invocation of a `this`-aware function will fail with such an exception?
+Hãy dừng lại một chút và xem xét: tại sao JS lại chọn mặc định ngữ cảnh thành `undefined`, để bất kỳ lệnh gọi *ngữ cảnh mặc định* nào của một hàm nhận biết `this` sẽ thất bại với một ngoại lệ như vậy?
 
-Because a `this`-aware function **always needs a `this`**. The invocation `init(3,4)` isn't providing a `this`, so that *is* a mistake, and *should* raise an exception so the mistake can be corrected. The lesson: never invoke a `this`-aware function without providing it a `this`!
+Bởi vì một hàm nhận biết `this` **luôn cần một `this`**. Lệnh gọi `init(3,4)` không cung cấp một `this`, vì vậy đó *là* một sai lầm, và *nên* đưa ra một ngoại lệ để sai lầm có thể được sửa chữa. Bài học: không bao giờ gọi một hàm nhận biết `this` mà không cung cấp cho nó một `this`!
 
-Just for completeness sake: in the less common non-strict mode, the *default context* is the global object -- JS defines it as `globalThis`, which in browser JS is essentially an alias to `window`, and in Node it's `global`. So, when `init(3,4)` runs in non-strict mode, the `this.x` expression is `globalThis.x` -- also known as `window.x` in the browser, or `global.x` in Node. Thus, `globalThis.x` gets set as `3` and `globalThis.y` gets set as `4`.
+Chỉ để cho đầy đủ: trong chế độ không nghiêm ngặt ít phổ biến hơn, *ngữ cảnh mặc định* là đối tượng toàn cục -- JS định nghĩa nó là `globalThis`, trong trình duyệt JS về cơ bản là bí danh của `window`, và trong Node nó là `global`. Vì vậy, khi `init(3,4)` chạy trong chế độ không nghiêm ngặt, biểu thức `this.x` là `globalThis.x` -- còn được gọi là `window.x` trong trình duyệt, hoặc `global.x` trong Node. Do đó, `globalThis.x` được đặt là `3` và `globalThis.y` được đặt là `4`.
 
 ```js
-// no strict-mode here, beware!
+// không có chế độ nghiêm ngặt ở đây, hãy coi chừng!
 
 var point = { /* .. */ };
 
@@ -192,15 +192,15 @@ point.x;        // null
 point.y;        // null
 ```
 
-That's unfortunate, because it's almost certainly *not* the intended outcome. Not only is it bad if it's a global variable, but it's also *not* changing the property on our `point` object, so program bugs are guaranteed.
+Điều đó thật đáng tiếc, bởi vì nó gần như chắc chắn *không phải* là kết quả mong muốn. Nó không chỉ tệ nếu nó là một biến toàn cục, mà nó còn *không* thay đổi thuộc tính trên đối tượng `point` của chúng ta, vì vậy lỗi chương trình được đảm bảo.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Ouch! Nobody wants accidental global variables implicitly created from all over the code. The lesson: always make sure your code is running in strict-mode! |
+| Ái chà! Không ai muốn các biến toàn cục ngẫu nhiên được tạo ngầm từ khắp nơi trong mã. Bài học: luôn đảm bảo mã của bạn đang chạy ở chế độ nghiêm ngặt! |
 
-### Explicit Context Invocation
+### Gọi Ngữ cảnh Rõ ràng (Explicit Context Invocation)
 
-Functions can alternately be invoked with *explicit context*, using the built-in `call(..)` or `apply(..)` utilities:
+Các hàm có thể được gọi thay thế với *ngữ cảnh rõ ràng*, sử dụng các tiện ích tích hợp `call(..)` hoặc `apply(..)`:
 
 ```js
 var point = { /* .. */ };
@@ -208,21 +208,21 @@ var point = { /* .. */ };
 const init = point.init;
 
 init.call( point, 3, 4 );
-// or: init.apply( point, [ 3, 4 ] )
+// hoặc: init.apply( point, [ 3, 4 ] )
 
 point.x;        // 3
 point.y;        // 4
 ```
 
-`init.call(point,3,4)` is effectively the same as `point.init(3,4)`, in that both of them assign `point` as the `this` context for the `init(..)` invocation.
+`init.call(point,3,4)` thực sự giống như `point.init(3,4)`, ở chỗ cả hai đều gán `point` làm ngữ cảnh `this` cho lệnh gọi `init(..)`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Both `call(..)` and `apply(..)` utilities take as their first argument a `this` context value; that's almost always an object, but can technically can be any value (number, string, etc). The `call(..)` utility takes subsequent arguments and passes them through to the invoked function, whereas `apply(..)` expects its second argument to be an array of values to pass as arguments. |
+| Cả hai tiện ích `call(..)` và `apply(..)` đều lấy đối số đầu tiên của chúng là một giá trị ngữ cảnh `this`; đó hầu như luôn là một đối tượng, nhưng về mặt kỹ thuật có thể là bất kỳ giá trị nào (số, chuỗi, v.v.). Tiện ích `call(..)` lấy các đối số tiếp theo và truyền chúng qua hàm được gọi, trong khi `apply(..)` mong đợi đối số thứ hai của nó là một mảng các giá trị để truyền làm đối số. |
 
-It might seem awkward to contemplate invoking a function with the *explicit context* assignment (`call(..)` / `apply(..)`) style in your program. But it's more useful than might be obvious at first glance.
+Có vẻ khó xử khi xem xét việc gọi một hàm với kiểu gán *ngữ cảnh rõ ràng* (`call(..)` / `apply(..)`) trong chương trình của bạn. Nhưng nó hữu ích hơn những gì có thể thấy rõ ràng ngay từ cái nhìn đầu tiên.
 
-Let's recall the original snippet:
+Hãy nhớ lại đoạn mã gốc:
 
 ```js
 var point = {
@@ -250,17 +250,17 @@ anotherPoint.x;         // 5
 anotherPoint.y;         // 6
 ```
 
-Are you seeing what I did there?
+Bạn có thấy những gì tôi đã làm ở đó không?
 
-I wanted to define `anotherPoint`, but I didn't want to repeat the definitions of those `init(..)` / `rotate(..)` / `toString()` functions from `point`. So I "borrowed" a function reference, `point.init`, and explicitly set the empty object `anotherPoint` as the `this` context, via `call(..)`.
+Tôi muốn định nghĩa `anotherPoint`, nhưng tôi không muốn lặp lại các định nghĩa của các hàm `init(..)` / `rotate(..)` / `toString()` đó từ `point`. Vì vậy, tôi đã "mượn" một tham chiếu hàm, `point.init`, và đặt rõ ràng đối tượng rỗng `anotherPoint` làm ngữ cảnh `this`, thông qua `call(..)`.
 
-When `init(..)` is running at that moment, `this` inside it will reference `anotherPoint`, and that's why the `x` / `y` properties (values `5` / `6`, respectively) get set there.
+Khi `init(..)` đang chạy tại thời điểm đó, `this` bên trong nó sẽ tham chiếu đến `anotherPoint`, và đó là lý do tại sao các thuộc tính `x` / `y` (giá trị `5` / `6`, tương ứng) được đặt ở đó.
 
-Any `this`-aware functions can be borrowed like this: `point.rotate.call(anotherPoint, ..)`, `point.toString.call(anotherPoint)`.
+Bất kỳ hàm nhận biết `this` nào cũng có thể được mượn như thế này: `point.rotate.call(anotherPoint, ..)`, `point.toString.call(anotherPoint)`.
 
-#### Revisiting Implicit Context Invocation
+#### Xem Lại Gọi Ngữ cảnh Ngầm định
 
-Another approach to share behavior between `point` and `anotherPoint` would have been:
+Một cách tiếp cận khác để chia sẻ hành vi giữa `point` và `anotherPoint` sẽ là:
 
 ```js
 var point = { /* .. */ };
@@ -277,17 +277,17 @@ anotherPoint.x;         // 5
 anotherPoint.y;         // 6
 ```
 
-This is another way of "borrowing" the functions, by adding shared references to the functions on any target object (e.g., `anotherPoint`). The call-site invocation `anotherPoint.init(5,6)` is the more natural/ergonomic style that relies on *implicit context* assignment.
+Đây là một cách khác để "mượn" các hàm, bằng cách thêm các tham chiếu được chia sẻ vào các hàm trên bất kỳ đối tượng đích nào (ví dụ: `anotherPoint`). Lệnh gọi tại vị trí gọi `anotherPoint.init(5,6)` là kiểu tự nhiên/tiện dụng hơn dựa trên việc gán *ngữ cảnh ngầm định*.
 
-It may seem this approach is a little cleaner, comparing `anotherPoint.init(5,6)` to `point.init.call(anotherPoint,5,6)`.
+Có vẻ như cách tiếp cận này sạch hơn một chút, so sánh `anotherPoint.init(5,6)` với `point.init.call(anotherPoint,5,6)`.
 
-But the main downside is having to modify any target object with such shared function references, which can be verbose, manual, and error-prone. Sometimes such an approach is acceptable, but many other times, *explicit context* assignment with `call(..)` / `apply(..)` is more preferable.
+Nhưng nhược điểm chính là phải sửa đổi bất kỳ đối tượng đích nào với các tham chiếu hàm được chia sẻ như vậy, điều này có thể dài dòng, thủ công và dễ bị lỗi. Đôi khi cách tiếp cận như vậy là chấp nhận được, nhưng nhiều lần khác, việc gán *ngữ cảnh rõ ràng* với `call(..)` / `apply(..)` được ưu tiên hơn.
 
-### New Context Invocation
+### Gọi Ngữ cảnh Mới (New Context Invocation)
 
-We've so far seen three different ways of context assignment at the function call-site: *default*, *implicit*, and *explicit*.
+Cho đến nay, chúng ta đã thấy ba cách gán ngữ cảnh khác nhau tại vị trí gọi hàm: *mặc định*, *ngầm định*, và *rõ ràng*.
 
-A fourth way to call a function, and assign the `this` for that invocation, is with the `new` keyword:
+Cách thứ tư để gọi một hàm, và gán `this` cho lệnh gọi đó, là với từ khóa `new`:
 
 ```js
 var point = {
@@ -304,79 +304,79 @@ anotherPoint.x;     // 3
 anotherPoint.y;     // 4
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| This example has a bit of nuance to be explained. The `init: function() { .. }` form shown here -- specifically, a function expression assigned to a property -- is required for the function to be validly called with the `new` keyword. From previous snippets, the concise method form of `init() { .. }` defines a function that *cannot* be called with `new`. |
+| Ví dụ này có một chút sắc thái cần được giải thích. Dạng `init: function() { .. }` được hiển thị ở đây -- cụ thể là một biểu thức hàm được gán cho một thuộc tính -- là bắt buộc để hàm được gọi hợp lệ với từ khóa `new`. Từ các đoạn mã trước, dạng phương thức ngắn gọn của `init() { .. }` định nghĩa một hàm *không thể* được gọi với `new`. |
 
-You've typically seen `new` used with `class` for creating instances. But as an underlying mechanism of the JS language, `new` is not inherently a `class` operation.
+Bạn thường thấy `new` được sử dụng với `class` để tạo các thể hiện. Nhưng như một cơ chế cơ bản của ngôn ngữ JS, `new` vốn không phải là một hoạt động `class`.
 
-In a sense, the `new` keyword hijacks a function and forces its behavior into a different mode than a normal invocation. Here are the 4 special steps that JS performs when a function is invoked with `new`:
+Theo một nghĩa nào đó, từ khóa `new` chiếm quyền điều khiển một hàm và buộc hành vi của nó vào một chế độ khác so với một lệnh gọi bình thường. Dưới đây là 4 bước đặc biệt mà JS thực hiện khi một hàm được gọi với `new`:
 
-1. create a brand new empty object, out of thin air.
+1. tạo một đối tượng rỗng hoàn toàn mới, từ hư không.
 
-2. link the `[[Prototype]]` of that new empty object to the function's `.prototype` object (see Chapter 2).
+2. liên kết `[[Prototype]]` của đối tượng rỗng mới đó với đối tượng `.prototype` của hàm (xem Chương 2).
 
-3. invoke the function with the `this` context set to that new empty object.
+3. gọi hàm với ngữ cảnh `this` được đặt thành đối tượng rỗng mới đó.
 
-4. if the function doesn't return its own object value explicitly (with a `return ..` statement), assume the function call should instead return the new object (from steps 1-3).
+4. nếu hàm không trả về giá trị đối tượng của riêng nó một cách rõ ràng (với câu lệnh `return ..`), giả sử lệnh gọi hàm thay vào đó sẽ trả về đối tượng mới (từ các bước 1-3).
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Step 4 implies that if you `new` invoke a function that *does* return its own object -- like `return { .. }`, etc -- then the new object from steps 1-3 is *not* returned. That's a tricky gotcha to be aware of, in that it effectively discards that new object before the program has a chance to receive and store a reference to it. Essentially, `new` should never be used to invoke a function that has explicit `return ..` statement(s) in it. |
+| Bước 4 ngụ ý rằng nếu bạn gọi `new` một hàm mà *có* trả về đối tượng của riêng nó -- như `return { .. }`, v.v. -- thì đối tượng mới từ các bước 1-3 sẽ *không* được trả về. Đó là một cạm bẫy khó khăn cần lưu ý, ở chỗ nó loại bỏ hiệu quả đối tượng mới đó trước khi chương trình có cơ hội nhận và lưu trữ một tham chiếu đến nó. Về cơ bản, `new` không bao giờ nên được sử dụng để gọi một hàm có (các) câu lệnh `return ..` rõ ràng trong đó. |
 
-To understand these 4 `new` steps more concretely, I'm going to illustrate them in code, as an alternate to using the `new` keyword:
+Để hiểu 4 bước `new` này một cách cụ thể hơn, tôi sẽ minh họa chúng bằng mã, như một sự thay thế cho việc sử dụng từ khóa `new`:
 
 ```js
-// alternative to:
+// thay thế cho:
 //   var anotherPoint = new point.init(3,4)
 
 var anotherPoint;
-// this is a bare block to hide local
-// `let` declarations
+// đây là một khối trần để ẩn các khai báo
+// `let` cục bộ
 {
-    // (Step 1)
+    // (Bước 1)
     let tmpObj = {};
 
-    // (Step 2)
+    // (Bước 2)
     Object.setPrototypeOf(
         tmpObj, point.init.prototype
     );
-    // or: tmpObj.__proto__ = point.init.prototype
+    // hoặc: tmpObj.__proto__ = point.init.prototype
 
-    // (Step 3)
+    // (Bước 3)
     let res = point.init.call(tmpObj,3,4);
 
-    // (Step 4)
+    // (Bước 4)
     anotherPoint = (
         typeof res !== "object" ? tmpObj : res
     );
 }
 ```
 
-Clearly, the `new` invocation streamlines that set of manual steps!
+Rõ ràng, lệnh gọi `new` sắp xếp hợp lý tập hợp các bước thủ công đó!
 
-| TIP: |
+| MẸO: |
 | :--- |
-| The `Object.setPrototypeOf(..)` in step 2 could also have been done via the `__proto__` property, such as `tmpObj.__proto__ = point.init.prototype`, or even as part of the object literal (step 1) with `tmpObj = { __proto__: point.init.prototype }`. |
+| `Object.setPrototypeOf(..)` trong bước 2 cũng có thể được thực hiện thông qua thuộc tính `__proto__`, chẳng hạn như `tmpObj.__proto__ = point.init.prototype`, hoặc thậm chí là một phần của object literal (bước 1) với `tmpObj = { __proto__: point.init.prototype }`. |
 
-Skipping some of the formality of these steps, let's recall an earlier snippet and see how `new` approximates a similar outcome:
+Bỏ qua một số hình thức của các bước này, hãy nhớ lại một đoạn mã trước đó và xem cách `new` xấp xỉ một kết quả tương tự:
 
 ```js
 var point = { /* .. */ };
 
-// this approach:
+// cách tiếp cận này:
 var anotherPoint = {};
 point.init.call(anotherPoint,5,6);
 
-// can instead be approximated as:
+// thay vào đó có thể được xấp xỉ như:
 var yetAnotherPoint = new point.init(5,6);
 ```
 
-That's a bit nicer! But there's a caveat here.
+Điều đó tốt hơn một chút! Nhưng có một cảnh báo ở đây.
 
-Using the other functions that `point` holds against `anotherPoint` / `yetAnotherPoint`, we won't want to do with `new`. Why? Because `new` is creating a *new* object, but that's not what we want if we intend to invoke a function against an existing object.
+Sử dụng các hàm khác mà `point` giữ đối với `anotherPoint` / `yetAnotherPoint`, chúng ta sẽ không muốn làm với `new`. Tại sao? Bởi vì `new` đang tạo một đối tượng *mới*, nhưng đó không phải là những gì chúng ta muốn nếu chúng ta có ý định gọi một hàm đối với một đối tượng hiện có.
 
-Instead, we'll likely use *explicit context* assignment:
+Thay vào đó, chúng ta có thể sẽ sử dụng gán *ngữ cảnh rõ ràng*:
 
 ```js
 point.rotate.call( anotherPoint, /*angleRadians=*/Math.PI );
@@ -385,37 +385,37 @@ point.toString.call( yetAnotherPoint );
 // (5,6)
 ```
 
-### Review This
+### Xem Lại Điều Này (Review This)
 
-We've seen four rules for `this` context assignment in function calls. Let's put them in order of precedence:
+Chúng ta đã thấy bốn quy tắc cho việc gán ngữ cảnh `this` trong các lệnh gọi hàm. Hãy sắp xếp chúng theo thứ tự ưu tiên:
 
-1. Is the function invoked with `new`, creating and setting a *new* `this`?
+1. Hàm có được gọi với `new`, tạo và thiết lập một `this` *mới* không?
 
-2. Is the function invoked with `call(..)` or `apply(..)`, *explicitly* setting `this`?
+2. Hàm có được gọi với `call(..)` hoặc `apply(..)`, thiết lập *rõ ràng* `this` không?
 
-3. Is the function invoked with an object reference at the call-site (e.g., `point.init(..)`), *implicitly* setting `this`?
+3. Hàm có được gọi với một tham chiếu đối tượng tại vị trí gọi (ví dụ: `point.init(..)`), thiết lập *ngầm định* `this` không?
 
-4. If none of the above... are we in non-strict mode? If so, *default* the `this` to `globalThis`. But if in strict-mode, *default* the `this` to `undefined`.
+4. Nếu không có điều nào ở trên... chúng ta có đang ở chế độ không nghiêm ngặt không? Nếu vậy, *mặc định* `this` thành `globalThis`. Nhưng nếu ở chế độ nghiêm ngặt, *mặc định* `this` thành `undefined`.
 
-These rules, *in this order*, are how JS determines the `this` for a function invocation. If multiple rules match a call-site (e.g., `new point.init.call(..)`), the first rule from the list to match wins.
+Các quy tắc này, *theo thứ tự này*, là cách JS xác định `this` cho một lệnh gọi hàm. Nếu nhiều quy tắc khớp với một vị trí gọi (ví dụ: `new point.init.call(..)`), quy tắc đầu tiên từ danh sách khớp sẽ thắng.
 
-That's it, you're now master over the `this` keyword. Well, not quite. There's a bunch more nuance to cover. But you're well on your way!
+Thế đấy, bây giờ bạn đã làm chủ từ khóa `this`. Chà, không hẳn. Còn rất nhiều sắc thái cần đề cập. Nhưng bạn đang đi đúng hướng!
 
-## An Arrow Points Somewhere
+## Một Mũi Tên Trỏ Đến Đâu Đó (An Arrow Points Somewhere)
 
-Everything I've asserted so far about `this` in functions, and how its determined based on the call-site, makes one giant assumption: that you're dealing with a *regular* function (or method).
+Mọi thứ tôi đã khẳng định cho đến nay về `this` trong các hàm, và cách nó được xác định dựa trên vị trí gọi, đều đưa ra một giả định khổng lồ: rằng bạn đang xử lý một hàm *thông thường* (hoặc phương thức).
 
-So what's an *irregular* function?!? It looks like this:
+Vậy một hàm *bất thường* là gì?!? Nó trông giống như thế này:
 
 ```js
 const x = x => x <= x;
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Yes, I'm being a tad sarcastic and unfair to call an arrow function "irregular" and to use such a contrived example. It's a joke, ok? |
+| Vâng, tôi đang hơi mỉa mai và không công bằng khi gọi một hàm mũi tên là "bất thường" và sử dụng một ví dụ gượng ép như vậy. Đó là một trò đùa, được chứ? |
 
-Here's a real example of an `=>` arrow function:
+Đây là một ví dụ thực tế về hàm mũi tên `=>`:
 
 ```js
 const clickHandler = evt =>
@@ -424,7 +424,7 @@ const clickHandler = evt =>
         evt.stopPropagation();
 ```
 
-For comparison sake, let me also show the non-arrow equivalent:
+Để so sánh, hãy để tôi cũng hiển thị tương đương không phải mũi tên:
 
 ```js
 const clickHandler = function(evt) {
@@ -434,7 +434,7 @@ const clickHandler = function(evt) {
 };
 ```
 
-Or if we went a bit old-school about it -- this is my jam! -- we could try the standalone function declaration form:
+Hoặc nếu chúng ta đi theo phong cách cũ một chút -- đây là sở thích của tôi! -- chúng ta có thể thử dạng khai báo hàm độc lập:
 
 ```js
 function clickHandler(evt) {
@@ -444,7 +444,7 @@ function clickHandler(evt) {
 }
 ```
 
-Or if the function appeared as a method in a `class` definition, or as a concise method in an object literal, it would look like this:
+Hoặc nếu hàm xuất hiện dưới dạng một phương thức trong định nghĩa `class`, hoặc dưới dạng một phương thức ngắn gọn trong object literal, nó sẽ trông giống như thế này:
 
 ```js
 // ..
@@ -455,17 +455,17 @@ clickHandler(evt) {
 }
 ```
 
-What I really want to focus on is how each of these forms of the function will behave with respect to their `this` reference, and whether the first `=>` form differs from the others (hint: it does!). But let's start with a little quiz to see if you've been paying attention.
+Điều tôi thực sự muốn tập trung vào là cách mỗi dạng hàm này sẽ hành xử đối với tham chiếu `this` của chúng, và liệu dạng `=>` đầu tiên có khác với các dạng khác hay không (gợi ý: có!). Nhưng hãy bắt đầu với một bài kiểm tra nhỏ để xem bạn có chú ý không.
 
-For each of those function forms just shown, how do we know what each `this` will reference?
+Đối với mỗi dạng hàm vừa được hiển thị, làm thế nào chúng ta biết mỗi `this` sẽ tham chiếu đến cái gì?
 
-### Where's The Call-site?
+### Vị trí Gọi Ở Đâu? (Where's The Call-site?)
 
-Hopefully, you responded with something like: "first, we need to see how the functions are called."
+Hy vọng rằng, bạn đã trả lời một cái gì đó như: "đầu tiên, chúng ta cần xem các hàm được gọi như thế nào."
 
-Fair enough.
+Đủ công bằng.
 
-Let's say our program looks like this:
+Giả sử chương trình của chúng ta trông giống như thế này:
 
 ```js
 var infoForm = {
@@ -478,7 +478,7 @@ var infoForm = {
         this.theSubmitBtn =
             theFormElem.querySelector("button[type=submit]");
 
-        // is *this* the call-site?
+        // đây có phải là vị trí gọi không?
         this.theSubmitBtn.addEventListener(
             "click",
             this.clickHandler,
@@ -490,13 +490,13 @@ var infoForm = {
 }
 ```
 
-Ah, interesting. Half of you readers have never seen actual DOM API code like `getElementById(..)`, `querySelector(..)`, and `addEventListener(..)` before. I heard the confusion bells whistle just now!
+À, thú vị. Một nửa số độc giả của các bạn chưa bao giờ thấy mã DOM API thực tế như `getElementById(..)`, `querySelector(..)`, và `addEventListener(..)` trước đây. Tôi nghe thấy tiếng chuông bối rối vang lên vừa rồi!
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Sorry, I'm dating myself, here. I've been doing this stuff long enough that I remember when we did that kind of code long before we had utilities like jQuery cluttering up the code with `$` everywhere. And after many years of front-end evolution, we seem to have landed somewhere quite a bit more "modern" -- at least, that's the prevailing presumption. |
+| Xin lỗi, tôi đang tiết lộ tuổi tác của mình ở đây. Tôi đã làm những thứ này đủ lâu để nhớ khi chúng tôi làm loại mã đó rất lâu trước khi chúng tôi có các tiện ích như jQuery làm lộn xộn mã với `$` ở khắp mọi nơi. Và sau nhiều năm phát triển front-end, chúng ta dường như đã hạ cánh ở đâu đó "hiện đại" hơn một chút -- ít nhất, đó là giả định phổ biến. |
 
-I'm guessing many of you these days are used to seeing component-framework code (React, etc) somewhat like this:
+Tôi đoán nhiều người trong số các bạn ngày nay đã quen với việc nhìn thấy mã khung thành phần (React, v.v.) phần nào giống như thế này:
 
 ```jsx
 // ..
@@ -514,35 +514,35 @@ infoForm(props) {
 // ..
 ```
 
-Of course, there's a bunch of other ways that code might be shaped, depending on if you're using one framework or another, etc.
+Tất nhiên, có rất nhiều cách khác mà mã có thể được định hình, tùy thuộc vào việc bạn đang sử dụng khung này hay khung khác, v.v.
 
-Or maybe you're not even using `class` / `this` style components anymore, because you've moved everything to hooks and closures. In any case, for our discussion purposes, *this* chapter is all about `this`, so we need to stick to a coding style like the above, to have code related to the discussion.
+Hoặc có thể bạn thậm chí không sử dụng các thành phần kiểu `class` / `this` nữa, bởi vì bạn đã chuyển mọi thứ sang hooks và closures. Trong mọi trường hợp, cho mục đích thảo luận của chúng ta, chương *này* là tất cả về `this`, vì vậy chúng ta cần tuân thủ một phong cách mã hóa như trên, để có mã liên quan đến cuộc thảo luận.
 
-And neither of those two previous code snippets show the `clickHandler` function being defined. But I've said repeatedly so far, that doesn't matter; all that matters is ... what? say it with me... all that matters is *how* the function is invoked.
+Và cả hai đoạn mã trước đó đều không hiển thị hàm `clickHandler` đang được định nghĩa. Nhưng tôi đã nói nhiều lần cho đến nay, điều đó không quan trọng; tất cả những gì quan trọng là ... cái gì? hãy nói cùng tôi... tất cả những gì quan trọng là *cách* hàm được gọi.
 
-So how is `clickHandler` being invoked? What's the call-site, and which context assignment rule does it match?
+Vậy `clickHandler` đang được gọi như thế nào? Vị trí gọi là gì, và nó khớp với quy tắc gán ngữ cảnh nào?
 
-### Hidden From Sight
+### Ẩn Khỏi Tầm Nhìn (Hidden From Sight)
 
-If you're stuck, don't worry. I'm deliberately making this difficult, to point something very important out.
+Nếu bạn bị mắc kẹt, đừng lo lắng. Tôi cố tình làm cho điều này trở nên khó khăn, để chỉ ra một điều rất quan trọng.
 
-When the `"click"` or `onClick=` event handler bindings happen, in both cases, we specified `this.clickHandler`, which implies that there is a `this` context object with a property on it called `clickHandler`, which is holding our function definition.
+Khi các ràng buộc trình xử lý sự kiện `"click"` hoặc `onClick=` xảy ra, trong cả hai trường hợp, chúng ta đã chỉ định `this.clickHandler`, điều này ngụ ý rằng có một đối tượng ngữ cảnh `this` với một thuộc tính trên nó được gọi là `clickHandler`, đang giữ định nghĩa hàm của chúng ta.
 
-So, is `this.clickHandler` the call-site? If it was, what assignment rule applies? The *implicit context* rule (#3)?
+Vậy, `this.clickHandler` có phải là vị trí gọi không? Nếu phải, quy tắc gán nào áp dụng? Quy tắc *ngữ cảnh ngầm định* (#3)?
 
-Unfortunately, no.
+Thật không may, không.
 
-The problem is, **we cannot actually see the call-site** in this program. Uh oh.
+Vấn đề là, **chúng ta không thể thực sự nhìn thấy vị trí gọi** trong chương trình này. Ồ ồ.
 
-If we can't see the call-site, how do we know *how* the function is going to actually get called?
+Nếu chúng ta không thể nhìn thấy vị trí gọi, làm thế nào chúng ta biết *cách* hàm thực sự sẽ được gọi?
 
-*That's* the exact point I'm making.
+*Đó* chính xác là điểm tôi đang đưa ra.
 
-It doesn't matter that we passed in `this.clickHandler`. That is merely a reference to a function object value. It's not a call-site.
+Không quan trọng là chúng ta đã truyền vào `this.clickHandler`. Đó chỉ đơn thuần là một tham chiếu đến một giá trị đối tượng hàm. Nó không phải là một vị trí gọi.
 
-Under the covers, somewhere inside a framework, library, or even the JS environment itself, when a user clicks the button, a reference to the `clickHandler(..)` function is going to be invoked. And as we've implied, that call-site is even going to pass in the DOM event object as the `evt` argument.
+Bên dưới lớp vỏ, ở đâu đó bên trong một khung, thư viện, hoặc thậm chí chính môi trường JS, khi người dùng nhấp vào nút, một tham chiếu đến hàm `clickHandler(..)` sẽ được gọi. Và như chúng ta đã ngụ ý, vị trí gọi đó thậm chí sẽ truyền vào đối tượng sự kiện DOM làm đối số `evt`.
 
-Since we can't see the call-site, we have to *imagine* it. Might it look like...?
+Vì chúng ta không thể nhìn thấy vị trí gọi, chúng ta phải *tưởng tượng* nó. Nó có thể trông giống như...?
 
 ```js
 // ..
@@ -550,36 +550,36 @@ eventCallback( domEventObj );
 // ..
 ```
 
-If it did, which `this` rule would apply? The *default context* rule (#4)?
+Nếu đúng như vậy, quy tắc `this` nào sẽ áp dụng? Quy tắc *ngữ cảnh mặc định* (#4)?
 
-Or, what if the call-site looked like this...?
+Hoặc, nếu vị trí gọi trông giống như thế này thì sao...?
 
 ```js
 // ..
 eventCallback.call( domElement, domEventObj );
 ```
 
-Now which `this` rule would apply? The *explicit context* rule (#2)?
+Bây giờ quy tắc `this` nào sẽ áp dụng? Quy tắc *ngữ cảnh rõ ràng* (#2)?
 
-Unless you open and view the source code for the framework/library, or read the documentation/specification, you won't *know* what to expect of that call-site. Which means that predicting, ultimately, what `this` points to in the `clickHandler` function you write, is... to put it mildly... a bit convoluted.
+Trừ khi bạn mở và xem mã nguồn cho khung/thư viện, hoặc đọc tài liệu/đặc tả, bạn sẽ không *biết* những gì mong đợi ở vị trí gọi đó. Điều đó có nghĩa là việc dự đoán, cuối cùng, `this` trỏ đến cái gì trong hàm `clickHandler` bạn viết, là... nói một cách nhẹ nhàng... hơi phức tạp.
 
-### *This* Is Wrong
+### *Cái Này* Sai Rồi (*This* Is Wrong)
 
-To spare you any more pain here, I'll cut to the chase.
+Để giúp bạn bớt đau đớn hơn ở đây, tôi sẽ đi thẳng vào vấn đề.
 
-Pretty much all implementations of a click-handler mechanism are going to do something like the `.call(..)`, and they're going to set the DOM element (e.g., button) the event listener is bound to, as the *explicit context* for the invocation.
+Hầu như tất cả các triển khai của cơ chế xử lý nhấp chuột sẽ làm điều gì đó giống như `.call(..)`, và chúng sẽ đặt phần tử DOM (ví dụ: nút) mà trình lắng nghe sự kiện bị ràng buộc, làm *ngữ cảnh rõ ràng* cho lệnh gọi.
 
-Hmmm... is that ok, or is that going to be a problem?
+Hmmm... điều đó có ổn không, hay nó sẽ là một vấn đề?
 
-Recall that our `clickHandler(..)` function is `this`-aware, and that its `this.theFormElem` reference implies referencing an object with a `theFormElem` property, which in turn is pointing at the parent `<form>` element. DOM buttons do not, by default, have a `theFormElem` property on them.
+Hãy nhớ lại rằng hàm `clickHandler(..)` của chúng ta là nhận biết `this`, và tham chiếu `this.theFormElem` của nó ngụ ý tham chiếu đến một đối tượng có thuộc tính `theFormElem`, đến lượt nó đang trỏ vào phần tử `<form>` cha. Các nút DOM, theo mặc định, không có thuộc tính `theFormElem` trên chúng.
 
-In other words, the `this` reference that our event handler will have set for it is almost certainly wrong. Oops.
+Nói cách khác, tham chiếu `this` mà trình xử lý sự kiện của chúng ta sẽ được thiết lập cho nó gần như chắc chắn là sai. Rất tiếc.
 
-Unless we want to rewrite the `clickHandler` function, we're going to need to fix that.
+Trừ khi chúng ta muốn viết lại hàm `clickHandler`, chúng ta sẽ cần phải sửa lỗi đó.
 
-### Fixing `this`
+### Sửa `this`
 
-Let's consider some options to address the mis-assignment. To keep things focused, I'll stick to this style of event binding for the discussion:
+Hãy xem xét một số tùy chọn để giải quyết việc gán sai. Để giữ cho mọi thứ tập trung, tôi sẽ tuân thủ phong cách ràng buộc sự kiện này cho cuộc thảo luận:
 
 ```js
 this.submitBtnaddEventListener(
@@ -589,11 +589,11 @@ this.submitBtnaddEventListener(
 );
 ```
 
-Here's one way to address it:
+Đây là một cách để giải quyết nó:
 
 ```js
-// store a fixed reference to the current
-// `this` context
+// lưu trữ một tham chiếu cố định đến ngữ cảnh
+// `this` hiện tại
 var context = this;
 
 this.submitBtn.addEventListener(
@@ -605,52 +605,51 @@ this.submitBtn.addEventListener(
 );
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| Most older JS code that uses this approach will say something like `var self = this` instead of the `context` name I'm giving it here. "Self" is a shorter word, and sounds cooler. But it's also entirely the wrong semantic meaning. The `this` keyword is not a "self" reference to the function, but rather the context for that current function invocation. Those may seem like the same thing at a glance, but they're completely different concepts, as different as apples and a Beatles song. So... to paraphrase them, "Hey developer, don't make it bad. Take a sad `self` and make it better `context`." |
+| Hầu hết mã JS cũ hơn sử dụng cách tiếp cận này sẽ nói điều gì đó như `var self = this` thay vì tên `context` mà tôi đang đặt cho nó ở đây. "Self" là một từ ngắn hơn, và nghe có vẻ ngầu hơn. Nhưng nó cũng hoàn toàn sai về ý nghĩa ngữ nghĩa. Từ khóa `this` không phải là một tham chiếu "self" (bản thân) đến hàm, mà là ngữ cảnh cho lệnh gọi hàm hiện tại đó. Những thứ đó thoạt nhìn có vẻ giống nhau, nhưng chúng là những khái niệm hoàn toàn khác nhau, khác nhau như táo và một bài hát của Beatles. Vì vậy... để diễn giải lại chúng, "Này nhà phát triển, đừng làm cho nó tồi tệ. Hãy lấy một `self` buồn và làm cho nó trở thành `context` tốt hơn." |
 
-What's going on here? I recognized that the enclosing code, where the `addEventListener` call is going to run, has a current `this` context that is correct, and we need to ensure that same `this` context is applied when `clickHandler(..)` gets invoked.
+Chuyện gì đang xảy ra ở đây? Tôi nhận ra rằng mã bao quanh, nơi lệnh gọi `addEventListener` sẽ chạy, có một ngữ cảnh `this` hiện tại là chính xác, và chúng ta cần đảm bảo rằng cùng một ngữ cảnh `this` đó được áp dụng khi `clickHandler(..)` được gọi.
 
-I defined a surrounding function (`handler(..)`) and then forced the call-site to look like:
+Tôi đã định nghĩa một hàm bao quanh (`handler(..)`) và sau đó buộc vị trí gọi trông giống như:
 
 ```js
 context.clickHandler(evt);
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| Which `this` context assignment rule is applied here? That's right, the *implicit context* rule (#3). |
+| Quy tắc gán ngữ cảnh `this` nào được áp dụng ở đây? Đúng vậy, quy tắc *ngữ cảnh ngầm định* (#3). |
 
-Now, it doesn't matter what the internal call-site of the library/framework/environment looks like. But, why?
+Bây giờ, không quan trọng vị trí gọi nội bộ của thư viện/khung/môi trường trông như thế nào. Nhưng, tại sao?
 
-Because we're now *actually* in control of the call-site. It doesn't matter how `handler(..)` gets invoked, or what its `this` is assigned. It only matters than when `clickHandler(..)` is invoked, the `this` context is set to what we wanted.
+Bởi vì bây giờ chúng ta *thực sự* đang kiểm soát vị trí gọi. Không quan trọng `handler(..)` được gọi như thế nào, hoặc `this` của nó được gán là gì. Chỉ quan trọng là khi `clickHandler(..)` được gọi, ngữ cảnh `this` được đặt thành những gì chúng ta muốn.
 
-I pulled off that trick not only by defining a surrounding function (`handler(..)`) so I can control the call-site, but... and this is important, so don't miss it... I defined `handler(..)` as a NON-`this`-aware function! There's no `this` keyword inside of `handler(..)`, so whatever `this` gets set (or not) by the library/framework/environment, is completely irrelevant.
+Tôi đã thực hiện thủ thuật đó không chỉ bằng cách định nghĩa một hàm bao quanh (`handler(..)`) để tôi có thể kiểm soát vị trí gọi, mà còn... và điều này quan trọng, vì vậy đừng bỏ lỡ nó... Tôi đã định nghĩa `handler(..)` là một hàm KHÔNG nhận biết `this`! Không có từ khóa `this` bên trong `handler(..)`, vì vậy bất kỳ `this` nào được thiết lập (hoặc không) bởi thư viện/khung/môi trường, đều hoàn toàn không liên quan.
 
-The `var context = this` line is critical to the trick. It defines a lexical variable `context`, which is not some special keyword, holding a snapshot of the value in the outer `this`. Then inside `clickHandler`, we merely reference a lexical variable (`context`), no relative/magic `this` keyword.
+Dòng `var context = this` rất quan trọng đối với thủ thuật. Nó định nghĩa một biến từ vựng `context`, không phải là một từ khóa đặc biệt nào đó, giữ một bản chụp nhanh của giá trị trong `this` bên ngoài. Sau đó bên trong `clickHandler`, chúng ta chỉ đơn thuần tham chiếu một biến từ vựng (`context`), không có từ khóa `this` tương đối/ma thuật nào.
 
-### Lexical This
+### `this` Từ vựng (Lexical This)
 
-The name for this pattern, by the way, is "lexical this", meaning a `this` that behaves like a lexical scope variable instead of like a dynamic context binding.
+Nhân tiện, tên cho mẫu này là "`this` từ vựng", có nghĩa là một `this` hoạt động giống như một biến phạm vi từ vựng thay vì giống như một ràng buộc ngữ cảnh động.
 
-But it turns out JS has an easier way of performing the "lexical this" magic trick. Are you ready for the trick reveal!?
+Nhưng hóa ra JS có một cách dễ dàng hơn để thực hiện trò ảo thuật "`this` từ vựng". Bạn đã sẵn sàng cho việc tiết lộ thủ thuật chưa!?
 
 ...
 
-The `=>` arrow function! Tada!
+Hàm mũi tên `=>`! Tada!
 
-That's right, the `=>` function is, unlike all other function forms, special, in that it's not special at all. Or, rather, that it doesn't define anything special for `this` behavior whatsoever.
+Đúng vậy, hàm `=>`, không giống như tất cả các dạng hàm khác, là đặc biệt, ở chỗ nó hoàn toàn không đặc biệt. Hoặc, đúng hơn, rằng nó không định nghĩa bất cứ điều gì đặc biệt cho hành vi `this` cả.
 
-In an `=>` function, the `this` keyword... **is not a keyword**. It's absolutely no different from any other variable, like `context` or `happyFace` or `foobarbaz`.
+Trong một hàm `=>`, từ khóa `this`... **không phải là một từ khóa**. Nó hoàn toàn không khác gì bất kỳ biến nào khác, như `context` hoặc `happyFace` hoặc `foobarbaz`.
 
-Let me illustrate *this* point more directly:
+Hãy để tôi minh họa quan điểm *này* trực tiếp hơn:
 
 ```js
 function outer() {
     console.log(this.value);
 
-    // define a return an "inner"
-    // function
+    // định nghĩa và trả về một hàm "inner"
     var inner = () => {
         console.log(this.value);
     };
@@ -662,35 +661,35 @@ var one = {
     value: 42,
 };
 var two = {
-    value: "sad face",
+    value: "buồn bã",
 };
 
 var innerFn = outer.call(one);
 // 42
 
 innerFn.call(two);
-// 42   <-- not "sad face"
+// 42   <-- không phải "buồn bã"
 ```
 
-The `innerFn.call(two)` would, for any *regular* function definition, have resulted in `"sad face"` here. But since the `inner` function we defined and returned (and assigned to `innerFn`) was an *irregular* `=>` arrow function, it has no special `this` behavior, but instead has "lexical this" behavior.
+`innerFn.call(two)` sẽ, đối với bất kỳ định nghĩa hàm *thông thường* nào, dẫn đến `"buồn bã"` ở đây. Nhưng vì hàm `inner` mà chúng ta đã định nghĩa và trả về (và gán cho `innerFn`) là một hàm mũi tên `=>` *bất thường*, nó không có hành vi `this` đặc biệt, mà thay vào đó có hành vi "`this` từ vựng".
 
-When the `innerFn(..)` (aka `inner(..)`) function is invoked, even with an *explicit context* assignment via `.call(..)`, that assignment is ignored.
+Khi hàm `innerFn(..)` (hay còn gọi là `inner(..)`) được gọi, ngay cả với một gán *ngữ cảnh rõ ràng* thông qua `.call(..)`, gán đó sẽ bị bỏ qua.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| I'm not sure why `=>` arrow functions even have a `call(..)` / `apply(..)` on them, since they are silent no-op functions. I guess it's for consistency with normal functions. But as we'll see later, there are other inconsistencies between *regular* functions and *irregular* `=>` arrow functions. |
+| Tôi không chắc tại sao các hàm mũi tên `=>` thậm chí có `call(..)` / `apply(..)` trên chúng, vì chúng là các hàm no-op im lặng. Tôi đoán đó là để nhất quán với các hàm bình thường. Nhưng như chúng ta sẽ thấy sau này, có những sự không nhất quán khác giữa các hàm *thông thường* và các hàm mũi tên `=>` *bất thường*. |
 
-When a `this` is encountered (`this.value`) inside an `=>` arrow function, `this` is treated like a normal lexical variable, not a special keyword. And since there is no `this` variable in that function itself, JS does what it always does with lexical variables: it goes up one level of lexical scope -- in this case, to the surrounding `outer(..)` function, and it checks to see if there's any registered `this` in that scope.
+Khi một `this` được bắt gặp (`this.value`) bên trong một hàm mũi tên `=>`, `this` được coi như một biến từ vựng bình thường, không phải là một từ khóa đặc biệt. Và vì không có biến `this` trong chính hàm đó, JS làm những gì nó luôn làm với các biến từ vựng: nó đi lên một cấp độ phạm vi từ vựng -- trong trường hợp này, đến hàm `outer(..)` bao quanh, và nó kiểm tra xem có bất kỳ `this` nào được đăng ký trong phạm vi đó không.
 
-Luckily, `outer(..)` is a *regular* function, which means it has a normal `this` keyword. And the `outer.call(one)` invocation assigned `one` to its `this`.
+May mắn thay, `outer(..)` là một hàm *thông thường*, có nghĩa là nó có một từ khóa `this` bình thường. Và lệnh gọi `outer.call(one)` đã gán `one` cho `this` của nó.
 
-So, `innerFn.call(two)` is invoking `inner()`, but when `inner()` looks up a value for `this`, it gets... `one`, not `two`.
+Vì vậy, `innerFn.call(two)` đang gọi `inner()`, nhưng khi `inner()` tra cứu một giá trị cho `this`, nó nhận được... `one`, không phải `two`.
 
-#### Back To The... Button
+#### Quay Lại Với... Nút Bấm
 
-You thought I was going to make a pun joke and say "future" there, didn't you!?
+Bạn đã nghĩ rằng tôi sẽ thực hiện một trò đùa chơi chữ và nói "tương lai" ở đó, phải không!?
 
-A more direct and appropriate way of solving our earlier issue, where we had done `var context = this` to get a sort of faked "lexical this" behavior, is to use the `=>` arrow function, since its primary design feature is... "lexical this".
+Một cách trực tiếp và thích hợp hơn để giải quyết vấn đề trước đó của chúng ta, nơi chúng ta đã thực hiện `var context = this` để có được một loại hành vi "`this` từ vựng" giả mạo, là sử dụng hàm mũi tên `=>`, vì tính năng thiết kế chính của nó là... "`this` từ vựng".
 
 ```js
 this.submitBtn.addEventListener(
@@ -700,21 +699,21 @@ this.submitBtn.addEventListener(
 );
 ```
 
-Boom! Problem solved! Mic drop!
+Bùm! Vấn đề đã được giải quyết! Mic drop!
 
-Hear me on *this*: the `=>` arrow function is *not* -- I repeat, *not* -- about typing fewer characters. The primary point of the `=>` function being added to JS was to give us "lexical this" behavior without having to resort to `var context = this` (or worse, `var self = this`) style hacks.
+Hãy nghe tôi về điều *này*: hàm mũi tên `=>` *không phải* -- tôi nhắc lại, *không phải* -- là về việc gõ ít ký tự hơn. Điểm chính của hàm `=>` được thêm vào JS là cung cấp cho chúng ta hành vi "`this` từ vựng" mà không cần phải dùng đến các thủ thuật kiểu `var context = this` (hoặc tệ hơn, `var self = this`).
 
-| TIP: |
+| MẸO: |
 | :--- |
-| If you need "lexical this", always prefer an `=>` arrow function. If you don't need "lexical this", well... the `=>` arrow function might not be the best tool for the job. |
+| Nếu bạn cần "`this` từ vựng", hãy luôn ưu tiên một hàm mũi tên `=>`. Nếu bạn không cần "`this` từ vựng", chà... hàm mũi tên `=>` có thể không phải là công cụ tốt nhất cho công việc. |
 
-#### Confession Time
+#### Thời Gian Thú Tội (Confession Time)
 
-I've said all along in this chapter, that how you write a function, and where you write the function, has *nothing* to do with how its `this` will be assigned.
+Tôi đã nói suốt trong chương này, rằng cách bạn viết một hàm, và nơi bạn viết hàm, *không liên quan gì* đến cách `this` của nó sẽ được gán.
 
-For regular functions, that's true. But when we consider an irregular `=>` arrow function, it's not entirely accurate anymore.
+Đối với các hàm thông thường, điều đó đúng. Nhưng khi chúng ta xem xét một hàm mũi tên `=>` bất thường, nó không còn hoàn toàn chính xác nữa.
 
-Recall the original `=>` form of `clickHandler` from earlier in the chapter?
+Hãy nhớ lại dạng `=>` ban đầu của `clickHandler` từ đầu chương?
 
 ```js
 const clickHandler = evt =>
@@ -723,7 +722,7 @@ const clickHandler = evt =>
         evt.stopPropagation();
 ```
 
-If we use that form, in the same context as our event binding, it could look like this:
+Nếu chúng ta sử dụng dạng đó, trong cùng ngữ cảnh với ràng buộc sự kiện của chúng ta, nó có thể trông giống như thế này:
 
 ```js
 const clickHandler = evt =>
@@ -734,7 +733,7 @@ const clickHandler = evt =>
 this.submitBtn.addEventListener("click",clickHandler,false);
 ```
 
-A lot of developers prefer to even further reduce it, to an inline `=>` arrow function:
+Rất nhiều nhà phát triển thích giảm nó hơn nữa, thành một hàm mũi tên `=>` nội tuyến:
 
 ```js
 this.submitBtn.addEventListener(
@@ -746,19 +745,19 @@ this.submitBtn.addEventListener(
 );
 ```
 
-When we write an `=>` arrow function, we know for sure that its `this` binding will exactly be the current `this` binding of whatever surrounding function is running, regardless of what the call-site of the `=>` arrow function looks like. So in other words, *how* we wrote the `=>` arrow function, and *where* we wrote it, does matter.
+Khi chúng ta viết một hàm mũi tên `=>`, chúng ta biết chắc chắn rằng ràng buộc `this` của nó sẽ chính xác là ràng buộc `this` hiện tại của bất kỳ hàm bao quanh nào đang chạy, bất kể vị trí gọi của hàm mũi tên `=>` trông như thế nào. Vì vậy, nói cách khác, *cách* chúng ta viết hàm mũi tên `=>`, và *nơi* chúng ta viết nó, có quan trọng.
 
-That doesn't fully answer the `this` question, though. It just shifts the question to *how the enclosing function was invoked*. Actually, the focus on the call-site is still the only thing that matters.
+Tuy nhiên, điều đó không trả lời đầy đủ câu hỏi `this`. Nó chỉ chuyển câu hỏi sang *cách hàm bao quanh được gọi*. Thực ra, sự tập trung vào vị trí gọi vẫn là điều duy nhất quan trọng.
 
-But the nuance I'm confessing to having omitted until *this* moment is: it matters *which* call-site we consider, not just *any* call-site in the current call stack. The call-site that matters is, the nearest function-invocation in the current call stack ***that actually assigns a `this` context***.
+Nhưng sắc thái mà tôi thú nhận đã bỏ qua cho đến thời điểm *này* là: quan trọng là vị trí gọi *nào* chúng ta xem xét, không chỉ *bất kỳ* vị trí gọi nào trong ngăn xếp cuộc gọi hiện tại. Vị trí gọi quan trọng là, lệnh gọi hàm gần nhất trong ngăn xếp cuộc gọi hiện tại ***thực sự gán một ngữ cảnh `this`***.
 
-Since an `=>` arrow function never has a `this`-assigning call-site (no matter what), that call-site isn't relevant to the question. We have to keep stepping up the call stack until we find a function invocation that *is* `this`-assigning -- even if such invoked function is not itself `this`-aware.
+Vì một hàm mũi tên `=>` không bao giờ có một vị trí gọi gán `this` (bất kể thế nào), vị trí gọi đó không liên quan đến câu hỏi. Chúng ta phải tiếp tục bước lên ngăn xếp cuộc gọi cho đến khi chúng ta tìm thấy một lệnh gọi hàm *có* gán `this` -- ngay cả khi hàm được gọi đó bản thân nó không nhận biết `this`.
 
-**THAT** is the only call-site that matters.
+**ĐÓ** là vị trí gọi duy nhất quan trọng.
 
-#### Find The Right Call-Site
+#### Tìm Vị Trí Gọi Đúng
 
-Let me illustrate, with a convoluted mess of a bunch of nested functions/calls:
+Hãy để tôi minh họa, với một mớ hỗn độn phức tạp của một loạt các hàm/cuộc gọi lồng nhau:
 
 ```js
 globalThis.value = { result: "Sad face" };
@@ -783,25 +782,23 @@ function one() {
 new one();          // ???
 ```
 
-Can you run through that (nightmare) in your head and determine what will be returned from the `new one()` invocation?
+Bạn có thể chạy qua (cơn ác mộng) đó trong đầu và xác định những gì sẽ được trả về từ lệnh gọi `new one()` không?
 
-It could be any of these:
+Nó có thể là bất kỳ cái nào trong số này:
 
 ```js
-// from `four.call(..)`:
+// từ `four.call(..)`:
 { result: "OK" }
 
-// or, from `three` object:
+// hoặc, từ đối tượng `three`:
 { result: "Hmmm" }
 
-// or, from the `globalThis.value`:
+// hoặc, từ `globalThis.value`:
 { result: "Sad face" }
 
-// or, empty object from the `new` call:
-{}
-```
+// hoặc, đối tượng rỗng từ lệnh gọi `new`:
 
-The call-stack for that `new one()` invocation is:
+Ngăn xếp cuộc gọi (call-stack) cho lệnh gọi `new one()` đó là:
 
 ```
 four         |
@@ -811,27 +808,27 @@ one          | (this = {})
 [ global ]   | (this = globalThis)
 ```
 
-Since `four()` and `fn()` are both `=>` arrow functions, the `three.fn()` and `four.call(..)` call-sites are not `this`-assigning; thus, they're irrelevant for our query. What's the next invocation to consider in the call-stack? `two()`. That's a regular function (it can accept `this`-assignment), and the call-site matches the *default context* assignment rule (#4). Since we're not in strict-mode, `this` is assigned `globalThis`.
+Vì `four()` và `fn()` đều là các hàm mũi tên `=>`, các vị trí gọi `three.fn()` và `four.call(..)` không phải là gán `this`; do đó, chúng không liên quan đến truy vấn của chúng ta. Lệnh gọi tiếp theo cần xem xét trong ngăn xếp cuộc gọi là gì? `two()`. Đó là một hàm thông thường (nó có thể chấp nhận gán `this`), và vị trí gọi khớp với quy tắc gán *ngữ cảnh mặc định* (#4). Vì chúng ta không ở chế độ nghiêm ngặt, `this` được gán là `globalThis`.
 
-When `four()` is running, `this` is just a normal variable. It looks then to its containing function (`three.fn()`), but it again finds a function with no `this`. So it goes up another level, and finds a `two()` *regular* function that has a `this` defined. And that `this` is `globalThis`. So the `this.value` expression resolves to `globalThis.value`, which returns us... `{ result: "Sad face" }`.
+Khi `four()` đang chạy, `this` chỉ là một biến bình thường. Sau đó, nó nhìn vào hàm chứa nó (`three.fn()`), nhưng nó lại tìm thấy một hàm không có `this`. Vì vậy, nó đi lên một cấp độ khác, và tìm thấy một hàm *thông thường* `two()` có định nghĩa `this`. Và `this` đó là `globalThis`. Vì vậy, biểu thức `this.value` phân giải thành `globalThis.value`, trả về cho chúng ta... `{ result: "Sad face" }`.
 
 ...
 
-Take a deep breath. I know that's a lot to mentally process. And in fairness, that's a super contrived example. You'll almost never see all that complexity mixed in one call-stack.
+Hít một hơi thật sâu. Tôi biết đó là rất nhiều thứ để xử lý trong đầu. Và công bằng mà nói, đó là một ví dụ siêu gượng ép. Bạn sẽ gần như không bao giờ thấy tất cả sự phức tạp đó trộn lẫn trong một ngăn xếp cuộc gọi.
 
-But you absolutely will find mixed call-stacks in real programs. You need to get comfortable with the analysis I just illustrated, to be able to unwind the call-stack until you find the most recent `this`-assigning call-site.
+Nhưng bạn hoàn toàn sẽ tìm thấy các ngăn xếp cuộc gọi hỗn hợp trong các chương trình thực tế. Bạn cần phải thoải mái với phân tích mà tôi vừa minh họa, để có thể gỡ bỏ ngăn xếp cuộc gọi cho đến khi bạn tìm thấy vị trí gọi gán `this` gần đây nhất.
 
-Remember the addage I quoted earlier: "with great power comes great responsibility". Choosing `this`-oriented code (even `class`es) means choosing both the flexibility it affords us, as well as needing to be comfortable navigating the call-stack to understand how it will behave.
+Hãy nhớ câu ngạn ngữ tôi đã trích dẫn trước đó: "sức mạnh lớn đi kèm với trách nhiệm lớn". Chọn mã định hướng `this` (thậm chí là các `class`) có nghĩa là chọn cả sự linh hoạt mà nó mang lại cho chúng ta, cũng như cần phải thoải mái điều hướng ngăn xếp cuộc gọi để hiểu cách nó sẽ hoạt động.
 
-That's the only way to effectively write (and later read!) `this`-aware code.
+Đó là cách duy nhất để viết (và sau này đọc!) mã nhận biết `this` một cách hiệu quả.
 
-### This Is Bound To Come Up
+### Điều Này Chắc Chắn Sẽ Xảy Ra (This Is Bound To Come Up)
 
-Backing up a bit, there's another option if you don't want to use an `=>` arrow function's "lexical this" behavior to address the button event handler functionality.
+Quay lại một chút, có một tùy chọn khác nếu bạn không muốn sử dụng hành vi "`this` từ vựng" của hàm mũi tên `=>` để giải quyết chức năng trình xử lý sự kiện nút.
 
-In addition to `call(..)` / `apply(..)` -- these invoke functions, remember! -- JS functions also have a third utility built in, called `bind(..)` -- which does *not* invoke the function, just to be clear.
+Ngoài `call(..)` / `apply(..)` -- hãy nhớ rằng những thứ này gọi hàm! -- Các hàm JS cũng có một tiện ích thứ ba được tích hợp sẵn, gọi là `bind(..)` -- cái mà *không* gọi hàm, chỉ để làm rõ.
 
-The `bind(..)` utility defines a *new* wrapped/bound version of a function, where its `this` is preset and fixed, and cannot be overridden with a `call(..)` or `apply(..)`, or even an *implicit context* object at the call-site:
+Tiện ích `bind(..)` định nghĩa một phiên bản được bao bọc/ràng buộc *mới* của một hàm, trong đó `this` của nó được thiết lập trước và cố định, và không thể bị ghi đè bằng `call(..)` hoặc `apply(..)`, hoặc thậm chí là một đối tượng *ngữ cảnh ngầm định* tại vị trí gọi:
 
 ```js
 this.submitBtn.addEventListener(
@@ -841,13 +838,13 @@ this.submitBtn.addEventListener(
 );
 ```
 
-Since I'm passing in a `this`-bound function as the event handler, it similarly doesn't matter how that utility tries to set a `this`, because I've already forced the `this` to be what I wanted: the value of `this` from the surrounding function invocation context.
+Vì tôi đang truyền vào một hàm bị ràng buộc `this` làm trình xử lý sự kiện, nên tương tự như vậy, không quan trọng tiện ích đó cố gắng đặt `this` như thế nào, bởi vì tôi đã buộc `this` phải là những gì tôi muốn: giá trị của `this` từ ngữ cảnh gọi hàm bao quanh.
 
-#### Hardly New
+#### Hầu Như Không Mới (Hardly New)
 
-This pattern is often referred to as "hard binding", since we're creating a function reference that is strongly bound to a particular `this`. A lot of JS writings have claimed that the `=>` arrow function is essentially just syntax for the `bind(this)` hard-binding. It's not. Let's dig in.
+Mẫu này thường được gọi là "ràng buộc cứng" (hard binding), vì chúng ta đang tạo một tham chiếu hàm được ràng buộc mạnh mẽ với một `this` cụ thể. Rất nhiều bài viết về JS đã tuyên bố rằng hàm mũi tên `=>` về cơ bản chỉ là cú pháp cho ràng buộc cứng `bind(this)`. Không phải vậy. Hãy cùng tìm hiểu.
 
-If you were going to create a `bind(..)` utility, it might look kinda like *this*:
+Nếu bạn định tạo một tiện ích `bind(..)`, nó có thể trông giống như *thế này*:
 
 ```js
 function bind(fn,context) {
@@ -857,13 +854,13 @@ function bind(fn,context) {
 }
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| This is not actually how `bind(..)` is implemented. The behavior is more sophisticated and nuanced. I'm only illustrating one portion of its behavior in this snippet. |
+| Đây không thực sự là cách `bind(..)` được triển khai. Hành vi phức tạp và tinh tế hơn. Tôi chỉ minh họa một phần hành vi của nó trong đoạn mã này. |
 
-Does that look familiar? It's using the good ol' fake "lexical this" hack. And under the covers, it's an *explicit context* assignment, in this case via `apply(..)`.
+Điều đó có vẻ quen thuộc không? Nó đang sử dụng thủ thuật "`this` từ vựng" giả mạo cũ kỹ. Và bên dưới lớp vỏ, đó là một gán *ngữ cảnh rõ ràng*, trong trường hợp này là thông qua `apply(..)`.
 
-So wait... doesn't that mean we could just do it with an `=>` arrow function?
+Vì vậy, chờ đã... điều đó không có nghĩa là chúng ta chỉ có thể làm điều đó với một hàm mũi tên `=>` sao?
 
 ```js
 function bind(fn,context) {
@@ -871,25 +868,25 @@ function bind(fn,context) {
 }
 ```
 
-Eh... not quite. As with most things in JS, there's a bit of nuance. Let me illustrate:
+Eh... không hẳn. Như với hầu hết mọi thứ trong JS, có một chút sắc thái. Hãy để tôi minh họa:
 
 ```js
-// candidate implementation, for comparison
+// triển khai ứng cử viên, để so sánh
 function fakeBind(fn,context) {
     return (...args) => fn.apply(context,args);
 }
 
-// test subject
+// đối tượng thử nghiệm
 function thisAwareFn() {
     console.log(`Value: ${this.value}`);
 }
 
-// control data
+// dữ liệu kiểm soát
 var obj = {
     value: 42,
 };
 
-// experiment
+// thí nghiệm
 var f = thisAwareFn.bind(obj);
 var g = fakeBind(thisAwareFn,obj);
 
@@ -900,29 +897,29 @@ new f();        // Value: undefined
 new g();        // <--- ???
 ```
 
-First, look at the `new f()` call. That's admittedly a strange usage, to call `new` on a hard-bound function. It's probably quite rare that you'd ever do so. But it shows something kind of interesting. Even though `f()` was hard-bound to a `this` context of `obj`, the `new` operator was able to hijack the hard-bound function's `this` and re-bind it to the newly created and empty object. That object has no `value` property, which is why we see `"Value: undefined"` printed out.
+Đầu tiên, hãy nhìn vào lệnh gọi `new f()`. Phải thừa nhận rằng đó là một cách sử dụng kỳ lạ, khi gọi `new` trên một hàm bị ràng buộc cứng. Có lẽ khá hiếm khi bạn làm như vậy. Nhưng nó cho thấy một điều gì đó khá thú vị. Mặc dù `f()` đã bị ràng buộc cứng với ngữ cảnh `this` của `obj`, toán tử `new` vẫn có thể chiếm quyền điều khiển `this` của hàm bị ràng buộc cứng và liên kết lại nó với đối tượng mới được tạo và rỗng. Đối tượng đó không có thuộc tính `value`, đó là lý do tại sao chúng ta thấy `"Value: undefined"` được in ra.
 
-If that feels strange, I agree. It's a weird corner nuance. It's not something you'd likely ever exploit. But I point it out not just for trivia. Refer back to the four rules presented earlier in this chapter. Remember how I asserted their order-of-precedence, and `new` was at the top (#1), ahead of *explicit* `call(..)` / `apply(..)` assignment rule (#2)?
+Nếu điều đó cảm thấy kỳ lạ, tôi đồng ý. Đó là một sắc thái góc kỳ lạ. Đó không phải là thứ bạn có thể sẽ khai thác. Nhưng tôi chỉ ra điều đó không chỉ vì chuyện vặt vãnh. Hãy tham khảo lại bốn quy tắc được trình bày trước đó trong chương này. Hãy nhớ cách tôi khẳng định thứ tự ưu tiên của chúng, và `new` đứng đầu (#1), trước quy tắc gán *rõ ràng* `call(..)` / `apply(..)` (#2)?
 
-Since we can sort of think of `bind(..)` as a variation of that rule, we now see that order-of-precedence proven. `new` is more precedent than, and can override, even a hard-bound function. Sort of makes you think the hard-bound function is maybe not so "hard"-bound, huh?!
+Vì chúng ta có thể nghĩ về `bind(..)` như một biến thể của quy tắc đó, bây giờ chúng ta thấy thứ tự ưu tiên đó đã được chứng minh. `new` được ưu tiên hơn, và có thể ghi đè, ngay cả một hàm bị ràng buộc cứng. Đại loại làm cho bạn nghĩ rằng hàm bị ràng buộc cứng có lẽ không bị ràng buộc "cứng" đến thế, hả?!
 
-But... what's going to happen with the `new g()` call, which is invoking `new` on the returned `=>` arrow function? Do you predict the same outcome as `new f()`?
+Nhưng... điều gì sẽ xảy ra với lệnh gọi `new g()`, đang gọi `new` trên hàm mũi tên `=>` được trả về? Bạn có dự đoán kết quả tương tự như `new f()` không?
 
-Sorry to disappoint.
+Xin lỗi vì đã làm bạn thất vọng.
 
-That line will actually throw an exception, because an `=>` function cannot be used with the `new` keyword.
+Dòng đó thực sự sẽ ném ra một ngoại lệ, bởi vì một hàm `=>` không thể được sử dụng với từ khóa `new`.
 
-But why? My best answer, not being authoritative on TC39 myself, is that conceptually and actually, an `=>` arrow function is not a function with a hard-bound `this`, it's a function that has no `this` at all. As such, `new` makes no sense against such a function, so JS just disallows it.
+Nhưng tại sao? Câu trả lời tốt nhất của tôi, không phải là người có thẩm quyền về TC39, là về mặt khái niệm và thực tế, một hàm mũi tên `=>` không phải là một hàm có `this` bị ràng buộc cứng, nó là một hàm hoàn toàn không có `this`. Như vậy, `new` không có ý nghĩa gì đối với một hàm như vậy, vì vậy JS chỉ đơn giản là không cho phép nó.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Recall earlier, when I pointed out that `=>` arrow functions have `call(..)`, `apply(..)`, and indeed even a `bind(..)`. But we've see that such functions basically ignore these utilities as no-ops. It's a bit strange, in my opinion, that `=>` arrow functions have all those utilities as pass-through no-ops, but for the `new` keyword, that's not just, again, a no-op pass-through, but rather disallowed with an exception. |
+| Hãy nhớ lại trước đó, khi tôi đã chỉ ra rằng các hàm mũi tên `=>` có `call(..)`, `apply(..)`, và thực sự thậm chí là `bind(..)`. Nhưng chúng ta đã thấy rằng các hàm như vậy về cơ bản bỏ qua các tiện ích này như là no-ops (không hoạt động). Theo tôi, hơi lạ khi các hàm mũi tên `=>` có tất cả các tiện ích đó như là no-ops chuyển qua, nhưng đối với từ khóa `new`, đó không chỉ là, một lần nữa, một no-op chuyển qua, mà thay vào đó bị cấm với một ngoại lệ. |
 
-But the main point is: an `=>` arrow function is *not* a syntactic form of `bind(this)`.
+Nhưng điểm chính là: một hàm mũi tên `=>` *không phải* là một dạng cú pháp của `bind(this)`.
 
-### Losing This Battle
+### Thua Trận Chiến Này (Losing This Battle)
 
-Returning once again to our button event handler example:
+Quay trở lại một lần nữa với ví dụ trình xử lý sự kiện nút của chúng ta:
 
 ```js
 this.submitBtnaddEventListener(
@@ -932,33 +929,33 @@ this.submitBtnaddEventListener(
 );
 ```
 
-There's a deeper concern we haven't yet addressed.
+Có một mối quan tâm sâu sắc hơn mà chúng ta chưa giải quyết.
 
-We've seen several different approaches to construct a different callback function reference to pass in there, in place of `this.clickHandler`.
+Chúng ta đã thấy một số cách tiếp cận khác nhau để xây dựng một tham chiếu hàm callback khác để truyền vào đó, thay thế cho `this.clickHandler`.
 
-But whichever of those ways we choose, they are producing literally a different function, not just an in-place modification to our existing `clickHandler` function.
+Nhưng bất kể chúng ta chọn cách nào trong số đó, chúng đều tạo ra một hàm hoàn toàn khác theo nghĩa đen, không chỉ là một sửa đổi tại chỗ đối với hàm `clickHandler` hiện có của chúng ta.
 
-Why does that matter?
+Tại sao điều đó lại quan trọng?
 
-Well, first of all, the more functions we create (and re-create), the more processing time (very slight) and the more memory (pretty small, usually) we're chewing up. And when we're re-creating a function reference, and throwing an old one away, that's also leaving un-reclaimed memory sitting around, which puts pressure on the garbage collector (GC) to more often, pause the universe of our program momentarily while it cleans up and reclaims that memory.
+Chà, trước hết, chúng ta càng tạo ra nhiều hàm (và tạo lại), chúng ta càng tiêu tốn nhiều thời gian xử lý (rất nhỏ) và nhiều bộ nhớ (khá nhỏ, thường là vậy). Và khi chúng ta tạo lại một tham chiếu hàm, và vứt bỏ một cái cũ đi, điều đó cũng để lại bộ nhớ chưa được thu hồi nằm xung quanh, gây áp lực lên bộ thu gom rác (GC) để thường xuyên hơn, tạm dừng vũ trụ của chương trình của chúng ta trong giây lát trong khi nó dọn dẹp và thu hồi bộ nhớ đó.
 
-If hooking up this event listening is a one-time operation, no big deal. But if it's happening over and over again, the system-level performance effects *can* start to add up. Ever had an otherwise smooth animation jitter? That was probably the GC kicking in, cleaning up a bunch of reclaimable memory.
+Nếu việc kết nối lắng nghe sự kiện này là một hoạt động một lần, thì không có vấn đề gì lớn. Nhưng nếu nó xảy ra lặp đi lặp lại, các hiệu ứng hiệu suất cấp hệ thống *có thể* bắt đầu cộng dồn. Đã bao giờ có một hoạt ảnh trơn tru bị giật chưa? Đó có lẽ là do GC khởi động, dọn dẹp một loạt bộ nhớ có thể thu hồi.
 
-But another concern is, for things like event handlers, if we're going to remove an event listener at some later time, we need to keep a reference to the exact same function we attached originally. If we're using a library/framework, often (but not always!) they take care of that little dirty-work detail for you. But otherwise, it's on us to make sure that whatever function we plan to attach, we hold onto a reference just in case we need it later.
+Nhưng một mối quan tâm khác là, đối với những thứ như trình xử lý sự kiện, nếu chúng ta định xóa một trình lắng nghe sự kiện vào một thời điểm nào đó sau này, chúng ta cần giữ một tham chiếu đến chính xác cùng một hàm mà chúng ta đã đính kèm ban đầu. Nếu chúng ta đang sử dụng một thư viện/khung, thường (nhưng không phải luôn luôn!) chúng sẽ lo liệu chi tiết công việc bẩn thỉu nhỏ đó cho bạn. Nhưng nếu không, chúng ta phải đảm bảo rằng bất kỳ hàm nào chúng ta định đính kèm, chúng ta giữ một tham chiếu đề phòng trường hợp chúng ta cần nó sau này.
 
-So the point I'm making is: presetting a `this` assignment, no matter how you do it, so that it's predictable, comes with a cost. A system level cost and a program maintenance/complexity cost. It is *never* free.
+Vì vậy, quan điểm tôi đang đưa ra là: thiết lập trước một gán `this`, bất kể bạn làm điều đó như thế nào, để nó có thể dự đoán được, đều đi kèm với một chi phí. Một chi phí cấp hệ thống và một chi phí bảo trì/phức tạp chương trình. Nó *không bao giờ* miễn phí.
 
-One way of reacting to that fact is to decide, OK, we're just going to manufacture all those `this`-assigned function references once, ahead of time, up-front. That way, we're sure to reduce both the system pressure, and the code pressure, to a minimum.
+Một cách phản ứng với thực tế đó là quyết định, OK, chúng ta sẽ chỉ sản xuất tất cả các tham chiếu hàm được gán `this` đó một lần, trước thời hạn, ngay từ đầu. Bằng cách đó, chúng ta chắc chắn sẽ giảm cả áp lực hệ thống và áp lực mã xuống mức tối thiểu.
 
-Sounds reasonable, right? Not so fast.
+Nghe có vẻ hợp lý, phải không? Không nhanh thế đâu.
 
-#### Pre-Binding Function Contexts
+#### Ràng Buộc Trước Ngữ Cảnh Hàm (Pre-Binding Function Contexts)
 
-If you have a one-off function reference that needs to be `this`-bound, and you use an `=>` arrow or a `bind(this)` call, I don't see any problems with that.
+Nếu bạn có một tham chiếu hàm một lần cần được ràng buộc `this`, và bạn sử dụng một mũi tên `=>` hoặc một lệnh gọi `bind(this)`, tôi không thấy bất kỳ vấn đề nào với điều đó.
 
-But if most or all of the `this`-aware functions in a segment of your code invoked in ways where the `this` isn't the predictable context you expect, and so you decide you need to hard-bind them all... I think that's a big warning signal that you're going about things the wrong way.
+Nhưng nếu hầu hết hoặc tất cả các hàm nhận biết `this` trong một phân đoạn mã của bạn được gọi theo những cách mà `this` không phải là ngữ cảnh có thể dự đoán được mà bạn mong đợi, và vì vậy bạn quyết định cần phải ràng buộc cứng tất cả chúng... Tôi nghĩ đó là một tín hiệu cảnh báo lớn rằng bạn đang đi sai hướng.
 
-Please recall the discussion in the "Avoid This" section from Chapter 3, which started with this snippet of code:
+Vui lòng nhớ lại cuộc thảo luận trong phần "Tránh Điều Này" từ Chương 3, bắt đầu với đoạn mã này:
 
 ```js
 class Point2d {
@@ -975,41 +972,41 @@ class Point2d {
 var point = new Point2d(3,4);
 ```
 
-Now imagine we did this with that code:
+Bây giờ hãy tưởng tượng chúng ta đã làm điều này với mã đó:
 
 ```js
 const getX = point.getDoubleX;
 
-// later, elsewhere
+// sau đó, ở nơi khác
 
 getX();         // 6
 ```
 
-As you can see, the problem we were trying to solve is the same as we've been dealing with here in this chapter. It's that we wanted to be able to invoke a function reference like `getX()`, and have that *mean* and *behave like* `point.getDoubleX()`. But `this` rules on *regular* functions don't work that way.
+Như bạn có thể thấy, vấn đề chúng ta đang cố gắng giải quyết giống như vấn đề chúng ta đã giải quyết ở đây trong chương này. Đó là chúng ta muốn có thể gọi một tham chiếu hàm như `getX()`, và để nó *có nghĩa* và *hoạt động giống như* `point.getDoubleX()`. Nhưng các quy tắc `this` trên các hàm *thông thường* không hoạt động theo cách đó.
 
-So we used an `=>` arrow function. No big deal, right!?
+Vì vậy, chúng ta đã sử dụng một hàm mũi tên `=>`. Không có vấn đề gì lớn, phải không!?
 
-Wrong.
+Sai.
 
-The real root problem is that we *want* two conflicting things out of our code, and we're trying to use the same *hammer* for both *nails*.
+Vấn đề gốc rễ thực sự là chúng ta *muốn* hai điều mâu thuẫn từ mã của mình, và chúng ta đang cố gắng sử dụng cùng một *cây búa* cho cả hai *cây đinh*.
 
-We want to have a `this`-aware method stored on the `class` prototype, so that there's only one definition for the function, and all our subclasses and instances nicely share that same function. And the way they all share is through the power of the dynamic `this` binding.
+Chúng ta muốn có một phương thức nhận biết `this` được lưu trữ trên nguyên mẫu `class`, để chỉ có một định nghĩa cho hàm, và tất cả các lớp con và thể hiện của chúng ta chia sẻ độc đáo cùng một hàm đó. Và cách tất cả chúng chia sẻ là thông qua sức mạnh của ràng buộc `this` động.
 
-But at the same time, we *also* want those function references to magically stay `this`-assinged to our instance when we pass those function references around and other code is in charge of the call-site.
+Nhưng đồng thời, chúng ta *cũng* muốn các tham chiếu hàm đó duy trì được gán `this` một cách kỳ diệu cho thể hiện của chúng ta khi chúng ta truyền các tham chiếu hàm đó xung quanh và mã khác chịu trách nhiệm về vị trí gọi.
 
-In other words, sometimes we want something like `point.getDoubleX` to mean, "give me a reference that's `this`-assigned to `point`", and other times we want the same expression `point.getDoubleX` to mean, give me a dynamic `this`-assignable function reference so it can properly get the context I need it to at this moment.
+Nói cách khác, đôi khi chúng ta muốn một cái gì đó như `point.getDoubleX` có nghĩa là, "cho tôi một tham chiếu được gán `this` cho `point`", và những lần khác chúng ta muốn cùng một biểu thức `point.getDoubleX` có nghĩa là, cho tôi một tham chiếu hàm có thể gán `this` động để nó có thể nhận ngữ cảnh tôi cần vào lúc này.
 
-Perhaps JS could offer a different operator besides `.`, like `::` or `->` or something like that, which would let you distinguish what kind of function reference you're after. In fact, there's a long-standing proposal for a `this`-binding operator (`::`), that picks up attention from time to time, and then seems to stall out. Who knows, maybe someday such an operator will finally land, and we'll have better options.
+Có lẽ JS có thể cung cấp một toán tử khác ngoài `.`, như `::` hoặc `->` hoặc một cái gì đó tương tự, cho phép bạn phân biệt loại tham chiếu hàm nào bạn đang theo đuổi. Trên thực tế, có một đề xuất lâu dài cho một toán tử ràng buộc `this` (`::`), thu hút sự chú ý theo thời gian, và sau đó dường như bị đình trệ. Ai biết được, có thể một ngày nào đó một toán tử như vậy cuối cùng sẽ hạ cánh, và chúng ta sẽ có các tùy chọn tốt hơn.
 
-But I strongly suspect that even if it does land someday, it's going to vend a whole new function reference, exactly as the `=>` or `bind(this)` approaches we've already talked about. It won't come as a free and perfect solution. There will always be a tension between wanting the same function to sometimes be `this`-flexible and sometimes be `this`-predictable.
+Nhưng tôi thực sự nghi ngờ rằng ngay cả khi nó hạ cánh vào một ngày nào đó, nó sẽ bán một tham chiếu hàm hoàn toàn mới, chính xác như các cách tiếp cận `=>` hoặc `bind(this)` mà chúng ta đã nói đến. Nó sẽ không đến như một giải pháp miễn phí và hoàn hảo. Sẽ luôn có một sự căng thẳng giữa việc muốn cùng một hàm đôi khi linh hoạt `this` và đôi khi có thể dự đoán `this`.
 
-What JS authors of `class`-oriented code often run up against, sooner or later, is this exact tension. And you know what they do?
+Những gì các tác giả JS của mã định hướng `class` thường gặp phải, sớm hay muộn, chính là sự căng thẳng này. Và bạn biết họ làm gì không?
 
-They don't consider the *costs* of simply pre-binding all the class's `this`-aware methods as instead `=>` arrow functions in member properties. They don't realize that it's completely defeated the entire purpose of the `[[Prototype]]` chain. And they don't realize that if fixed-context is what they *really need*, there's an entirely different mechanism in JS that is better suited for that purpose.
+Họ không xem xét *chi phí* của việc chỉ đơn giản là ràng buộc trước tất cả các phương thức nhận biết `this` của lớp thay vì là các hàm mũi tên `=>` trong các thuộc tính thành viên. Họ không nhận ra rằng nó hoàn toàn đánh bại toàn bộ mục đích của chuỗi `[[Prototype]]`. Và họ không nhận ra rằng nếu ngữ cảnh cố định là những gì họ *thực sự cần*, thì có một cơ chế hoàn toàn khác trong JS phù hợp hơn cho mục đích đó.
 
-#### Take A More Critical Look
+### Hãy Nhìn Nhận Một Cách Phê Bình Hơn (Take A More Critical Look)
 
-So when you do this sort of thing:
+Vì vậy, khi bạn làm loại điều này:
 
 ```js
 class Point2d {
@@ -1034,7 +1031,7 @@ f();            // 6
 g();            // (5,6)
 ```
 
-I say, "ick!", to the hard-bound `this`-aware methods `getDoubleX()` and `toString()` there. To me, that's a code smell. But here's an even *worse* approach that has been favored by many developers in the past:
+Tôi nói, "kinh!", đối với các phương thức nhận biết `this` bị ràng buộc cứng `getDoubleX()` và `toString()` ở đó. Đối với tôi, đó là một mùi mã (code smell). Nhưng đây là một cách tiếp cận thậm chí còn *tệ hơn* đã được nhiều nhà phát triển ưa chuộng trong quá khứ:
 
 ```js
 class Point2d {
@@ -1061,11 +1058,11 @@ f();            // 6
 g();            // (5,6)
 ```
 
-Double ick.
+Kinh gấp đôi.
 
-In both cases, you're using a `this` mechanism but completely betraying/neutering it, by taking away all the powerful dynamicism of `this`.
+Trong cả hai trường hợp, bạn đang sử dụng cơ chế `this` nhưng hoàn toàn phản bội/vô hiệu hóa nó, bằng cách lấy đi tất cả sự năng động mạnh mẽ của `this`.
 
-You really should at least be contemplating this alternate approach, which skips the whole `this` mechanism altogether:
+Bạn thực sự ít nhất nên xem xét cách tiếp cận thay thế này, bỏ qua hoàn toàn cơ chế `this`:
 
 ```js
 function Point2d(px,py) {
@@ -1088,27 +1085,27 @@ f();            // 6
 g();            // (5,6)
 ```
 
-You see? No ugly or complex `this` to clutter up that code or worry about corner cases for. Lexical scope is super straightforward and intuitive.
+Bạn thấy không? Không có `this` xấu xí hoặc phức tạp nào làm lộn xộn mã đó hoặc phải lo lắng về các trường hợp góc. Phạm vi từ vựng cực kỳ đơn giản và trực quan.
 
-When all we want is for most/all of our function behaviors to have a fixed and predictable context, the most appropriate solution, the most straightforward and even performant solution, is lexical variables and scope closure.
+Khi tất cả những gì chúng ta muốn là hầu hết/tất cả các hành vi hàm của chúng ta có ngữ cảnh cố định và có thể dự đoán được, giải pháp thích hợp nhất, giải pháp đơn giản nhất và thậm chí hiệu quả nhất, là các biến từ vựng và đóng phạm vi (scope closure).
 
-When you go to all to the trouble of sprinkling `this` references all over a piece of code, and then you cut off the whole mechanism at the knees with `=>` "lexical this" or `bind(this)`, you chose to make the code more verbose, more complex, more overwrought. And you got nothing out of it that was more beneficial, except to follow the `this` (and `class`) bandwagon.
+Khi bạn đi đến tất cả những rắc rối của việc rắc các tham chiếu `this` lên khắp một đoạn mã, và sau đó bạn cắt bỏ toàn bộ cơ chế ở đầu gối bằng `=>` "`this` từ vựng" hoặc `bind(this)`, bạn đã chọn làm cho mã dài dòng hơn, phức tạp hơn, quá mức cần thiết. Và bạn không nhận được gì từ nó có lợi hơn, ngoại trừ việc đi theo trào lưu `this` (và `class`).
 
 ...
 
-Deep breath. Collect yourself.
+Hít thở sâu. Thu thập lại bản thân.
 
-I'm talking to myself, not you. But if what I just said bothers you, I'm talking to you, too!
+Tôi đang nói chuyện với chính mình, không phải bạn. Nhưng nếu những gì tôi vừa nói làm phiền bạn, tôi cũng đang nói chuyện với bạn!
 
-OK, listen. That's just my opinion. If you don't agree, that's fine. But apply the same level of rigor to thinking about how these mechanisms work, as I have, when you decide what conclusions you want to arrive at.
+OK, nghe này. Đó chỉ là ý kiến của tôi. Nếu bạn không đồng ý, điều đó ổn thôi. Nhưng hãy áp dụng cùng mức độ nghiêm ngặt để suy nghĩ về cách các cơ chế này hoạt động, như tôi đã làm, khi bạn quyết định kết luận nào bạn muốn đi đến.
 
-## Variations
+## Các Biến Thể (Variations)
 
-Before we close out our lengthy discussion of `this`, there's a few irregular variations on function calls that we should discuss.
+Trước khi chúng ta kết thúc cuộc thảo luận dài dòng về `this`, có một vài biến thể bất thường về các lệnh gọi hàm mà chúng ta nên thảo luận.
 
-### Indirect Function Calls
+### Gọi Hàm Gián Tiếp (Indirect Function Calls)
 
-Recall this example from earlier in the chapter?
+Hãy nhớ lại ví dụ này từ đầu chương?
 
 ```js
 var point = {
@@ -1124,58 +1121,58 @@ var point = {
 };
 
 var init = point.init;
-init(3,4);                  // broken!
+init(3,4);                  // hỏng!
 ```
 
-This is broken because the `init(3,4)` call-site doesn't provide the necessary `this`-assignment signal. But there's other ways to observe a similar breakage. For example:
+Điều này bị hỏng vì vị trí gọi `init(3,4)` không cung cấp tín hiệu gán `this` cần thiết. Nhưng có những cách khác để quan sát sự cố tương tự. Ví dụ:
 
 ```js
-(1,point.init)(3,4);        // broken!
+(1,point.init)(3,4);        // hỏng!
 ```
 
-This strange looking syntax is first evaluating an expression `(1,point.init)`, which is a comma series expression. The result of such an expression is the final evaluated value, which in this case is the function reference (held by `point.init`).
+Cú pháp trông kỳ lạ này trước tiên đang đánh giá một biểu thức `(1,point.init)`, là một biểu thức chuỗi dấu phẩy. Kết quả của một biểu thức như vậy là giá trị được đánh giá cuối cùng, trong trường hợp này là tham chiếu hàm (được giữ bởi `point.init`).
 
-So the outcome puts that function reference onto the expression stack, and then invokes that value with `(3,4)`. That's an indirect invocation of the function. And what's the result? It actually matches the *default context* assignment rule (#4) we looked at earlier in the chapter.
+Vì vậy, kết quả đặt tham chiếu hàm đó vào ngăn xếp biểu thức, và sau đó gọi giá trị đó với `(3,4)`. Đó là một lệnh gọi gián tiếp của hàm. Và kết quả là gì? Nó thực sự khớp với quy tắc gán *ngữ cảnh mặc định* (#4) mà chúng ta đã xem xét trước đó trong chương.
 
-Thus, in non-strict mode, the `this` for the `point.init(..)` call will be `globalThis`. Had we been in strict-mode, it would have been `undefined`, and the `this.x = x` operation would then have thrown an exception for invalidly accessing the `x` property on the `undefined` value.
+Do đó, trong chế độ không nghiêm ngặt, `this` cho lệnh gọi `point.init(..)` sẽ là `globalThis`. Nếu chúng ta ở chế độ nghiêm ngặt, nó sẽ là `undefined`, và thao tác `this.x = x` sau đó sẽ ném ra một ngoại lệ vì truy cập không hợp lệ vào thuộc tính `x` trên giá trị `undefined`.
 
-There's several different ways to get an indirect function invocation. For example:
+Có một số cách khác nhau để có được một lệnh gọi hàm gián tiếp. Ví dụ:
 
 ```js
-(()=>point.init)()(3,4);    // broken!
+(()=>point.init)()(3,4);    // hỏng!
 ```
 
-And another example of indirect function invocation is the Immediately Invoked Function Expression (IIFE) pattern:
+Và một ví dụ khác về gọi hàm gián tiếp là mẫu Biểu thức Hàm Được Gọi Ngay Lập Tức (IIFE):
 
 ```js
 (function(){
-    // `this` assigned via "default" rule
+    // `this` được gán thông qua quy tắc "mặc định"
 })();
 ```
 
-As you can see, the function expression value is put onto the expression stack, and then it's invoked with the `()` on the end.
+Như bạn có thể thấy, giá trị biểu thức hàm được đưa vào ngăn xếp biểu thức, và sau đó nó được gọi với `()` ở cuối.
 
-But what about this code:
+Nhưng còn mã này thì sao:
 
 ```js
 (point.init)(3,4);
 ```
 
-What will be the outcome of that code?
+Kết quả của mã đó sẽ là gì?
 
-By the same reasoning we've seen in the previous examples, it stands to reason that the `point.init` expression puts the function value onto the expression stack, and then invoked indirectly with `(3,4)`.
+Theo cùng một lý luận mà chúng ta đã thấy trong các ví dụ trước, có lý do để cho rằng biểu thức `point.init` đặt giá trị hàm vào ngăn xếp biểu thức, và sau đó được gọi gián tiếp với `(3,4)`.
 
-Not quite, though! JS grammar has a special rule to handle the invocation form `(someIdentifier)(..)` as if it had been `someIdentifier(..)` (without the `(..)` around the identifier name).
+Tuy nhiên, không hẳn vậy! Ngữ pháp JS có một quy tắc đặc biệt để xử lý dạng gọi `(someIdentifier)(..)` như thể nó là `someIdentifier(..)` (không có `(..)` xung quanh tên định danh).
 
-Wondering why you might want to ever force the *default context* for `this` assignment via an indirect function invocation?
+Tự hỏi tại sao bạn có thể muốn buộc *ngữ cảnh mặc định* cho việc gán `this` thông qua một lệnh gọi hàm gián tiếp?
 
-### Accessing `globalThis`
+### Truy Cập `globalThis`
 
-Before we answer that, let's introduce another way of performing indirect function `this` assignment. Thus far, the indirect function invocation patterns shown are sensitive to strict-mode. But what if we wanted an indirect function `this` assignment that doesn't respect strict-mode.
+Trước khi chúng ta trả lời điều đó, hãy giới thiệu một cách khác để thực hiện gán `this` hàm gián tiếp. Cho đến nay, các mẫu gọi hàm gián tiếp được hiển thị đều nhạy cảm với chế độ nghiêm ngặt. Nhưng nếu chúng ta muốn một gán `this` hàm gián tiếp không tôn trọng chế độ nghiêm ngặt thì sao.
 
-The `Function(..)` constructor takes a string of code and dynamically defines the equivalent function. However, it always does so as if that function had been declared in the global scope. And furthermore, it ensures such function *does not* run in strict-mode, no matter the strict-mode status of the program. That's the same outcome as running an indirect
+Hàm tạo `Function(..)` lấy một chuỗi mã và định nghĩa động hàm tương đương. Tuy nhiên, nó luôn làm như vậy như thể hàm đó đã được khai báo trong phạm vi toàn cục. Và hơn nữa, nó đảm bảo hàm như vậy *không* chạy trong chế độ nghiêm ngặt, bất kể trạng thái chế độ nghiêm ngặt của chương trình. Đó là kết quả tương tự như chạy một gián tiếp
 
-One niche usage of such strict-mode agnostic indirect function `this` assignment is for getting a reliable reference to the true global object prior to when the JS specification actually defined the `globalThis` identifier (for example, in a polyfill for it):
+Một cách sử dụng thích hợp của việc gán `this` hàm gián tiếp bất khả tri chế độ nghiêm ngặt như vậy là để có được một tham chiếu đáng tin cậy đến đối tượng toàn cục thực sự trước khi đặc tả JS thực sự định nghĩa định danh `globalThis` (ví dụ, trong một polyfill cho nó):
 
 ```js
 "use strict";
@@ -1184,7 +1181,7 @@ var gt = new Function("return this")();
 gt === globalThis;                      // true
 ```
 
-In fact, a similar outcome, using the comma operator trick (see previous section) and `eval(..)`:
+Trên thực tế, một kết quả tương tự, sử dụng thủ thuật toán tử dấu phẩy (xem phần trước) và `eval(..)`:
 
 ```js
 "use strict";
@@ -1196,18 +1193,18 @@ function getGlobalThis() {
 getGlobalThis() === globalThis;      // true
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| `eval("this")` would be sensitive to strict-mode, but `(1,eval)("this")` is not, and therefor reliably gives us the `globalThis` in any program. |
+| `eval("this")` sẽ nhạy cảm với chế độ nghiêm ngặt, nhưng `(1,eval)("this")` thì không, và do đó cung cấp cho chúng ta `globalThis` một cách đáng tin cậy trong bất kỳ chương trình nào. |
 
-Unfortunately, the `new Function(..)` and `(1,eval)(..)` approaches both have an important limitation: that code will be blocked in browser-based JS code if the app is served with certain Content-Security-Policy (CSP) restrictions, disallowing dynamic code evaluation (for security reasons).
+Thật không may, cả hai cách tiếp cận `new Function(..)` và `(1,eval)(..)` đều có một hạn chế quan trọng: mã đó sẽ bị chặn trong mã JS dựa trên trình duyệt nếu ứng dụng được phục vụ với một số hạn chế Chính sách Bảo mật Nội dung (CSP) nhất định, không cho phép đánh giá mã động (vì lý do bảo mật).
 
-Can we get around this? Yes, mostly. [^globalThisPolyfill]
+Chúng ta có thể giải quyết vấn đề này không? Có, hầu hết. [^globalThisPolyfill]
 
-The JS specification says that a getter function defined on the global object, or on any object that inherits from it (like `Object.prototype`), runs the getter function with `this` context assigned to `globalThis`, regardless of the program's strict-mode.
+Đặc tả JS nói rằng một hàm getter được định nghĩa trên đối tượng toàn cục, hoặc trên bất kỳ đối tượng nào kế thừa từ nó (như `Object.prototype`), chạy hàm getter với ngữ cảnh `this` được gán cho `globalThis`, bất kể chế độ nghiêm ngặt của chương trình.
 
 ```js
-// Adapted from: https://mathiasbynens.be/notes/globalthis#robust-polyfill
+// Được điều chỉnh từ: https://mathiasbynens.be/notes/globalthis#robust-polyfill
 function getGlobalThis() {
     Object.defineProperty(Object.prototype,"__get_globalthis__",{
         get() { return this; },
@@ -1221,13 +1218,13 @@ function getGlobalThis() {
 getGlobalThis() === globalThis;      // true
 ```
 
-Yeah, that's super gnarly. But that's JS `this` for you!
+Vâng, điều đó thật siêu phức tạp. Nhưng đó là `this` của JS dành cho bạn!
 
-### Template Tag Functions
+### Hàm Thẻ Mẫu (Template Tag Functions)
 
-There's one more unusual variation of function invocation we should cover: tagged template functions.
+Có thêm một biến thể bất thường của việc gọi hàm mà chúng ta nên đề cập: các hàm mẫu được gắn thẻ (tagged template functions).
 
-Template strings -- what I prefer to call interpolated literals -- can be "tagged" with a prefix function, which is invoked with the parsed contents of the template literal:
+Chuỗi mẫu (template strings) -- cái mà tôi thích gọi là các literal nội suy -- có thể được "gắn thẻ" với một hàm tiền tố, được gọi với nội dung đã phân tích của template literal:
 
 ```js
 function tagFn(/* .. */) {
@@ -1237,13 +1234,13 @@ function tagFn(/* .. */) {
 tagFn`actually a function invocation!`;
 ```
 
-As you can see, there's no `(..)` invocation syntax, just the tag function (`tagFn`) appearing before the `` `template literal` ``; whitespace is allowed between them, but is very uncommon.
+Như bạn có thể thấy, không có cú pháp gọi `(..)`, chỉ có hàm thẻ (`tagFn`) xuất hiện trước `` `template literal` ``; khoảng trắng được phép giữa chúng, nhưng rất không phổ biến.
 
-Despite the strange appearance, the function `tagFn(..)` will be invoked. It's passed the list of one or more string literals that were parsed from the template literal, along with any interpolated expression values that were encountered.
+Mặc dù có vẻ ngoài kỳ lạ, hàm `tagFn(..)` sẽ được gọi. Nó được truyền danh sách một hoặc nhiều chuỗi literal đã được phân tích từ template literal, cùng với bất kỳ giá trị biểu thức nội suy nào đã gặp phải.
 
-We're not going to cover all the ins and outs of tagged template functions -- they're seriously one of the most powerful and interesting features ever added to JS -- but since we're talking about `this` assignment in function invocations, for completeness sake we need to talk about how `this` will be assigned.
+Chúng ta sẽ không đề cập đến tất cả các chi tiết của các hàm mẫu được gắn thẻ -- chúng thực sự là một trong những tính năng mạnh mẽ và thú vị nhất từng được thêm vào JS -- nhưng vì chúng ta đang nói về việc gán `this` trong các lệnh gọi hàm, để đầy đủ, chúng ta cần nói về cách `this` sẽ được gán.
 
-The other form for tag functions you may encounter is:
+Dạng khác cho các hàm thẻ mà bạn có thể gặp phải là:
 
 ```js
 var someObj = {
@@ -1253,18 +1250,18 @@ var someObj = {
 someObj.tagFn`also a function invocation!`;
 ```
 
-Here's the easy explanation: `` tagFn`..` `` and `` someObj.tagFn`..` `` will each have `this`-assignment behavior corresponding to call-sites as `tagFn(..)` and `someObj.tagFn(..)`, respectively. In other words, `` tagFn`..` `` behaves by the *default context* assignment rule (#4), and `` someObj.tagFn`..` `` behaves by the *implicit context* assignment rule (#3).
+Đây là lời giải thích dễ dàng: `` tagFn`..` `` và `` someObj.tagFn`..` `` mỗi cái sẽ có hành vi gán `this` tương ứng với các vị trí gọi như `tagFn(..)` và `someObj.tagFn(..)`, tương ứng. Nói cách khác, `` tagFn`..` `` hoạt động theo quy tắc gán *ngữ cảnh mặc định* (#4), và `` someObj.tagFn`..` `` hoạt động theo quy tắc gán *ngữ cảnh ngầm định* (#3).
 
-Luckily for us, we don't need to worry about the `new` or `call(..)` / `apply(..)` assignment rules, as those forms aren't possible with tag functions.
+May mắn cho chúng ta, chúng ta không cần phải lo lắng về các quy tắc gán `new` hoặc `call(..)` / `apply(..)`, vì các dạng đó không thể thực hiện được với các hàm thẻ.
 
-It should be pointed out that it's pretty rare for a tagged template literal function to be defined as `this`-aware, so it's fairly unlikely you'll need to apply these rules. But just in case, now you're in the *know*.
+Cần phải chỉ ra rằng khá hiếm khi một hàm template literal được gắn thẻ được định nghĩa là nhận biết `this`, vì vậy khá khó có khả năng bạn sẽ cần áp dụng các quy tắc này. Nhưng đề phòng trường hợp, bây giờ bạn đã *biết*.
 
-## Stay Aware
+## Luôn Nhận Biết (Stay Aware)
 
-So, that's `this`. I'm willing to bet for many of you, it was a bit more... shall we say, involved... than you might have been expecting.
+Vậy đó, đó là `this`. Tôi sẵn sàng cá rằng đối với nhiều người trong số các bạn, nó có một chút... chúng ta nên nói là, liên quan... hơn những gì bạn có thể mong đợi.
 
-The good news, perhaps, is that in practice you don't often trip over all these different complexities. But the more you use `this`, the more it requires you, and the readers of your code, to understand how it actually works.
+Tin tốt, có lẽ, là trong thực tế bạn không thường xuyên vấp phải tất cả những phức tạp khác nhau này. Nhưng bạn càng sử dụng `this`, nó càng đòi hỏi bạn, và những người đọc mã của bạn, phải hiểu cách nó thực sự hoạt động.
 
-The lesson here is that you should be intentional and aware of all aspects of `this` before you go sprinkling it about your code. Make sure you're using it most effectively and taking full advantage of this important pillar of JS.
+Bài học ở đây là bạn nên có chủ ý và nhận thức về tất cả các khía cạnh của `this` trước khi bạn rắc nó vào mã của mình. Hãy chắc chắn rằng bạn đang sử dụng nó hiệu quả nhất và tận dụng tối đa trụ cột quan trọng này của JS.
 
 [^globalThisPolyfill]: "A horrifying globalThis polyfill in universal JavaScript"; Mathias Bynens; April 18 2019; https://mathiasbynens.be/notes/globalthis#robust-polyfill ; Accessed July 2022

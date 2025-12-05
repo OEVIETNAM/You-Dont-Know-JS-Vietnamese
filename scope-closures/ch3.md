@@ -1,63 +1,63 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Chapter 3: The Scope Chain
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Chương 3: Chuỗi Phạm Vi
 
-Chapters 1 and 2 laid down a concrete definition of *lexical scope* (and its parts) and illustrated helpful metaphors for its conceptual foundation. Before proceeding with this chapter, find someone else to explain (written or aloud), in your own words, what lexical scope is and why it's useful to understand.
+Chương 1 và 2 đã đặt ra một định nghĩa cụ thể về *phạm vi từ vựng* (và các phần của nó) và minh họa các phép ẩn dụ hữu ích cho nền tảng khái niệm của nó. Trước khi tiếp tục với chương này, hãy tìm người khác để giải thích (bằng văn bản hoặc nói), bằng lời của riêng bạn, phạm vi từ vựng là gì và tại sao việc hiểu nó lại hữu ích.
 
-That seems like a step you might skip, but I've found it really does help to take the time to reformulate these ideas as explanations to others. That helps our brains digest what we're learning!
+Điều đó có vẻ như là một bước bạn có thể bỏ qua, nhưng tôi thấy nó thực sự giúp dành thời gian để tái cấu trúc những ý tưởng này thành lời giải thích cho người khác. Điều đó giúp bộ não của chúng ta tiêu hóa những gì chúng ta đang học!
 
-Now it's time to dig into the nuts and bolts, so expect that things will get a lot more detailed from here forward. Stick with it, though, because these discussions really hammer home just how much we all *don't know* about scope, yet. Make sure to take your time with the text and all the code snippets provided.
+Bây giờ là lúc đào sâu vào các chi tiết cụ thể, vì vậy hãy mong đợi rằng mọi thứ sẽ chi tiết hơn nhiều từ đây trở đi. Tuy nhiên, hãy kiên trì, bởi vì những cuộc thảo luận này thực sự nhấn mạnh việc chúng ta tất cả *không biết* bao nhiêu về phạm vi. Hãy chắc chắn dành thời gian của bạn với văn bản và tất cả các đoạn mã được cung cấp.
 
-To refresh the context of our running example, let's recall the color-coded illustration of the nested scope bubbles, from Chapter 2, Figure 2:
+Để làm mới ngữ cảnh của ví dụ đang chạy của chúng ta, hãy nhớ lại hình minh họa được mã hóa màu của các bong bóng phạm vi lồng nhau, từ Chương 2, Hình 2:
 
 <figure>
     <img src="images/fig2.png" width="500" alt="Colored Scope Bubbles" align="center">
-    <figcaption><em>Fig. 2 (Ch. 2): Colored Scope Bubbles</em></figcaption>
+    <figcaption><em>Hình 2 (Ch. 2): Bong Bóng Phạm Vi Màu</em></figcaption>
     <br><br>
 </figure>
 
-The connections between scopes that are nested within other scopes is called the scope chain, which determines the path along which variables can be accessed. The chain is directed, meaning the lookup moves upward/outward only.
+Các kết nối giữa các phạm vi được lồng trong các phạm vi khác được gọi là chuỗi phạm vi, xác định đường dẫn mà các biến có thể được truy cập. Chuỗi được định hướng, có nghĩa là tra cứu chỉ di chuyển lên/ra ngoài.
 
-## "Lookup" Is (Mostly) Conceptual
+## "Tra Cứu" Chủ Yếu Là Khái Niệm
 
-In Figure 2, notice the color of the `students` variable reference in the `for`-loop. How exactly did we determine that it's a RED(1) marble?
+Trong Hình 2, hãy chú ý màu của tham chiếu biến `students` trong vòng lặp `for`. Chính xác chúng ta đã xác định nó là viên bi ĐỎ(1) như thế nào?
 
-In Chapter 2, we described the runtime access of a variable as a "lookup," where the *Engine* has to start by asking the current scope's *Scope Manager* if it knows about an identifier/variable, and proceeding upward/outward back through the chain of nested scopes (toward the global scope) until found, if ever. The lookup stops as soon as the first matching named declaration in a scope bucket is found.
+Trong Chương 2, chúng ta đã mô tả truy cập thời gian chạy của một biến như một "tra cứu", trong đó *Engine* phải bắt đầu bằng cách hỏi *Scope Manager* của phạm vi hiện tại nếu nó biết về một định danh/biến, và tiến lên/ra ngoài qua chuỗi các phạm vi lồng nhau (hướng tới phạm vi toàn cục) cho đến khi tìm thấy, nếu có. Tra cứu dừng ngay khi tìm thấy khai báo tên khớp đầu tiên trong một xô phạm vi.
 
-The lookup process thus determined that `students` is a RED(1) marble, because we had not yet found a matching variable name as we traversed the scope chain, until we arrived at the final RED(1) global scope.
+Quá trình tra cứu do đó xác định rằng `students` là viên bi ĐỎ(1), bởi vì chúng ta chưa tìm thấy tên biến khớp khi chúng ta đi qua chuỗi phạm vi, cho đến khi chúng ta đến phạm vi toàn cục ĐỎ(1) cuối cùng.
 
-Similarly, `studentID` in the `if`-statement is determined to be a BLUE(2) marble.
+Tương tự, `studentID` trong câu lệnh `if` được xác định là viên bi XANH DƯƠNG(2).
 
-This suggestion of a runtime lookup process works well for conceptual understanding, but it's not actually how things usually work in practice.
+Gợi ý về quá trình tra cứu thời gian chạy này hoạt động tốt cho sự hiểu biết khái niệm, nhưng nó không thực sự là cách mọi thứ thường hoạt động trong thực tế.
 
-The color of a marble's bucket (aka, meta information of what scope a variable originates from) is *usually determined* during the initial compilation processing. Because lexical scope is pretty much finalized at that point, a marble's color will not change based on anything that can happen later during runtime.
+Màu của xô của viên bi (hay còn gọi là thông tin meta về phạm vi nào mà một biến bắt nguồn từ đó) *thường được xác định* trong quá trình xử lý biên dịch ban đầu. Bởi vì phạm vi từ vựng khá nhiều được hoàn thiện tại thời điểm đó, màu của viên bi sẽ không thay đổi dựa trên bất cứ điều gì có thể xảy ra sau này trong thời gian chạy.
 
-Since the marble's color is known from compilation, and it's immutable, this information would likely be stored with (or at least accessible from) each variable's entry in the AST; that information is then used explicitly by the executable instructions that constitute the program's runtime.
+Vì màu của viên bi được biết từ biên dịch, và nó bất biến, thông tin này có thể sẽ được lưu trữ với (hoặc ít nhất là có thể truy cập từ) mục nhập của mỗi biến trong AST; thông tin đó sau đó được sử dụng rõ ràng bởi các hướng dẫn thực thi tạo thành thời gian chạy của chương trình.
 
-In other words, *Engine* (from Chapter 2) doesn't need to lookup through a bunch of scopes to figure out which scope bucket a variable comes from. That information is already known! Avoiding the need for a runtime lookup is a key optimization benefit of lexical scope. The runtime operates more performantly without spending time on all these lookups.
+Nói cách khác, *Engine* (từ Chương 2) không cần tra cứu qua một loạt các phạm vi để tìm ra xô phạm vi nào mà một biến đến từ đó. Thông tin đó đã được biết! Tránh nhu cầu tra cứu thời gian chạy là một lợi ích tối ưu hóa chính của phạm vi từ vựng. Thời gian chạy hoạt động hiệu quả hơn mà không dành thời gian cho tất cả các tra cứu này.
 
-But I said "...usually determined..." just a moment ago, with respect to figuring out a marble's color during compilation. So in what case would it ever *not* be known during compilation?
+Nhưng tôi đã nói "...thường được xác định..." chỉ một lúc trước, liên quan đến việc tìm ra màu của viên bi trong quá trình biên dịch. Vậy trong trường hợp nào nó sẽ *không* được biết trong quá trình biên dịch?
 
-Consider a reference to a variable that isn't declared in any lexically available scopes in the current file—see *Get Started*, Chapter 1, which asserts that each file is its own separate program from the perspective of JS compilation. If no declaration is found, that's not *necessarily* an error. Another file (program) in the runtime may indeed declare that variable in the shared global scope.
+Hãy xem xét một tham chiếu đến một biến không được khai báo trong bất kỳ phạm vi có sẵn từ vựng nào trong tệp hiện tại—xem *Get Started*, Chương 1, khẳng định rằng mỗi tệp là chương trình riêng biệt của nó từ quan điểm biên dịch JS. Nếu không tìm thấy khai báo, điều đó không *nhất thiết* là một lỗi. Một tệp khác (chương trình) trong thời gian chạy thực sự có thể khai báo biến đó trong phạm vi toàn cục được chia sẻ.
 
-So the ultimate determination of whether the variable was ever appropriately declared in some accessible bucket may need to be deferred to the runtime.
+Vì vậy, xác định cuối cùng về việc liệu biến đã từng được khai báo đúng cách trong một số xô có thể truy cập có thể cần được hoãn lại cho thời gian chạy.
 
-Any reference to a variable that's initially *undeclared* is left as an uncolored marble during that file's compilation; this color cannot be determined until other relevant file(s) have been compiled and the application runtime commences. That deferred lookup will eventually resolve the color to whichever scope the variable is found in (likely the global scope).
+Bất kỳ tham chiếu nào đến một biến ban đầu *chưa được khai báo* được để lại như một viên bi không màu trong quá trình biên dịch tệp đó; màu này không thể được xác định cho đến khi các tệp liên quan khác đã được biên dịch và thời gian chạy ứng dụng bắt đầu. Tra cứu hoãn lại đó cuối cùng sẽ giải quyết màu thành phạm vi nào mà biến được tìm thấy (có thể là phạm vi toàn cục).
 
-However, this lookup would only be needed once per variable at most, since nothing else during runtime could later change that marble's color.
+Tuy nhiên, tra cứu này sẽ chỉ cần thiết nhiều nhất một lần cho mỗi biến, vì không có gì khác trong thời gian chạy có thể thay đổi màu của viên bi đó sau này.
 
-The "Lookup Failures" section in Chapter 2 covers what happens if a marble is ultimately still uncolored at the moment its reference is runtime executed.
+Phần "Thất Bại Tra Cứu" trong Chương 2 đề cập đến những gì xảy ra nếu một viên bi cuối cùng vẫn không có màu tại thời điểm tham chiếu của nó được thực thi thời gian chạy.
 
-## Shadowing
+## Che Khuất (Shadowing)
 
-"Shadowing" might sound mysterious and a little bit sketchy. But don't worry, it's completely legit!
+"Shadowing" có thể nghe có vẻ bí ẩn và hơi đáng ngờ. Nhưng đừng lo lắng, nó hoàn toàn hợp pháp!
 
-Our running example for these chapters uses different variable names across the scope boundaries. Since they all have unique names, in a way it wouldn't matter if all of them were just stored in one bucket (like RED(1)).
+Ví dụ đang chạy của chúng ta cho các chương này sử dụng các tên biến khác nhau qua các ranh giới phạm vi. Vì tất cả chúng đều có tên duy nhất, theo một cách nào đó sẽ không quan trọng nếu tất cả chúng chỉ được lưu trữ trong một xô (như ĐỎ(1)).
 
-Where having different lexical scope buckets starts to matter more is when you have two or more variables, each in different scopes, with the same lexical names. A single scope cannot have two or more variables with the same name; such multiple references would be assumed as just one variable.
+Nơi có các xô phạm vi từ vựng khác nhau bắt đầu quan trọng hơn là khi bạn có hai hoặc nhiều biến, mỗi biến trong các phạm vi khác nhau, với cùng tên từ vựng. Một phạm vi duy nhất không thể có hai hoặc nhiều biến có cùng tên; các tham chiếu nhiều như vậy sẽ được giả định là chỉ một biến.
 
-So if you need to maintain two or more variables of the same name, you must use separate (often nested) scopes. And in that case, it's very relevant how the different scope buckets are laid out.
+Vì vậy, nếu bạn cần duy trì hai hoặc nhiều biến có cùng tên, bạn phải sử dụng các phạm vi riêng biệt (thường là lồng nhau). Và trong trường hợp đó, cách các xô phạm vi khác nhau được bố trí rất liên quan.
 
-Consider:
+Hãy xem xét:
 
 ```js
 var studentName = "Suzy";
@@ -77,31 +77,31 @@ console.log(studentName);
 // Suzy
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| Before you move on, take some time to analyze this code using the various techniques/metaphors we've covered in the book. In particular, make sure to identify the marble/bubble colors in this snippet. It's good practice! |
+| Trước khi bạn tiếp tục, hãy dành thời gian để phân tích mã này bằng các kỹ thuật/phép ẩn dụ khác nhau mà chúng ta đã đề cập trong cuốn sách. Đặc biệt, hãy chắc chắn xác định màu bi/bong bóng trong đoạn mã này. Đó là thực hành tốt! |
 
-The `studentName` variable on line 1 (the `var studentName = ..` statement) creates a RED(1) marble. The same named variable is declared as a BLUE(2) marble on line 3, the parameter in the `printStudent(..)` function definition.
+Biến `studentName` trên dòng 1 (câu lệnh `var studentName = ..`) tạo ra một viên bi ĐỎ(1). Cùng biến có tên được khai báo là viên bi XANH DƯƠNG(2) trên dòng 3, tham số trong định nghĩa hàm `printStudent(..)`.
 
-What color marble will `studentName` be in the `studentName = studentName.toUpperCase()` assignment statement and the `console.log(studentName)` statement? All three `studentName` references will be BLUE(2).
+Viên bi `studentName` sẽ có màu gì trong câu lệnh gán `studentName = studentName.toUpperCase()` và câu lệnh `console.log(studentName)`? Cả ba tham chiếu `studentName` sẽ là XANH DƯƠNG(2).
 
-With the conceptual notion of the "lookup," we asserted that it starts with the current scope and works its way outward/upward, stopping as soon as a matching variable is found. The BLUE(2) `studentName` is found right away. The RED(1) `studentName` is never even considered.
+Với khái niệm "tra cứu", chúng ta khẳng định rằng nó bắt đầu với phạm vi hiện tại và hoạt động theo cách của nó ra ngoài/lên, dừng ngay khi tìm thấy biến khớp. `studentName` XANH DƯƠNG(2) được tìm thấy ngay lập tức. `studentName` ĐỎ(1) thậm chí không bao giờ được xem xét.
 
-This is a key aspect of lexical scope behavior, called *shadowing*. The BLUE(2) `studentName` variable (parameter) shadows the RED(1) `studentName`. So, the parameter is shadowing the (shadowed) global variable. Repeat that sentence to yourself a few times to make sure you have the terminology straight!
+Đây là một khía cạnh chính của hành vi phạm vi từ vựng, được gọi là *shadowing* (che khuất). Biến `studentName` XANH DƯƠNG(2) (tham số) che khuất `studentName` ĐỎ(1). Vì vậy, tham số đang che khuất biến toàn cục (bị che khuất). Lặp lại câu đó cho chính bạn vài lần để đảm bảo bạn có thuật ngữ đúng!
 
-That's why the re-assignment of `studentName` affects only the inner (parameter) variable: the BLUE(2) `studentName`, not the global RED(1) `studentName`.
+Đó là lý do tại sao việc gán lại `studentName` chỉ ảnh hưởng đến biến bên trong (tham số): `studentName` XANH DƯƠNG(2), không phải `studentName` toàn cục ĐỎ(1).
 
-When you choose to shadow a variable from an outer scope, one direct impact is that from that scope inward/downward (through any nested scopes) it's now impossible for any marble to be colored as the shadowed variable—(RED(1), in this case). In other words, any `studentName` identifier reference will correspond to that parameter variable, never the global `studentName` variable. It's lexically impossible to reference the global `studentName` anywhere inside of the `printStudent(..)` function (or from any nested scopes).
+Khi bạn chọn che khuất một biến từ phạm vi bên ngoài, một tác động trực tiếp là từ phạm vi đó vào trong/xuống (thông qua bất kỳ phạm vi lồng nhau nào) bây giờ không thể nào cho bất kỳ viên bi nào được tô màu như biến bị che khuất—(ĐỎ(1), trong trường hợp này). Nói cách khác, bất kỳ tham chiếu định danh `studentName` nào sẽ tương ứng với biến tham số đó, không bao giờ là biến toàn cục `studentName`. Về mặt từ vựng, không thể tham chiếu đến `studentName` toàn cục ở bất cứ đâu bên trong hàm `printStudent(..)` (hoặc từ bất kỳ phạm vi lồng nhau nào).
 
-### Global Unshadowing Trick
+### Thủ Thuật Bỏ Che Khuất Toàn Cục
 
-Please beware: leveraging the technique I'm about to describe is not very good practice, as it's limited in utility, confusing for readers of your code, and likely to invite bugs to your program. I'm covering it only because you may run across this behavior in existing programs, and understanding what's happening is critical to not getting tripped up.
+Xin lưu ý: tận dụng kỹ thuật mà tôi sắp mô tả không phải là thực hành tốt, vì nó hạn chế về tiện ích, gây nhầm lẫn cho người đọc mã của bạn, và có thể mời lỗi vào chương trình của bạn. Tôi chỉ đề cập đến nó vì bạn có thể gặp hành vi này trong các chương trình hiện có, và việc hiểu những gì đang xảy ra là rất quan trọng để không bị vấp ngã.
 
-It *is* possible to access a global variable from a scope where that variable has been shadowed, but not through a typical lexical identifier reference.
+*Có thể* truy cập một biến toàn cục từ một phạm vi nơi biến đó đã bị che khuất, nhưng không thông qua tham chiếu định danh từ vựng điển hình.
 
-In the global scope (RED(1)), `var` declarations and `function` declarations also expose themselves as properties (of the same name as the identifier) on the *global object*—essentially an object representation of the global scope. If you've written JS for a browser environment, you probably recognize the global object as `window`. That's not *entirely* accurate, but it's good enough for our discussion. In the next chapter, we'll explore the global scope/object topic more.
+Trong phạm vi toàn cục (ĐỎ(1)), các khai báo `var` và khai báo `function` cũng tự phơi bày như các thuộc tính (có cùng tên với định danh) trên *đối tượng toàn cục*—về cơ bản là một biểu diễn đối tượng của phạm vi toàn cục. Nếu bạn đã viết JS cho môi trường trình duyệt, bạn có thể nhận ra đối tượng toàn cục là `window`. Điều đó không *hoàn toàn* chính xác, nhưng nó đủ tốt cho cuộc thảo luận của chúng ta. Trong chương tiếp theo, chúng ta sẽ khám phá chủ đề phạm vi/đối tượng toàn cục nhiều hơn.
 
-Consider this program, specifically executed as a standalone .js file in a browser environment:
+Hãy xem xét chương trình này, được thực thi cụ thể như một tệp .js độc lập trong môi trường trình duyệt:
 
 ```js
 var studentName = "Suzy";
@@ -116,17 +116,17 @@ printStudent("Frank");
 // "Suzy"
 ```
 
-Notice the `window.studentName` reference? This expression is accessing the global variable `studentName` as a property on `window` (which we're pretending for now is synonymous with the global object). That's the only way to access a shadowed variable from inside a scope where the shadowing variable is present.
+Chú ý tham chiếu `window.studentName`? Biểu thức này đang truy cập biến toàn cục `studentName` như một thuộc tính trên `window` (mà chúng ta đang giả vờ bây giờ là đồng nghĩa với đối tượng toàn cục). Đó là cách duy nhất để truy cập một biến bị che khuất từ bên trong một phạm vi nơi biến che khuất có mặt.
 
-The `window.studentName` is a mirror of the global `studentName` variable, not a separate snapshot copy. Changes to one are still seen from the other, in either direction. You can think of `window.studentName` as a getter/setter that accesses the actual `studentName` variable. As a matter of fact, you can even *add* a variable to the global scope by creating/setting a property on the global object.
+`window.studentName` là một bản sao của biến toàn cục `studentName`, không phải là một bản sao ảnh chụp riêng biệt. Thay đổi đối với một vẫn được nhìn thấy từ cái kia, theo cả hai hướng. Bạn có thể nghĩ về `window.studentName` như một getter/setter truy cập biến `studentName` thực tế. Trên thực tế, bạn thậm chí có thể *thêm* một biến vào phạm vi toàn cục bằng cách tạo/thiết lập một thuộc tính trên đối tượng toàn cục.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Remember: just because you *can* doesn't mean you *should*. Don't shadow a global variable that you need to access, and conversely, avoid using this trick to access a global variable that you've shadowed. And definitely don't confuse readers of your code by creating global variables as `window` properties instead of with formal declarations! |
+| Hãy nhớ: chỉ vì bạn *có thể* không có nghĩa là bạn *nên*. Đừng che khuất một biến toàn cục mà bạn cần truy cập, và ngược lại, tránh sử dụng thủ thuật này để truy cập một biến toàn cục mà bạn đã che khuất. Và chắc chắn đừng làm bối rối người đọc mã của bạn bằng cách tạo các biến toàn cục như thuộc tính `window` thay vì với các khai báo chính thức! |
 
-This little "trick" only works for accessing a global scope variable (not a shadowed variable from a nested scope), and even then, only one that was declared with `var` or `function`.
+Thủ thuật nhỏ này chỉ hoạt động để truy cập một biến phạm vi toàn cục (không phải biến bị che khuất từ phạm vi lồng nhau), và thậm chí sau đó, chỉ một biến được khai báo với `var` hoặc `function`.
 
-Other forms of global scope declarations do not create mirrored global object properties:
+Các dạng khai báo phạm vi toàn cục khác không tạo ra các thuộc tính đối tượng toàn cục được phản chiếu:
 
 ```js
 var one = 1;
@@ -140,15 +140,15 @@ console.log(window.notTwo);    // undefined
 console.log(window.notThree);  // undefined
 ```
 
-Variables (no matter how they're declared!) that exist in any other scope than the global scope are completely inaccessible from a scope where they've been shadowed:
+Các biến (bất kể chúng được khai báo như thế nào!) tồn tại trong bất kỳ phạm vi nào khác ngoài phạm vi toàn cục hoàn toàn không thể truy cập được từ một phạm vi nơi chúng đã bị che khuất:
 
 ```js
 var special = 42;
 
 function lookingFor(special) {
-    // The identifier `special` (parameter) in this
-    // scope is shadowed inside keepLooking(), and
-    // is thus inaccessible from that scope.
+    // Định danh `special` (tham số) trong phạm vi
+    // này bị che khuất bên trong keepLooking(), và
+    // do đó không thể truy cập được từ phạm vi đó.
 
     function keepLooking() {
         var special = 3.141592;
@@ -164,11 +164,11 @@ lookingFor(112358132134);
 // 42
 ```
 
-The global RED(1) `special` is shadowed by the BLUE(2) `special` (parameter), and the BLUE(2) `special` is itself shadowed by the GREEN(3) `special` inside `keepLooking()`. We can still access the RED(1) `special` using the indirect reference `window.special`. But there's no way for `keepLooking()` to access the BLUE(2) `special` that holds the number `112358132134`.
+`special` toàn cục ĐỎ(1) bị che khuất bởi `special` XANH DƯƠNG(2) (tham số), và `special` XANH DƯƠNG(2) tự nó bị che khuất bởi `special` XANH LÁ(3) bên trong `keepLooking()`. Chúng ta vẫn có thể truy cập `special` ĐỎ(1) bằng cách sử dụng tham chiếu gián tiếp `window.special`. Nhưng không có cách nào cho `keepLooking()` truy cập `special` XANH DƯƠNG(2) chứa số `112358132134`.
 
-### Copying Is Not Accessing
+### Sao Chép Không Phải Là Truy Cập
 
-I've been asked the following "But what about...?" question dozens of times. Consider:
+Tôi đã được hỏi câu hỏi "Nhưng còn...?" sau đây hàng chục lần. Hãy xem xét:
 
 ```js
 var special = 42;
@@ -181,7 +181,7 @@ function lookingFor(special) {
     function keepLooking() {
         var special = 3.141592;
         console.log(special);
-        console.log(another.special);  // Ooo, tricky!
+        console.log(another.special);  // Ồ, tinh vi!
         console.log(window.special);
     }
 
@@ -194,24 +194,24 @@ lookingFor(112358132134);
 // 42
 ```
 
-Oh! So does this `another` object technique disprove my claim that the `special` parameter is "completely inaccessible" from inside `keepLooking()`? No, the claim is still correct.
+Ồ! Vậy kỹ thuật đối tượng `another` này có bác bỏ tuyên bố của tôi rằng tham số `special` "hoàn toàn không thể truy cập" từ bên trong `keepLooking()` không? Không, tuyên bố vẫn đúng.
 
-`special: special` is copying the value of the `special` parameter variable into another container (a property of the same name). Of course, if you put a value in another container, shadowing no longer applies (unless `another` was shadowed, too!). But that doesn't mean we're accessing the parameter `special`; it means we're accessing the copy of the value it had at that moment, by way of *another* container (object property). We cannot reassign the BLUE(2) `special` parameter to a different value from inside `keepLooking()`.
+`special: special` đang sao chép giá trị của biến tham số `special` vào một container khác (một thuộc tính có cùng tên). Tất nhiên, nếu bạn đặt một giá trị vào một container khác, shadowing không còn áp dụng (trừ khi `another` cũng bị che khuất!). Nhưng điều đó không có nghĩa là chúng ta đang truy cập tham số `special`; nó có nghĩa là chúng ta đang truy cập bản sao của giá trị mà nó có tại thời điểm đó, bằng cách *container khác* (thuộc tính đối tượng). Chúng ta không thể gán lại tham số `special` XANH DƯƠNG(2) thành một giá trị khác từ bên trong `keepLooking()`.
 
-Another "But...!?" you may be about to raise: what if I'd used objects or arrays as the values instead of the numbers (`112358132134`, etc.)? Would us having references to objects instead of copies of primitive values "fix" the inaccessibility?
+Một "Nhưng...!?" khác bạn có thể sắp nêu ra: điều gì sẽ xảy ra nếu tôi đã sử dụng các đối tượng hoặc mảng làm giá trị thay vì các số (`112358132134`, v.v.)? Liệu chúng ta có tham chiếu đến các đối tượng thay vì bản sao của các giá trị nguyên thủy "sửa" sự không thể truy cập?
 
-No. Mutating the contents of the object value via a reference copy is **not** the same thing as lexically accessing the variable itself. We still can't reassign the BLUE(2) `special` parameter.
+Không. Thay đổi nội dung của giá trị đối tượng thông qua bản sao tham chiếu **không** giống với việc truy cập từ vựng biến chính nó. Chúng ta vẫn không thể gán lại tham số `special` XANH DƯƠNG(2).
 
-### Illegal Shadowing
+### Che Khuất Bất Hợp Pháp
 
-Not all combinations of declaration shadowing are allowed. `let` can shadow `var`, but `var` cannot shadow `let`:
+Không phải tất cả các kết hợp của che khuất khai báo đều được phép. `let` có thể che khuất `var`, nhưng `var` không thể che khuất `let`:
 
 ```js
 function something() {
     var special = "JavaScript";
 
     {
-        let special = 42;   // totally fine shadowing
+        let special = 42;   // che khuất hoàn toàn tốt
 
         // ..
     }
@@ -233,13 +233,13 @@ function another() {
 }
 ```
 
-Notice in the `another()` function, the inner `var special` declaration is attempting to declare a function-wide `special`, which in and of itself is fine (as shown by the `something()` function).
+Chú ý trong hàm `another()`, khai báo `var special` bên trong đang cố gắng khai báo một `special` toàn hàm, mà bản thân nó là tốt (như được hiển thị bởi hàm `something()`).
 
-The syntax error description in this case indicates that `special` has already been defined, but that error message is a little misleading—again, no such error happens in `something()`, as shadowing is generally allowed just fine.
+Mô tả lỗi cú pháp trong trường hợp này chỉ ra rằng `special` đã được định nghĩa, nhưng thông báo lỗi đó hơi gây hiểu lầm—một lần nữa, không có lỗi như vậy xảy ra trong `something()`, vì shadowing thường được phép tốt.
 
-The real reason it's raised as a `SyntaxError` is because the `var` is basically trying to "cross the boundary" of (or hop over) the `let` declaration of the same name, which is not allowed.
+Lý do thực sự nó được nêu ra như một `SyntaxError` là vì `var` về cơ bản đang cố gắng "vượt qua ranh giới" của (hoặc nhảy qua) khai báo `let` có cùng tên, điều này không được phép.
 
-That boundary-crossing prohibition effectively stops at each function boundary, so this variant raises no exception:
+Lệnh cấm vượt ranh giới đó thực sự dừng lại ở mỗi ranh giới hàm, vì vậy biến thể này không gây ra ngoại lệ:
 
 ```js
 function another() {
@@ -249,7 +249,7 @@ function another() {
         let special = "JavaScript";
 
         ajax("https://some.url",function callback(){
-            // totally fine shadowing
+            // che khuất hoàn toàn tốt
             var special = "JavaScript";
 
             // ..
@@ -258,11 +258,11 @@ function another() {
 }
 ```
 
-Summary: `let` (in an inner scope) can always shadow an outer scope's `var`. `var` (in an inner scope) can only shadow an outer scope's `let` if there is a function boundary in between.
+Tóm tắt: `let` (trong phạm vi bên trong) luôn có thể che khuất `var` của phạm vi bên ngoài. `var` (trong phạm vi bên trong) chỉ có thể che khuất `let` của phạm vi bên ngoài nếu có ranh giới hàm ở giữa.
 
-## Function Name Scope
+## Phạm Vi Tên Hàm
 
-As you've seen by now, a `function` declaration looks like this:
+Như bạn đã thấy cho đến nay, một khai báo `function` trông như thế này:
 
 ```js
 function askQuestion() {
@@ -270,9 +270,9 @@ function askQuestion() {
 }
 ```
 
-And as discussed in Chapters 1 and 2, such a `function` declaration will create an identifier in the enclosing scope (in this case, the global scope) named `askQuestion`.
+Và như đã thảo luận trong Chương 1 và 2, một khai báo `function` như vậy sẽ tạo một định danh trong phạm vi bao quanh (trong trường hợp này, phạm vi toàn cục) có tên `askQuestion`.
 
-What about this program?
+Còn chương trình này thì sao?
 
 ```js
 var askQuestion = function(){
@@ -280,9 +280,9 @@ var askQuestion = function(){
 };
 ```
 
-The same is true for the variable `askQuestion` being created. But since it's a `function` expression—a function definition used as value instead of a standalone declaration—the function itself will not "hoist" (see Chapter 5).
+Điều tương tự cũng đúng cho biến `askQuestion` đang được tạo. Nhưng vì đó là một `function` expression—một định nghĩa hàm được sử dụng như giá trị thay vì một khai báo độc lập—bản thân hàm sẽ không "hoist" (xem Chương 5).
 
-One major difference between `function` declarations and `function` expressions is what happens to the name identifier of the function. Consider a named `function` expression:
+Một sự khác biệt lớn giữa khai báo `function` và biểu thức `function` là những gì xảy ra với định danh tên của hàm. Hãy xem xét một biểu thức `function` được đặt tên:
 
 ```js
 var askQuestion = function ofTheTeacher(){
@@ -290,7 +290,7 @@ var askQuestion = function ofTheTeacher(){
 };
 ```
 
-We know `askQuestion` ends up in the outer scope. But what about the `ofTheTeacher` identifier? For formal `function` declarations, the name identifier ends up in the outer/enclosing scope, so it may be reasonable to assume that's the case here. But `ofTheTeacher` is declared as an identifier **inside the function itself**:
+Chúng ta biết `askQuestion` kết thúc trong phạm vi bên ngoài. Nhưng còn định danh `ofTheTeacher` thì sao? Đối với khai báo `function` chính thức, định danh tên kết thúc trong phạm vi bên ngoài/bao quanh, vì vậy có thể hợp lý khi giả định đó là trường hợp ở đây. Nhưng `ofTheTeacher` được khai báo là một định danh **bên trong chính hàm**:
 
 ```js
 var askQuestion = function ofTheTeacher() {
@@ -304,11 +304,11 @@ console.log(ofTheTeacher);
 // ReferenceError: ofTheTeacher is not defined
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Actually, `ofTheTeacher` is not exactly *in the scope of the function*. Appendix A, "Implied Scopes" will explain further. |
+| Thực ra, `ofTheTeacher` không chính xác *trong phạm vi của hàm*. Phụ lục A, "Phạm Vi Ngầm Định" sẽ giải thích thêm. |
 
-Not only is `ofTheTeacher` declared inside the function rather than outside, but it's also defined as read-only:
+Không chỉ `ofTheTeacher` được khai báo bên trong hàm thay vì bên ngoài, mà nó cũng được định nghĩa là chỉ đọc:
 
 ```js
 var askQuestion = function ofTheTeacher() {
@@ -322,9 +322,9 @@ askQuestion();
 // TypeError
 ```
 
-Because we used strict-mode, the assignment failure is reported as a `TypeError`; in non-strict-mode, such an assignment fails silently with no exception.
+Bởi vì chúng ta đã sử dụng chế độ nghiêm ngặt, thất bại gán được báo cáo là một `TypeError`; trong chế độ không nghiêm ngặt, một phép gán như vậy thất bại âm thầm mà không có ngoại lệ.
 
-What about when a `function` expression has no name identifier?
+Còn khi một biểu thức `function` không có định danh tên thì sao?
 
 ```js
 var askQuestion = function(){
@@ -332,15 +332,15 @@ var askQuestion = function(){
 };
 ```
 
-A `function` expression with a name identifier is referred to as a "named function expression," but one without a name identifier is referred to as an "anonymous function expression." Anonymous function expressions clearly have no name identifier that affects either scope.
+Một biểu thức `function` với một định danh tên được gọi là "biểu thức hàm được đặt tên", nhưng một biểu thức không có định danh tên được gọi là "biểu thức hàm ẩn danh". Các biểu thức hàm ẩn danh rõ ràng không có định danh tên ảnh hưởng đến phạm vi nào.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| We'll discuss named vs. anonymous `function` expressions in much more detail, including what factors affect the decision to use one or the other, in Appendix A. |
+| Chúng ta sẽ thảo luận về các biểu thức `function` được đặt tên so với ẩn danh chi tiết hơn nhiều, bao gồm các yếu tố ảnh hưởng đến quyết định sử dụng cái này hay cái kia, trong Phụ lục A. |
 
-## Arrow Functions
+## Hàm Mũi Tên
 
-ES6 added an additional `function` expression form to the language, called "arrow functions":
+ES6 đã thêm một dạng biểu thức `function` bổ sung vào ngôn ngữ, được gọi là "hàm mũi tên":
 
 ```js
 var askQuestion = () => {
@@ -348,13 +348,13 @@ var askQuestion = () => {
 };
 ```
 
-The `=>` arrow function doesn't require the word `function` to define it. Also, the `( .. )` around the parameter list is optional in some simple cases. Likewise, the `{ .. }` around the function body is optional in some cases. And when the `{ .. }` are omitted, a return value is sent out without using a `return` keyword.
+Hàm mũi tên `=>` không yêu cầu từ `function` để định nghĩa nó. Ngoài ra, `( .. )` xung quanh danh sách tham số là tùy chọn trong một số trường hợp đơn giản. Tương tự, `{ .. }` xung quanh thân hàm là tùy chọn trong một số trường hợp. Và khi `{ .. }` bị bỏ qua, một giá trị trả về được gửi ra mà không cần sử dụng từ khóa `return`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The attractiveness of `=>` arrow functions is often sold as "shorter syntax," and that's claimed to equate to objectively more readable code. This claim is dubious at best, and I believe outright misguided. We'll dig into the "readability" of various function forms in Appendix A. |
+| Sức hấp dẫn của hàm mũi tên `=>` thường được bán như "cú pháp ngắn hơn", và điều đó được tuyên bố là tương đương với mã có thể đọc được khách quan hơn. Tuyên bố này là đáng ngờ nhất, và tôi tin rằng hoàn toàn bị sai lầm. Chúng ta sẽ đào sâu vào "khả năng đọc" của các dạng hàm khác nhau trong Phụ lục A. |
 
-Arrow functions are lexically anonymous, meaning they have no directly related identifier that references the function. The assignment to `askQuestion` creates an inferred name of "askQuestion", but that's **not the same thing as being non-anonymous**:
+Các hàm mũi tên là ẩn danh từ vựng, có nghĩa là chúng không có định danh liên quan trực tiếp tham chiếu đến hàm. Phép gán cho `askQuestion` tạo ra một tên suy luận là "askQuestion", nhưng đó **không giống với việc không ẩn danh**:
 
 ```js
 var askQuestion = () => {
@@ -364,7 +364,7 @@ var askQuestion = () => {
 askQuestion.name;   // askQuestion
 ```
 
-Arrow functions achieve their syntactic brevity at the expense of having to mentally juggle a bunch of variations for different forms/conditions. Just a few, for example:
+Các hàm mũi tên đạt được sự ngắn gọn cú pháp của chúng với chi phí phải tâm trí xử lý một loạt các biến thể cho các dạng/điều kiện khác nhau. Chỉ một vài, ví dụ:
 
 ```js
 () => 42;
@@ -378,16 +378,16 @@ id => id.toUpperCase();
 };
 ```
 
-The real reason I bring up arrow functions is because of the common but incorrect claim that arrow functions somehow behave differently with respect to lexical scope from standard `function` functions.
+Lý do thực sự tôi đưa ra các hàm mũi tên là vì tuyên bố phổ biến nhưng không chính xác rằng các hàm mũi tên bằng cách nào đó hoạt động khác nhau liên quan đến phạm vi từ vựng so với các hàm `function` tiêu chuẩn.
 
-This is incorrect.
+Điều này không chính xác.
 
-Other than being anonymous (and having no declarative form), `=>` arrow functions have the same lexical scope rules as `function` functions do. An arrow function, with or without `{ .. }` around its body, still creates a separate, inner nested bucket of scope. Variable declarations inside this nested scope bucket behave the same as in a `function` scope.
+Ngoài việc là ẩn danh (và không có dạng khai báo), các hàm mũi tên `=>` có cùng quy tắc phạm vi từ vựng như các hàm `function`. Một hàm mũi tên, có hoặc không có `{ .. }` xung quanh thân của nó, vẫn tạo ra một xô phạm vi lồng nhau, bên trong riêng biệt. Các khai báo biến bên trong xô phạm vi lồng nhau này hoạt động giống như trong phạm vi `function`.
 
-## Backing Out
+## Lùi Lại
 
-When a function (declaration or expression) is defined, a new scope is created. The positioning of scopes nested inside one another creates a natural scope hierarchy throughout the program, called the scope chain. The scope chain controls variable access, directionally oriented upward and outward.
+Khi một hàm (khai báo hoặc biểu thức) được định nghĩa, một phạm vi mới được tạo ra. Vị trí của các phạm vi lồng bên trong nhau tạo ra một hệ thống phân cấp phạm vi tự nhiên trong toàn bộ chương trình, được gọi là chuỗi phạm vi. Chuỗi phạm vi kiểm soát truy cập biến, được định hướng lên và ra ngoài.
 
-Each new scope offers a clean slate, a space to hold its own set of variables. When a variable name is repeated at different levels of the scope chain, shadowing occurs, which prevents access to the outer variable from that point inward.
+Mỗi phạm vi mới cung cấp một bảng sạch, một không gian để giữ tập hợp biến riêng của nó. Khi một tên biến được lặp lại ở các cấp độ khác nhau của chuỗi phạm vi, shadowing xảy ra, ngăn chặn truy cập vào biến bên ngoài từ điểm đó vào trong.
 
-As we step back out from these finer details, the next chapter shifts focus to the primary scope all JS programs include: the global scope.
+Khi chúng ta lùi lại từ những chi tiết tinh tế hơn này, chương tiếp theo chuyển trọng tâm sang phạm vi chính mà tất cả các chương trình JS bao gồm: phạm vi toàn cục.

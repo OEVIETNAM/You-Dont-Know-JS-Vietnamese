@@ -1,26 +1,26 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Chapter 2: Illustrating Lexical Scope
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Chương 2: Minh Họa Phạm Vi Từ Vựng
 
-In Chapter 1, we explored how scope is determined during code compilation, a model called "lexical scope." The term "lexical" refers to the first stage of compilation (lexing/parsing).
+Trong Chương 1, chúng ta đã khám phá cách phạm vi được xác định trong quá trình biên dịch mã, một mô hình được gọi là "phạm vi từ vựng". Thuật ngữ "từ vựng" đề cập đến giai đoạn đầu tiên của biên dịch (lexing/parsing).
 
-To properly *reason* about our programs, it's important to have a solid conceptual foundation of how scope works. If we rely on guesses and intuition, we may accidentally get the right answers some of the time, but many other times we're far off. This isn't a recipe for success.
+Để *suy luận* đúng về các chương trình của chúng ta, điều quan trọng là phải có một nền tảng khái niệm vững chắc về cách phạm vi hoạt động. Nếu chúng ta dựa vào phỏng đoán và trực giác, chúng ta có thể vô tình nhận được câu trả lời đúng một số lần, nhưng nhiều lần khác chúng ta lại sai lầm. Đây không phải là công thức cho thành công.
 
-Like way back in grade school math class, getting the right answer isn't enough if we don't show the correct steps to get there! We need to build accurate and helpful mental models as foundation moving forward.
+Giống như hồi lớp toán ở trường tiểu học, việc có câu trả lời đúng là chưa đủ nếu chúng ta không chỉ ra các bước chính xác để đạt được nó! Chúng ta cần xây dựng các mô hình tinh thần chính xác và hữu ích làm nền tảng để tiến về phía trước.
 
-This chapter will illustrate *scope* with several metaphors. The goal here is to *think* about how your program is handled by the JS engine in ways that more closely align with how the JS engine actually works.
+Chương này sẽ minh họa *phạm vi* với một số phép ẩn dụ. Mục tiêu ở đây là *suy nghĩ* về cách chương trình của bạn được xử lý bởi công cụ JS theo những cách gần gũi hơn với cách công cụ JS thực sự hoạt động.
 
-## Marbles, and Buckets, and Bubbles... Oh My!
+## Bi, Xô và Bong Bóng... Trời Ơi!
 
-One metaphor I've found effective in understanding scope is sorting colored marbles into buckets of their matching color.
+Một phép ẩn dụ mà tôi thấy hiệu quả trong việc hiểu phạm vi là phân loại các viên bi màu vào các xô có màu phù hợp.
 
-Imagine you come across a pile of marbles, and notice that all the marbles are colored red, blue, or green. Let's sort all the marbles, dropping the red ones into a red bucket, green into a green bucket, and blue into a blue bucket. After sorting, when you later need a green marble, you already know the green bucket is where to go to get it.
+Hãy tưởng tượng bạn bắt gặp một đống bi, và nhận thấy rằng tất cả các viên bi đều có màu đỏ, xanh dương hoặc xanh lá. Hãy phân loại tất cả các viên bi, thả những viên đỏ vào xô đỏ, xanh lá vào xô xanh lá, và xanh dương vào xô xanh dương. Sau khi phân loại, khi bạn sau này cần một viên bi xanh lá, bạn đã biết xô xanh lá là nơi để lấy nó.
 
-In this metaphor, the marbles are the variables in our program. The buckets are scopes (functions and blocks), which we just conceptually assign individual colors for our discussion purposes. The color of each marble is thus determined by which *color* scope we find the marble originally created in.
+Trong phép ẩn dụ này, các viên bi là các biến trong chương trình của chúng ta. Các xô là các phạm vi (hàm và khối), mà chúng ta chỉ gán màu riêng lẻ theo khái niệm cho mục đích thảo luận của chúng ta. Màu của mỗi viên bi do đó được xác định bởi phạm vi *màu* nào mà chúng ta tìm thấy viên bi ban đầu được tạo ra.
 
-Let's annotate the running program example from Chapter 1 with scope color labels:
+Hãy chú thích ví dụ chương trình đang chạy từ Chương 1 với các nhãn màu phạm vi:
 
 ```js
-// outer/global scope: RED
+// phạm vi ngoài cùng/toàn cục: ĐỎ
 
 var students = [
     { id: 14, name: "Kyle" },
@@ -30,10 +30,10 @@ var students = [
 ];
 
 function getStudentName(studentID) {
-    // function scope: BLUE
+    // phạm vi hàm: XANH DƯƠNG
 
     for (let student of students) {
-        // loop scope: GREEN
+        // phạm vi vòng lặp: XANH LÁ
 
         if (student.id == studentID) {
             return student.name;
@@ -45,72 +45,72 @@ var nextStudent = getStudentName(73);
 console.log(nextStudent);   // Suzy
 ```
 
-We've designated three scope colors with code comments: RED (outermost global scope), BLUE (scope of function `getStudentName(..)`), and GREEN (scope of/inside the `for` loop). But it still may be difficult to recognize the boundaries of these scope buckets when looking at a code listing.
+Chúng ta đã chỉ định ba màu phạm vi với các nhận xét mã: ĐỎ (phạm vi toàn cục ngoài cùng), XANH DƯƠNG (phạm vi của hàm `getStudentName(..)`), và XANH LÁ (phạm vi của/bên trong vòng lặp `for`). Nhưng vẫn có thể khó nhận ra ranh giới của các xô phạm vi này khi nhìn vào danh sách mã.
 
-Figure 2 helps visualize the boundaries of the scopes by drawing colored bubbles (aka, buckets) around each:
+Hình 2 giúp hình dung các ranh giới của các phạm vi bằng cách vẽ các bong bóng màu (hay còn gọi là xô) xung quanh mỗi phạm vi:
 
 <figure>
     <img src="images/fig2.png" width="500" alt="Colored Scope Bubbles" align="center">
-    <figcaption><em>Fig. 2: Colored Scope Bubbles</em></figcaption>
+    <figcaption><em>Hình 2: Bong Bóng Phạm Vi Màu</em></figcaption>
 </figure>
 
-1. **Bubble 1** (RED) encompasses the global scope, which holds three identifiers/variables: `students` (line 1), `getStudentName` (line 8), and `nextStudent` (line 16).
+1. **Bong bóng 1** (ĐỎ) bao gồm phạm vi toàn cục, chứa ba định danh/biến: `students` (dòng 1), `getStudentName` (dòng 8), và `nextStudent` (dòng 16).
 
-2. **Bubble 2** (BLUE) encompasses the scope of the function `getStudentName(..)` (line 8), which holds just one identifier/variable: the parameter `studentID` (line 8).
+2. **Bong bóng 2** (XANH DƯƠNG) bao gồm phạm vi của hàm `getStudentName(..)` (dòng 8), chỉ chứa một định danh/biến: tham số `studentID` (dòng 8).
 
-3. **Bubble 3** (GREEN) encompasses the scope of the `for`-loop (line 9), which holds just one identifier/variable: `student` (line 9).
+3. **Bong bóng 3** (XANH LÁ) bao gồm phạm vi của vòng lặp `for` (dòng 9), chỉ chứa một định danh/biến: `student` (dòng 9).
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Technically, the parameter `studentID` is not exactly in the BLUE(2) scope. We'll unwind that confusion in "Implied Scopes" in Appendix A. For now, it's close enough to label `studentID` a BLUE(2) marble. |
+| Về mặt kỹ thuật, tham số `studentID` không chính xác trong phạm vi XANH DƯƠNG(2). Chúng ta sẽ làm rõ sự nhầm lẫn đó trong "Phạm Vi Ngầm Định" trong Phụ lục A. Hiện tại, gần đúng khi gắn nhãn `studentID` là viên bi XANH DƯƠNG(2). |
 
-Scope bubbles are determined during compilation based on where the functions/blocks of scope are written, the nesting inside each other, and so on. Each scope bubble is entirely contained within its parent scope bubble—a scope is never partially in two different outer scopes.
+Các bong bóng phạm vi được xác định trong quá trình biên dịch dựa trên nơi các hàm/khối phạm vi được viết, sự lồng nhau bên trong nhau, v.v. Mỗi bong bóng phạm vi hoàn toàn được chứa trong bong bóng phạm vi cha của nó—một phạm vi không bao giờ một phần trong hai phạm vi bên ngoài khác nhau.
 
-Each marble (variable/identifier) is colored based on which bubble (bucket) it's declared in, not the color of the scope it may be accessed from (e.g., `students` on line 9 and `studentID` on line 10).
+Mỗi viên bi (biến/định danh) được tô màu dựa trên bong bóng (xô) nào nó được khai báo, không phải màu của phạm vi mà nó có thể được truy cập (ví dụ: `students` trên dòng 9 và `studentID` trên dòng 10).
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Remember we asserted in Chapter 1 that `id`, `name`, and `log` are all properties, not variables; in other words, they're not marbles in buckets, so they don't get colored based on any the rules we're discussing in this book. To understand how such property accesses are handled, see the third book in the series, *Objects & Classes*. |
+| Hãy nhớ chúng ta đã khẳng định trong Chương 1 rằng `id`, `name`, và `log` đều là thuộc tính, không phải biến; nói cách khác, chúng không phải là viên bi trong xô, vì vậy chúng không được tô màu dựa trên bất kỳ quy tắc nào mà chúng ta đang thảo luận trong cuốn sách này. Để hiểu cách các truy cập thuộc tính như vậy được xử lý, hãy xem cuốn sách thứ ba trong bộ, *Objects & Classes*. |
 
-As the JS engine processes a program (during compilation), and finds a declaration for a variable, it essentially asks, "Which *color* scope (bubble or bucket) am I currently in?" The variable is designated as that same *color*, meaning it belongs to that bucket/bubble.
+Khi công cụ JS xử lý một chương trình (trong quá trình biên dịch), và tìm thấy một khai báo cho một biến, về cơ bản nó hỏi, "Tôi hiện đang ở trong phạm vi *màu* nào (bong bóng hoặc xô)?" Biến được chỉ định là cùng *màu* đó, có nghĩa là nó thuộc về xô/bong bóng đó.
 
-The GREEN(3) bucket is wholly nested inside of the BLUE(2) bucket, and similarly the BLUE(2) bucket is wholly nested inside the RED(1) bucket. Scopes can nest inside each other as shown, to any depth of nesting as your program needs.
+Xô XANH LÁ(3) hoàn toàn lồng bên trong xô XANH DƯƠNG(2), và tương tự xô XANH DƯƠNG(2) hoàn toàn lồng bên trong xô ĐỎ(1). Các phạm vi có thể lồng nhau như được hiển thị, đến bất kỳ độ sâu lồng nhau nào mà chương trình của bạn cần.
 
-References (non-declarations) to variables/identifiers are allowed if there's a matching declaration either in the current scope, or any scope above/outside the current scope, but not with declarations from lower/nested scopes.
+Các tham chiếu (không phải khai báo) đến biến/định danh được phép nếu có một khai báo khớp trong phạm vi hiện tại, hoặc bất kỳ phạm vi nào ở trên/bên ngoài phạm vi hiện tại, nhưng không với các khai báo từ các phạm vi thấp hơn/lồng nhau.
 
-An expression in the RED(1) bucket only has access to RED(1) marbles, **not** BLUE(2) or GREEN(3). An expression in the BLUE(2) bucket can reference either BLUE(2) or RED(1) marbles, **not** GREEN(3). And an expression in the GREEN(3) bucket has access to RED(1), BLUE(2), and GREEN(3) marbles.
+Một biểu thức trong xô ĐỎ(1) chỉ có quyền truy cập vào các viên bi ĐỎ(1), **không phải** XANH DƯƠNG(2) hoặc XANH LÁ(3). Một biểu thức trong xô XANH DƯƠNG(2) có thể tham chiếu đến các viên bi XANH DƯƠNG(2) hoặc ĐỎ(1), **không phải** XANH LÁ(3). Và một biểu thức trong xô XANH LÁ(3) có quyền truy cập vào các viên bi ĐỎ(1), XANH DƯƠNG(2), và XANH LÁ(3).
 
-We can conceptualize the process of determining these non-declaration marble colors during runtime as a lookup. Since the `students` variable reference in the `for`-loop statement on line 9 is not a declaration, it has no color. So we ask the current BLUE(2) scope bucket if it has a marble matching that name. Since it doesn't, the lookup continues with the next outer/containing scope: RED(1). The RED(1) bucket has a marble of the name `students`, so the loop-statement's `students` variable reference is determined to be a RED(1) marble.
+Chúng ta có thể khái niệm hóa quá trình xác định các màu viên bi không phải khai báo này trong thời gian chạy như một tra cứu. Vì tham chiếu biến `students` trong câu lệnh vòng lặp `for` trên dòng 9 không phải là một khai báo, nó không có màu. Vì vậy, chúng ta hỏi xô phạm vi XANH DƯƠNG(2) hiện tại nếu nó có một viên bi khớp với tên đó. Vì nó không có, tra cứu tiếp tục với phạm vi bên ngoài/chứa tiếp theo: ĐỎ(1). Xô ĐỎ(1) có một viên bi có tên `students`, vì vậy tham chiếu biến `students` của câu lệnh vòng lặp được xác định là viên bi ĐỎ(1).
 
-The `if (student.id == studentID)` statement on line 10 is similarly determined to reference a GREEN(3) marble named `student` and a BLUE(2) marble `studentID`.
+Câu lệnh `if (student.id == studentID)` trên dòng 10 tương tự được xác định tham chiếu đến một viên bi XANH LÁ(3) có tên `student` và một viên bi XANH DƯƠNG(2) `studentID`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The JS engine doesn't generally determine these marble colors during runtime; the "lookup" here is a rhetorical device to help you understand the concepts. During compilation, most or all variable references will match already-known scope buckets, so their color is already determined, and stored with each marble reference to avoid unnecessary lookups as the program runs. More on this nuance in Chapter 3. |
+| Công cụ JS thường không xác định các màu viên bi này trong thời gian chạy; "tra cứu" ở đây là một thiết bị tu từ để giúp bạn hiểu các khái niệm. Trong quá trình biên dịch, hầu hết hoặc tất cả các tham chiếu biến sẽ khớp với các xô phạm vi đã biết, vì vậy màu của chúng đã được xác định, và được lưu trữ với mỗi tham chiếu viên bi để tránh tra cứu không cần thiết khi chương trình chạy. Thêm về sắc thái này trong Chương 3. |
 
-The key take-aways from marbles & buckets (and bubbles!):
+Các điểm chính từ bi & xô (và bong bóng!):
 
-* Variables are declared in specific scopes, which can be thought of as colored marbles from matching-color buckets.
+* Các biến được khai báo trong các phạm vi cụ thể, có thể được coi như các viên bi màu từ các xô có màu phù hợp.
 
-* Any variable reference that appears in the scope where it was declared, or appears in any deeper nested scopes, will be labeled a marble of that same color—unless an intervening scope "shadows" the variable declaration; see "Shadowing" in Chapter 3.
+* Bất kỳ tham chiếu biến nào xuất hiện trong phạm vi nơi nó được khai báo, hoặc xuất hiện trong bất kỳ phạm vi lồng sâu hơn nào, sẽ được gắn nhãn là viên bi có cùng màu đó—trừ khi một phạm vi can thiệp "che khuất" khai báo biến; xem "Shadowing" trong Chương 3.
 
-* The determination of colored buckets, and the marbles they contain, happens during compilation. This information is used for variable (marble color) "lookups" during code execution.
+* Việc xác định các xô màu, và các viên bi mà chúng chứa, xảy ra trong quá trình biên dịch. Thông tin này được sử dụng cho "tra cứu" biến (màu viên bi) trong quá trình thực thi mã.
 
-## A Conversation Among Friends
+## Cuộc Trò Chuyện Giữa Các Bạn Bè
 
-Another useful metaphor for the process of analyzing variables and the scopes they come from is to imagine various conversations that occur inside the engine as code is processed and then executed. We can "listen in" on these conversations to get a better conceptual foundation for how scopes work.
+Một phép ẩn dụ hữu ích khác cho quá trình phân tích các biến và các phạm vi mà chúng đến từ đó là tưởng tượng các cuộc trò chuyện khác nhau xảy ra bên trong công cụ khi mã được xử lý và sau đó được thực thi. Chúng ta có thể "lắng nghe" các cuộc trò chuyện này để có nền tảng khái niệm tốt hơn về cách các phạm vi hoạt động.
 
-Let's now meet the members of the JS engine that will have conversations as they process our program:
+Bây giờ hãy gặp các thành viên của công cụ JS sẽ có các cuộc trò chuyện khi họ xử lý chương trình của chúng ta:
 
-* *Engine*: responsible for start-to-finish compilation and execution of our JavaScript program.
+* *Engine* (Công cụ): chịu trách nhiệm biên dịch và thực thi từ đầu đến cuối chương trình JavaScript của chúng ta.
 
-* *Compiler*: one of *Engine*'s friends; handles all the dirty work of parsing and code-generation (see previous section).
+* *Compiler* (Trình biên dịch): một trong những người bạn của *Engine*; xử lý tất cả công việc bẩn của phân tích cú pháp và tạo mã (xem phần trước).
 
-* *Scope Manager*: another friend of *Engine*; collects and maintains a lookup list of all the declared variables/identifiers, and enforces a set of rules as to how these are accessible to currently executing code.
+* *Scope Manager* (Trình quản lý phạm vi): một người bạn khác của *Engine*; thu thập và duy trì danh sách tra cứu của tất cả các biến/định danh đã khai báo, và thực thi một tập hợp các quy tắc về cách chúng có thể truy cập được đối với mã đang thực thi hiện tại.
 
-For you to *fully understand* how JavaScript works, you need to begin to *think* like *Engine* (and friends) think, ask the questions they ask, and answer their questions likewise.
+Để bạn *hiểu đầy đủ* cách JavaScript hoạt động, bạn cần bắt đầu *suy nghĩ* như *Engine* (và bạn bè) suy nghĩ, đặt các câu hỏi mà họ đặt, và trả lời các câu hỏi của họ tương tự.
 
-To explore these conversations, recall again our running program example:
+Để khám phá các cuộc trò chuyện này, hãy nhớ lại một lần nữa ví dụ chương trình đang chạy của chúng ta:
 
 ```js
 var students = [
@@ -134,121 +134,121 @@ console.log(nextStudent);
 // Suzy
 ```
 
-Let's examine how JS is going to process that program, specifically starting with the first statement. The array and its contents are just basic JS value literals (and thus unaffected by any scoping concerns), so our focus here will be on the `var students = [ .. ]` declaration and initialization-assignment parts.
+Hãy kiểm tra cách JS sẽ xử lý chương trình đó, cụ thể bắt đầu với câu lệnh đầu tiên. Mảng và nội dung của nó chỉ là các giá trị literal JS cơ bản (và do đó không bị ảnh hưởng bởi bất kỳ mối quan tâm phạm vi nào), vì vậy trọng tâm của chúng ta ở đây sẽ là các phần khai báo và gán khởi tạo `var students = [ .. ]`.
 
-We typically think of that as a single statement, but that's not how our friend *Engine* sees it. In fact, JS treats these as two distinct operations, one which *Compiler* will handle during compilation, and the other which *Engine* will handle during execution.
+Chúng ta thường nghĩ về điều đó như một câu lệnh duy nhất, nhưng đó không phải là cách bạn *Engine* của chúng ta nhìn thấy nó. Trên thực tế, JS coi chúng là hai hoạt động riêng biệt, một hoạt động mà *Compiler* sẽ xử lý trong quá trình biên dịch, và hoạt động khác mà *Engine* sẽ xử lý trong quá trình thực thi.
 
-The first thing *Compiler* will do with this program is perform lexing to break it down into tokens, which it will then parse into a tree (AST).
+Điều đầu tiên *Compiler* sẽ làm với chương trình này là thực hiện lexing để chia nó thành các token, sau đó nó sẽ phân tích cú pháp thành một cây (AST).
 
-Once *Compiler* gets to code generation, there's more detail to consider than may be obvious. A reasonable assumption would be that *Compiler* will produce code for the first statement such as: "Allocate memory for a variable, label it `students`, then stick a reference to the array into that variable." But that's not the whole story.
+Khi *Compiler* đến tạo mã, có nhiều chi tiết cần xem xét hơn những gì có thể rõ ràng. Một giả định hợp lý sẽ là *Compiler* sẽ tạo mã cho câu lệnh đầu tiên như: "Phân bổ bộ nhớ cho một biến, gắn nhãn nó là `students`, sau đó gắn một tham chiếu đến mảng vào biến đó." Nhưng đó không phải là toàn bộ câu chuyện.
 
-Here's the steps *Compiler* will follow to handle that statement:
+Đây là các bước *Compiler* sẽ làm theo để xử lý câu lệnh đó:
 
-1. Encountering `var students`, *Compiler* will ask *Scope Manager* to see if a variable named `students` already exists for that particular scope bucket. If so, *Compiler* would ignore this declaration and move on. Otherwise, *Compiler* will produce code that (at execution time) asks *Scope Manager* to create a new variable called `students` in that scope bucket.
+1. Gặp `var students`, *Compiler* sẽ hỏi *Scope Manager* để xem liệu một biến có tên `students` đã tồn tại cho xô phạm vi cụ thể đó chưa. Nếu có, *Compiler* sẽ bỏ qua khai báo này và tiếp tục. Nếu không, *Compiler* sẽ tạo mã mà (tại thời điểm thực thi) yêu cầu *Scope Manager* tạo một biến mới có tên `students` trong xô phạm vi đó.
 
-2. *Compiler* then produces code for *Engine* to later execute, to handle the `students = []` assignment. The code *Engine* runs will first ask *Scope Manager* if there is a variable called `students` accessible in the current scope bucket. If not, *Engine* keeps looking elsewhere (see "Nested Scope" below). Once *Engine* finds a variable, it assigns the reference of the `[ .. ]` array to it.
+2. *Compiler* sau đó tạo mã cho *Engine* để thực thi sau này, để xử lý phép gán `students = []`. Mã *Engine* chạy trước tiên sẽ hỏi *Scope Manager* nếu có một biến có tên `students` có thể truy cập được trong xô phạm vi hiện tại. Nếu không, *Engine* tiếp tục tìm kiếm ở nơi khác (xem "Phạm Vi Lồng Nhau" bên dưới). Khi *Engine* tìm thấy một biến, nó gán tham chiếu của mảng `[ .. ]` cho nó.
 
-In conversational form, the first phase of compilation for the program might play out between *Compiler* and *Scope Manager* like this:
+Ở dạng trò chuyện, giai đoạn đầu tiên của biên dịch cho chương trình có thể diễn ra giữa *Compiler* và *Scope Manager* như thế này:
 
-> ***Compiler***: Hey, *Scope Manager* (of the global scope), I found a formal declaration for an identifier called `students`, ever heard of it?
+> ***Compiler***: Này, *Scope Manager* (của phạm vi toàn cục), tôi tìm thấy một khai báo chính thức cho một định danh có tên `students`, bạn đã nghe nói về nó chưa?
 
-> ***(Global) Scope Manager***: Nope, never heard of it, so I just created it for you.
+> ***(Global) Scope Manager***: Không, chưa bao giờ nghe nói về nó, vì vậy tôi vừa tạo nó cho bạn.
 
-> ***Compiler***: Hey, *Scope Manager*, I found a formal declaration for an identifier called `getStudentName`, ever heard of it?
+> ***Compiler***: Này, *Scope Manager*, tôi tìm thấy một khai báo chính thức cho một định danh có tên `getStudentName`, bạn đã nghe nói về nó chưa?
 
-> ***(Global) Scope Manager***: Nope, but I just created it for you.
+> ***(Global) Scope Manager***: Không, nhưng tôi vừa tạo nó cho bạn.
 
-> ***Compiler***: Hey, *Scope Manager*, `getStudentName` points to a function, so we need a new scope bucket.
+> ***Compiler***: Này, *Scope Manager*, `getStudentName` trỏ đến một hàm, vì vậy chúng ta cần một xô phạm vi mới.
 
-> ***(Function) Scope Manager***: Got it, here's the scope bucket.
+> ***(Function) Scope Manager***: Được rồi, đây là xô phạm vi.
 
-> ***Compiler***: Hey, *Scope Manager* (of the function), I found a formal parameter declaration for `studentID`, ever heard of it?
+> ***Compiler***: Này, *Scope Manager* (của hàm), tôi tìm thấy một khai báo tham số chính thức cho `studentID`, bạn đã nghe nói về nó chưa?
 
-> ***(Function) Scope Manager***: Nope, but now it's created in this scope.
+> ***(Function) Scope Manager***: Không, nhưng bây giờ nó được tạo trong phạm vi này.
 
-> ***Compiler***: Hey, *Scope Manager* (of the function), I found a `for`-loop that will need its own scope bucket.
-
-> ...
-
-The conversation is a question-and-answer exchange, where **Compiler** asks the current *Scope Manager* if an encountered identifier declaration has already been encountered. If "no," *Scope Manager* creates that variable in that scope. If the answer is "yes," then it's effectively skipped over since there's nothing more for that *Scope Manager* to do.
-
-*Compiler* also signals when it runs across functions or block scopes, so that a new scope bucket and *Scope Manager* can be instantiated.
-
-Later, when it comes to execution of the program, the conversation will shift to *Engine* and *Scope Manager*, and might play out like this:
-
-> ***Engine***: Hey, *Scope Manager* (of the global scope), before we begin, can you look up the identifier `getStudentName` so I can assign this function to it?
-
-> ***(Global) Scope Manager***: Yep, here's the variable.
-
-> ***Engine***: Hey, *Scope Manager*, I found a *target* reference for `students`, ever heard of it?
-
-> ***(Global) Scope Manager***: Yes, it was formally declared for this scope, so here it is.
-
-> ***Engine***: Thanks, I'm initializing `students` to `undefined`, so it's ready to use.
-
-> Hey, *Scope Manager* (of the global scope), I found a *target* reference for `nextStudent`, ever heard of it?
-
-> ***(Global) Scope Manager***: Yes, it was formally declared for this scope, so here it is.
-
-> ***Engine***: Thanks, I'm initializing `nextStudent` to `undefined`, so it's ready to use.
-
-> Hey, *Scope Manager* (of the global scope), I found a *source* reference for `getStudentName`, ever heard of it?
-
-> ***(Global) Scope Manager***: Yes, it was formally declared for this scope. Here it is.
-
-> ***Engine***: Great, the value in `getStudentName` is a function, so I'm going to execute it.
-
-> ***Engine***: Hey, *Scope Manager*, now we need to instantiate the function's scope.
+> ***Compiler***: Này, *Scope Manager* (của hàm), tôi tìm thấy một vòng lặp `for` sẽ cần xô phạm vi riêng của nó.
 
 > ...
 
-This conversation is another question-and-answer exchange, where *Engine* first asks the current *Scope Manager* to look up the hoisted `getStudentName` identifier, so as to associate the function with it. *Engine* then proceeds to ask *Scope Manager* about the *target* reference for `students`, and so on.
+Cuộc trò chuyện là một trao đổi hỏi-đáp, trong đó **Compiler** hỏi *Scope Manager* hiện tại nếu một khai báo định danh gặp phải đã được gặp trước đó. Nếu "không," *Scope Manager* tạo biến đó trong phạm vi đó. Nếu câu trả lời là "có," thì nó thực sự bị bỏ qua vì không có gì khác cho *Scope Manager* đó làm.
 
-To review and summarize how a statement like `var students = [ .. ]` is processed, in two distinct steps:
+*Compiler* cũng báo hiệu khi nó chạy qua các hàm hoặc phạm vi khối, để một xô phạm vi mới và *Scope Manager* có thể được khởi tạo.
 
-1. *Compiler* sets up the declaration of the scope variable (since it wasn't previously declared in the current scope).
+Sau này, khi đến thực thi chương trình, cuộc trò chuyện sẽ chuyển sang *Engine* và *Scope Manager*, và có thể diễn ra như thế này:
 
-2. While *Engine* is executing, to process the assignment part of the statement, *Engine* asks *Scope Manager* to look up the variable, initializes it to `undefined` so it's ready to use, and then assigns the array value to it.
+> ***Engine***: Này, *Scope Manager* (của phạm vi toàn cục), trước khi chúng ta bắt đầu, bạn có thể tra cứu định danh `getStudentName` để tôi có thể gán hàm này cho nó không?
 
-## Nested Scope
+> ***(Global) Scope Manager***: Vâng, đây là biến.
 
-When it comes time to execute the `getStudentName()` function, *Engine* asks for a *Scope Manager* instance for that function's scope, and it will then proceed to look up the parameter (`studentID`) to assign the `73` argument value to, and so on.
+> ***Engine***: Này, *Scope Manager*, tôi tìm thấy một tham chiếu *mục tiêu* cho `students`, bạn đã nghe nói về nó chưa?
 
-The function scope for `getStudentName(..)` is nested inside the global scope. The block scope of the `for`-loop is similarly nested inside that function scope. Scopes can be lexically nested to any arbitrary depth as the program defines.
+> ***(Global) Scope Manager***: Có, nó đã được khai báo chính thức cho phạm vi này, vì vậy đây là nó.
 
-Each scope gets its own *Scope Manager* instance each time that scope is executed (one or more times). Each scope automatically has all its identifiers registered at the start of the scope being executed (this is called "variable hoisting"; see Chapter 5).
+> ***Engine***: Cảm ơn, tôi đang khởi tạo `students` thành `undefined`, vì vậy nó sẵn sàng để sử dụng.
 
-At the beginning of a scope, if any identifier came from a `function` declaration, that variable is automatically initialized to its associated function reference. And if any identifier came from a `var` declaration (as opposed to `let`/`const`), that variable is automatically initialized to `undefined` so that it can be used; otherwise, the variable remains uninitialized (aka, in its "TDZ," see Chapter 5) and cannot be used until its full declaration-and-initialization are executed.
+> Này, *Scope Manager* (của phạm vi toàn cục), tôi tìm thấy một tham chiếu *mục tiêu* cho `nextStudent`, bạn đã nghe nói về nó chưa?
 
-In the `for (let student of students) {` statement, `students` is a *source* reference that must be looked up. But how will that lookup be handled, since the scope of the function will not find such an identifier?
+> ***(Global) Scope Manager***: Có, nó đã được khai báo chính thức cho phạm vi này, vì vậy đây là nó.
 
-To explain, let's imagine that bit of conversation playing out like this:
+> ***Engine***: Cảm ơn, tôi đang khởi tạo `nextStudent` thành `undefined`, vì vậy nó sẵn sàng để sử dụng.
 
-> ***Engine***: Hey, *Scope Manager* (for the function), I have a *source* reference for `students`, ever heard of it?
+> Này, *Scope Manager* (của phạm vi toàn cục), tôi tìm thấy một tham chiếu *nguồn* cho `getStudentName`, bạn đã nghe nói về nó chưa?
 
-> ***(Function) Scope Manager***: Nope, never heard of it. Try the next outer scope.
+> ***(Global) Scope Manager***: Có, nó đã được khai báo chính thức cho phạm vi này. Đây là nó.
 
-> ***Engine***: Hey, *Scope Manager* (for the global scope), I have a *source* reference for `students`, ever heard of it?
+> ***Engine***: Tuyệt vời, giá trị trong `getStudentName` là một hàm, vì vậy tôi sẽ thực thi nó.
 
-> ***(Global) Scope Manager***: Yep, it was formally declared, here it is.
+> ***Engine***: Này, *Scope Manager*, bây giờ chúng ta cần khởi tạo phạm vi của hàm.
 
 > ...
 
-One of the key aspects of lexical scope is that any time an identifier reference cannot be found in the current scope, the next outer scope in the nesting is consulted; that process is repeated until an answer is found or there are no more scopes to consult.
+Cuộc trò chuyện này là một trao đổi hỏi-đáp khác, trong đó *Engine* trước tiên yêu cầu *Scope Manager* hiện tại tra cứu định danh `getStudentName` được hoisted, để liên kết hàm với nó. *Engine* sau đó tiến hành hỏi *Scope Manager* về tham chiếu *mục tiêu* cho `students`, v.v.
 
-### Lookup Failures
+Để xem lại và tóm tắt cách một câu lệnh như `var students = [ .. ]` được xử lý, trong hai bước riêng biệt:
 
-When *Engine* exhausts all *lexically available* scopes (moving outward) and still cannot resolve the lookup of an identifier, an error condition then exists. However, depending on the mode of the program (strict-mode or not) and the role of the variable (i.e., *target* vs. *source*; see Chapter 1), this error condition will be handled differently.
+1. *Compiler* thiết lập khai báo của biến phạm vi (vì nó chưa được khai báo trước đó trong phạm vi hiện tại).
 
-#### Undefined Mess
+2. Trong khi *Engine* đang thực thi, để xử lý phần gán của câu lệnh, *Engine* yêu cầu *Scope Manager* tra cứu biến, khởi tạo nó thành `undefined` để nó sẵn sàng sử dụng, và sau đó gán giá trị mảng cho nó.
 
-If the variable is a *source*, an unresolved identifier lookup is considered an undeclared (unknown, missing) variable, which always results in a `ReferenceError` being thrown. Also, if the variable is a *target*, and the code at that moment is running in strict-mode, the variable is considered undeclared and similarly throws a `ReferenceError`.
+## Phạm Vi Lồng Nhau
 
-The error message for an undeclared variable condition, in most JS environments, will look like, "Reference Error: XYZ is not defined." The phrase "not defined" seems almost identical to the word "undefined," as far as the English language goes. But these two are very different in JS, and this error message unfortunately creates a persistent confusion.
+Khi đến lúc thực thi hàm `getStudentName()`, *Engine* yêu cầu một thể hiện *Scope Manager* cho phạm vi của hàm đó, và sau đó nó sẽ tiến hành tra cứu tham số (`studentID`) để gán giá trị đối số `73` cho nó, v.v.
 
-"Not defined" really means "not declared"—or, rather, "undeclared," as in a variable that has no matching formal declaration in any *lexically available* scope. By contrast, "undefined" really means a variable was found (declared), but the variable otherwise has no other value in it at the moment, so it defaults to the `undefined` value.
+Phạm vi hàm cho `getStudentName(..)` được lồng bên trong phạm vi toàn cục. Phạm vi khối của vòng lặp `for` tương tự được lồng bên trong phạm vi hàm đó. Các phạm vi có thể được lồng từ vựng đến bất kỳ độ sâu tùy ý nào mà chương trình định nghĩa.
 
-To perpetuate the confusion even further, JS's `typeof` operator returns the string `"undefined"` for variable references in either state:
+Mỗi phạm vi nhận được thể hiện *Scope Manager* riêng của nó mỗi khi phạm vi đó được thực thi (một hoặc nhiều lần). Mỗi phạm vi tự động có tất cả các định danh của nó được đăng ký ở đầu phạm vi đang được thực thi (điều này được gọi là "variable hoisting"; xem Chương 5).
+
+Ở đầu một phạm vi, nếu bất kỳ định danh nào đến từ khai báo `function`, biến đó được tự động khởi tạo thành tham chiếu hàm liên quan của nó. Và nếu bất kỳ định danh nào đến từ khai báo `var` (trái ngược với `let`/`const`), biến đó được tự động khởi tạo thành `undefined` để nó có thể được sử dụng; nếu không, biến vẫn chưa được khởi tạo (hay còn gọi là, trong "TDZ" của nó, xem Chương 5) và không thể được sử dụng cho đến khi khai báo-và-khởi tạo đầy đủ của nó được thực thi.
+
+Trong câu lệnh `for (let student of students) {`, `students` là một tham chiếu *nguồn* phải được tra cứu. Nhưng tra cứu đó sẽ được xử lý như thế nào, vì phạm vi của hàm sẽ không tìm thấy một định danh như vậy?
+
+Để giải thích, hãy tưởng tượng cuộc trò chuyện đó diễn ra như thế này:
+
+> ***Engine***: Này, *Scope Manager* (cho hàm), tôi có một tham chiếu *nguồn* cho `students`, bạn đã nghe nói về nó chưa?
+
+> ***(Function) Scope Manager***: Không, chưa bao giờ nghe nói về nó. Hãy thử phạm vi bên ngoài tiếp theo.
+
+> ***Engine***: Này, *Scope Manager* (cho phạm vi toàn cục), tôi có một tham chiếu *nguồn* cho `students`, bạn đã nghe nói về nó chưa?
+
+> ***(Global) Scope Manager***: Vâng, nó đã được khai báo chính thức, đây là nó.
+
+> ...
+
+Một trong những khía cạnh chính của phạm vi từ vựng là bất cứ khi nào một tham chiếu định danh không thể được tìm thấy trong phạm vi hiện tại, phạm vi bên ngoài tiếp theo trong lồng nhau được tham khảo; quá trình đó được lặp lại cho đến khi tìm thấy câu trả lời hoặc không còn phạm vi nào để tham khảo.
+
+### Thất Bại Tra Cứu
+
+Khi *Engine* cạn kiệt tất cả các phạm vi *có sẵn từ vựng* (di chuyển ra ngoài) và vẫn không thể giải quyết tra cứu của một định danh, một điều kiện lỗi sau đó tồn tại. Tuy nhiên, tùy thuộc vào chế độ của chương trình (chế độ nghiêm ngặt hay không) và vai trò của biến (tức là *mục tiêu* so với *nguồn*; xem Chương 1), điều kiện lỗi này sẽ được xử lý khác nhau.
+
+#### Mớ Hỗn Độn Undefined
+
+Nếu biến là *nguồn*, một tra cứu định danh không được giải quyết được coi là một biến chưa được khai báo (không biết, thiếu), luôn dẫn đến một `ReferenceError` được ném ra. Ngoài ra, nếu biến là *mục tiêu*, và mã tại thời điểm đó đang chạy trong chế độ nghiêm ngặt, biến được coi là chưa được khai báo và tương tự ném ra một `ReferenceError`.
+
+Thông báo lỗi cho một điều kiện biến chưa được khai báo, trong hầu hết các môi trường JS, sẽ trông giống như, "Reference Error: XYZ is not defined." Cụm từ "not defined" có vẻ gần như giống hệt với từ "undefined", theo ngôn ngữ tiếng Anh. Nhưng hai điều này rất khác nhau trong JS, và thông báo lỗi này thật không may tạo ra một sự nhầm lẫn dai dẳng.
+
+"Not defined" thực sự có nghĩa là "not declared" (không được khai báo)—hoặc, đúng hơn, "undeclared" (chưa được khai báo), như trong một biến không có khai báo chính thức khớp trong bất kỳ phạm vi *có sẵn từ vựng* nào. Ngược lại, "undefined" thực sự có nghĩa là một biến đã được tìm thấy (đã khai báo), nhưng biến nếu không có giá trị khác trong đó vào lúc này, vì vậy nó mặc định là giá trị `undefined`.
+
+Để làm cho sự nhầm lẫn còn lâu dài hơn nữa, toán tử `typeof` của JS trả về chuỗi `"undefined"` cho các tham chiếu biến trong cả hai trạng thái:
 
 ```js
 var studentName;
@@ -257,64 +257,64 @@ typeof studentName;     // "undefined"
 typeof doesntExist;     // "undefined"
 ```
 
-These two variable references are in very different conditions, but JS sure does muddy the waters. The terminology mess is confusing and terribly unfortunate. Unfortunately, JS developers just have to pay close attention to not mix up *which kind* of "undefined" they're dealing with!
+Hai tham chiếu biến này đang ở trong các điều kiện rất khác nhau, nhưng JS chắc chắn làm cho nước bị đục. Mớ hỗn độn thuật ngữ là khó hiểu và vô cùng đáng tiếc. Thật không may, các nhà phát triển JS chỉ phải chú ý kỹ để không nhầm lẫn *loại* "undefined" nào mà họ đang xử lý!
 
-#### Global... What!?
+#### Toàn Cục... Cái Gì!?
 
-If the variable is a *target* and strict-mode is not in effect, a confusing and surprising legacy behavior kicks in. The troublesome outcome is that the global scope's *Scope Manager* will just create an **accidental global variable** to fulfill that target assignment!
+Nếu biến là *mục tiêu* và chế độ nghiêm ngặt không có hiệu lực, một hành vi di sản khó hiểu và đáng ngạc nhiên sẽ xảy ra. Kết quả rắc rối là *Scope Manager* của phạm vi toàn cục sẽ chỉ tạo một **biến toàn cục ngẫu nhiên** để thực hiện phép gán mục tiêu đó!
 
-Consider:
+Hãy xem xét:
 
 ```js
 function getStudentName() {
-    // assignment to an undeclared variable :(
+    // gán cho một biến chưa được khai báo :(
     nextStudent = "Suzy";
 }
 
 getStudentName();
 
 console.log(nextStudent);
-// "Suzy" -- oops, an accidental-global variable!
+// "Suzy" -- rất tiếc, một biến toàn cục ngẫu nhiên!
 ```
 
-Here's how that *conversation* will proceed:
+Đây là cách *cuộc trò chuyện* đó sẽ tiến hành:
 
-> ***Engine***: Hey, *Scope Manager* (for the function), I have a *target* reference for `nextStudent`, ever heard of it?
+> ***Engine***: Này, *Scope Manager* (cho hàm), tôi có một tham chiếu *mục tiêu* cho `nextStudent`, bạn đã nghe nói về nó chưa?
 
-> ***(Function) Scope Manager***: Nope, never heard of it. Try the next outer scope.
+> ***(Function) Scope Manager***: Không, chưa bao giờ nghe nói về nó. Hãy thử phạm vi bên ngoài tiếp theo.
 
-> ***Engine***: Hey, *Scope Manager* (for the global scope), I have a *target* reference for `nextStudent`, ever heard of it?
+> ***Engine***: Này, *Scope Manager* (cho phạm vi toàn cục), tôi có một tham chiếu *mục tiêu* cho `nextStudent`, bạn đã nghe nói về nó chưa?
 
-> ***(Global) Scope Manager***: Nope, but since we're in non-strict-mode, I helped you out and just created a global variable for you, here it is!
+> ***(Global) Scope Manager***: Không, nhưng vì chúng ta đang ở chế độ không nghiêm ngặt, tôi đã giúp bạn và vừa tạo một biến toàn cục cho bạn, đây là nó!
 
-Yuck.
+Kinh tởm.
 
-This sort of accident (almost certain to lead to bugs eventually) is a great example of the beneficial protections offered by strict-mode, and why it's such a bad idea *not* to be using strict-mode. In strict-mode, the ***Global Scope Manager*** would instead have responded:
+Loại tai nạn này (gần như chắc chắn dẫn đến lỗi cuối cùng) là một ví dụ tuyệt vời về các biện pháp bảo vệ có lợi được cung cấp bởi chế độ nghiêm ngặt, và tại sao đó là một ý tưởng tồi tệ *không* sử dụng chế độ nghiêm ngặt. Trong chế độ nghiêm ngặt, ***Global Scope Manager*** thay vào đó sẽ phản hồi:
 
-> ***(Global) Scope Manager***: Nope, never heard of it. Sorry, I've got to throw a `ReferenceError`.
+> ***(Global) Scope Manager***: Không, chưa bao giờ nghe nói về nó. Xin lỗi, tôi phải ném một `ReferenceError`.
 
-Assigning to a never-declared variable *is* an error, so it's right that we would receive a `ReferenceError` here.
+Gán cho một biến chưa bao giờ được khai báo *là* một lỗi, vì vậy đúng là chúng ta sẽ nhận được một `ReferenceError` ở đây.
 
-Never rely on accidental global variables. Always use strict-mode, and always formally declare your variables. You'll then get a helpful `ReferenceError` if you ever mistakenly try to assign to a not-declared variable.
+Không bao giờ dựa vào các biến toàn cục ngẫu nhiên. Luôn sử dụng chế độ nghiêm ngặt, và luôn khai báo chính thức các biến của bạn. Sau đó, bạn sẽ nhận được một `ReferenceError` hữu ích nếu bạn từng nhầm lẫn cố gắng gán cho một biến chưa được khai báo.
 
-### Building On Metaphors
+### Xây Dựng Trên Các Phép Ẩn Dụ
 
-To visualize nested scope resolution, I prefer yet another metaphor, an office building, as in Figure 3:
+Để hình dung giải quyết phạm vi lồng nhau, tôi thích một phép ẩn dụ khác nữa, một tòa nhà văn phòng, như trong Hình 3:
 
 <figure>
     <img src="images/fig3.png" width="250" alt="Scope &quot;Building&quot;" align="center">
-    <figcaption><em>Fig. 3: Scope "Building"</em></figcaption>
+    <figcaption><em>Hình 3: "Tòa Nhà" Phạm Vi</em></figcaption>
     <br><br>
 </figure>
 
-The building represents our program's nested scope collection. The first floor of the building represents the currently executing scope. The top level of the building is the global scope.
+Tòa nhà đại diện cho bộ sưu tập phạm vi lồng nhau của chương trình của chúng ta. Tầng đầu tiên của tòa nhà đại diện cho phạm vi đang thực thi hiện tại. Tầng cao nhất của tòa nhà là phạm vi toàn cục.
 
-You resolve a *target* or *source* variable reference by first looking on the current floor, and if you don't find it, taking the elevator to the next floor (i.e., an outer scope), looking there, then the next, and so on. Once you get to the top floor (the global scope), you either find what you're looking for, or you don't. But you have to stop regardless.
+Bạn giải quyết một tham chiếu biến *mục tiêu* hoặc *nguồn* bằng cách trước tiên nhìn vào tầng hiện tại, và nếu bạn không tìm thấy nó, đi thang máy lên tầng tiếp theo (tức là một phạm vi bên ngoài), nhìn ở đó, sau đó là tầng tiếp theo, v.v. Khi bạn đến tầng cao nhất (phạm vi toàn cục), bạn hoặc tìm thấy những gì bạn đang tìm kiếm, hoặc bạn không. Nhưng bạn phải dừng lại bất kể.
 
-## Continue the Conversation
+## Tiếp Tục Cuộc Trò Chuyện
 
-By this point, you should be developing richer mental models for what scope is and how the JS engine determines and uses it from your code.
+Đến thời điểm này, bạn nên đang phát triển các mô hình tinh thần phong phú hơn về phạm vi là gì và cách công cụ JS xác định và sử dụng nó từ mã của bạn.
 
-Before *continuing*, go find some code in one of your projects and run through these conversations. Seriously, actually speak out loud. Find a friend and practice each role with them. If either of you find yourself confused or tripped up, spend more time reviewing this material.
+Trước khi *tiếp tục*, hãy tìm một số mã trong một trong các dự án của bạn và chạy qua các cuộc trò chuyện này. Nghiêm túc, thực sự nói to lên. Tìm một người bạn và thực hành từng vai trò với họ. Nếu một trong hai bạn thấy mình bối rối hoặc vấp ngã, hãy dành nhiều thời gian hơn để xem lại tài liệu này.
 
-As we move (up) to the next (outer) chapter, we'll explore how the lexical scopes of a program are connected in a chain.
+Khi chúng ta di chuyển (lên) đến chương tiếp theo (bên ngoài), chúng ta sẽ khám phá cách các phạm vi từ vựng của một chương trình được kết nối trong một chuỗi.

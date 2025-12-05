@@ -1,43 +1,43 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
-# Chapter 3: Digging to the Roots of JS
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
+# Chương 3: Đào sâu vào Cội rễ của JS
 
-If you've read Chapters 1 and 2, and taken the time to digest and percolate, you're hopefully starting to *get* JS a little more. If you skipped/skimmed them (especially Chapter 2), I recommend going back to spend some more time with that material.
+Nếu bạn đã đọc Chương 1 và 2, và dành thời gian để tiêu hóa và ngấm dần, hy vọng bạn đang bắt đầu *hiểu* JS thêm một chút. Nếu bạn đã bỏ qua/đọc lướt chúng (đặc biệt là Chương 2), tôi khuyên bạn nên quay lại để dành thêm thời gian với tài liệu đó.
 
-In Chapter 2, we surveyed syntax, patterns, and behaviors at a high level. In this chapter, our attention shifts to some of the lower-level root characteristics of JS that underpin virtually every line of code we write.
+Trong Chương 2, chúng ta đã khảo sát cú pháp, các mẫu và hành vi ở mức độ cao. Trong chương này, sự chú ý của chúng ta chuyển sang một số đặc điểm gốc rễ cấp thấp hơn của JS làm nền tảng cho hầu như mọi dòng mã chúng ta viết.
 
-Be aware: this chapter digs much deeper than you're likely used to thinking about a programming language. My goal is to help you appreciate the core of how JS works, what makes it tick. This chapter should begin to answer some of the "Why?" questions that may be cropping up as you explore JS. However, this material is still not an exhaustive exposition of the language; that's what the rest of the book series is for! Our goal here is still just to *get started*, and become more comfortable with, the *feel* of JS, how it ebbs and flows.
+Hãy lưu ý: chương này đào sâu hơn nhiều so với những gì bạn có thể quen nghĩ về một ngôn ngữ lập trình. Mục tiêu của tôi là giúp bạn đánh giá cao cốt lõi của cách JS hoạt động, điều gì làm cho nó hoạt động. Chương này sẽ bắt đầu trả lời một số câu hỏi "Tại sao?" có thể xuất hiện khi bạn khám phá JS. Tuy nhiên, tài liệu này vẫn không phải là một sự trình bày đầy đủ về ngôn ngữ; đó là những gì phần còn lại của bộ sách dành cho! Mục tiêu của chúng ta ở đây vẫn chỉ là *bắt đầu*, và trở nên thoải mái hơn với, *cảm giác* của JS, cách nó thăng trầm.
 
-Don't run so quickly through this material that you get lost in the weeds. As I've said a dozen times already, **take your time**. Even still, you'll probably finish this chapter with remaining questions. That's OK, because there's a whole book series ahead of you to keep exploring!
+Đừng chạy quá nhanh qua tài liệu này đến nỗi bạn bị lạc trong đám cỏ dại. Như tôi đã nói cả tá lần rồi, **hãy dành thời gian của bạn**. Thậm chí như vậy, bạn có thể sẽ kết thúc chương này với những câu hỏi còn lại. Điều đó là ổn, bởi vì có cả một bộ sách phía trước bạn để tiếp tục khám phá!
 
-## Iteration
+## Lặp lại (Iteration)
 
-Since programs are essentially built to process data (and make decisions on that data), the patterns used to step through the data have a big impact on the program's readability.
+Vì các chương trình về cơ bản được xây dựng để xử lý dữ liệu (và đưa ra quyết định dựa trên dữ liệu đó), các mẫu được sử dụng để bước qua dữ liệu có tác động lớn đến khả năng đọc của chương trình.
 
-The iterator pattern has been around for decades, and suggests a "standardized" approach to consuming data from a source one *chunk* at a time. The idea is that it's more common and helpful to iterate the data source—to progressively handle the collection of data by processing the first part, then the next, and so on, rather than handling the entire set all at once.
+Mẫu iterator (trình lặp) đã tồn tại trong nhiều thập kỷ, và gợi ý một cách tiếp cận "tiêu chuẩn hóa" để tiêu thụ dữ liệu từ một nguồn một *phần* tại một thời điểm. Ý tưởng là việc lặp lại nguồn dữ liệu—để xử lý dần dần tập hợp dữ liệu bằng cách xử lý phần đầu tiên, sau đó là phần tiếp theo, v.v., thay vì xử lý toàn bộ tập hợp cùng một lúc—là phổ biến và hữu ích hơn.
 
-Imagine a data structure that represents a relational database `SELECT` query, which typically organizes the results as rows. If this query had only one or a couple of rows, you could handle the entire result set at once, and assign each row to a local variable, and perform whatever operations on that data that were appropriate.
+Hãy tưởng tượng một cấu trúc dữ liệu đại diện cho một truy vấn `SELECT` cơ sở dữ liệu quan hệ, thường tổ chức kết quả thành các hàng. Nếu truy vấn này chỉ có một hoặc một vài hàng, bạn có thể xử lý toàn bộ tập hợp kết quả cùng một lúc, và gán mỗi hàng cho một biến cục bộ, và thực hiện bất kỳ thao tác nào trên dữ liệu đó là phù hợp.
 
-But if the query has 100 or 1,000 (or more!) rows, you'll need iterative processing to deal with this data (typically, a loop).
+Nhưng nếu truy vấn có 100 hoặc 1.000 (hoặc nhiều hơn!) hàng, bạn sẽ cần xử lý lặp lại để giải quyết dữ liệu này (thường là một vòng lặp).
 
-The iterator pattern defines a data structure called an "iterator" that has a reference to an underlying data source (like the query result rows), which exposes a method like `next()`. Calling `next()` returns the next piece of data (i.e., a "record" or "row" from a database query).
+Mẫu iterator định nghĩa một cấu trúc dữ liệu được gọi là "iterator" có tham chiếu đến một nguồn dữ liệu cơ bản (như các hàng kết quả truy vấn), hiển thị một phương thức như `next()`. Gọi `next()` trả về phần dữ liệu tiếp theo (tức là một "bản ghi" hoặc "hàng" từ một truy vấn cơ sở dữ liệu).
 
-You don't always know how many pieces of data that you will need to iterate through, so the pattern typically indicates completion by some special value or exception once you iterate through the entire set and *go past the end*.
+Bạn không phải lúc nào cũng biết có bao nhiêu phần dữ liệu mà bạn sẽ cần lặp qua, vì vậy mẫu thường chỉ ra sự hoàn thành bằng một số giá trị đặc biệt hoặc ngoại lệ khi bạn lặp qua toàn bộ tập hợp và *đi qua phần cuối*.
 
-The importance of the iterator pattern is in adhering to a *standard* way of processing data iteratively, which creates cleaner and easier to understand code, as opposed to having every data structure/source define its own custom way of handling its data.
+Tầm quan trọng của mẫu iterator là tuân thủ một cách *tiêu chuẩn* để xử lý dữ liệu lặp đi lặp lại, tạo ra mã sạch hơn và dễ hiểu hơn, trái ngược với việc mỗi cấu trúc/nguồn dữ liệu xác định cách tùy chỉnh riêng của nó để xử lý dữ liệu của nó.
 
-After many years of various JS community efforts around mutually agreed-upon iteration techniques, ES6 standardized a specific protocol for the iterator pattern directly in the language. The protocol defines a `next()` method whose return is an object called an *iterator result*; the object has `value` and `done` properties, where `done` is a boolean that is `false` until the iteration over the underlying data source is complete.
+Sau nhiều năm nỗ lực khác nhau của cộng đồng JS xung quanh các kỹ thuật lặp lại được thỏa thuận chung, ES6 đã tiêu chuẩn hóa một giao thức cụ thể cho mẫu iterator trực tiếp trong ngôn ngữ. Giao thức định nghĩa một phương thức `next()` có giá trị trả về là một đối tượng được gọi là *kết quả iterator*; đối tượng có các thuộc tính `value` và `done`, trong đó `done` là một boolean là `false` cho đến khi việc lặp lại trên nguồn dữ liệu cơ bản hoàn tất.
 
-### Consuming Iterators
+### Tiêu thụ Iterator
 
-With the ES6 iteration protocol in place, it's workable to consume a data source one value at a time, checking after each `next()` call for `done` to be `true` to stop the iteration. But this approach is rather manual, so ES6 also included several mechanisms (syntax and APIs) for standardized consumption of these iterators.
+Với giao thức lặp lại ES6 tại chỗ, việc tiêu thụ một nguồn dữ liệu một giá trị tại một thời điểm là khả thi, kiểm tra sau mỗi cuộc gọi `next()` để `done` là `true` để dừng việc lặp lại. Nhưng cách tiếp cận này khá thủ công, vì vậy ES6 cũng bao gồm một số cơ chế (cú pháp và API) để tiêu thụ tiêu chuẩn các iterator này.
 
-One such mechanism is the `for..of` loop:
+Một cơ chế như vậy là vòng lặp `for..of`:
 
 ```js
-// given an iterator of some data source:
+// cho một iterator của một số nguồn dữ liệu:
 var it = /* .. */;
 
-// loop over its results one at a time
+// lặp qua các kết quả của nó từng cái một
 for (let val of it) {
     console.log(`Iterator value: ${ val }`);
 }
@@ -46,48 +46,48 @@ for (let val of it) {
 // ..
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| We'll omit the manual loop equivalent here, but it's definitely less readable than the `for..of` loop! |
+| Chúng tôi sẽ bỏ qua tương đương vòng lặp thủ công ở đây, nhưng nó chắc chắn kém dễ đọc hơn vòng lặp `for..of`! |
 
-Another mechanism that's often used for consuming iterators is the `...` operator. This operator actually has two symmetrical forms: *spread* and *rest* (or *gather*, as I prefer). The *spread* form is an iterator-consumer.
+Một cơ chế khác thường được sử dụng để tiêu thụ iterator là toán tử `...`. Toán tử này thực sự có hai dạng đối xứng: *spread* (trải ra) và *rest* (hoặc *gather* (thu thập), như tôi thích hơn). Dạng *spread* là một người tiêu dùng iterator.
 
-To *spread* an iterator, you have to have *something* to spread it into. There are two possibilities in JS: an array or an argument list for a function call.
+Để *spread* một iterator, bạn phải có *thứ gì đó* để spread nó vào. Có hai khả năng trong JS: một mảng hoặc một danh sách đối số cho một cuộc gọi hàm.
 
-An array spread:
+Một spread mảng:
 
 ```js
-// spread an iterator into an array,
-// with each iterated value occupying
-// an array element position.
+// spread một iterator vào một mảng,
+// với mỗi giá trị được lặp lại chiếm
+// một vị trí phần tử mảng.
 var vals = [ ...it ];
 ```
 
-A function call spread:
+Một spread cuộc gọi hàm:
 
 ```js
-// spread an iterator into a function,
-// call with each iterated value
-// occupying an argument position.
+// spread một iterator vào một hàm,
+// gọi với mỗi giá trị được lặp lại
+// chiếm một vị trí đối số.
 doSomethingUseful( ...it );
 ```
 
-In both cases, the iterator-spread form of `...` follows the iterator-consumption protocol (the same as the `for..of` loop) to retrieve all available values from an iterator and place (aka, spread) them into the receiving context (array, argument list).
+Trong cả hai trường hợp, dạng iterator-spread của `...` tuân theo giao thức tiêu thụ iterator (giống như vòng lặp `for..of`) để lấy tất cả các giá trị có sẵn từ một iterator và đặt (hay còn gọi là, spread) chúng vào ngữ cảnh nhận (mảng, danh sách đối số).
 
 ### Iterables
 
-The iterator-consumption protocol is technically defined for consuming *iterables*; an iterable is a value that can be iterated over.
+Giao thức tiêu thụ iterator được định nghĩa kỹ thuật để tiêu thụ *iterables*; một iterable là một giá trị có thể được lặp lại.
 
-The protocol automatically creates an iterator instance from an iterable, and consumes *just that iterator instance* to its completion. This means a single iterable could be consumed more than once; each time, a new iterator instance would be created and used.
+Giao thức tự động tạo một thể hiện iterator từ một iterable, và tiêu thụ *chỉ thể hiện iterator đó* cho đến khi hoàn thành. Điều này có nghĩa là một iterable duy nhất có thể được tiêu thụ nhiều lần; mỗi lần, một thể hiện iterator mới sẽ được tạo và sử dụng.
 
-So where do we find iterables?
+Vậy chúng ta tìm iterables ở đâu?
 
-ES6 defined the basic data structure/collection types in JS as iterables. This includes strings, arrays, maps, sets, and others.
+ES6 đã định nghĩa các loại cấu trúc dữ liệu/tập hợp cơ bản trong JS là iterables. Điều này bao gồm chuỗi, mảng, map, set, và những thứ khác.
 
-Consider:
+Hãy xem xét:
 
 ```js
-// an array is an iterable
+// một mảng là một iterable
 var arr = [ 10, 20, 30 ];
 
 for (let val of arr) {
@@ -98,13 +98,13 @@ for (let val of arr) {
 // Array value: 30
 ```
 
-Since arrays are iterables, we can shallow-copy an array using iterator consumption via the `...` spread operator:
+Vì mảng là iterables, chúng ta có thể sao chép nông (shallow-copy) một mảng bằng cách sử dụng tiêu thụ iterator thông qua toán tử spread `...`:
 
 ```js
 var arrCopy = [ ...arr ];
 ```
 
-We can also iterate the characters in a string one at a time:
+Chúng ta cũng có thể lặp lại các ký tự trong một chuỗi từng cái một:
 
 ```js
 var greeting = "Hello world!";
@@ -115,12 +115,12 @@ chars;
 //   "w", "o", "r", "l", "d", "!" ]
 ```
 
-A `Map` data structure uses objects as keys, associating a value (of any type) with that object. Maps have a different default iteration than seen here, in that the iteration is not just over the map's values but instead its *entries*. An *entry* is a tuple (2-element array) including both a key and a value.
+Một cấu trúc dữ liệu `Map` sử dụng các đối tượng làm khóa, liên kết một giá trị (của bất kỳ loại nào) với đối tượng đó. Map có một lần lặp mặc định khác so với những gì thấy ở đây, ở chỗ việc lặp lại không chỉ qua các giá trị của map mà thay vào đó là các *mục* (entries) của nó. Một *mục* là một tuple (mảng 2 phần tử) bao gồm cả khóa và giá trị.
 
-Consider:
+Hãy xem xét:
 
 ```js
-// given two DOM elements, `btn1` and `btn2`
+// cho hai phần tử DOM, `btn1` và `btn2`
 
 var buttonNames = new Map();
 buttonNames.set(btn1,"Button 1");
@@ -133,9 +133,9 @@ for (let [btn,btnName] of buttonNames) {
 }
 ```
 
-In the `for..of` loop over the default map iteration, we use the `[btn,btnName]` syntax (called "array destructuring") to break down each consumed tuple into the respective key/value pairs (`btn1` / `"Button 1"` and `btn2` / `"Button 2"`).
+Trong vòng lặp `for..of` qua lần lặp map mặc định, chúng ta sử dụng cú pháp `[btn,btnName]` (được gọi là "phân rã mảng" - array destructuring) để chia nhỏ mỗi tuple được tiêu thụ thành các cặp khóa/giá trị tương ứng (`btn1` / `"Button 1"` và `btn2` / `"Button 2"`).
 
-Each of the built-in iterables in JS expose a default iteration, one which likely matches your intuition. But you can also choose a more specific iteration if necessary. For example, if we want to consume only the values of the above `buttonNames` map, we can call `values()` to get a values-only iterator:
+Mỗi iterable tích hợp trong JS hiển thị một lần lặp mặc định, một lần lặp có khả năng phù hợp với trực giác của bạn. Nhưng bạn cũng có thể chọn một lần lặp cụ thể hơn nếu cần thiết. Ví dụ, nếu chúng ta chỉ muốn tiêu thụ các giá trị của map `buttonNames` ở trên, chúng ta có thể gọi `values()` để lấy một iterator chỉ có giá trị:
 
 ```js
 for (let btnName of buttonNames.values()) {
@@ -145,7 +145,7 @@ for (let btnName of buttonNames.values()) {
 // Button 2
 ```
 
-Or if we want the index *and* value in an array iteration, we can make an entries iterator with the `entries()` method:
+Hoặc nếu chúng ta muốn chỉ mục *và* giá trị trong một lần lặp mảng, chúng ta có thể tạo một iterator mục với phương thức `entries()`:
 
 ```js
 var arr = [ 10, 20, 30 ];
@@ -158,29 +158,29 @@ for (let [idx,val] of arr.entries()) {
 // [2]: 30
 ```
 
-For the most part, all built-in iterables in JS have three iterator forms available: keys-only (`keys()`), values-only (`values()`), and entries (`entries()`).
+Phần lớn, tất cả các iterable tích hợp trong JS đều có sẵn ba dạng iterator: chỉ khóa (`keys()`), chỉ giá trị (`values()`), và mục (`entries()`).
 
-Beyond just using built-in iterables, you can also ensure your own data structures adhere to the iteration protocol; doing so means you opt into the ability to consume your data with `for..of` loops and the `...` operator. "Standardizing" on this protocol means code that is overall more readily recognizable and readable.
+Ngoài việc chỉ sử dụng các iterable tích hợp, bạn cũng có thể đảm bảo các cấu trúc dữ liệu của riêng mình tuân thủ giao thức lặp lại; làm như vậy có nghĩa là bạn chọn tham gia vào khả năng tiêu thụ dữ liệu của mình bằng các vòng lặp `for..of` và toán tử `...`. "Tiêu chuẩn hóa" trên giao thức này có nghĩa là mã tổng thể dễ nhận biết và dễ đọc hơn.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| You may have noticed a nuanced shift that occurred in this discussion. We started by talking about consuming **iterators**, but then switched to talking about iterating over **iterables**. The iteration-consumption protocol expects an *iterable*, but the reason we can provide a direct *iterator* is that an iterator is just an iterable of itself! When creating an iterator instance from an existing iterator, the iterator itself is returned. |
+| Bạn có thể đã nhận thấy một sự thay đổi sắc thái xảy ra trong cuộc thảo luận này. Chúng ta bắt đầu bằng cách nói về việc tiêu thụ **iterators**, nhưng sau đó chuyển sang nói về việc lặp lại qua **iterables**. Giao thức tiêu thụ lặp lại mong đợi một *iterable*, nhưng lý do chúng ta có thể cung cấp một *iterator* trực tiếp là vì một iterator chỉ là một iterable của chính nó! Khi tạo một thể hiện iterator từ một iterator hiện có, chính iterator đó được trả về. |
 
 ## Closure
 
-Perhaps without realizing it, almost every JS developer has made use of closure. In fact, closure is one of the most pervasive programming functionalities across a majority of languages. It might even be as important to understand as variables or loops; that's how fundamental it is.
+Có lẽ không nhận ra điều đó, hầu như mọi nhà phát triển JS đều đã sử dụng closure. Trên thực tế, closure là một trong những chức năng lập trình phổ biến nhất trên phần lớn các ngôn ngữ. Nó thậm chí có thể quan trọng để hiểu như các biến hoặc vòng lặp; đó là mức độ cơ bản của nó.
 
-Yet it feels kind of hidden, almost magical. And it's often talked about in either very abstract or very informal terms, which does little to help us nail down exactly what it is.
+Tuy nhiên, nó cảm thấy hơi ẩn, gần như kỳ diệu. Và nó thường được nói đến trong các thuật ngữ rất trừu tượng hoặc rất không chính thức, điều này không giúp ích nhiều cho chúng ta trong việc xác định chính xác nó là gì.
 
-We need to be able to recognize where closure is used in programs, as the presence or lack of closure is sometimes the cause of bugs (or even the cause of performance issues).
+Chúng ta cần có khả năng nhận ra nơi closure được sử dụng trong các chương trình, vì sự hiện diện hoặc thiếu closure đôi khi là nguyên nhân gây ra lỗi (hoặc thậm chí là nguyên nhân gây ra các vấn đề về hiệu suất).
 
-So let's define closure in a pragmatic and concrete way:
+Vì vậy, hãy định nghĩa closure theo một cách thực dụng và cụ thể:
 
-> Closure is when a function remembers and continues to access variables from outside its scope, even when the function is executed in a different scope.
+> Closure là khi một hàm ghi nhớ và tiếp tục truy cập các biến từ bên ngoài phạm vi của nó, ngay cả khi hàm được thực thi trong một phạm vi khác.
 
-We see two definitional characteristics here. First, closure is part of the nature of a function. Objects don't get closures, functions do. Second, to observe a closure, you must execute a function in a different scope than where that function was originally defined.
+Chúng ta thấy hai đặc điểm định nghĩa ở đây. Thứ nhất, closure là một phần của bản chất của một hàm. Các đối tượng không có closure, các hàm có. Thứ hai, để quan sát một closure, bạn phải thực thi một hàm trong một phạm vi khác với nơi hàm đó được định nghĩa ban đầu.
 
-Consider:
+Hãy xem xét:
 
 ```js
 function greeting(msg) {
@@ -202,11 +202,11 @@ howdy("Grant");
 // Howdy, Grant!
 ```
 
-First, the `greeting(..)` outer function is executed, creating an instance of the inner function `who(..)`; that function closes over the variable `msg`, which is the parameter from the outer scope of `greeting(..)`. When that inner function is returned, its reference is assigned to the `hello` variable in the outer scope. Then we call `greeting(..)` a second time, creating a new inner function instance, with a new closure over a new `msg`, and return that reference to be assigned to `howdy`.
+Đầu tiên, hàm bên ngoài `greeting(..)` được thực thi, tạo ra một thể hiện của hàm bên trong `who(..)`; hàm đó đóng trên biến `msg`, là tham số từ phạm vi bên ngoài của `greeting(..)`. Khi hàm bên trong đó được trả về, tham chiếu của nó được gán cho biến `hello` trong phạm vi bên ngoài. Sau đó, chúng ta gọi `greeting(..)` lần thứ hai, tạo ra một thể hiện hàm bên trong mới, với một closure mới trên một `msg` mới, và trả về tham chiếu đó để được gán cho `howdy`.
 
-When the `greeting(..)` function finishes running, normally we would expect all of its variables to be garbage collected (removed from memory). We'd expect each `msg` to go away, but they don't. The reason is closure. Since the inner function instances are still alive (assigned to `hello` and `howdy`, respectively), their closures are still preserving the `msg` variables.
+Khi hàm `greeting(..)` chạy xong, thông thường chúng ta sẽ mong đợi tất cả các biến của nó được thu gom rác (xóa khỏi bộ nhớ). Chúng ta mong đợi mỗi `msg` sẽ biến mất, nhưng chúng không. Lý do là closure. Vì các thể hiện hàm bên trong vẫn còn sống (được gán cho `hello` và `howdy`, tương ứng), các closure của chúng vẫn đang bảo tồn các biến `msg`.
 
-These closures are not a snapshot of the `msg` variable's value; they are a direct link and preservation of the variable itself. That means closure can actually observe (or make!) updates to these variables over time.
+Các closure này không phải là ảnh chụp nhanh giá trị của biến `msg`; chúng là một liên kết trực tiếp và bảo tồn chính biến đó. Điều đó có nghĩa là closure thực sự có thể quan sát (hoặc thực hiện!) các cập nhật cho các biến này theo thời gian.
 
 ```js
 function counter(step = 1) {
@@ -228,9 +228,9 @@ incBy3();       // 6
 incBy3();       // 9
 ```
 
-Each instance of the inner `increaseCount()` function is closed over both the `count` and `step` variables from its outer `counter(..)` function's scope. `step` remains the same over time, but `count` is updated on each invocation of that inner function. Since closure is over the variables and not just snapshots of the values, these updates are preserved.
+Mỗi thể hiện của hàm bên trong `increaseCount()` được đóng trên cả hai biến `count` và `step` từ phạm vi của hàm bên ngoài `counter(..)` của nó. `step` vẫn giữ nguyên theo thời gian, nhưng `count` được cập nhật trên mỗi lần gọi hàm bên trong đó. Vì closure là trên các biến và không chỉ là ảnh chụp nhanh của các giá trị, các cập nhật này được bảo tồn.
 
-Closure is most common when working with asynchronous code, such as with callbacks. Consider:
+Closure phổ biến nhất khi làm việc với mã không đồng bộ, chẳng hạn như với callbacks. Hãy xem xét:
 
 ```js
 function getSomeData(url) {
@@ -245,9 +245,9 @@ getSomeData("https://some.url/wherever");
 // Response (from https://some.url/wherever): ...
 ```
 
-The inner function `onResponse(..)` is closed over `url`, and thus preserves and remembers it until the Ajax call returns and executes `onResponse(..)`. Even though `getSomeData(..)` finishes right away, the `url` parameter variable is kept alive in the closure for as long as needed.
+Hàm bên trong `onResponse(..)` được đóng trên `url`, và do đó bảo tồn và ghi nhớ nó cho đến khi cuộc gọi Ajax trả về và thực thi `onResponse(..)`. Mặc dù `getSomeData(..)` kết thúc ngay lập tức, biến tham số `url` được giữ sống trong closure miễn là cần thiết.
 
-It's not necessary that the outer scope be a function—it usually is, but not always—just that there be at least one variable in an outer scope accessed from an inner function:
+Không nhất thiết phạm vi bên ngoài phải là một hàm—nó thường là vậy, nhưng không phải lúc nào cũng vậy—chỉ cần có ít nhất một biến trong một phạm vi bên ngoài được truy cập từ một hàm bên trong:
 
 ```js
 for (let [idx,btn] of buttons.entries()) {
@@ -257,27 +257,27 @@ for (let [idx,btn] of buttons.entries()) {
 }
 ```
 
-Because this loop is using `let` declarations, each iteration gets new block-scoped (aka, local) `idx` and `btn` variables;  the loop also creates a new inner `onClick(..)` function each time. That inner function closes over `idx`, preserving it for as long as the click handler is set on the `btn`. So when each button is clicked, its handler can print its associated index value, because the handler remembers its respective `idx` variable.
+Vì vòng lặp này đang sử dụng khai báo `let`, mỗi lần lặp nhận được các biến `idx` và `btn` phạm vi khối (hay còn gọi là, cục bộ) mới; vòng lặp cũng tạo ra một hàm `onClick(..)` bên trong mới mỗi lần. Hàm bên trong đó đóng trên `idx`, bảo tồn nó miễn là trình xử lý nhấp chuột được đặt trên `btn`. Vì vậy, khi mỗi nút được nhấp, trình xử lý của nó có thể in giá trị chỉ mục liên quan của nó, bởi vì trình xử lý ghi nhớ biến `idx` tương ứng của nó.
 
-Remember: this closure is not over the value (like `1` or `3`), but over the variable `idx` itself.
+Hãy nhớ: closure này không phải trên giá trị (như `1` hoặc `3`), mà trên chính biến `idx`.
 
-Closure is one of the most prevalent and important programming patterns in any language. But that's especially true of JS; it's hard to imagine doing anything useful without leveraging closure in one way or another.
+Closure là một trong những mẫu lập trình phổ biến và quan trọng nhất trong bất kỳ ngôn ngữ nào. Nhưng điều đó đặc biệt đúng với JS; thật khó để tưởng tượng làm bất cứ điều gì hữu ích mà không tận dụng closure theo cách này hay cách khác.
 
-If you're still feeling unclear or shaky about closure, the majority of Book 2, *Scope & Closures* is focused on the topic.
+Nếu bạn vẫn cảm thấy không rõ ràng hoặc lung lay về closure, phần lớn Cuốn 2, *Phạm vi & Closures* tập trung vào chủ đề này.
 
-## `this` Keyword
+## Từ khóa `this`
 
-One of JS's most powerful mechanisms is also one of its most misunderstood: the `this` keyword. One common misconception is that a function's `this` refers to the function itself. Because of how `this` works in other languages, another misconception is that `this` points the instance that a method belongs to. Both are incorrect.
+Một trong những cơ chế mạnh mẽ nhất của JS cũng là một trong những cơ chế bị hiểu lầm nhiều nhất: từ khóa `this`. Một quan niệm sai lầm phổ biến là `this` của một hàm đề cập đến chính hàm đó. Do cách `this` hoạt động trong các ngôn ngữ khác, một quan niệm sai lầm khác là `this` trỏ đến thể hiện mà một phương thức thuộc về. Cả hai đều không chính xác.
 
-As discussed previously, when a function is defined, it is *attached* to its enclosing scope via closure. Scope is the set of rules that controls how references to variables are resolved.
+Như đã thảo luận trước đây, khi một hàm được định nghĩa, nó được *gắn* vào phạm vi bao quanh của nó thông qua closure. Phạm vi là tập hợp các quy tắc kiểm soát cách các tham chiếu đến các biến được giải quyết.
 
-But functions also have another characteristic besides their scope that influences what they can access. This characteristic is best described as an *execution context*, and it's exposed to the function via its `this` keyword.
+Nhưng các hàm cũng có một đặc điểm khác ngoài phạm vi của chúng ảnh hưởng đến những gì chúng có thể truy cập. Đặc điểm này được mô tả tốt nhất là một *ngữ cảnh thực thi* (execution context), và nó được hiển thị cho hàm thông qua từ khóa `this` của nó.
 
-Scope is static and contains a fixed set of variables available at the moment and location you define a function, but a function's execution *context* is dynamic, entirely dependent on **how it is called** (regardless of where it is defined or even called from).
+Phạm vi là tĩnh và chứa một tập hợp cố định các biến có sẵn tại thời điểm và vị trí bạn định nghĩa một hàm, nhưng *ngữ cảnh* thực thi của một hàm là động, hoàn toàn phụ thuộc vào **cách nó được gọi** (bất kể nó được định nghĩa ở đâu hoặc thậm chí được gọi từ đâu).
 
-`this` is not a fixed characteristic of a function based on the function's definition, but rather a dynamic characteristic that's determined each time the function is called.
+`this` không phải là một đặc điểm cố định của một hàm dựa trên định nghĩa của hàm, mà là một đặc điểm động được xác định mỗi khi hàm được gọi.
 
-One way to think about the *execution context* is that it's a tangible object whose properties are made available to a function while it executes. Compare that to scope, which can also be thought of as an *object*; except, the *scope object* is hidden inside the JS engine, it's always the same for that function, and its *properties* take the form of identifier variables available inside the function.
+Một cách để nghĩ về *ngữ cảnh thực thi* là nó là một đối tượng hữu hình có các thuộc tính được cung cấp cho một hàm trong khi nó thực thi. So sánh điều đó với phạm vi, cũng có thể được coi là một *đối tượng*; ngoại trừ, *đối tượng phạm vi* được ẩn bên trong công cụ JS, nó luôn giống nhau cho hàm đó, và các *thuộc tính* của nó có dạng các biến định danh có sẵn bên trong hàm.
 
 ```js
 function classroom(teacher) {
@@ -290,24 +290,24 @@ function classroom(teacher) {
 var assignment = classroom("Kyle");
 ```
 
-The outer `classroom(..)` function makes no reference to a `this` keyword, so it's just like any other function we've seen so far. But the inner `study()` function does reference `this`, which makes it a `this`-aware function. In other words, it's a function that is dependent on its *execution context*.
+Hàm bên ngoài `classroom(..)` không tham chiếu đến từ khóa `this`, vì vậy nó giống như bất kỳ hàm nào khác mà chúng ta đã thấy cho đến nay. Nhưng hàm bên trong `study()` có tham chiếu đến `this`, điều này làm cho nó trở thành một hàm nhận biết `this`. Nói cách khác, nó là một hàm phụ thuộc vào *ngữ cảnh thực thi* của nó.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| `study()` is also closed over the `teacher` variable from its outer scope. |
+| `study()` cũng được đóng trên biến `teacher` từ phạm vi bên ngoài của nó. |
 
-The inner `study()` function returned by `classroom("Kyle")` is assigned to a variable called `assignment`. So how can `assignment()` (aka `study()`) be called?
+Hàm bên trong `study()` được trả về bởi `classroom("Kyle")` được gán cho một biến gọi là `assignment`. Vậy `assignment()` (hay còn gọi là `study()`) có thể được gọi như thế nào?
 
 ```js
 assignment();
 // Kyle says to study undefined  -- Oops :(
 ```
 
-In this snippet, we call `assignment()` as a plain, normal function, without providing it any *execution context*.
+Trong đoạn mã này, chúng ta gọi `assignment()` như một hàm bình thường, đơn giản, mà không cung cấp cho nó bất kỳ *ngữ cảnh thực thi* nào.
 
-Since this program is not in strict mode (see Chapter 1, "Strictly Speaking"), context-aware functions that are called **without any context specified** default the context to the global object (`window` in the browser). As there is no global variable named `topic` (and thus no such property on the global object), `this.topic` resolves to `undefined`.
+Vì chương trình này không ở chế độ nghiêm ngặt (xem Chương 1, "Nói một cách nghiêm túc"), các hàm nhận biết ngữ cảnh được gọi **mà không có bất kỳ ngữ cảnh nào được chỉ định** mặc định ngữ cảnh là đối tượng toàn cục (`window` trong trình duyệt). Vì không có biến toàn cục nào có tên `topic` (và do đó không có thuộc tính nào như vậy trên đối tượng toàn cục), `this.topic` giải quyết thành `undefined`.
 
-Now consider:
+Bây giờ hãy xem xét:
 
 ```js
 var homework = {
@@ -319,9 +319,9 @@ homework.assignment();
 // Kyle says to study JS
 ```
 
-A copy of the `assignment` function reference is set as a property on the `homework` object, and then it's called as `homework.assignment()`. That means the `this` for that function call will be the `homework` object. Hence, `this.topic` resolves to `"JS"`.
+Một bản sao của tham chiếu hàm `assignment` được đặt làm thuộc tính trên đối tượng `homework`, và sau đó nó được gọi là `homework.assignment()`. Điều đó có nghĩa là `this` cho cuộc gọi hàm đó sẽ là đối tượng `homework`. Do đó, `this.topic` giải quyết thành `"JS"`.
 
-Lastly:
+Cuối cùng:
 
 ```js
 var otherHomework = {
@@ -332,23 +332,23 @@ assignment.call(otherHomework);
 // Kyle says to study Math
 ```
 
-A third way to invoke a function is with the `call(..)` method, which takes an object (`otherHomework` here) to use for setting the `this` reference for the function call. The property reference `this.topic` resolves to `"Math"`.
+Một cách thứ ba để gọi một hàm là với phương thức `call(..)`, phương thức này nhận một đối tượng (`otherHomework` ở đây) để sử dụng cho việc thiết lập tham chiếu `this` cho cuộc gọi hàm. Tham chiếu thuộc tính `this.topic` giải quyết thành `"Math"`.
 
-The same context-aware function invoked three different ways, gives different answers each time for what object `this` will reference.
+Cùng một hàm nhận biết ngữ cảnh được gọi theo ba cách khác nhau, đưa ra các câu trả lời khác nhau mỗi lần cho đối tượng mà `this` sẽ tham chiếu.
 
-The benefit of `this`-aware functions—and their dynamic context—is the ability to more flexibly re-use a single function with data from different objects. A function that closes over a scope can never reference a different scope or set of variables. But a function that has dynamic `this` context awareness can be quite helpful for certain tasks.
+Lợi ích của các hàm nhận biết `this`—và ngữ cảnh động của chúng—là khả năng tái sử dụng linh hoạt hơn một hàm duy nhất với dữ liệu từ các đối tượng khác nhau. Một hàm đóng trên một phạm vi không bao giờ có thể tham chiếu đến một phạm vi hoặc tập hợp các biến khác. Nhưng một hàm có nhận thức ngữ cảnh `this` động có thể khá hữu ích cho một số tác vụ nhất định.
 
-## Prototypes
+## Nguyên mẫu (Prototypes)
 
-Where `this` is a characteristic of function execution, a prototype is a characteristic of an object, and specifically resolution of a property access.
+Trong khi `this` là một đặc điểm của việc thực thi hàm, thì nguyên mẫu (prototype) là một đặc điểm của một đối tượng, và cụ thể là việc giải quyết truy cập thuộc tính.
 
-Think about a prototype as a linkage between two objects; the linkage is hidden behind the scenes, though there are ways to expose and observe it. This prototype linkage occurs when an object is created; it's linked to another object that already exists.
+Hãy nghĩ về một nguyên mẫu như một liên kết giữa hai đối tượng; liên kết này được ẩn đằng sau hậu trường, mặc dù có nhiều cách để hiển thị và quan sát nó. Liên kết nguyên mẫu này xảy ra khi một đối tượng được tạo ra; nó được liên kết với một đối tượng khác đã tồn tại.
 
-A series of objects linked together via prototypes is called the "prototype chain."
+Một chuỗi các đối tượng được liên kết với nhau thông qua các nguyên mẫu được gọi là "chuỗi nguyên mẫu" (prototype chain).
 
-The purpose of this prototype linkage (i.e., from an object B to another object A) is so that accesses against B for properties/methods that B does not have, are *delegated* to A to handle. Delegation of property/method access allows two (or more!) objects to cooperate with each other to perform a task.
+Mục đích của liên kết nguyên mẫu này (tức là, từ một đối tượng B đến một đối tượng A khác) là để các truy cập đối với B cho các thuộc tính/phương thức mà B không có, được *ủy quyền* cho A để xử lý. Việc ủy quyền truy cập thuộc tính/phương thức cho phép hai (hoặc nhiều hơn!) đối tượng hợp tác với nhau để thực hiện một tác vụ.
 
-Consider defining an object as a normal literal:
+Hãy xem xét việc định nghĩa một đối tượng như một literal bình thường:
 
 ```js
 var homework = {
@@ -356,19 +356,19 @@ var homework = {
 };
 ```
 
-The `homework` object only has a single property on it: `topic`. However, its default prototype linkage connects to the `Object.prototype` object, which has common built-in methods on it like `toString()` and `valueOf()`, among others.
+Đối tượng `homework` chỉ có một thuộc tính duy nhất trên nó: `topic`. Tuy nhiên, liên kết nguyên mẫu mặc định của nó kết nối với đối tượng `Object.prototype`, đối tượng này có các phương thức tích hợp phổ biến trên nó như `toString()` và `valueOf()`, trong số những phương thức khác.
 
-We can observe this prototype linkage *delegation* from `homework` to `Object.prototype`:
+Chúng ta có thể quan sát *sự ủy quyền* liên kết nguyên mẫu này từ `homework` đến `Object.prototype`:
 
 ```js
 homework.toString();    // [object Object]
 ```
 
-`homework.toString()` works even though `homework` doesn't have a `toString()` method defined; the delegation invokes `Object.prototype.toString()` instead.
+`homework.toString()` hoạt động ngay cả khi `homework` không có phương thức `toString()` được định nghĩa; sự ủy quyền gọi `Object.prototype.toString()` thay thế.
 
-### Object Linkage
+### Liên kết Đối tượng
 
-To define an object prototype linkage, you can create the object using the `Object.create(..)` utility:
+Để định nghĩa một liên kết nguyên mẫu đối tượng, bạn có thể tạo đối tượng bằng cách sử dụng tiện ích `Object.create(..)`:
 
 ```js
 var homework = {
@@ -380,23 +380,23 @@ var otherHomework = Object.create(homework);
 otherHomework.topic;   // "JS"
 ```
 
-The first argument to `Object.create(..)` specifies an object to link the newly created object to, and then returns the newly created (and linked!) object.
+Đối số đầu tiên cho `Object.create(..)` chỉ định một đối tượng để liên kết đối tượng mới được tạo với nó, và sau đó trả về đối tượng mới được tạo (và được liên kết!).
 
-Figure 4 shows how the three objects (`otherHomework`, `homework`, and `Object.prototype`) are linked in a prototype chain:
+Hình 4 cho thấy cách ba đối tượng (`otherHomework`, `homework`, và `Object.prototype`) được liên kết trong một chuỗi nguyên mẫu:
 
 <figure>
     <img src="images/fig4.png" width="200" alt="Prototype chain with 3 objects" align="center">
-    <figcaption><em>Fig. 4: Objects in a prototype chain</em></figcaption>
+    <figcaption><em>Hình 4: Các đối tượng trong một chuỗi nguyên mẫu</em></figcaption>
     <br><br>
 </figure>
 
-Delegation through the prototype chain only applies for accesses to lookup the value in a property. If you assign to a property of an object, that will apply directly to the object regardless of where that object is prototype linked to.
+Việc ủy quyền thông qua chuỗi nguyên mẫu chỉ áp dụng cho các truy cập để tra cứu giá trị trong một thuộc tính. Nếu bạn gán cho một thuộc tính của một đối tượng, điều đó sẽ áp dụng trực tiếp cho đối tượng bất kể đối tượng đó được liên kết nguyên mẫu ở đâu.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| `Object.create(null)` creates an object that is not prototype linked anywhere, so it's purely just a standalone object; in some circumstances, that may be preferable. |
+| `Object.create(null)` tạo ra một đối tượng không được liên kết nguyên mẫu ở bất kỳ đâu, vì vậy nó hoàn toàn chỉ là một đối tượng độc lập; trong một số trường hợp, điều đó có thể thích hợp hơn. |
 
-Consider:
+Hãy xem xét:
 
 ```js
 homework.topic;
@@ -410,30 +410,30 @@ otherHomework.topic;
 // "Math"
 
 homework.topic;
-// "JS" -- not "Math"
+// "JS" -- không phải "Math"
 ```
 
-The assignment to `topic` creates a property of that name directly on `otherHomework`; there's no effect on the `topic` property on `homework`. The next statement then accesses `otherHomework.topic`, and we see the non-delegated answer from that new property: `"Math"`.
+Việc gán cho `topic` tạo ra một thuộc tính có tên đó trực tiếp trên `otherHomework`; không có ảnh hưởng nào đến thuộc tính `topic` trên `homework`. Câu lệnh tiếp theo sau đó truy cập `otherHomework.topic`, và chúng ta thấy câu trả lời không được ủy quyền từ thuộc tính mới đó: `"Math"`.
 
-Figure 5 shows the objects/properties after the assignment that creates the `otherHomework.topic` property:
+Hình 5 cho thấy các đối tượng/thuộc tính sau khi gán tạo ra thuộc tính `otherHomework.topic`:
 
 <figure>
     <img src="images/fig5.png" width="200" alt="3 objects linked, with shadowed property" align="center">
-    <figcaption><em>Fig. 5: Shadowed property 'topic'</em></figcaption>
+    <figcaption><em>Hình 5: Thuộc tính bị che khuất 'topic'</em></figcaption>
     <br><br>
 </figure>
 
-The `topic` on `otherHomework` is "shadowing" the property of the same name on the `homework` object in the chain.
+`topic` trên `otherHomework` đang "che khuất" (shadowing) thuộc tính cùng tên trên đối tượng `homework` trong chuỗi.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Another frankly more convoluted but perhaps still more common way of creating an object with a prototype linkage is using the "prototypal class" pattern, from before `class` (see Chapter 2, "Classes") was added in ES6. We'll cover this topic in more detail in Appendix A, "Prototypal 'Classes'". |
+| Một cách khác thẳng thắn là phức tạp hơn nhưng có lẽ vẫn phổ biến hơn để tạo một đối tượng với liên kết nguyên mẫu là sử dụng mẫu "lớp nguyên mẫu" (prototypal class), từ trước khi `class` (xem Chương 2, "Lớp") được thêm vào trong ES6. Chúng ta sẽ đề cập đến chủ đề này chi tiết hơn trong Phụ lục A, "Các 'Lớp' Nguyên mẫu". |
 
-### `this` Revisited
+### `this` Xem xét lại
 
-We covered the `this` keyword earlier, but its true importance shines when considering how it powers prototype-delegated function calls. Indeed, one of the main reasons `this` supports dynamic context based on how the function is called is so that method calls on objects which delegate through the prototype chain still maintain the expected `this`.
+Chúng ta đã đề cập đến từ khóa `this` trước đó, nhưng tầm quan trọng thực sự của nó tỏa sáng khi xem xét cách nó cung cấp năng lượng cho các cuộc gọi hàm được ủy quyền nguyên mẫu. Thật vậy, một trong những lý do chính khiến `this` hỗ trợ ngữ cảnh động dựa trên cách hàm được gọi là để các cuộc gọi phương thức trên các đối tượng ủy quyền thông qua chuỗi nguyên mẫu vẫn duy trì `this` mong đợi.
 
-Consider:
+Hãy xem xét:
 
 ```js
 var homework = {
@@ -453,26 +453,26 @@ mathHomework.study();
 // Please study Math
 ```
 
-The two objects `jsHomework` and `mathHomework` each prototype link to the single `homework` object, which has the `study()` function. `jsHomework` and `mathHomework` are each given their own `topic` property (see Figure 6).
+Hai đối tượng `jsHomework` và `mathHomework` mỗi đối tượng liên kết nguyên mẫu với đối tượng `homework` duy nhất, đối tượng này có hàm `study()`. `jsHomework` và `mathHomework` mỗi đối tượng được cung cấp thuộc tính `topic` riêng của chúng (xem Hình 6).
 
 <figure>
     <img src="images/fig6.png" width="495" alt="4 objects prototype linked" align="center">
-    <figcaption><em>Fig. 6: Two objects linked to a common parent</em></figcaption>
+    <figcaption><em>Hình 6: Hai đối tượng được liên kết với một cha chung</em></figcaption>
     <br><br>
 </figure>
 
-`jsHomework.study()` delegates to `homework.study()`, but its `this` (`this.topic`) for that execution resolves to `jsHomework` because of how the function is called, so `this.topic` is `"JS"`. Similarly for `mathHomework.study()` delegating to `homework.study()` but still resolving `this` to `mathHomework`, and thus `this.topic` as `"Math"`.
+`jsHomework.study()` ủy quyền cho `homework.study()`, nhưng `this` (`this.topic`) của nó cho lần thực thi đó giải quyết thành `jsHomework` do cách hàm được gọi, vì vậy `this.topic` là `"JS"`. Tương tự đối với `mathHomework.study()` ủy quyền cho `homework.study()` nhưng vẫn giải quyết `this` thành `mathHomework`, và do đó `this.topic` là `"Math"`.
 
-The preceding code snippet would be far less useful if `this` was resolved to `homework`. Yet, in many other languages, it would seem `this` would be `homework` because the `study()` method is indeed defined on `homework`.
+Đoạn mã trước đó sẽ ít hữu ích hơn nhiều nếu `this` được giải quyết thành `homework`. Tuy nhiên, trong nhiều ngôn ngữ khác, có vẻ như `this` sẽ là `homework` vì phương thức `study()` thực sự được định nghĩa trên `homework`.
 
-Unlike many other languages, JS's `this` being dynamic is a critical component of allowing prototype delegation, and indeed `class`, to work as expected!
+Không giống như nhiều ngôn ngữ khác, `this` của JS là động là một thành phần quan trọng cho phép ủy quyền nguyên mẫu, và thực sự là `class`, hoạt động như mong đợi!
 
-## Asking "Why?"
+## Hỏi "Tại sao?"
 
-The intended take-away from this chapter is that there's a lot more to JS under the hood than is obvious from glancing at the surface.
+Điều cần rút ra từ chương này là có nhiều điều về JS dưới nắp ca-pô hơn là hiển nhiên khi nhìn lướt qua bề mặt.
 
-As you are *getting started* learning and knowing JS more closely, one of the most important skills you can practice and bolster is curiosity, and the art of asking "Why?" when you encounter something in the language.
+Khi bạn đang *bắt đầu* học và biết JS kỹ hơn, một trong những kỹ năng quan trọng nhất bạn có thể thực hành và củng cố là sự tò mò, và nghệ thuật hỏi "Tại sao?" khi bạn gặp điều gì đó trong ngôn ngữ.
 
-Even though this chapter has gone quite deep on some of the topics, many details have still been entirely skimmed over. There's much more to learn here, and the path to that starts with you asking the *right* questions of your code. Asking the right questions is a critical skill of becoming a better developer.
+Mặc dù chương này đã đi khá sâu vào một số chủ đề, nhiều chi tiết vẫn hoàn toàn bị lướt qua. Còn nhiều điều để học ở đây, và con đường đến đó bắt đầu với việc bạn đặt những câu hỏi *đúng* về mã của mình. Đặt những câu hỏi đúng là một kỹ năng quan trọng để trở thành một nhà phát triển giỏi hơn.
 
-In the final chapter of this book, we're going to briefly look at how JS is divided, as covered across the rest of the *You Don't Know JS Yet* book series. Also, don't skip Appendix B of this book, which has some practice code to review some of the main topics covered in this book.
+Trong chương cuối của cuốn sách này, chúng ta sẽ xem xét ngắn gọn cách JS được phân chia, như được đề cập trong phần còn lại của bộ sách *You Don't Know JS Yet*. Ngoài ra, đừng bỏ qua Phụ lục B của cuốn sách này, trong đó có một số mã thực hành để xem lại một số chủ đề chính được đề cập trong cuốn sách này.

@@ -1,24 +1,24 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 
 <img src="images/cover.png" width="300">
 
 -----
 
-**[Purchase ebook/PDF from Leanpub](https://leanpub.com/ydkjsy-scope-closures)**
+**[Mua ebook/PDF từ Leanpub](https://leanpub.com/ydkjsy-scope-closures)**
 
 -----
 
-[Table of Contents](toc.md)
+[Mục Lục](toc.md)
 
-* [Foreword](foreword.md) (by [Sarah Drasner](https://sarah.dev/))
-* [Preface](../preface.md)
-* [Chapter 1: What's the Scope?](ch1.md)
-* [Chapter 2: Illustrating Lexical Scope](ch2.md)
-* [Chapter 3: The Scope Chain](ch3.md)
-* [Chapter 4: Around the Global Scope](ch4.md)
-* [Chapter 5: The (Not So) Secret Lifecycle of Variables](ch5.md)
-* [Chapter 6: Limiting Scope Exposure](ch6.md)
-* [Chapter 7: Using Closures](ch7.md)
-* [Chapter 8: The Module Pattern](ch8.md)
-* [Appendix A: Exploring Further](apA.md)
-* [Appendix B: Practice](apB.md)
+* [Lời Tựa](foreword.md) (bởi [Sarah Drasner](https://sarah.dev/))
+* [Lời Nói Đầu](../preface.md)
+* [Chương 1: Phạm Vi Là Gì?](ch1.md)
+* [Chương 2: Minh Họa Phạm Vi Từ Vựng](ch2.md)
+* [Chương 3: Chuỗi Phạm Vi](ch3.md)
+* [Chương 4: Xung Quanh Phạm Vi Toàn Cục](ch4.md)
+* [Chương 5: Vòng Đời (Không Quá) Bí Mật Của Biến](ch5.md)
+* [Chương 6: Giới Hạn Phơi Bày Phạm Vi](ch6.md)
+* [Chương 7: Sử Dụng Closures](ch7.md)
+* [Chương 8: Mẫu Module](ch8.md)
+* [Phụ Lục A: Khám Phá Thêm](apA.md)
+* [Phụ Lục B: Thực Hành](apB.md)

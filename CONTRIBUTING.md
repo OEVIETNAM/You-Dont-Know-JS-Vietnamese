@@ -1,56 +1,56 @@
-# Contributing
+# Đóng góp
 
-This book series is now complete, **so in general, we're no longer open to contributions.**
+Bộ sách này hiện đã hoàn thành, **vì vậy nhìn chung, chúng tôi không còn mở cho các đóng góp nữa.**
 
-## Translations
+## Dịch thuật
 
-If you're wanting to translate these books, please keep in mind that any such translations **must be posted to this github repository, free and open, and not monetized.**
+Nếu bạn muốn dịch những cuốn sách này, hãy nhớ rằng bất kỳ bản dịch nào như vậy **phải được đăng lên kho lưu trữ github này, miễn phí và mở, và không được kiếm tiền.**
 
-Foreign translations are appreciated, but only for the 3 second edition books.
+Các bản dịch tiếng nước ngoài được đánh giá cao, nhưng chỉ dành cho 3 cuốn sách ấn bản thứ hai.
 
-**I will not be accepting any new foreign translations for previous editions.**
+**Tôi sẽ không chấp nhận bất kỳ bản dịch tiếng nước ngoài mới nào cho các ấn bản trước đó.**
 
 ----
 
-Please check these issues first:
+Vui lòng kiểm tra các vấn đề này trước:
 
 * https://github.com/getify/You-Dont-Know-JS/issues?utf8=%E2%9C%93&q=label%3A%22foreign+language+translations%22+
 * https://github.com/getify/You-Dont-Know-JS/issues/9
 * https://github.com/getify/You-Dont-Know-JS/issues/900
 * https://github.com/getify/You-Dont-Know-JS/issues/1378
 
-To summarize, the steps for a foreign language translation are:
+Tóm lại, các bước cho một bản dịch tiếng nước ngoài là:
 
-1. Fork this repo
-2. Make your own translation entirely in your fork, preferably of all six books, but at a minimum of one whole book
-3. File an issue asking for a branch to be made on our main repo, named for that [language's ISO code](http://www.lingoes.net/en/translator/langcode.htm)
-4. Once the branch is created, you can PR to merge your translated work in
-5. Once the merge is complete, I will promote you to a repository maintainer so you can manage any further translation maintenance work on your own branch of this repo
+1. Fork repo này
+2. Thực hiện bản dịch của riêng bạn hoàn toàn trong fork của bạn, tốt nhất là tất cả sáu cuốn sách, nhưng tối thiểu là một cuốn sách hoàn chỉnh
+3. Gửi một vấn đề yêu cầu tạo một nhánh trên repo chính của chúng tôi, được đặt tên theo [mã ISO của ngôn ngữ đó](http://www.lingoes.net/en/translator/langcode.htm)
+4. Sau khi nhánh được tạo, bạn có thể PR để hợp nhất công việc đã dịch của mình vào
+5. Sau khi hợp nhất hoàn tất, tôi sẽ thăng chức cho bạn thành người duy trì kho lưu trữ để bạn có thể quản lý bất kỳ công việc bảo trì bản dịch nào khác trên nhánh riêng của bạn trong repo này
 
-## Reading Experience (Chapter/Section links, etc)
+## Trải nghiệm Đọc (Liên kết Chương/Phần, v.v.)
 
-I understand that reading one long .md file, with no relative cross links to other sections/etc, is not the preferred reading experience for most of you. As such, it's totally reasonable to want to file an issue/PR to add those kinds of features.
+Tôi hiểu rằng việc đọc một tệp .md dài, không có liên kết chéo tương đối đến các phần khác/v.v., không phải là trải nghiệm đọc ưa thích của hầu hết các bạn. Như vậy, hoàn toàn hợp lý khi muốn gửi một vấn đề/PR để thêm các loại tính năng đó.
 
-This topic has been brought up many times, and I've considered it. For now, I **do not** accept these kinds of changes into the repo.
+Chủ đề này đã được đưa ra nhiều lần, và tôi đã xem xét nó. Hiện tại, tôi **không** chấp nhận những loại thay đổi này vào repo.
 
-The main purpose of my book repos is to track and manage the content for the purposes of publication (paid-for ebooks and print books). I do this in the open because I also care about providing free and early access to the content, to make sure there is no paywall barrier to learning.
+Mục đích chính của các repo sách của tôi là theo dõi và quản lý nội dung cho mục đích xuất bản (sách điện tử trả phí và sách in). Tôi làm điều này một cách công khai vì tôi cũng quan tâm đến việc cung cấp quyền truy cập miễn phí và sớm vào nội dung, để đảm bảo không có rào cản tường phí đối với việc học.
 
-As such, this repo **is not optimized for your reading experience.**
+Như vậy, repo này **không được tối ưu hóa cho trải nghiệm đọc của bạn.**
 
-The intended **best reading experience** are the published books (either ebook or print), so I encourage you to purchase them for that purpose.
+**Trải nghiệm đọc tốt nhất** dự định là các cuốn sách đã xuất bản (sách điện tử hoặc sách in), vì vậy tôi khuyến khích bạn mua chúng cho mục đích đó.
 
-## Editions
+## Các Ấn bản
 
-The current (and final) edition of the books is the 2nd edition.
+Ấn bản hiện tại (và cuối cùng) của các cuốn sách là ấn bản thứ 2.
 
-I **am not accepting any contributions** for 1st edition books, no exceptions.
+Tôi **không chấp nhận bất kỳ đóng góp nào** cho các cuốn sách ấn bản thứ 1, không có ngoại lệ.
 
-## Typos?
+## Lỗi chính tả?
 
-We're not worried about typo fixes anymore. The books are done and published.
+Chúng tôi không còn lo lắng về việc sửa lỗi chính tả nữa. Các cuốn sách đã hoàn thành và được xuất bản.
 
-## Search First!
+## Tìm kiếm Trước!
 
-Seriously, no more need for contributions.
+Nghiêm túc mà nói, không cần đóng góp thêm nữa.
 
-But, if you're going to attempt a contribution, please make sure to search the issues (both open and closed!) first.
+Nhưng, nếu bạn định cố gắng đóng góp, hãy chắc chắn tìm kiếm các vấn đề (cả mở và đóng!) trước.

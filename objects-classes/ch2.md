@@ -1,21 +1,21 @@
-# You Don't Know JS Yet: Objects & Classes - 2nd Edition
-# Chapter 2: How Objects Work
+# You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
+# Chương 2: Cách Đối tượng Hoạt động
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang trong quá trình thực hiện |
 
-Objects are not just containers for multiple values, though clearly that's the context for most interactions with objects.
+Các đối tượng không chỉ là thùng chứa cho nhiều giá trị, mặc dù rõ ràng đó là bối cảnh cho hầu hết các tương tác với các đối tượng.
 
-To fully understand the object mechanism in JS, and get the most out of using objects in our programs, we need to look more closely at a number of characteristics of objects (and their properties) which can affect their behavior when interacting with them.
+Để hiểu đầy đủ cơ chế đối tượng trong JS, và tận dụng tối đa việc sử dụng các đối tượng trong các chương trình của chúng ta, chúng ta cần xem xét kỹ hơn một số đặc điểm của các đối tượng (và các thuộc tính của chúng) có thể ảnh hưởng đến hành vi của chúng khi tương tác với chúng.
 
-These characteristics that define the underlying behavior of objects are collectively referred to in formal terms as the "metaobject protocol" (MOP)[^mop]. The MOP is useful not only for understanding how objects will behave, but also for overriding the default behaviors of objects to bend the language to fit our program's needs more fully.
+Những đặc điểm xác định hành vi cơ bản của các đối tượng được gọi chung theo thuật ngữ chính thức là "giao thức metaobject" (MOP)[^mop]. MOP hữu ích không chỉ để hiểu cách các đối tượng sẽ hành xử, mà còn để ghi đè các hành vi mặc định của các đối tượng nhằm uốn nắn ngôn ngữ để phù hợp hơn với nhu cầu của chương trình của chúng ta.
 
-## Property Descriptors
+## Mô tả Thuộc tính (Property Descriptors)
 
-Each property on an object is internally described by what's known as a "property descriptor". This is, itself, an object (aka, "metaobject") with several properties (aka "attributes") on it, dictating how the target property behaves.
+Mỗi thuộc tính trên một đối tượng được mô tả nội bộ bởi cái được gọi là "mô tả thuộc tính" (property descriptor). Bản thân nó là một đối tượng (hay còn gọi là "metaobject") với một vài thuộc tính (hay còn gọi là "thuộc tính") trên đó, quy định cách thuộc tính đích hành xử.
 
-We can retrieve a property descriptor for any existing property using `Object.getOwnPropertyDescriptor(..)` (ES5):
+Chúng ta có thể truy xuất một mô tả thuộc tính cho bất kỳ thuộc tính hiện có nào bằng cách sử dụng `Object.getOwnPropertyDescriptor(..)` (ES5):
 
 ```js
 myObj = {
@@ -33,113 +33,113 @@ Object.getOwnPropertyDescriptor(myObj,"favoriteNumber");
 // }
 ```
 
-We can even use such a descriptor to define a new property on an object, using `Object.defineProperty(..)` (ES5):
+Chúng ta thậm chí có thể sử dụng một mô tả như vậy để định nghĩa một thuộc tính mới trên một đối tượng, bằng cách sử dụng `Object.defineProperty(..)` (ES5):
 
 ```js
 anotherObj = {};
 
 Object.defineProperty(anotherObj,"fave",{
     value: 42,
-    enumerable: true,     // default if omitted
-    writable: true,       // default if omitted
-    configurable: true    // default if omitted
+    enumerable: true,     // mặc định nếu bỏ qua
+    writable: true,       // mặc định nếu bỏ qua
+    configurable: true    // mặc định nếu bỏ qua
 });
 
 anotherObj.fave;          // 42
 ```
 
-If an existing property has not already been marked as non-configurable (with `configurable: false` in its descriptor), it can always be re-defined/overwritten using `Object.defineProperty(..)`.
+Nếu một thuộc tính hiện có chưa được đánh dấu là không thể cấu hình (với `configurable: false` trong mô tả của nó), nó luôn có thể được định nghĩa lại/ghi đè bằng cách sử dụng `Object.defineProperty(..)`.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| A number of earlier sections in this chapter refer to "copying" or "duplicating" properties. One might assume such copying/duplication would be at the property descriptor level. However, none of those operations actually work that way; they all do simple `=` style access and assignment, which has the effect of ignoring any nuances in how the underlying descriptor for a property is defined. |
+| Một số phần trước trong chương này đề cập đến việc "sao chép" hoặc "nhân bản" các thuộc tính. Người ta có thể cho rằng việc sao chép/nhân bản như vậy sẽ ở cấp độ mô tả thuộc tính. Tuy nhiên, không có hoạt động nào trong số đó thực sự hoạt động theo cách đó; tất cả chúng đều thực hiện truy cập và gán kiểu `=` đơn giản, có tác dụng bỏ qua bất kỳ sắc thái nào trong cách mô tả cơ bản cho một thuộc tính được định nghĩa. |
 
-Though it seems far less common out in the wild, we can even define multiple properties at once, each with their own descriptor:
+Mặc dù có vẻ ít phổ biến hơn nhiều trong thực tế, chúng ta thậm chí có thể định nghĩa nhiều thuộc tính cùng một lúc, mỗi thuộc tính có mô tả riêng:
 
 ```js
 anotherObj = {};
 
 Object.defineProperties(anotherObj,{
     "fave": {
-        // a property descriptor
+        // một mô tả thuộc tính
     },
     "superFave": {
-        // another property descriptor
+        // một mô tả thuộc tính khác
     }
 });
 ```
 
-It's not very common to see this usage, because it's rarer that you need to specifically control the definition of multiple properties. But it may be useful in some cases.
+Không phổ biến lắm khi thấy cách sử dụng này, bởi vì hiếm khi bạn cần kiểm soát cụ thể định nghĩa của nhiều thuộc tính. Nhưng nó có thể hữu ích trong một số trường hợp.
 
-### Accessor Properties
+### Thuộc tính Accessor (Accessor Properties)
 
-A property descriptor usually defines a `value` property, as shown above. However, a special kind of property, known as an "accessor property" (aka, a getter/setter), can be defined. For these a property like this, its descriptor does not define a fixed `value` property, but would instead look something like this:
+Một mô tả thuộc tính thường định nghĩa một thuộc tính `value`, như được hiển thị ở trên. Tuy nhiên, một loại thuộc tính đặc biệt, được gọi là "thuộc tính accessor" (hay còn gọi là getter/setter), có thể được định nghĩa. Đối với một thuộc tính như thế này, mô tả của nó không định nghĩa một thuộc tính `value` cố định, mà thay vào đó sẽ trông giống như thế này:
 
 ```js
 {
-    get() { .. },    // function to invoke when retrieving the value
-    set(v) { .. },   // function to invoke when assigning the value
-    // .. enumerable, etc
+    get() { .. },    // hàm để gọi khi truy xuất giá trị
+    set(v) { .. },   // hàm để gọi khi gán giá trị
+    // .. enumerable, v.v.
 }
 ```
 
-A getter looks like a property access (`obj.prop`), but under the covers it invokes the `get()` method as defined; it's sort of like if you had called `obj.prop()`. A setter looks like a property assignment (`obj.prop = value`), but it invokes the `set(..)` method as defined; it's sort of like if you had called `obj.prop(value)`.
+Một getter trông giống như một truy cập thuộc tính (`obj.prop`), nhưng bên dưới lớp vỏ nó gọi phương thức `get()` như đã định nghĩa; nó giống như thể bạn đã gọi `obj.prop()`. Một setter trông giống như một phép gán thuộc tính (`obj.prop = value`), nhưng nó gọi phương thức `set(..)` như đã định nghĩa; nó giống như thể bạn đã gọi `obj.prop(value)`.
 
-Let's illustrate a getter/setter accessor property:
+Hãy minh họa một thuộc tính accessor getter/setter:
 
 ```js
 anotherObj = {};
 
 Object.defineProperty(anotherObj,"fave",{
-    get() { console.log("Getting 'fave' value!"); return 123; },
-    set(v) { console.log(`Ignoring ${v} assignment.`); }
+    get() { console.log("Đang lấy giá trị 'fave'!"); return 123; },
+    set(v) { console.log(`Đang bỏ qua phép gán ${v}.`); }
 });
 
 anotherObj.fave;
-// Getting 'fave' value!
+// Đang lấy giá trị 'fave'!
 // 123
 
 anotherObj.fave = 42;
-// Ignoring 42 assignment.
+// Đang bỏ qua phép gán 42.
 
 anotherObj.fave;
-// Getting 'fave' value!
+// Đang lấy giá trị 'fave'!
 // 123
 ```
 
 ### Enumerable, Writable, Configurable
 
-Besides `value` or `get()` / `set(..)`, the other 3 attributes of a property descriptor are (as shown above):
+Bên cạnh `value` hoặc `get()` / `set(..)`, 3 thuộc tính khác của một mô tả thuộc tính là (như được hiển thị ở trên):
 
 * `enumerable`
 * `writable`
 * `configurable`
 
-The `enumerable` attribute controls whether the property will appear in various enumerations of object properties, such as `Object.keys(..)`, `Object.entries(..)`, `for..in` loops, and the copying that occurs with the `...` object spread and `Object.assign(..)`. Most properties should be left enumerable, but you can mark certain special properties on an object as non-enumerable if they shouldn't be iterated/copied.
+Thuộc tính `enumerable` kiểm soát xem thuộc tính có xuất hiện trong các liệt kê khác nhau của các thuộc tính đối tượng hay không, chẳng hạn như `Object.keys(..)`, `Object.entries(..)`, vòng lặp `for..in`, và việc sao chép xảy ra với `...` object spread và `Object.assign(..)`. Hầu hết các thuộc tính nên được để là có thể liệt kê (enumerable), nhưng bạn có thể đánh dấu một số thuộc tính đặc biệt nhất định trên một đối tượng là không thể liệt kê nếu chúng không nên được lặp lại/sao chép.
 
-The `writable` attribute controls whether a `value` assignment (via `=`) is allowed. To make a property "read only", define it with `writable: false`. However, as long as the property is still configurable, `Object.defineProperty(..)` can still change the value by setting `value` differently.
+Thuộc tính `writable` kiểm soát xem một phép gán `value` (thông qua `=`) có được phép hay không. Để làm cho một thuộc tính "chỉ đọc", hãy định nghĩa nó với `writable: false`. Tuy nhiên, miễn là thuộc tính vẫn có thể cấu hình (configurable), `Object.defineProperty(..)` vẫn có thể thay đổi giá trị bằng cách đặt `value` khác đi.
 
-The `configurable` attribute controls whether a property's **descriptor** can be re-defined/overwritten. A property that's `configurable: false` is locked to its definition, and any further attempts to change it with `Object.defineProperty(..)` will fail. A non-configurable property can still be assigned new values (via `=`), as long as `writable: true` is still set on the property's descriptor.
+Thuộc tính `configurable` kiểm soát xem **mô tả** của một thuộc tính có thể được định nghĩa lại/ghi đè hay không. Một thuộc tính `configurable: false` bị khóa với định nghĩa của nó, và bất kỳ nỗ lực nào tiếp theo để thay đổi nó với `Object.defineProperty(..)` sẽ thất bại. Một thuộc tính không thể cấu hình vẫn có thể được gán các giá trị mới (thông qua `=`), miễn là `writable: true` vẫn được đặt trên mô tả của thuộc tính.
 
-## Object Sub-Types
+## Kiểu con Đối tượng (Object Sub-Types)
 
-There are a variety of specialized sub-types of objects in JS. But by far, the two most common ones you'll interact with are arrays and `function`s.
+Có nhiều loại kiểu con chuyên biệt của các đối tượng trong JS. Nhưng cho đến nay, hai loại phổ biến nhất bạn sẽ tương tác là mảng và `function` (hàm).
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| By "sub-type", we mean the notion of a derived type that has inherited the behaviors from a parent type but then specialized or extended those behaviors. In other words, values of these sub-types are fully objects, but are also *more than just* objects. |
+| Bằng "kiểu con", chúng tôi muốn nói đến khái niệm về một kiểu dẫn xuất đã kế thừa các hành vi từ một kiểu cha nhưng sau đó chuyên biệt hóa hoặc mở rộng các hành vi đó. Nói cách khác, các giá trị của các kiểu con này hoàn toàn là các đối tượng, nhưng cũng *nhiều hơn chỉ là* các đối tượng. |
 
-### Arrays
+### Mảng (Arrays)
 
-Arrays are objects that are specifically intended to be **numerically indexed**, rather than using string named property locations. They are still objects, so a named property like `favoriteNumber` is legal. But it's greatly frowned upon to mix named properties into numerically indexed arrays.
+Mảng là các đối tượng được thiết kế đặc biệt để được **lập chỉ mục bằng số**, thay vì sử dụng các vị trí thuộc tính được đặt tên bằng chuỗi. Chúng vẫn là các đối tượng, vì vậy một thuộc tính được đặt tên như `favoriteNumber` là hợp lệ. Nhưng việc trộn lẫn các thuộc tính được đặt tên vào các mảng được lập chỉ mục bằng số rất không được khuyến khích.
 
-Arrays are preferably defined with literal syntax (similar to objects), but with the `[ .. ]` square brackets rather than `{ .. }` curly brackets:
+Mảng tốt nhất là được định nghĩa với cú pháp literal (tương tự như các đối tượng), nhưng với các dấu ngoặc vuông `[ .. ]` thay vì các dấu ngoặc nhọn `{ .. }`:
 
 ```js
 myList = [ 23, 42, 109 ];
 ```
 
-JS allows any mixture of value types in arrays, including objects, other arrays, functions, etc. As you're likely already aware, arrays are "zero-indexed", meaning the first element in the array is at the index `0`, not `1`:
+JS cho phép bất kỳ sự pha trộn nào của các loại giá trị trong mảng, bao gồm các đối tượng, các mảng khác, các hàm, v.v. Như bạn có thể đã biết, các mảng được "lập chỉ mục bắt đầu từ 0", nghĩa là phần tử đầu tiên trong mảng ở chỉ mục `0`, không phải `1`:
 
 ```js
 myList = [ 23, 42, 109 ];
@@ -148,33 +148,33 @@ myList[0];      // 23
 myList[1];      // 42
 ```
 
-Recall that any string property name on an object that "looks like" an integer -- is able to be validly coerced to a numeric integer -- will actually be treated like an integer property (aka, integer index). The same goes for arrays. You should always use `42` as an integer index (aka, property name), but if you use the string `"42"`, JS will assume you meant that as an integer and do that for you.
+Hãy nhớ lại rằng bất kỳ tên thuộc tính chuỗi nào trên một đối tượng mà "trông giống như" một số nguyên -- có thể được ép kiểu hợp lệ thành một số nguyên -- thực sự sẽ được xử lý giống như một thuộc tính số nguyên (hay còn gọi là chỉ mục số nguyên). Điều tương tự cũng áp dụng cho các mảng. Bạn nên luôn sử dụng `42` làm chỉ mục số nguyên (hay còn gọi là tên thuộc tính), nhưng nếu bạn sử dụng chuỗi `"42"`, JS sẽ giả định bạn có ý đó là một số nguyên và thực hiện điều đó cho bạn.
 
 ```js
-// "2" works as an integer index here, but it's not advised
+// "2" hoạt động như một chỉ mục số nguyên ở đây, nhưng không được khuyến khích
 myList["2"];    // 109
 ```
 
-One exception to the "no named properties on arrays" *rule* is that all arrays automatically expose a `length` property, which is automatically kept updated with the "length" of the array.
+Một ngoại lệ cho *quy tắc* "không có thuộc tính được đặt tên trên mảng" là tất cả các mảng tự động hiển thị một thuộc tính `length`, thuộc tính này được tự động cập nhật với "độ dài" của mảng.
 
 ```js
 myList = [ 23, 42, 109 ];
 
 myList.length;   // 3
 
-// "push" another value onto the end of the list
+// "đẩy" một giá trị khác vào cuối danh sách
 myList.push("Hello");
 
 myList.length;   // 4
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Many JS developers incorrectly believe that array `length` is basically a *getter* (see "Accessor Properties" earlier in this chapter), but it's not. The offshoot is that these developers feel like it's "expensive" to access this property -- as if JS has to on-the-fly recompute the length -- and will thus do things like capture/store the length of an array before doing a non-mutating loop over it. This used to be "best practice" from a performance perspective. But for at least 10 years now, that's actually been an anti-pattern, because the JS engine is more efficient at managing the `length` property than our JS code is at trying to "outsmart" the engine to avoid invoking something we think is a *getter*. It's more efficient to let the JS engine do its job, and just access the property whenever and however often it's needed. |
+| Nhiều nhà phát triển JS tin tưởng sai lầm rằng `length` của mảng về cơ bản là một *getter* (xem "Thuộc tính Accessor" trước đó trong chương này), nhưng không phải vậy. Hệ quả là những nhà phát triển này cảm thấy như việc truy cập thuộc tính này là "đắt đỏ" -- như thể JS phải tính toán lại độ dài ngay lập tức -- và do đó sẽ làm những việc như nắm bắt/lưu trữ độ dài của một mảng trước khi thực hiện một vòng lặp không thay đổi trên nó. Điều này từng là "thực hành tốt nhất" từ góc độ hiệu suất. Nhưng trong ít nhất 10 năm nay, đó thực sự là một anti-pattern, bởi vì công cụ JS hiệu quả hơn trong việc quản lý thuộc tính `length` so với mã JS của chúng ta khi cố gắng "vượt mặt" công cụ để tránh gọi một cái gì đó mà chúng ta nghĩ là một *getter*. Hiệu quả hơn là để công cụ JS làm công việc của nó, và chỉ cần truy cập thuộc tính bất cứ khi nào và bao nhiêu lần cần thiết. |
 
-#### Empty Slots
+#### Các Khe Rỗng (Empty Slots)
 
-JS arrays also have a really unfortunate "flaw" in their design, referred to as "empty slots". If you assign an index of an array more than one position beyond the current end of the array, JS will leave the in between slots "empty" rather than auto-assigning them to `undefined` as you might expect:
+Các mảng JS cũng có một "khiếm khuyết" thực sự đáng tiếc trong thiết kế của chúng, được gọi là "các khe rỗng". Nếu bạn gán một chỉ mục của một mảng vượt quá một vị trí so với phần cuối hiện tại của mảng, JS sẽ để các khe ở giữa "rỗng" thay vì tự động gán chúng thành `undefined` như bạn có thể mong đợi:
 
 ```js
 myList = [ 23, 42, 109 ];
@@ -185,19 +185,19 @@ myList.length;              // 15
 
 myList;                     // [ 23, 42, 109, empty x 11, "Hello" ]
 
-// looks like a real slot with a
-// real `undefined` value in it,
-// but beware, it's a trick!
+// trông giống như một khe thực sự với một
+// giá trị `undefined` thực sự trong đó,
+// nhưng hãy coi chừng, đó là một mẹo!
 myList[9];                  // undefined
 ```
 
-You might wonder why empty slots are so bad? One reason: there are APIs in JS, like array's `map(..)`, where empty slots are surprisingly skipped over! Never, ever intentionally create empty slots in your arrays. This in undebateably one of JS's "bad parts".
+Bạn có thể tự hỏi tại sao các khe rỗng lại tệ đến vậy? Một lý do: có các API trong JS, giống như `map(..)` của mảng, nơi các khe rỗng bị bỏ qua một cách đáng ngạc nhiên! Đừng bao giờ, đừng bao giờ cố ý tạo các khe rỗng trong các mảng của bạn. Điều này không thể tranh cãi là một trong những "phần tồi tệ" của JS.
 
-### Functions
+### Hàm (Functions)
 
-I don't have much specifically to say about functions here, other than to point out that they are also sub-object-types. This means that in addition to being executable, they can also have named properties added to or accessed from them.
+Tôi không có nhiều điều cụ thể để nói về các hàm ở đây, ngoài việc chỉ ra rằng chúng cũng là các kiểu đối tượng con. Điều này có nghĩa là ngoài việc có thể thực thi, chúng cũng có thể có các thuộc tính được đặt tên được thêm vào hoặc truy cập từ chúng.
 
-Functions have two pre-defined properties you may find yourself interacting with, specifically for meta-programming purposes:
+Các hàm có hai thuộc tính được định nghĩa trước mà bạn có thể thấy mình đang tương tác, cụ thể cho các mục đích lập trình meta:
 
 ```js
 function help(opt1,opt2,...remainingOpts) {
@@ -208,75 +208,75 @@ help.name;          // "help"
 help.length;        // 2
 ```
 
-The `length` of a function is the count of its explicitly defined parameters, up to but not including a parameter that either has a default value defined (e.g., `param = 42`) or a "rest parameter" (e.g., `...remainingOpts`).
+`length` của một hàm là số lượng các tham số được định nghĩa rõ ràng của nó, lên đến nhưng không bao gồm một tham số có giá trị mặc định được định nghĩa (ví dụ: `param = 42`) hoặc một "tham số còn lại" (ví dụ: `...remainingOpts`).
 
-#### Avoid Setting Function-Object Properties
+#### Tránh Đặt Thuộc tính Hàm-Đối tượng
 
-You should avoid assigning properties on function objects. If you're looking to store extra information associated with a function, use a separate `Map(..)` (or `WeakMap(..)`) with the function object as the key, and the extra information as the value.
+Bạn nên tránh gán các thuộc tính trên các đối tượng hàm. Nếu bạn đang tìm cách lưu trữ thông tin bổ sung liên quan đến một hàm, hãy sử dụng một `Map(..)` riêng biệt (hoặc `WeakMap(..)`) với đối tượng hàm làm khóa, và thông tin bổ sung làm giá trị.
 
 ```js
 extraInfo = new Map();
 
-extraInfo.set(help,"this is some important information");
+extraInfo.set(help,"đây là một số thông tin quan trọng");
 
-// later:
-extraInfo.get(help);   // "this is some important information"
+// sau đó:
+extraInfo.get(help);   // "đây là một số thông tin quan trọng"
 ```
 
-## Object Characteristics
+## Đặc điểm Đối tượng (Object Characteristics)
 
-In addition to defining behaviors for specific properties, certain behaviors are configurable across the whole object:
+Ngoài việc định nghĩa các hành vi cho các thuộc tính cụ thể, một số hành vi nhất định có thể cấu hình trên toàn bộ đối tượng:
 
-* extensible
-* sealed
-* frozen
+* extensible (có thể mở rộng)
+* sealed (đã niêm phong)
+* frozen (đã đóng băng)
 
-### Extensible
+### Extensible (Có thể mở rộng)
 
-Extensibility refers to whether an object can have new properties defined/added to it. By default, all objects are extensible, but you can change shut off extensibility for an object:
+Khả năng mở rộng đề cập đến việc liệu một đối tượng có thể có các thuộc tính mới được định nghĩa/thêm vào nó hay không. Theo mặc định, tất cả các đối tượng đều có thể mở rộng, nhưng bạn có thể tắt khả năng mở rộng cho một đối tượng:
 
 ```js
 myObj = {
     favoriteNumber: 42
 };
 
-myObj.firstName = "Kyle";                  // works fine
+myObj.firstName = "Kyle";                  // hoạt động tốt
 
 Object.preventExtensions(myObj);
 
-myObj.nicknames = [ "getify", "ydkjs" ];   // fails
-myObj.favoriteNumber = 123;                // works fine
+myObj.nicknames = [ "getify", "ydkjs" ];   // thất bại
+myObj.favoriteNumber = 123;                // hoạt động tốt
 ```
 
-In non-strict-mode, an assignment that creates a new property will silently fail, whereas in strict mode an exception will be thrown.
+Trong chế độ không nghiêm ngặt, một phép gán tạo ra một thuộc tính mới sẽ thất bại âm thầm, trong khi ở chế độ nghiêm ngặt, một ngoại lệ sẽ được ném ra.
 
-### Sealed
-
-// TODO
-
-### Frozen
+### Sealed (Đã niêm phong)
 
 // TODO
 
-## Extending The MOP
-
-As mentioned at the start of this chapter, objects in JS behave according to a set of rules referred to as the Metaobject Protocol (MOP)[^mop]. Now that we understand more fully how objects work by default, we want to turn our attention to how we can hook into some of these default behaviors and override/customize them.
+### Frozen (Đã đóng băng)
 
 // TODO
 
-## `[[Prototype]]` Chain
+## Mở rộng MOP
 
-One of the most important, but least obvious, characteristics of an object (part of the MOP) is referred to as its "prototype chain"; the official JS specification notation is `[[Prototype]]`. Make sure not to confuse this `[[Prototype]]` with a public property named `prototype`. Despite the naming, these are distinct concepts.
+Như đã đề cập ở đầu chương này, các đối tượng trong JS hành xử theo một bộ quy tắc được gọi là Giao thức Metaobject (MOP)[^mop]. Bây giờ chúng ta đã hiểu đầy đủ hơn về cách các đối tượng hoạt động theo mặc định, chúng ta muốn chuyển sự chú ý sang cách chúng ta có thể móc nối vào một số hành vi mặc định này và ghi đè/tùy chỉnh chúng.
 
-The `[[Prototype]]` is an internal linkage that an object gets by default when its created, pointing to another object. This linkage is a hidden, often subtle characteristic of an object, but it has profound impacts on how interactions with the object will play out. It's referred to as a "chain" because one object links to another, which in turn links to another, ... and so on. There is an *end* or *top* to this chain, where the linkage stops and there's no further to go. More on that shortly.
+// TODO
 
-We already saw several implications of `[[Prototype]]` linkage in Chapter 1. For example, by default, all objects are `[[Prototype]]`-linked to the built-in object named `Object.prototype`.
+## Chuỗi `[[Prototype]]`
 
-| WARNING: |
+Một trong những đặc điểm quan trọng nhất, nhưng ít rõ ràng nhất, của một đối tượng (một phần của MOP) được gọi là "chuỗi prototype" của nó; ký hiệu đặc tả JS chính thức là `[[Prototype]]`. Hãy chắc chắn không nhầm lẫn `[[Prototype]]` này với một thuộc tính công khai có tên là `prototype`. Mặc dù tên gọi giống nhau, đây là những khái niệm riêng biệt.
+
+`[[Prototype]]` là một liên kết nội bộ mà một đối tượng nhận được theo mặc định khi nó được tạo, trỏ đến một đối tượng khác. Liên kết này là một đặc điểm ẩn, thường tinh tế của một đối tượng, nhưng nó có tác động sâu sắc đến cách các tương tác với đối tượng sẽ diễn ra. Nó được gọi là một "chuỗi" bởi vì một đối tượng liên kết đến một đối tượng khác, đối tượng đó lại liên kết đến một đối tượng khác, ... và cứ thế. Có một *điểm cuối* hoặc *đỉnh* của chuỗi này, nơi liên kết dừng lại và không còn nơi nào để đi tiếp. Thêm về điều đó ngay sau đây.
+
+Chúng ta đã thấy một số ý nghĩa của liên kết `[[Prototype]]` trong Chương 1. Ví dụ, theo mặc định, tất cả các đối tượng đều được liên kết `[[Prototype]]` với đối tượng tích hợp có tên là `Object.prototype`.
+
+| CẢNH BÁO: |
 | :--- |
-| That `Object.prototype` name itself can be confusing, since it uses a property called `prototype`. How are `[[Prototype]]` and `prototype` related!? Put such questions/confusion on pause for a bit, as we'll come back an explain the differences between `[[Prototype]]` and `prototype` later in this chapter. For the moment, just assume the presence of this important but weirdly named built-in object, `Object.prototype`. |
+| Bản thân cái tên `Object.prototype` đó có thể gây nhầm lẫn, vì nó sử dụng một thuộc tính gọi là `prototype`. `[[Prototype]]` và `prototype` liên quan như thế nào!? Hãy tạm dừng những câu hỏi/sự nhầm lẫn như vậy một chút, vì chúng ta sẽ quay lại và giải thích sự khác biệt giữa `[[Prototype]]` và `prototype` sau trong chương này. Hiện tại, chỉ cần giả định sự hiện diện của đối tượng tích hợp quan trọng nhưng có tên kỳ lạ này, `Object.prototype`. |
 
-Let's consider some code:
+Hãy xem xét một số mã:
 
 ```js
 myObj = {
@@ -284,9 +284,9 @@ myObj = {
 };
 ```
 
-That should look familiar from Chapter 1. But what you *don't see* in this code is that the object there was automatically linked (via its internal `[[Prototype]]`) to that automatically built-in, but weirdly named, `Object.prototype` object.
+Điều đó trông quen thuộc từ Chương 1. Nhưng những gì bạn *không thấy* trong mã này là đối tượng ở đó đã được tự động liên kết (thông qua `[[Prototype]]` nội bộ của nó) với đối tượng `Object.prototype` được tích hợp tự động nhưng có tên kỳ lạ đó.
 
-When we do things like:
+Khi chúng ta làm những việc như:
 
 ```js
 myObj.toString();                             // "[object Object]"
@@ -294,19 +294,19 @@ myObj.toString();                             // "[object Object]"
 myObj.hasOwnProperty("favoriteNumber");   // true
 ```
 
-We're taking advantage of this internal `[[Prototype]]` linkage, without really realizing it. Since `myObj` does not have `toString` or `hasOwnProperty` properties defined on it, those property accesses actually end up **DELEGATING** the access to continue its lookup along the `[[Prototype]]` chain.
+Chúng ta đang tận dụng liên kết `[[Prototype]]` nội bộ này mà không thực sự nhận ra nó. Vì `myObj` không có các thuộc tính `toString` hoặc `hasOwnProperty` được định nghĩa trên nó, các truy cập thuộc tính đó thực sự kết thúc bằng việc **ỦY QUYỀN** (DELEGATING) quyền truy cập để tiếp tục tra cứu dọc theo chuỗi `[[Prototype]]`.
 
-Since `myObj` is `[[Prototype]]`-linked to the object named `Object.prototype`, the lookup for `toString` and `hasOwnProperty` properties continues on that object; and indeed, these methods are found there!
+Vì `myObj` được liên kết `[[Prototype]]` với đối tượng có tên `Object.prototype`, việc tra cứu các thuộc tính `toString` và `hasOwnProperty` tiếp tục trên đối tượng đó; và quả thực, các phương thức này được tìm thấy ở đó!
 
-The ability for `myObj.toString` to access the `toString` property even though it doesn't actually have it, is commonly referred to as "inheritance", or more specifically, "prototypal inheritance". The `toString` and `hasOwnProperty` properties, along with many others, are said to be "inherited properties" on `myObj`.
+Khả năng `myObj.toString` truy cập thuộc tính `toString` mặc dù nó thực sự không có nó, thường được gọi là "kế thừa", hoặc cụ thể hơn là "kế thừa nguyên mẫu" (prototypal inheritance). Các thuộc tính `toString` và `hasOwnProperty`, cùng với nhiều thuộc tính khác, được cho là "các thuộc tính được kế thừa" trên `myObj`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| I have a lot of frustrations with the usage of the word "inheritance" here -- it should be called "delegation"! --  but that's what most people refer to it as, so we'll begrudgingly comply and use that same terminology for now (albeit under protest, with " quotes). I'll save my objections for an appendix of this book. |
+| Tôi có rất nhiều thất vọng với việc sử dụng từ "kế thừa" ở đây -- nó nên được gọi là "ủy quyền"! -- nhưng đó là những gì hầu hết mọi người gọi nó, vì vậy chúng tôi sẽ miễn cưỡng tuân thủ và sử dụng cùng một thuật ngữ đó cho đến bây giờ (mặc dù phản đối, với dấu ngoặc kép "). Tôi sẽ dành sự phản đối của mình cho một phụ lục của cuốn sách này. |
 
-`Object.prototype` has several built-in properties and methods, all of which are "inherited" by any object that is `[[Prototype]]`-linked, either directly or indirectly through another object's linkage, to `Object.prototype`.
+`Object.prototype` có một số thuộc tính và phương thức tích hợp, tất cả đều được "kế thừa" bởi bất kỳ đối tượng nào được liên kết `[[Prototype]]`, trực tiếp hoặc gián tiếp thông qua liên kết của một đối tượng khác, với `Object.prototype`.
 
-Some common "inherited" properties from `Object.prototype` include:
+Một số thuộc tính "được kế thừa" phổ biến từ `Object.prototype` bao gồm:
 
 * `constructor`
 * `__proto__`
@@ -315,7 +315,7 @@ Some common "inherited" properties from `Object.prototype` include:
 * `hasOwnProperty(..)`
 * `isPrototypeOf(..)`
 
-Recall `hasOwnProperty(..)`, which we saw earlier gives us a boolean check for whether a certain property (by string name) is owned by an object:
+Hãy nhớ lại `hasOwnProperty(..)`, mà chúng ta đã thấy trước đó cung cấp cho chúng ta một kiểm tra boolean xem một thuộc tính nhất định (theo tên chuỗi) có được sở hữu bởi một đối tượng hay không:
 
 ```js
 myObj = {
@@ -325,9 +325,9 @@ myObj = {
 myObj.hasOwnProperty("favoriteNumber");   // true
 ```
 
-It's always been considered somewhat unfortunate (semantic organization, naming conflicts, etc) that such an important utility as `hasOwnProperty(..)` was included on the Object `[[Prototype]]` chain as an instance method, instead of being defined as a static utility.
+Luôn được coi là hơi đáng tiếc (tổ chức ngữ nghĩa, xung đột đặt tên, v.v.) khi một tiện ích quan trọng như `hasOwnProperty(..)` được đưa vào chuỗi `[[Prototype]]` của Object như một phương thức thể hiện (instance method), thay vì được định nghĩa là một tiện ích tĩnh.
 
-As of ES2022, JS has finally added the static version of this utility: `Object.hasOwn(..)`.
+Kể từ ES2022, JS cuối cùng đã thêm phiên bản tĩnh của tiện ích này: `Object.hasOwn(..)`.
 
 ```js
 myObj = {
@@ -337,94 +337,94 @@ myObj = {
 Object.hasOwn(myObj,"favoriteNumber");   // true
 ```
 
-This form is now considered the more preferable and robust option, and the instance method (`hasOwnProperty(..)`) form should now generally be avoided.
+Dạng này hiện được coi là tùy chọn thích hợp và mạnh mẽ hơn, và dạng phương thức thể hiện (`hasOwnProperty(..)`) bây giờ thường nên tránh.
 
-Somewhat unfortunately and inconsistently, there's not (yet, as of time of writing) corresponding static utilities, like `Object.isPrototype(..)` (instead of the instance method `isPrototypeOf(..)`). But at least `Object.hasOwn(..)` exists, so that's progress.
+Hơi đáng tiếc và không nhất quán, vẫn chưa có (tại thời điểm viết) các tiện ích tĩnh tương ứng, như `Object.isPrototype(..)` (thay vì phương thức thể hiện `isPrototypeOf(..)`). Nhưng ít nhất `Object.hasOwn(..)` tồn tại, vì vậy đó là sự tiến bộ.
 
-### Creating An Object With A Different `[[Prototype]]`
+### Tạo Một Đối tượng Với `[[Prototype]]` Khác
 
-By default, any object you create in your programs will be `[[Prototype]]`-linked to that `Object.prototype` object. However, you can create an object with a different linkage like this:
+Theo mặc định, bất kỳ đối tượng nào bạn tạo trong các chương trình của mình sẽ được liên kết `[[Prototype]]` với đối tượng `Object.prototype` đó. Tuy nhiên, bạn có thể tạo một đối tượng với một liên kết khác như thế này:
 
 ```js
 myObj = Object.create(differentObj);
 ```
 
-The `Object.create(..)` method takes its first argument as the value to set for the newly created object's `[[Prototype]]`.
+Phương thức `Object.create(..)` lấy đối số đầu tiên của nó làm giá trị để đặt cho `[[Prototype]]` của đối tượng mới được tạo.
 
-One downside to this approach is that you aren't using the `{ .. }` literal syntax, so you don't initially define any contents for `myObj`. You typically then have to define properties one-by-one, using `=`.
+Một nhược điểm của cách tiếp cận này là bạn không sử dụng cú pháp literal `{ .. }`, vì vậy bạn không định nghĩa ban đầu bất kỳ nội dung nào cho `myObj`. Bạn thường phải định nghĩa các thuộc tính từng cái một, sử dụng `=`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The second, optional argument to `Object.create(..)` is -- like the second argument to `Object.defineProperties(..)` as discussed earlier -- an object with properties that hold descriptors to initially define the new object with. In practice out in the wild, this form is rarely used, likely because it's more awkward to specify full descriptors instead of just name/value pairs. But it may come in handy in some limited cases. |
+| Đối số thứ hai, tùy chọn cho `Object.create(..)` là -- giống như đối số thứ hai cho `Object.defineProperties(..)` như đã thảo luận trước đó -- một đối tượng với các thuộc tính giữ các mô tả để định nghĩa ban đầu đối tượng mới. Trong thực tế, dạng này hiếm khi được sử dụng, có thể vì nó khó xử hơn khi chỉ định đầy đủ các mô tả thay vì chỉ các cặp tên/giá trị. Nhưng nó có thể hữu ích trong một số trường hợp hạn chế. |
 
-Alternately, but less preferably, you can use the `{ .. }` literal syntax along with a special (and strange looking!) property:
+Ngoài ra, nhưng ít được ưa thích hơn, bạn có thể sử dụng cú pháp literal `{ .. }` cùng với một thuộc tính đặc biệt (và trông lạ lùng!):
 
 ```js
 myObj = {
     __proto__: differentObj,
 
-    // .. the rest of the object definition
+    // .. phần còn lại của định nghĩa đối tượng
 };
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| The strange looking `__proto__` property has been in some JS engines for more than 20 years, but was only standardized in JS as of ES6 (in 2015). Even still, it was added in Appendix B of the specification[^specApB], which lists features that TC39 begrudgingly includes because they exist popularly in various browser-based JS engines and therefore are a de-facto reality even if they didn't originate with TC39. This feature is thus "guaranteed" by the spec to exist in all conforming browser-based JS engines, but is not necessarily guaranteed to work in other independent JS engines. Node.js uses the JS engine (v8) from the Chrome browser, so Node.js gets `__proto__` by default/accident. Be careful when using `__proto__` to be aware of all the JS engine environments your code will run in. |
+| Thuộc tính `__proto__` trông lạ lùng đã có trong một số công cụ JS trong hơn 20 năm, nhưng chỉ được chuẩn hóa trong JS kể từ ES6 (năm 2015). Thậm chí như vậy, nó đã được thêm vào Phụ lục B của đặc tả[^specApB], liệt kê các tính năng mà TC39 miễn cưỡng bao gồm vì chúng tồn tại phổ biến trong các công cụ JS dựa trên trình duyệt khác nhau và do đó là một thực tế hiển nhiên ngay cả khi chúng không bắt nguồn từ TC39. Do đó, tính năng này được đặc tả "đảm bảo" tồn tại trong tất cả các công cụ JS dựa trên trình duyệt tuân thủ, nhưng không nhất thiết được đảm bảo hoạt động trong các công cụ JS độc lập khác. Node.js sử dụng công cụ JS (v8) từ trình duyệt Chrome, vì vậy Node.js nhận được `__proto__` theo mặc định/tình cờ. Hãy cẩn thận khi sử dụng `__proto__` để nhận thức được tất cả các môi trường công cụ JS mà mã của bạn sẽ chạy trong đó. |
 
-Whether you use `Object.create(..)` or `__proto__`, the created object in question will usually be `[[Prototype]]`-linked to a different object than the default `Object.prototype`.
+Cho dù bạn sử dụng `Object.create(..)` hay `__proto__`, đối tượng được đề cập thường sẽ được liên kết `[[Prototype]]` với một đối tượng khác với `Object.prototype` mặc định.
 
-#### Empty `[[Prototype]]` Linkage
+#### Liên kết `[[Prototype]]` Rỗng
 
-We mentioned above that the `[[Prototype]]` chain has to stop somewhere, so as to have lookups not continue forever. `Object.prototype` is typically the top/end of every `[[Prototype]]` chain, as its own `[[Prototype]]` is `null`, and therefore there's nowhere else to continue looking.
+Chúng ta đã đề cập ở trên rằng chuỗi `[[Prototype]]` phải dừng ở đâu đó, để việc tra cứu không tiếp tục mãi mãi. `Object.prototype` thường là đỉnh/cuối của mọi chuỗi `[[Prototype]]`, vì `[[Prototype]]` của chính nó là `null`, và do đó không còn nơi nào khác để tiếp tục tìm kiếm.
 
-However, you can also define objects with their own `null` value for `[[Prototype]]`, such as:
+Tuy nhiên, bạn cũng có thể định nghĩa các đối tượng với giá trị `null` riêng của chúng cho `[[Prototype]]`, chẳng hạn như:
 
 ```js
 emptyObj = Object.create(null);
-// or: emptyObj = { __proto__: null }
+// hoặc: emptyObj = { __proto__: null }
 
 emptyObj.toString;   // undefined
 ```
 
-It can be quite useful to create an object with no `[[Prototype]]` linkage to `Object.prototype`. For example, as mentioned in Chapter 1, the `in` and `for..in` constructs will consult the `[[Prototype]]` chain for inherited properties. But this may be undesirable, as you may not want something like `"toString" in myObj` to resolve successfully.
+Có thể khá hữu ích khi tạo một đối tượng không có liên kết `[[Prototype]]` với `Object.prototype`. Ví dụ, như đã đề cập trong Chương 1, các cấu trúc `in` và `for..in` sẽ tham khảo chuỗi `[[Prototype]]` cho các thuộc tính được kế thừa. Nhưng điều này có thể không mong muốn, vì bạn có thể không muốn một cái gì đó như `"toString" in myObj` giải quyết thành công.
 
-Moreover, an object with an empty `[[Prototype]]` is safe from any accidental "inheritance" collision between its own property names and the ones it "inherits" from elsewhere. These types of (useful!) objects are sometimes referred to in popular parlance as "dictionary objects".
+Hơn nữa, một đối tượng với một `[[Prototype]]` rỗng an toàn khỏi bất kỳ sự va chạm "kế thừa" ngẫu nhiên nào giữa tên thuộc tính của chính nó và những tên nó "kế thừa" từ nơi khác. Những loại đối tượng (hữu ích!) này đôi khi được gọi trong ngôn ngữ phổ biến là "đối tượng từ điển" (dictionary objects).
 
-### `[[Prototype]]` vs `prototype`
+### `[[Prototype]]` so với `prototype`
 
-Notice that public property name `prototype` in the name/location of this special object, `Object.prototype`? What's that all about?
+Chú ý tên thuộc tính công khai `prototype` trong tên/vị trí của đối tượng đặc biệt này, `Object.prototype`? Tất cả chuyện đó là sao?
 
-`Object` is the `Object(..)` function; by default, all functions (which are themselves objects!) have such a `prototype` property on them, pointing at an object.
+`Object` là hàm `Object(..)`; theo mặc định, tất cả các hàm (chúng cũng là các đối tượng!) đều có một thuộc tính `prototype` như vậy trên chúng, trỏ vào một đối tượng.
 
-Any here's where the name conflict between `[[Prototype]]` and `prototype` really bites us. The `prototype` property on a function doesn't define any linkage that the function itself experiences. Indeed, functions (as objects) have their own internal `[[Prototype]]` linkage somewhere else -- more on that in a second.
+Và đây là nơi xung đột tên giữa `[[Prototype]]` và `prototype` thực sự cắn chúng ta. Thuộc tính `prototype` trên một hàm không định nghĩa bất kỳ liên kết nào mà bản thân hàm trải nghiệm. Thật vậy, các hàm (như các đối tượng) có liên kết `[[Prototype]]` nội bộ riêng của chúng ở một nơi khác -- thêm về điều đó trong giây lát.
 
-Rather, the `prototype` property on a function refers to an object that should be *linked TO* by any other object that is created when calling that function with the `new` keyword:
+Thay vào đó, thuộc tính `prototype` trên một hàm đề cập đến một đối tượng nên được *liên kết ĐẾN* bởi bất kỳ đối tượng nào khác được tạo khi gọi hàm đó với từ khóa `new`:
 
 ```js
 myObj = {};
 
-// is basically the same as:
+// về cơ bản giống như:
 myObj = new Object();
 ```
 
-Since the `{ .. }` object literal syntax is essentially the same as a `new Object()` call, the built-in object named/located at `Object.prototype` is used as the internal `[[Prototype]]` value for the new object we create and name `myObj`.
+Vì cú pháp object literal `{ .. }` về cơ bản giống như một lệnh gọi `new Object()`, đối tượng tích hợp được đặt tên/đặt tại `Object.prototype` được sử dụng làm giá trị `[[Prototype]]` nội bộ cho đối tượng mới mà chúng ta tạo và đặt tên là `myObj`.
 
-Phew! Talk about a topic made significantly more confusing just because of the name overlap between `[[Prototype]]` and `prototype`!
+Phù! Nói về một chủ đề trở nên khó hiểu hơn đáng kể chỉ vì sự chồng chéo tên giữa `[[Prototype]]` và `prototype`!
 
 ----
 
-But where do functions themselves (as objects!) link to, `[[Prototype]]` wise? They link to `Function.prototype`, yet another built-in object, located at the `prototype` property on the `Function(..)` function.
+Nhưng bản thân các hàm (như các đối tượng!) liên kết đến đâu, theo kiểu `[[Prototype]]`? Chúng liên kết đến `Function.prototype`, lại là một đối tượng tích hợp khác, nằm tại thuộc tính `prototype` trên hàm `Function(..)`.
 
-In other words, you can think of functions themselves as having been "created" by a `new Function(..)` call, and then `[[Prototype]]`-linked to the `Function.prototype` object. This object contains properties/methods all functions "inherit" by default, such as `toString()` (to string serialize the source code of a function) and `call(..)` / `apply(..)` / `bind(..)` (we'll explain these later in this book).
+Nói cách khác, bạn có thể nghĩ về bản thân các hàm như đã được "tạo ra" bởi một lệnh gọi `new Function(..)`, và sau đó được liên kết `[[Prototype]]` với đối tượng `Function.prototype`. Đối tượng này chứa các thuộc tính/phương thức mà tất cả các hàm "kế thừa" theo mặc định, chẳng hạn như `toString()` (để tuần tự hóa chuỗi mã nguồn của một hàm) và `call(..)` / `apply(..)` / `bind(..)` (chúng ta sẽ giải thích những điều này sau trong cuốn sách này).
 
-## Objects Behavior
+## Hành vi Đối tượng
 
-Properties on objects are internally defined and controlled by a "descriptor" metaobject, which includes attributes such as `value` (the property's present value) and `enumerable` (a boolean controlling whether the property is included in enumerable-only listings of properties/property names).
+Các thuộc tính trên các đối tượng được định nghĩa và kiểm soát nội bộ bởi một metaobject "mô tả", bao gồm các thuộc tính như `value` (giá trị hiện tại của thuộc tính) và `enumerable` (một boolean kiểm soát xem thuộc tính có được bao gồm trong các danh sách chỉ liệt kê các thuộc tính/tên thuộc tính hay không).
 
-The way object and their properties work in JS is referred to as the "metaobject protocol" (MOP)[^mop]. We can control the precise behavior of properties via `Object.defineProperty(..)`, as well as object-wide behaviors with `Object.freeze(..)`. But even more powerfully, we can hook into and override certain default behaviors on objects using special pre-defined Symbols.
+Cách đối tượng và các thuộc tính của chúng hoạt động trong JS được gọi là "giao thức metaobject" (MOP)[^mop]. Chúng ta có thể kiểm soát hành vi chính xác của các thuộc tính thông qua `Object.defineProperty(..)`, cũng như các hành vi trên toàn bộ đối tượng với `Object.freeze(..)`. Nhưng thậm chí mạnh mẽ hơn, chúng ta có thể móc nối vào và ghi đè một số hành vi mặc định nhất định trên các đối tượng bằng cách sử dụng các Symbol được định nghĩa trước đặc biệt.
 
-Prototypes are internal linkages between objects that allow property or method access against one object -- if the property/method requested is absent -- to be handled by "delegating" that access lookup to another object. When the delegation involves a method, the context for the method to run in is shared from the initial object to the target object via the `this` keyword.
+Các prototype là các liên kết nội bộ giữa các đối tượng cho phép truy cập thuộc tính hoặc phương thức đối với một đối tượng -- nếu thuộc tính/phương thức được yêu cầu vắng mặt -- được xử lý bằng cách "ủy quyền" tra cứu truy cập đó cho một đối tượng khác. Khi việc ủy quyền liên quan đến một phương thức, ngữ cảnh cho phương thức chạy được chia sẻ từ đối tượng ban đầu đến đối tượng đích thông qua từ khóa `this`.
 
-[^mop]: "Metaobject", Wikipedia; https://en.wikipedia.org/wiki/Metaobject ; Accessed July 2022.
+[^mop]: "Metaobject", Wikipedia; https://en.wikipedia.org/wiki/Metaobject ; Truy cập tháng 7 năm 2022.
 
-[^specApB]: "Appendix B: Additional ECMAScript Features for Web Browsers", ECMAScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-additional-ecmascript-features-for-web-browsers ; Accessed July 2022
+[^specApB]: "Appendix B: Additional ECMAScript Features for Web Browsers", ECMAScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-additional-ecmascript-features-for-web-browsers ; Truy cập tháng 7 năm 2022

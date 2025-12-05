@@ -1,52 +1,55 @@
-# You Don't Know JS Yet: Objects & Classes - 2nd Edition
 
-| NOTE: |
+
+
+# You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
+
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang trong quá trình thực hiện |
 
-## Table of Contents
+## Mục lục
 
-* Foreword
-* Preface
-* Chapter 1: Object Foundations
-    * About This Book
-    * Objects As Containers
-    * Defining Properties
-    * Accessing Properties
-    * Assigning Properties
-    * Deleting Properties
-    * Determining Container Contents
-    * Temporary Containers
-    * Containers Are Collections Of Properties
-* Chapter 2: How Objects Work
-    * Property Descriptors
-    * Object Sub-Types
-    * Object Characteristics
-    * Extending the MOP
-    * `[[Prototype]]` Chain
-    * Objects Behavior
-* Chapter 3: Classy Objects
-    * When Should I Class-Orient My Code?
-    * Keep It `class`y
-    * Class Instance `this`
-    * Class Extension
-    * Static Class Behavior
-    * Private Class Behavior
-    * Class Example
-* Chapter 4: This Works
-    * This Aware
-    * This Is It!
-    * An Arrow Points Somewhere
-    * Variations
-    * Stay Aware
-* Chapter 5: Delegation
-    * Preamble
-    * What's A Constructor, Anyway?
-    * Ditching Class Thinking
-    * Delegation Illustrated
-    * Composing Peer Objects
-    * Why *This*?
-* Thank You!
+* Lời tựa
+* Lời nói đầu
+* Chương 1: Nền tảng Đối tượng
+    * Về cuốn sách này
+    * Đối tượng như là Thùng chứa
+    * Định nghĩa Thuộc tính
+    * Truy cập Thuộc tính
+    * Gán Thuộc tính
+    * Xóa Thuộc tính
+    * Xác định Nội dung Thùng chứa
+    * Thùng chứa Tạm thời
+    * Thùng chứa là Tập hợp các Thuộc tính
+* Chương 2: Cách Đối tượng Hoạt động
+    * Mô tả Thuộc tính
+    * Các kiểu con Đối tượng
+    * Đặc điểm Đối tượng
+    * Mở rộng MOP
+    * Chuỗi `[[Prototype]]`
+    * Hành vi Đối tượng
+* Chương 3: Đối tượng kiểu Lớp
+    * Khi nào tôi nên Định hướng Lớp cho Mã của mình?
+    * Giữ cho nó `class`y
+    * Thể hiện Lớp `this`
+    * Mở rộng Lớp
+    * Hành vi Lớp Tĩnh
+    * Hành vi Lớp Riêng tư
+    * Ví dụ Lớp
+* Chương 4: This Hoạt động
+    * Nhận thức This
+    * Chính là Nó!
+    * Một Mũi tên Chỉ Đâu đó
+    * Các biến thể
+    * Luôn Nhận thức
+* Chương 5: Ủy quyền
+    * Lời mở đầu
+    * Dù sao thì Constructor là gì?
+    * Bỏ Tư duy Lớp
+    * Minh họa Ủy quyền
+    * Soạn thảo Đối tượng Ngang hàng
+    * Tại sao *This*?
+* Cảm ơn!
 * TODO:
     * object wrappers (String, Boolean, etc)
     * object coercions (valueof, tostring, boxing)

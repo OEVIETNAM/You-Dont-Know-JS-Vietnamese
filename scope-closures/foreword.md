@@ -1,18 +1,18 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Foreword
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Lời Tựa
 
-If I look over the books on my bookshelf, I can clearly see which of these titles are well loved. Well loved in this sense meaning they are a little worn. Their binding is broken, their pages are tattered, there might even be a spilled drink smear or two. What’s ironic to me is that the most loved of my books often _**look**_ the least cared for, though honestly the opposite is true.
+Nếu tôi nhìn qua những cuốn sách trên giá sách của mình, tôi có thể thấy rõ những tựa sách nào được yêu thích. Được yêu thích theo nghĩa này có nghĩa là chúng hơi mòn. Gáy sách bị hỏng, các trang bị rách, thậm chí có thể có một hoặc hai vết bẩn do đồ uống đổ. Điều trớ trêu đối với tôi là những cuốn sách được yêu thích nhất của tôi thường _**trông**_ ít được chăm sóc nhất, mặc dù thành thật mà nói thì điều ngược lại mới đúng.
 
-*Scope and Closures* (1st ed.) is one of my most loved books. It’s small, but the binding is coming undone. The pages are worn and dog-eared. It’s a bit rumpled. It’s not a book I’ve read once. I’ve picked it up again and again in the many years since it was originally published.
+*Phạm Vi và Closures* (ấn bản 1) là một trong những cuốn sách tôi yêu thích nhất. Nó nhỏ, nhưng gáy sách đang bong ra. Các trang bị mòn và quăn mép. Nó hơi nhàu nát. Đó không phải là cuốn sách tôi đã đọc một lần. Tôi đã cầm nó lên nhiều lần trong nhiều năm kể từ khi nó được xuất bản lần đầu.
 
-For me, it’s also been a benchmark for my own personal progression through JavaScript. When I first read it in 2014, I was familiar with the concepts but the depth of my understanding was admittedly not as deep as the thin volume.
+Đối với tôi, nó cũng là một chuẩn mực cho sự tiến bộ cá nhân của tôi qua JavaScript. Khi tôi đọc nó lần đầu tiên vào năm 2014, tôi đã quen thuộc với các khái niệm nhưng độ sâu hiểu biết của tôi phải thừa nhận là không sâu bằng cuốn sách mỏng này.
 
-Over the years, even though I wasn’t necessarily feeling my own improvement on a day-to-day basis, each one of the concepts became more approachable. I’d smile to myself, realizing how far I’d come with the help of these guides. It became apparent there was an inverse correlation between how well I treated the book and how much I loved it.
+Qua nhiều năm, mặc dù tôi không nhất thiết cảm thấy sự cải thiện của chính mình hàng ngày, mỗi khái niệm trở nên dễ tiếp cận hơn. Tôi sẽ mỉm cười với chính mình, nhận ra mình đã đi xa đến mức nào với sự giúp đỡ của những hướng dẫn này. Rõ ràng là có một mối tương quan nghịch đảo giữa việc tôi đối xử với cuốn sách tốt như thế nào và tôi yêu thích nó bao nhiêu.
 
-When Kyle asked me to write the Foreword for the 2nd edition, I was floored. It’s not often you’re asked to write about a book that’s been so formative for your own understanding and career, *Scope and Closures* in particular. I remember the day I first understood closures, the first time I used one well. The satisfaction was great, in part because the symmetry of the idea was compelling to me. Before I even picked this book up, I was already enamoured with closures. And yet, there’s a difference between being able to execute code successfully and fully explore the concepts with any depth. This book took my base understanding and drew it out, helped me master it.
+Khi Kyle yêu cầu tôi viết Lời Tựa cho ấn bản thứ 2, tôi đã rất ngạc nhiên. Không thường xuyên bạn được yêu cầu viết về một cuốn sách đã hình thành nên sự hiểu biết và sự nghiệp của chính bạn, đặc biệt là *Phạm Vi và Closures*. Tôi nhớ ngày tôi lần đầu tiên hiểu closures, lần đầu tiên tôi sử dụng nó tốt. Sự hài lòng thật tuyệt vời, một phần vì sự đối xứng của ý tưởng hấp dẫn tôi. Trước khi tôi cầm cuốn sách này lên, tôi đã say mê closures. Tuy nhiên, có một sự khác biệt giữa việc có thể thực thi mã thành công và khám phá đầy đủ các khái niệm với bất kỳ độ sâu nào. Cuốn sách này đã lấy sự hiểu biết cơ bản của tôi và kéo nó ra, giúp tôi làm chủ nó.
 
-This book is deceptively short. It’s helpful that it’s small because it’s dense with useful knowledge. Since it is compact, I’d suggest you give yourself time to absorb each page. Take your time with it. Treat the book with care, and by that I mean, wear it down.
+Cuốn sách này ngắn một cách đánh lừa. Thật hữu ích khi nó nhỏ vì nó dày đặc kiến thức hữu ích. Vì nó nhỏ gọn, tôi khuyên bạn nên dành thời gian để hấp thụ từng trang. Hãy dành thời gian với nó. Đối xử với cuốn sách một cách cẩn thận, và theo đó tôi có nghĩa là, hãy làm mòn nó.
 
 Sarah Drasner<br>
-Head of Developer Experience<br>
+Trưởng Bộ Phận Trải Nghiệm Nhà Phát Triển<br>
 Netlify

@@ -1,15 +1,15 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
-# Appendix A: Exploring Further
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
+# Phụ lục A: Khám phá Thêm
 
-In this appendix, we're going to explore some topics from the main chapter text in a bit more detail. Think of this content as an optional preview of some of the more nuanced details covered throughout the rest of the book series.
+Trong phụ lục này, chúng ta sẽ khám phá một số chủ đề từ văn bản chương chính chi tiết hơn một chút. Hãy coi nội dung này như một bản xem trước tùy chọn của một số chi tiết sắc thái hơn được đề cập trong phần còn lại của bộ sách.
 
-## Values vs. References
+## Giá trị so với Tham chiếu
 
-In Chapter 2, we introduced the two main types of values: primitives and objects. But we didn't discuss yet one key difference between the two: how these values are assigned and passed around.
+Trong Chương 2, chúng ta đã giới thiệu hai loại giá trị chính: nguyên thủy (primitives) và đối tượng (objects). Nhưng chúng ta chưa thảo luận về một sự khác biệt chính giữa hai loại này: cách các giá trị này được gán và truyền đi.
 
-In many languages, the developer can choose between assigning/passing a value as the value itself, or as a reference to the value. In JS, however, this decision is entirely determined by the kind of value. That surprises a lot of developers from other languages when they start using JS.
+Trong nhiều ngôn ngữ, nhà phát triển có thể chọn giữa việc gán/truyền một giá trị dưới dạng chính giá trị đó, hoặc dưới dạng tham chiếu đến giá trị. Tuy nhiên, trong JS, quyết định này hoàn toàn được xác định bởi loại giá trị. Điều đó làm ngạc nhiên rất nhiều nhà phát triển từ các ngôn ngữ khác khi họ bắt đầu sử dụng JS.
 
-If you assign/pass a value itself, the value is copied. For example:
+Nếu bạn gán/truyền chính một giá trị, giá trị đó sẽ được sao chép. Ví dụ:
 
 ```js
 var myName = "Kyle";
@@ -17,9 +17,9 @@ var myName = "Kyle";
 var yourName = myName;
 ```
 
-Here, the `yourName` variable has a separate copy of the `"Kyle"` string from the value that's stored in `myName`. That's because the value is a primitive, and primitive values are always assigned/passed as **value copies**.
+Ở đây, biến `yourName` có một bản sao riêng biệt của chuỗi `"Kyle"` từ giá trị được lưu trữ trong `myName`. Đó là bởi vì giá trị là một nguyên thủy, và các giá trị nguyên thủy luôn được gán/truyền dưới dạng **bản sao giá trị**.
 
-Here's how you can prove there's two separate values involved:
+Đây là cách bạn có thể chứng minh có hai giá trị riêng biệt liên quan:
 
 ```js
 var myName = "Kyle";
@@ -35,11 +35,11 @@ console.log(yourName);
 // Kyle
 ```
 
-See how `yourName` wasn't affected by the re-assignment of `myName` to `"Frank"`? That's because each variable holds its own copy of the value.
+Thấy cách `yourName` không bị ảnh hưởng bởi việc gán lại `myName` thành `"Frank"` không? Đó là bởi vì mỗi biến giữ bản sao giá trị của riêng nó.
 
-By contrast, references are the idea that two or more variables are pointing at the same value, such that modifying this shared value would be reflected by access via any of those references. In JS, only object values (arrays, objects, functions, etc.) are treated as references.
+Ngược lại, tham chiếu là ý tưởng rằng hai hoặc nhiều biến đang trỏ đến cùng một giá trị, sao cho việc sửa đổi giá trị được chia sẻ này sẽ được phản ánh bằng quyền truy cập thông qua bất kỳ tham chiếu nào trong số đó. Trong JS, chỉ các giá trị đối tượng (mảng, đối tượng, hàm, v.v.) được coi là tham chiếu.
 
-Consider:
+Hãy xem xét:
 
 ```js
 var myAddress = {
@@ -50,20 +50,20 @@ var myAddress = {
 
 var yourAddress = myAddress;
 
-// I've got to move to a new house!
+// Tôi phải chuyển đến một ngôi nhà mới!
 myAddress.street = "456 TS Ave";
 
 console.log(yourAddress.street);
 // 456 TS Ave
 ```
 
-Because the value assigned to `myAddress` is an object, it's held/assigned by reference, and thus the assignment to the `yourAddress` variable is a copy of the reference, not the object value itself. That's why the updated value assigned to the `myAddress.street` is reflected when we access `yourAddress.street`. `myAddress` and `yourAddress` have copies of the reference to the single shared object, so an update to one is an update to both.
+Vì giá trị được gán cho `myAddress` là một đối tượng, nó được giữ/gán bằng tham chiếu, và do đó việc gán cho biến `yourAddress` là một bản sao của tham chiếu, không phải chính giá trị đối tượng. Đó là lý do tại sao giá trị cập nhật được gán cho `myAddress.street` được phản ánh khi chúng ta truy cập `yourAddress.street`. `myAddress` và `yourAddress` có các bản sao của tham chiếu đến đối tượng được chia sẻ duy nhất, vì vậy cập nhật cho một cái là cập nhật cho cả hai.
 
-Again, JS chooses the value-copy vs. reference-copy behavior based on the value type. Primitives are held by value, objects are held by reference. There's no way to override this in JS, in either direction.
+Một lần nữa, JS chọn hành vi sao chép giá trị so với sao chép tham chiếu dựa trên loại giá trị. Các nguyên thủy được giữ theo giá trị, các đối tượng được giữ theo tham chiếu. Không có cách nào để ghi đè điều này trong JS, theo cả hai hướng.
 
-## So Many Function Forms
+## Rất Nhiều Dạng Hàm
 
-Recall this snippet from the "Functions" section in Chapter 2:
+Nhớ lại đoạn mã này từ phần "Hàm" trong Chương 2:
 
 ```js
 var awesomeFunction = function(coolThings) {
@@ -72,20 +72,20 @@ var awesomeFunction = function(coolThings) {
 };
 ```
 
-The function expression here is referred to as an *anonymous function expression*, since it has no name identifier between the `function` keyword and the `(..)` parameter list. This point confuses many JS developers because as of ES6, JS performs a "name inference" on an anonymous function:
+Biểu thức hàm ở đây được gọi là *biểu thức hàm ẩn danh* (anonymous function expression), vì nó không có định danh tên giữa từ khóa `function` và danh sách tham số `(..)`. Điểm này gây nhầm lẫn cho nhiều nhà phát triển JS vì kể từ ES6, JS thực hiện "suy luận tên" trên một hàm ẩn danh:
 
 ```js
 awesomeFunction.name;
 // "awesomeFunction"
 ```
 
-The `name` property of a function will reveal either its directly given name (in the case of a declaration) or its inferred name in the case of an anonymous function expression. That value is generally used by developer tools when inspecting a function value or when reporting an error stack trace.
+Thuộc tính `name` của một hàm sẽ tiết lộ tên được đặt trực tiếp của nó (trong trường hợp khai báo) hoặc tên được suy luận của nó trong trường hợp biểu thức hàm ẩn danh. Giá trị đó thường được sử dụng bởi các công cụ dành cho nhà phát triển khi kiểm tra một giá trị hàm hoặc khi báo cáo dấu vết ngăn xếp lỗi.
 
-So even an anonymous function expression *might* get a name. However, name inference only happens in limited cases such as when the function expression is assigned (with `=`). If you pass a function expression as an argument to a function call, for example, no name inference occurs; the `name` property will be an empty string, and the developer console will usually report "(anonymous function)".
+Vì vậy, ngay cả một biểu thức hàm ẩn danh *có thể* nhận được một cái tên. Tuy nhiên, suy luận tên chỉ xảy ra trong các trường hợp hạn chế chẳng hạn như khi biểu thức hàm được gán (với `=`). Nếu bạn truyền một biểu thức hàm làm đối số cho một cuộc gọi hàm, ví dụ, không có suy luận tên nào xảy ra; thuộc tính `name` sẽ là một chuỗi rỗng, và bảng điều khiển dành cho nhà phát triển thường sẽ báo cáo "(anonymous function)".
 
-Even if a name is inferred, **it's still an anonymous function.** Why? Because the inferred name is a metadata string value, not an available identifier to refer to the function. An anonymous function doesn't have an identifier to use to refer to itself from inside itself—for recursion, event unbinding, etc.
+Ngay cả khi một cái tên được suy luận, **nó vẫn là một hàm ẩn danh.** Tại sao? Bởi vì tên được suy luận là một giá trị chuỗi siêu dữ liệu, không phải là một định danh có sẵn để tham chiếu đến hàm. Một hàm ẩn danh không có định danh để sử dụng để tham chiếu đến chính nó từ bên trong chính nó—cho đệ quy, hủy liên kết sự kiện, v.v.
 
-Compare the anonymous function expression form to:
+So sánh dạng biểu thức hàm ẩn danh với:
 
 ```js
 // let awesomeFunction = ..
@@ -99,46 +99,46 @@ awesomeFunction.name;
 // "someName"
 ```
 
-This function expression is a *named function expression*, since the identifier `someName` is directly associated with the function expression at compile time; the association with the identifier `awesomeFunction` still doesn't happen until runtime at the time of that statement. Those two identifiers don't have to match; sometimes it makes sense to have them be different, other times it's better to have them be the same.
+Biểu thức hàm này là một *biểu thức hàm được đặt tên* (named function expression), vì định danh `someName` được liên kết trực tiếp với biểu thức hàm tại thời điểm biên dịch; liên kết với định danh `awesomeFunction` vẫn không xảy ra cho đến thời gian chạy tại thời điểm của câu lệnh đó. Hai định danh đó không cần phải khớp nhau; đôi khi có ý nghĩa khi để chúng khác nhau, những lần khác tốt hơn là để chúng giống nhau.
 
-Notice also that the explicit function name, the identifier `someName`, takes precedence when assigning a *name* for the `name` property.
+Cũng lưu ý rằng tên hàm rõ ràng, định danh `someName`, được ưu tiên khi gán một *tên* cho thuộc tính `name`.
 
-Should function expressions be named or anonymous? Opinions vary widely on this. Most developers tend to be unconcerned with using anonymous functions. They're shorter, and unquestionably more common in the broad sphere of JS code out there.
+Các biểu thức hàm nên được đặt tên hay ẩn danh? Ý kiến khác nhau rất nhiều về điều này. Hầu hết các nhà phát triển có xu hướng không quan tâm đến việc sử dụng các hàm ẩn danh. Chúng ngắn hơn, và chắc chắn phổ biến hơn trong phạm vi rộng lớn của mã JS ngoài kia.
 
-In my opinion, if a function exists in your program, it has a purpose; otherwise, take it out! And if it has a purpose, it has a natural name that describes that purpose.
+Theo ý kiến của tôi, nếu một hàm tồn tại trong chương trình của bạn, nó có một mục đích; nếu không, hãy loại bỏ nó! Và nếu nó có một mục đích, nó có một cái tên tự nhiên mô tả mục đích đó.
 
-If a function has a name, you the code author should include that name in the code, so that the reader does not have to infer that name from reading and mentally executing that function's source code. Even a trivial function body like `x * 2` has to be read to infer a name like "double" or "multBy2"; that brief extra mental work is unnecessary when you could just take a second to name the function "double" or "multBy2" *once*, saving the reader that repeated mental work every time it's read in the future.
+Nếu một hàm có tên, bạn là tác giả mã nên bao gồm tên đó trong mã, để người đọc không phải suy luận tên đó từ việc đọc và thực thi tinh thần mã nguồn của hàm đó. Ngay cả một thân hàm tầm thường như `x * 2` cũng phải được đọc để suy luận một cái tên như "double" hoặc "multBy2"; công việc tinh thần thêm ngắn gọn đó là không cần thiết khi bạn chỉ cần dành một giây để đặt tên cho hàm là "double" hoặc "multBy2" *một lần*, tiết kiệm cho người đọc công việc tinh thần lặp đi lặp lại đó mỗi khi nó được đọc trong tương lai.
 
-There are, regrettably in some respects, many other function definition forms in JS as of early 2020 (maybe more in the future!).
+Thật đáng tiếc ở một số khía cạnh, có nhiều dạng định nghĩa hàm khác trong JS tính đến đầu năm 2020 (có thể nhiều hơn trong tương lai!).
 
-Here are some more declaration forms:
+Dưới đây là một số dạng khai báo khác:
 
 ```js
-// generator function declaration
+// khai báo hàm generator
 function *two() { .. }
 
-// async function declaration
+// khai báo hàm async
 async function three() { .. }
 
-// async generator function declaration
+// khai báo hàm async generator
 async function *four() { .. }
 
-// named function export declaration (ES6 modules)
+// khai báo xuất hàm được đặt tên (mô-đun ES6)
 export function five() { .. }
 ```
 
-And here are some more of the (many!) function expression forms:
+Và đây là một số dạng biểu thức hàm (nhiều!) khác:
 
 ```js
 // IIFE
 (function(){ .. })();
 (function namedIIFE(){ .. })();
 
-// asynchronous IIFE
+// IIFE không đồng bộ
 (async function(){ .. })();
 (async function namedAIIFE(){ .. })();
 
-// arrow function expressions
+// biểu thức hàm mũi tên (arrow function)
 var f;
 f = () => 42;
 f = x => x * 2;
@@ -154,114 +154,114 @@ someOperation( x => x * 2 );
 // ..
 ```
 
-Keep in mind that arrow function expressions are **syntactically anonymous**, meaning the syntax doesn't provide a way to provide a direct name identifier for the function. The function expression may get an inferred name, but only if it's one of the assignment forms, not in the (more common!) form of being passed as a function call argument (as in the last line of the snippet).
+Hãy nhớ rằng các biểu thức hàm mũi tên là **ẩn danh về mặt cú pháp**, có nghĩa là cú pháp không cung cấp cách để cung cấp một định danh tên trực tiếp cho hàm. Biểu thức hàm có thể nhận được một tên được suy luận, nhưng chỉ khi nó là một trong các dạng gán, không phải trong dạng (phổ biến hơn!) được truyền dưới dạng đối số cuộc gọi hàm (như trong dòng cuối cùng của đoạn mã).
 
-Since I don't think anonymous functions are a good idea to use frequently in your programs, I'm not a fan of using the `=>` arrow function form. This kind of function actually has a specific purpose (i.e., handling the `this` keyword lexically), but that doesn't mean we should use it for every function we write. Use the most appropriate tool for each job.
+Vì tôi không nghĩ rằng các hàm ẩn danh là một ý tưởng hay để sử dụng thường xuyên trong các chương trình của bạn, tôi không phải là người hâm mộ việc sử dụng dạng hàm mũi tên `=>`. Loại hàm này thực sự có một mục đích cụ thể (tức là, xử lý từ khóa `this` theo từ vựng), nhưng điều đó không có nghĩa là chúng ta nên sử dụng nó cho mọi hàm chúng ta viết. Sử dụng công cụ thích hợp nhất cho mỗi công việc.
 
-Functions can also be specified in class definitions and object literal definitions. They're typically referred to as "methods" when in these forms, though in JS this term doesn't have much observable difference over "function":
+Các hàm cũng có thể được chỉ định trong các định nghĩa lớp và định nghĩa literal đối tượng. Chúng thường được gọi là "phương thức" khi ở trong các dạng này, mặc dù trong JS thuật ngữ này không có nhiều khác biệt có thể quan sát được so với "hàm":
 
 ```js
 class SomethingKindaGreat {
-    // class methods
-    coolMethod() { .. }   // no commas!
+    // phương thức lớp
+    coolMethod() { .. }   // không có dấu phẩy!
     boringMethod() { .. }
 }
 
 var EntirelyDifferent = {
-    // object methods
-    coolMethod() { .. },   // commas!
+    // phương thức đối tượng
+    coolMethod() { .. },   // dấu phẩy!
     boringMethod() { .. },
 
-    // (anonymous) function expression property
+    // thuộc tính biểu thức hàm (ẩn danh)
     oldSchool: function() { .. }
 };
 ```
 
-Phew! That's a lot of different ways to define functions.
+Phù! Đó là rất nhiều cách khác nhau để định nghĩa hàm.
 
-There's no simple shortcut path here; you just have to build familiarity with all the function forms so you can recognize them in existing code and use them appropriately in the code you write. Study them closely and practice!
+Không có con đường tắt đơn giản nào ở đây; bạn chỉ cần xây dựng sự quen thuộc với tất cả các dạng hàm để bạn có thể nhận ra chúng trong mã hiện có và sử dụng chúng một cách thích hợp trong mã bạn viết. Hãy nghiên cứu chúng kỹ lưỡng và thực hành!
 
-## Coercive Conditional Comparison
+## So sánh Có điều kiện Ép buộc
 
-Yes, that section name is quite a mouthful. But what are we talking about? We're talking about conditional expressions needing to perform coercion-oriented comparisons to make their decisions.
+Vâng, tên phần đó khá dài dòng. Nhưng chúng ta đang nói về cái gì? Chúng ta đang nói về các biểu thức điều kiện cần thực hiện các so sánh định hướng ép buộc để đưa ra quyết định của chúng.
 
-`if` and `? :`-ternary statements, as well as the test clauses in `while` and `for` loops, all perform an implicit value comparison. But what sort? Is it "strict" or "coercive"? Both, actually.
+Các câu lệnh `if` và `? :`-ba ngôi, cũng như các mệnh đề kiểm tra trong các vòng lặp `while` và `for`, tất cả đều thực hiện một so sánh giá trị ngầm định. Nhưng loại nào? Là "nghiêm ngặt" (strict) hay "ép buộc" (coercive)? Cả hai, thực ra.
 
-Consider:
+Hãy xem xét:
 
 ```js
 var x = 1;
 
 if (x) {
-    // will run!
+    // sẽ chạy!
 }
 
 while (x) {
-    // will run, once!
+    // sẽ chạy, một lần!
     x = false;
 }
 ```
 
-You might think of these `(x)` conditional expressions like this:
+Bạn có thể nghĩ về các biểu thức điều kiện `(x)` này như thế này:
 
 ```js
 var x = 1;
 
 if (x == true) {
-    // will run!
+    // sẽ chạy!
 }
 
 while (x == true) {
-    // will run, once!
+    // sẽ chạy, một lần!
     x = false;
 }
 ```
 
-In this specific case -- the value of `x` being `1` -- that mental model works, but it's not accurate more broadly. Consider:
+Trong trường hợp cụ thể này -- giá trị của `x` là `1` -- mô hình tinh thần đó hoạt động, nhưng nó không chính xác rộng hơn. Hãy xem xét:
 
 ```js
 var x = "hello";
 
 if (x) {
-    // will run!
+    // sẽ chạy!
 }
 
 if (x == true) {
-    // won't run :(
+    // sẽ không chạy :(
 }
 ```
 
-Oops. So what is the `if` statement actually doing? This is the more accurate mental model:
+Rất tiếc. Vậy câu lệnh `if` thực sự đang làm gì? Đây là mô hình tinh thần chính xác hơn:
 
 ```js
 var x = "hello";
 
 if (Boolean(x) == true) {
-    // will run
+    // sẽ chạy
 }
 
-// which is the same as:
+// cũng giống như là:
 
 if (Boolean(x) === true) {
-    // will run
+    // sẽ chạy
 }
 ```
 
-Since the `Boolean(..)` function always returns a value of type boolean, the `==` vs `===` in this snippet is irrelevant; they'll both do the same thing. But the important part is to see that before the comparison, a coercion occurs, from whatever type `x` currently is, to boolean.
+Vì hàm `Boolean(..)` luôn trả về một giá trị kiểu boolean, `==` so với `===` trong đoạn mã này là không liên quan; cả hai đều sẽ làm điều tương tự. Nhưng phần quan trọng là thấy rằng trước khi so sánh, một sự ép buộc xảy ra, từ bất kỳ loại nào `x` hiện tại, sang boolean.
 
-You just can't get away from coercions in JS comparisons. Buckle down and learn them.
+Bạn chỉ không thể thoát khỏi sự ép buộc trong các so sánh JS. Hãy bắt tay vào và học chúng.
 
-## Prototypal "Classes"
+## Các "Lớp" Nguyên mẫu
 
-In Chapter 3, we introduced prototypes and showed how we can link objects through a prototype chain.
+Trong Chương 3, chúng ta đã giới thiệu các nguyên mẫu và chỉ ra cách chúng ta có thể liên kết các đối tượng thông qua một chuỗi nguyên mẫu.
 
-Another way of wiring up such prototype linkages served as the (honestly, ugly) predecessor to the elegance of the ES6 `class` system (see Chapter 2, "Classes"), and is referred to as prototypal classes.
+Một cách khác để kết nối các liên kết nguyên mẫu như vậy đã đóng vai trò là người tiền nhiệm (thành thật mà nói, xấu xí) cho sự thanh lịch của hệ thống `class` ES6 (xem Chương 2, "Lớp"), và được gọi là các lớp nguyên mẫu.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| While this style of code is quite uncommon in JS these days, it's still perplexingly rather common to be asked about it in job interviews! |
+| Mặc dù phong cách mã này khá hiếm gặp trong JS ngày nay, nhưng vẫn còn khá phổ biến một cách khó hiểu khi được hỏi về nó trong các cuộc phỏng vấn xin việc! |
 
-Let's first recall the `Object.create(..)` style of coding:
+Trước tiên hãy nhớ lại phong cách mã hóa `Object.create(..)`:
 
 ```js
 var Classroom = {
@@ -276,9 +276,9 @@ mathClass.welcome();
 // Welcome, students!
 ```
 
-Here, a `mathClass` object is linked via its prototype to a `Classroom` object. Through this linkage, the function call `mathClass.welcome()` is delegated to the method defined on `Classroom`.
+Ở đây, một đối tượng `mathClass` được liên kết qua nguyên mẫu của nó với một đối tượng `Classroom`. Thông qua liên kết này, cuộc gọi hàm `mathClass.welcome()` được ủy quyền cho phương thức được định nghĩa trên `Classroom`.
 
-The prototypal class pattern would have labeled this delegation behavior "inheritance," and alternatively have defined it (with the same behavior) as:
+Mẫu lớp nguyên mẫu sẽ dán nhãn hành vi ủy quyền này là "kế thừa", và thay vào đó đã định nghĩa nó (với cùng hành vi) như sau:
 
 ```js
 function Classroom() {
@@ -295,15 +295,15 @@ mathClass.welcome();
 // Welcome, students!
 ```
 
-All functions by default reference an empty object at a property named `prototype`. Despite the confusing naming, this is **not** the function's *prototype* (where the function is prototype linked to), but rather the prototype object to *link to* when other objects are created by calling the function with `new`.
+Tất cả các hàm theo mặc định đều tham chiếu đến một đối tượng trống tại một thuộc tính có tên `prototype`. Bất chấp việc đặt tên gây nhầm lẫn, đây **không phải** là *nguyên mẫu* của hàm (nơi hàm được liên kết nguyên mẫu đến), mà là đối tượng nguyên mẫu để *liên kết đến* khi các đối tượng khác được tạo bằng cách gọi hàm với `new`.
 
-We add a `welcome` property on that empty object (called `Classroom.prototype`), pointing at the `hello()` function.
+Chúng ta thêm một thuộc tính `welcome` trên đối tượng trống đó (được gọi là `Classroom.prototype`), trỏ đến hàm `hello()`.
 
-Then `new Classroom()` creates a new object (assigned to `mathClass`), and prototype links it to the existing `Classroom.prototype` object.
+Sau đó `new Classroom()` tạo ra một đối tượng mới (được gán cho `mathClass`), và liên kết nguyên mẫu nó với đối tượng `Classroom.prototype` hiện có.
 
-Though `mathClass` does not have a `welcome()` property/function, it successfully delegates to the function `Classroom.prototype.welcome()`.
+Mặc dù `mathClass` không có thuộc tính/hàm `welcome()`, nó ủy quyền thành công cho hàm `Classroom.prototype.welcome()`.
 
-This "prototypal class" pattern is now strongly discouraged, in favor of using ES6's `class` mechanism:
+Mẫu "lớp nguyên mẫu" này hiện bị phản đối mạnh mẽ, ủng hộ việc sử dụng cơ chế `class` của ES6:
 
 ```js
 class Classroom {
@@ -322,4 +322,4 @@ mathClass.welcome();
 // Welcome, students!
 ```
 
-Under the covers, the same prototype linkage is wired up, but this `class` syntax fits the class-oriented design pattern much more cleanly than "prototypal classes".
+Dưới vỏ bọc, cùng một liên kết nguyên mẫu được kết nối, nhưng cú pháp `class` này phù hợp với mẫu thiết kế hướng lớp sạch sẽ hơn nhiều so với "các lớp nguyên mẫu".

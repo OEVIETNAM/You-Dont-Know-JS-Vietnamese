@@ -1,13 +1,13 @@
-# You Don't Know JS Yet: Get Started - 2nd Edition
-# Appendix B: Practice, Practice, Practice!
+# You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
+# Phụ lục B: Thực hành, Thực hành, Thực hành!
 
-In this appendix, we'll explore some exercises and their suggested solutions. These are just to *get you started* with practice over the concepts from the book.
+Trong phụ lục này, chúng ta sẽ khám phá một số bài tập và giải pháp gợi ý của chúng. Những bài tập này chỉ để *giúp bạn bắt đầu* thực hành các khái niệm từ cuốn sách.
 
-## Practicing Comparisons
+## Thực hành So sánh
 
-Let's practice working with value types and comparisons (Chapter 4, Pillar 3) where coercion will need to be involved.
+Hãy thực hành làm việc với các loại giá trị và so sánh (Chương 4, Trụ cột 3) nơi ép kiểu sẽ cần phải tham gia.
 
-`scheduleMeeting(..)` should take a start time (in 24-hour format as a string "hh:mm") and a meeting duration (number of minutes). It should return `true` if the meeting falls entirely within the work day (according to the times specified in `dayStart` and `dayEnd`); return `false` if the meeting violates the work day bounds.
+`scheduleMeeting(..)` nên nhận thời gian bắt đầu (ở định dạng 24 giờ dưới dạng chuỗi "hh:mm") và thời lượng cuộc họp (số phút). Nó sẽ trả về `true` nếu cuộc họp nằm hoàn toàn trong ngày làm việc (theo thời gian được chỉ định trong `dayStart` và `dayEnd`); trả về `false` nếu cuộc họp vi phạm giới hạn ngày làm việc.
 
 ```js
 const dayStart = "07:30";
@@ -26,13 +26,13 @@ scheduleMeeting("17:30",30);    // false
 scheduleMeeting("18:00",15);    // false
 ```
 
-Try to solve this yourself first. Consider the usage of equality and relational comparison operators, and how coercion impacts this code. Once you have code that works, *compare* your solution(s) to the code in "Suggested Solutions" at the end of this appendix.
+Hãy cố gắng tự giải quyết vấn đề này trước. Xem xét việc sử dụng các toán tử so sánh bằng và quan hệ, và cách ép kiểu ảnh hưởng đến mã này. Khi bạn có mã hoạt động, hãy *so sánh* (các) giải pháp của bạn với mã trong "Giải pháp Gợi ý" ở cuối phụ lục này.
 
-## Practicing Closure
+## Thực hành Closure
 
-Now let's practice with closure (Chapter 4, Pillar 1).
+Bây giờ hãy thực hành với closure (Chương 4, Trụ cột 1).
 
-The `range(..)` function takes a number as its first argument, representing the first number in a desired range of numbers. The second argument is also a number representing the end of the desired range (inclusive). If the second argument is omitted, then another function should be returned that expects that argument.
+Hàm `range(..)` nhận một số làm đối số đầu tiên của nó, đại diện cho số đầu tiên trong một phạm vi số mong muốn. Đối số thứ hai cũng là một số đại diện cho kết thúc của phạm vi mong muốn (bao gồm cả nó). Nếu đối số thứ hai bị bỏ qua, thì một hàm khác sẽ được trả về mong đợi đối số đó.
 
 ```js
 function range(start,end) {
@@ -53,19 +53,19 @@ start3(0);     // []
 start4(6);     // [4,5,6]
 ```
 
-Try to solve this yourself first.
+Hãy cố gắng tự giải quyết vấn đề này trước.
 
-Once you have code that works, *compare* your solution(s) to the code in "Suggested Solutions" at the end of this appendix.
+Khi bạn có mã hoạt động, hãy *so sánh* (các) giải pháp của bạn với mã trong "Giải pháp Gợi ý" ở cuối phụ lục này.
 
-## Practicing Prototypes
+## Thực hành Nguyên mẫu
 
-Finally, let's work on `this` and objects linked via prototype (Chapter 4, Pillar 2).
+Cuối cùng, hãy làm việc trên `this` và các đối tượng được liên kết qua nguyên mẫu (Chương 4, Trụ cột 2).
 
-Define a slot machine with three reels that can individually `spin()`, and then `display()` the current contents of all the reels.
+Định nghĩa một máy đánh bạc (slot machine) với ba cuộn quay có thể `spin()` (quay) riêng lẻ, và sau đó `display()` (hiển thị) nội dung hiện tại của tất cả các cuộn quay.
 
-The basic behavior of a single reel is defined in the `reel` object below. But the slot machine needs individual reels—objects that delegate to `reel`, and which each have a `position` property.
+Hành vi cơ bản của một cuộn quay đơn lẻ được định nghĩa trong đối tượng `reel` bên dưới. Nhưng máy đánh bạc cần các cuộn quay riêng lẻ—các đối tượng ủy quyền cho `reel`, và mỗi đối tượng có một thuộc tính `position` (vị trí).
 
-A reel only *knows how* to `display()` its current slot symbol, but a slot machine typically shows three symbols per reel: the current slot (`position`), one slot above (`position - 1`), and one slot below (`position + 1`). So displaying the slot machine should end up displaying a 3 x 3 grid of slot symbols.
+Một cuộn quay chỉ *biết cách* `display()` biểu tượng khe hiện tại của nó, nhưng một máy đánh bạc thường hiển thị ba biểu tượng trên mỗi cuộn quay: khe hiện tại (`position`), một khe ở trên (`position - 1`), và một khe ở dưới (`position + 1`). Vì vậy, việc hiển thị máy đánh bạc sẽ kết thúc bằng việc hiển thị một lưới 3 x 3 các biểu tượng khe.
 
 ```js
 function randMax(max) {
@@ -98,8 +98,8 @@ var reel = {
 
 var slotMachine = {
     reels: [
-        // this slot machine needs 3 separate reels
-        // hint: Object.create(..)
+        // máy đánh bạc này cần 3 cuộn quay riêng biệt
+        // gợi ý: Object.create(..)
     ],
     spin() {
         this.reels.forEach(function spinReel(reel){
@@ -124,23 +124,23 @@ slotMachine.display();
 // ☺ | ♦ | ★
 ```
 
-Try to solve this yourself first.
+Hãy cố gắng tự giải quyết vấn đề này trước.
 
-Hints:
+Gợi ý:
 
-* Use the `%` modulo operator for wrapping `position` as you access symbols circularly around a reel.
+* Sử dụng toán tử modulo `%` để bao bọc `position` khi bạn truy cập các biểu tượng theo vòng tròn quanh một cuộn quay.
 
-* Use `Object.create(..)` to create an object and prototype-link it to another object. Once linked, delegation allows the objects to share `this` context during method invocation.
+* Sử dụng `Object.create(..)` để tạo một đối tượng và liên kết nguyên mẫu nó với một đối tượng khác. Sau khi được liên kết, ủy quyền cho phép các đối tượng chia sẻ ngữ cảnh `this` trong quá trình gọi phương thức.
 
-* Instead of modifying the reel object directly to show each of the three positions, you can use another temporary object (`Object.create(..)` again) with its own `position`, to delegate from.
+* Thay vì sửa đổi đối tượng cuộn quay trực tiếp để hiển thị từng vị trí trong ba vị trí, bạn có thể sử dụng một đối tượng tạm thời khác (`Object.create(..)` một lần nữa) với `position` riêng của nó, để ủy quyền từ đó.
 
-Once you have code that works, *compare* your solution(s) to the code in "Suggested Solutions" at the end of this appendix.
+Khi bạn có mã hoạt động, hãy *so sánh* (các) giải pháp của bạn với mã trong "Giải pháp Gợi ý" ở cuối phụ lục này.
 
-## Suggested Solutions
+## Giải pháp Gợi ý
 
-Keep in mind that these suggested solutions are just that: suggestions. There are many different ways to solve these practice exercises. Compare your approach to what you see here, and consider the pros and cons of each.
+Hãy nhớ rằng những giải pháp gợi ý này chỉ là: gợi ý. Có nhiều cách khác nhau để giải quyết các bài tập thực hành này. So sánh cách tiếp cận của bạn với những gì bạn thấy ở đây, và xem xét ưu và nhược điểm của mỗi cách.
 
-Suggested solution for "Comparisons" (Pillar 3) practice:
+Giải pháp gợi ý cho thực hành "So sánh" (Trụ cột 3):
 
 ```js
 const dayStart = "07:30";
@@ -172,8 +172,8 @@ function scheduleMeeting(startTime,durationMinutes) {
                 meetingEndMinutes - 60;
         }
 
-        // re-compose fully-qualified time strings
-        // (to make comparison easier)
+        // biên soạn lại các chuỗi thời gian đủ điều kiện
+        // (để làm cho việc so sánh dễ dàng hơn)
         let meetingStart = `${
             meetingStartHour.padStart(2,"0")
         }:${
@@ -185,10 +185,10 @@ function scheduleMeeting(startTime,durationMinutes) {
             String(meetingEndMinutes).padStart(2,"0")
         }`;
 
-        // NOTE: since expressions are all strings,
-        // comparisons here are alphabetic, but it's
-        // safe here since they're fully qualified
-        // time strings (ie, "07:15" < "07:30")
+        // LƯU Ý: vì các biểu thức đều là chuỗi,
+        // so sánh ở đây là theo thứ tự bảng chữ cái, nhưng nó
+        // an toàn ở đây vì chúng là các chuỗi thời gian
+        // đủ điều kiện (tức là, "07:15" < "07:30")
         return (
             meetingStart >= dayStart &&
             meetingEnd <= dayEnd
@@ -209,7 +209,7 @@ scheduleMeeting("18:00",15);    // false
 
 ----
 
-Suggested solution for "Closure" (Pillar 1) practice:
+Giải pháp gợi ý cho thực hành "Closure" (Trụ cột 1):
 
 ```js
 function range(start,end) {
@@ -253,7 +253,7 @@ start4(6);     // [4,5,6]
 
 ----
 
-Suggested solution for "Prototypes" (Pillar 2) practice:
+Giải pháp gợi ý cho thực hành "Nguyên mẫu" (Trụ cột 2):
 
 ```js
 function randMax(max) {
@@ -298,7 +298,7 @@ var slotMachine = {
     display() {
         var lines = [];
 
-        // display all 3 lines on the slot machine
+        // hiển thị tất cả 3 dòng trên máy đánh bạc
         for (
             let linePos = -1; linePos <= 1; linePos++
         ) {
@@ -333,4 +333,4 @@ slotMachine.display();
 // ☺ | ♦ | ★
 ```
 
-That's it for this book. But now it's time to look for real projects to practice these ideas on. Just keep coding, because that's the best way to learn!
+Đó là tất cả cho cuốn sách này. Nhưng bây giờ đã đến lúc tìm kiếm các dự án thực tế để thực hành những ý tưởng này. Chỉ cần tiếp tục viết mã, vì đó là cách tốt nhất để học!

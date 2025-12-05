@@ -1,50 +1,50 @@
-# You Don't Know JS Yet: Scope & Closures - 2nd Edition
-# Chapter 8: The Module Pattern
+# You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
+# Chương 8: Mẫu Module
 
-In this chapter, we wrap up the main text of the book by exploring one of the most important code organization patterns in all of programming: the module. As we'll see, modules are inherently built from what we've already covered: the payoff for your efforts in learning lexical scope and closure.
+Trong chương này, chúng ta kết thúc văn bản chính của cuốn sách bằng cách khám phá một trong những mẫu tổ chức mã quan trọng nhất trong tất cả các chương trình: module. Như chúng ta sẽ thấy, các module vốn được xây dựng từ những gì chúng ta đã đề cập: phần thưởng cho những nỗ lực của bạn trong việc học phạm vi từ vựng và closure.
 
-We've examined every angle of lexical scope, from the breadth of the global scope down through nested block scopes, into the intricacies of the variable lifecycle. Then we leveraged lexical scope to understand the full power of closure.
+Chúng ta đã kiểm tra mọi góc độ của phạm vi từ vựng, từ bề rộng của phạm vi toàn cục xuống qua các phạm vi khối lồng nhau, vào sự phức tạp của vòng đời biến. Sau đó, chúng ta đã tận dụng phạm vi từ vựng để hiểu toàn bộ sức mạnh của closure.
 
-Take a moment to reflect on how far you've come in this journey so far; you've taken big steps in getting to know JS more deeply!
+Hãy dành một chút thời gian để suy ngẫm về việc bạn đã đi bao xa trong hành trình này cho đến nay; bạn đã thực hiện những bước lớn trong việc tìm hiểu sâu hơn về JS!
 
-The central theme of this book has been that understanding and mastering scope and closure is key in properly structuring and organizing our code, especially the decisions on where to store information in variables.
+Chủ đề trung tâm của cuốn sách này là hiểu và làm chủ phạm vi và closure là chìa khóa trong việc cấu trúc và tổ chức mã của chúng ta đúng cách, đặc biệt là các quyết định về nơi lưu trữ thông tin trong các biến.
 
-Our goal in this final chapter is to appreciate how modules embody the importance of these topics, elevating them from abstract concepts to concrete, practical improvements in building programs.
+Mục tiêu của chúng ta trong chương cuối cùng này là đánh giá cao cách các module thể hiện tầm quan trọng của các chủ đề này, nâng chúng từ các khái niệm trừu tượng lên các cải tiến cụ thể, thực tế trong việc xây dựng các chương trình.
 
-## Encapsulation and Least Exposure (POLE)
+## Đóng Gói và Phơi Bày Tối Thiểu (POLE)
 
-Encapsulation is often cited as a principle of object-oriented (OO) programming, but it's more fundamental and broadly applicable than that. The goal of encapsulation is the bundling or co-location of information (data) and behavior (functions) that together serve a common purpose.
+Đóng gói (Encapsulation) thường được trích dẫn như một nguyên tắc của lập trình hướng đối tượng (OO), nhưng nó cơ bản và áp dụng rộng rãi hơn thế. Mục tiêu của đóng gói là bó hoặc đồng vị trí thông tin (dữ liệu) và hành vi (hàm) cùng phục vụ một mục đích chung.
 
-Independent of any syntax or code mechanisms, the spirit of encapsulation can be realized in something as simple as using separate files to hold bits of the overall program with common purpose. If we bundle everything that powers a list of search results into a single file called "search-list.js", we're encapsulating that part of the program.
+Độc lập với bất kỳ cú pháp hoặc cơ chế mã nào, tinh thần của đóng gói có thể được thực hiện trong một cái gì đó đơn giản như sử dụng các tệp riêng biệt để giữ các bit của chương trình tổng thể với mục đích chung. Nếu chúng ta bó mọi thứ cung cấp năng lượng cho một danh sách các kết quả tìm kiếm vào một tệp duy nhất gọi là "search-list.js", chúng ta đang đóng gói phần đó của chương trình.
 
-The recent trend in modern front-end programming to organize applications around Component architecture pushes encapsulation even further. For many, it feels natural to consolidate everything that constitutes the search results list—even beyond code, including presentational markup and styling—into a single unit of program logic, something tangible we can interact with. And then we label that collection the "SearchList" component.
+Xu hướng gần đây trong lập trình front-end hiện đại để tổ chức các ứng dụng xung quanh kiến trúc Component đẩy đóng gói đi xa hơn nữa. Đối với nhiều người, cảm thấy tự nhiên khi hợp nhất mọi thứ cấu thành danh sách kết quả tìm kiếm—thậm chí vượt ra ngoài mã, bao gồm đánh dấu trình bày và kiểu dáng—vào một đơn vị logic chương trình duy nhất, một cái gì đó hữu hình mà chúng ta có thể tương tác. Và sau đó chúng ta dán nhãn bộ sưu tập đó là thành phần "SearchList".
 
-Another key goal is the control of visibility of certain aspects of the encapsulated data and functionality. Recall from Chapter 6 the *least exposure* principle (POLE), which seeks to defensively guard against various *dangers* of scope over-exposure; these affect both variables and functions. In JS, we most often implement visibility control through the mechanics of lexical scope.
+Một mục tiêu chính khác là kiểm soát khả năng hiển thị của các khía cạnh nhất định của dữ liệu và chức năng được đóng gói. Nhớ lại từ Chương 6 nguyên tắc *phơi bày tối thiểu* (POLE), tìm cách bảo vệ một cách phòng thủ chống lại các *nguy hiểm* khác nhau của việc phơi bày quá mức phạm vi; những điều này ảnh hưởng đến cả biến và hàm. Trong JS, chúng ta thường thực hiện kiểm soát khả năng hiển thị thông qua cơ chế của phạm vi từ vựng.
 
-The idea is to group alike program bits together, and selectively limit programmatic access to the parts we consider *private* details. What's not considered *private* is then marked as *public*, accessible to the whole program.
+Ý tưởng là nhóm các bit chương trình giống nhau lại với nhau, và giới hạn quyền truy cập lập trình một cách chọn lọc vào các phần chúng ta coi là chi tiết *riêng tư*. Những gì không được coi là *riêng tư* sau đó được đánh dấu là *công khai*, có thể truy cập được cho toàn bộ chương trình.
 
-The natural effect of this effort is better code organization. It's easier to build and maintain software when we know where things are, with clear and obvious boundaries and connection points. It's also easier to maintain quality if we avoid the pitfalls of over-exposed data and functionality.
+Hiệu ứng tự nhiên của nỗ lực này là tổ chức mã tốt hơn. Dễ dàng hơn để xây dựng và bảo trì phần mềm khi chúng ta biết mọi thứ ở đâu, với các ranh giới và điểm kết nối rõ ràng và hiển nhiên. Cũng dễ dàng hơn để duy trì chất lượng nếu chúng ta tránh những cạm bẫy của dữ liệu và chức năng bị phơi bày quá mức.
 
-These are some of the main benefits of organizing JS programs into modules.
+Đây là một số lợi ích chính của việc tổ chức các chương trình JS thành các module.
 
-## What Is a Module?
+## Module Là Gì?
 
-A module is a collection of related data and functions (often referred to as methods in this context), characterized by a division between hidden *private* details and *public* accessible details, usually called the "public API."
+Một module là một tập hợp các dữ liệu và hàm liên quan (thường được gọi là phương thức trong bối cảnh này), được đặc trưng bởi sự phân chia giữa các chi tiết *riêng tư* ẩn và các chi tiết *công khai* có thể truy cập, thường được gọi là "API công khai".
 
-A module is also stateful: it maintains some information over time, along with functionality to access and update that information.
+Một module cũng có trạng thái: nó duy trì một số thông tin theo thời gian, cùng với chức năng để truy cập và cập nhật thông tin đó.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| A broader concern of the module pattern is fully embracing system-level modularization through loose-coupling and other program architecture techniques. That's a complex topic well beyond the bounds of our discussion, but is worth further study beyond this book. |
+| Một mối quan tâm rộng hơn của mẫu module là hoàn toàn nắm lấy mô-đun hóa cấp hệ thống thông qua liên kết lỏng lẻo và các kỹ thuật kiến trúc chương trình khác. Đó là một chủ đề phức tạp vượt xa giới hạn thảo luận của chúng ta, nhưng đáng để nghiên cứu thêm ngoài cuốn sách này. |
 
-To get a better sense of what a module is, let's compare some module characteristics to useful code patterns that aren't quite modules.
+Để có cảm giác tốt hơn về module là gì, hãy so sánh một số đặc điểm module với các mẫu mã hữu ích không hoàn toàn là module.
 
-### Namespaces (Stateless Grouping)
+### Không Gian Tên (Nhóm Không Trạng Thái)
 
-If you group a set of related functions together, without data, then you don't really have the expected encapsulation a module implies. The better term for this grouping of *stateless* functions is a namespace:
+Nếu bạn nhóm một tập hợp các hàm liên quan lại với nhau, không có dữ liệu, thì bạn không thực sự có đóng gói mong đợi mà một module ngụ ý. Thuật ngữ tốt hơn cho nhóm các hàm *không trạng thái* này là một không gian tên (namespace):
 
 ```js
-// namespace, not module
+// không gian tên, không phải module
 var Utils = {
     cancelEvt(evt) {
         evt.preventDefault();
@@ -62,16 +62,16 @@ var Utils = {
 };
 ```
 
-`Utils` here is a useful collection of utilities, yet they're all state-independent functions. Gathering functionality together is generally good practice, but that doesn't make this a module. Rather, we've defined a `Utils` namespace and organized the functions under it.
+`Utils` ở đây là một bộ sưu tập hữu ích các tiện ích, nhưng tất cả chúng đều là các hàm độc lập với trạng thái. Tập hợp chức năng lại với nhau nói chung là thực hành tốt, nhưng điều đó không làm cho cái này trở thành một module. Thay vào đó, chúng ta đã định nghĩa một không gian tên `Utils` và tổ chức các hàm dưới nó.
 
-### Data Structures (Stateful Grouping)
+### Cấu Trúc Dữ Liệu (Nhóm Có Trạng Thái)
 
-Even if you bundle data and stateful functions together, if you're not limiting the visibility of any of it, then you're stopping short of the POLE aspect of encapsulation; it's not particularly helpful to label that a module.
+Ngay cả khi bạn bó dữ liệu và các hàm có trạng thái lại với nhau, nếu bạn không giới hạn khả năng hiển thị của bất kỳ cái nào trong số đó, thì bạn đang dừng lại ở khía cạnh POLE của đóng gói; không đặc biệt hữu ích khi dán nhãn đó là một module.
 
-Consider:
+Hãy xem xét:
 
 ```js
-// data structure, not module
+// cấu trúc dữ liệu, không phải module
 var Student = {
     records: [
         { id: 14, name: "Kyle", grade: 86 },
@@ -91,15 +91,15 @@ Student.getName(73);
 // Suzy
 ```
 
-Since `records` is publicly accessible data, not hidden behind a public API, `Student` here isn't really a module.
+Vì `records` là dữ liệu có thể truy cập công khai, không ẩn sau một API công khai, `Student` ở đây không thực sự là một module.
 
-`Student` does have the data-and-functionality aspect of encapsulation, but not the visibility-control aspect. It's best to label this an instance of a data structure.
+`Student` có khía cạnh dữ liệu-và-chức-năng của đóng gói, nhưng không có khía cạnh kiểm soát khả năng hiển thị. Tốt nhất là dán nhãn cái này là một thể hiện của một cấu trúc dữ liệu.
 
-### Modules (Stateful Access Control)
+### Modules (Kiểm Soát Truy Cập Có Trạng Thái)
 
-To embody the full spirit of the module pattern, we not only need grouping and state, but also access control through visibility (private vs. public).
+Để thể hiện tinh thần đầy đủ của mẫu module, chúng ta không chỉ cần nhóm và trạng thái, mà còn cần kiểm soát truy cập thông qua khả năng hiển thị (riêng tư so với công khai).
 
-Let's turn `Student` from the previous section into a module. We'll start with a form I call the "classic module," which was originally referred to as the "revealing module" when it first emerged in the early 2000s. Consider:
+Hãy biến `Student` từ phần trước thành một module. Chúng ta sẽ bắt đầu với một hình thức tôi gọi là "module cổ điển," ban đầu được gọi là "module tiết lộ" (revealing module) khi nó xuất hiện lần đầu vào đầu những năm 2000. Hãy xem xét:
 
 ```js
 var Student = (function defineStudent(){
@@ -129,32 +129,32 @@ var Student = (function defineStudent(){
 Student.getName(73);   // Suzy
 ```
 
-`Student` is now an instance of a module. It features a public API with a single method: `getName(..)`. This method is able to access the private hidden `records` data.
+`Student` bây giờ là một thể hiện của một module. Nó có một API công khai với một phương thức duy nhất: `getName(..)`. Phương thức này có thể truy cập dữ liệu `records` ẩn riêng tư.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| I should point out that the explicit student data being hard-coded into this module definition is just for our illustration purposes. A typical module in your program will receive this data from an outside source, typically loaded from databases, JSON data files, Ajax calls, etc. The data is then injected into the module instance typically through method(s) on the module's public API. |
+| Tôi nên chỉ ra rằng dữ liệu sinh viên rõ ràng được mã hóa cứng vào định nghĩa module này chỉ dành cho mục đích minh họa của chúng ta. Một module điển hình trong chương trình của bạn sẽ nhận dữ liệu này từ một nguồn bên ngoài, thường được tải từ cơ sở dữ liệu, tệp dữ liệu JSON, cuộc gọi Ajax, v.v. Dữ liệu sau đó được tiêm vào thể hiện module thường thông qua (các) phương thức trên API công khai của module. |
 
-How does the classic module format work?
+Định dạng module cổ điển hoạt động như thế nào?
 
-Notice that the instance of the module is created by the `defineStudent()` IIFE being executed. This IIFE returns an object (named `publicAPI`) that has a property on it referencing the inner `getName(..)` function.
+Chú ý rằng thể hiện của module được tạo ra bởi IIFE `defineStudent()` đang được thực thi. IIFE này trả về một đối tượng (có tên `publicAPI`) có một thuộc tính trên đó tham chiếu đến hàm `getName(..)` bên trong.
 
-Naming the object `publicAPI` is stylistic preference on my part. The object can be named whatever you like (JS doesn't care), or you can just return an object directly without assigning it to any internal named variable. More on this choice in Appendix A.
+Đặt tên đối tượng là `publicAPI` là sở thích phong cách của tôi. Đối tượng có thể được đặt tên bất cứ điều gì bạn thích (JS không quan tâm), hoặc bạn có thể chỉ cần trả về một đối tượng trực tiếp mà không cần gán nó cho bất kỳ biến được đặt tên nội bộ nào. Thêm về lựa chọn này trong Phụ lục A.
 
-From the outside, `Student.getName(..)` invokes this exposed inner function, which maintains access to the inner `records` variable via closure.
+Từ bên ngoài, `Student.getName(..)` gọi hàm bên trong được phơi bày này, duy trì quyền truy cập vào biến `records` bên trong thông qua closure.
 
-You don't *have* to return an object with a function as one of its properties. You could just return a function directly, in place of the object. That still satisfies all the core bits of a classic module.
+Bạn không *phải* trả về một đối tượng với một hàm là một trong các thuộc tính của nó. Bạn có thể chỉ cần trả về một hàm trực tiếp, thay cho đối tượng. Điều đó vẫn thỏa mãn tất cả các bit cốt lõi của một module cổ điển.
 
-By virtue of how lexical scope works, defining variables and functions inside your outer module definition function makes everything *by default* private. Only properties added to the public API object returned from the function will be exported for external public use.
+Nhờ cách phạm vi từ vựng hoạt động, việc định nghĩa các biến và hàm bên trong hàm định nghĩa module bên ngoài của bạn làm cho mọi thứ *theo mặc định* là riêng tư. Chỉ các thuộc tính được thêm vào đối tượng API công khai được trả về từ hàm mới được xuất khẩu để sử dụng công khai bên ngoài.
 
-The use of an IIFE implies that our program only ever needs a single central instance of the module, commonly referred to as a "singleton." Indeed, this specific example is simple enough that there's no obvious reason we'd need anything more than just one instance of the `Student` module.
+Việc sử dụng một IIFE ngụ ý rằng chương trình của chúng ta chỉ bao giờ cần một thể hiện trung tâm duy nhất của module, thường được gọi là một "singleton." Thật vậy, ví dụ cụ thể này đủ đơn giản để không có lý do rõ ràng nào chúng ta cần bất cứ điều gì hơn chỉ một thể hiện của module `Student`.
 
-#### Module Factory (Multiple Instances)
+#### Nhà Máy Module (Nhiều Thể Hiện)
 
-But if we did want to define a module that supported multiple instances in our program, we can slightly tweak the code:
+Nhưng nếu chúng ta muốn định nghĩa một module hỗ trợ nhiều thể hiện trong chương trình của mình, chúng ta có thể điều chỉnh mã một chút:
 
 ```js
-// factory function, not singleton IIFE
+// hàm nhà máy, không phải singleton IIFE
 function defineStudent() {
     var records = [
         { id: 14, name: "Kyle", grade: 86 },
@@ -183,27 +183,27 @@ var fullTime = defineStudent();
 fullTime.getName(73);            // Suzy
 ```
 
-Rather than specifying `defineStudent()` as an IIFE, we just define it as a normal standalone function, which is commonly referred to in this context as a "module factory" function.
+Thay vì chỉ định `defineStudent()` là một IIFE, chúng ta chỉ định nghĩa nó như một hàm độc lập bình thường, thường được gọi trong bối cảnh này là một hàm "nhà máy module" (module factory).
 
-We then call the module factory, producing an instance of the module that we label `fullTime`. This module instance implies a new instance of the inner scope, and thus a new closure that `getName(..)` holds over `records`. `fullTime.getName(..)` now invokes the method on that specific instance.
+Sau đó, chúng ta gọi nhà máy module, tạo ra một thể hiện của module mà chúng ta dán nhãn `fullTime`. Thể hiện module này ngụ ý một thể hiện mới của phạm vi bên trong, và do đó một closure mới mà `getName(..)` giữ trên `records`. `fullTime.getName(..)` bây giờ gọi phương thức trên thể hiện cụ thể đó.
 
-#### Classic Module Definition
+#### Định Nghĩa Module Cổ Điển
 
-So to clarify what makes something a classic module:
+Vì vậy, để làm rõ những gì làm cho một cái gì đó trở thành một module cổ điển:
 
-* There must be an outer scope, typically from a module factory function running at least once.
+* Phải có một phạm vi bên ngoài, thường là từ một hàm nhà máy module chạy ít nhất một lần.
 
-* The module's inner scope must have at least one piece of hidden information that represents state for the module.
+* Phạm vi bên trong của module phải có ít nhất một phần thông tin ẩn đại diện cho trạng thái cho module.
 
-* The module must return on its public API a reference to at least one function that has closure over the hidden module state (so that this state is actually preserved).
+* Module phải trả về trên API công khai của nó một tham chiếu đến ít nhất một hàm có closure trên trạng thái module ẩn (để trạng thái này thực sự được bảo tồn).
 
-You'll likely run across other variations on this classic module approach, which we'll look at in more detail in Appendix A.
+Bạn có thể sẽ gặp các biến thể khác trên cách tiếp cận module cổ điển này, chúng ta sẽ xem xét chi tiết hơn trong Phụ lục A.
 
 ## Node CommonJS Modules
 
-In Chapter 4, we introduced the CommonJS module format used by Node. Unlike the classic module format described earlier, where you could bundle the module factory or IIFE alongside any other code including other modules, CommonJS modules are file-based; one module per file.
+Trong Chương 4, chúng ta đã giới thiệu định dạng module CommonJS được sử dụng bởi Node. Không giống như định dạng module cổ điển được mô tả trước đó, nơi bạn có thể bó nhà máy module hoặc IIFE cùng với bất kỳ mã nào khác bao gồm các module khác, các module CommonJS dựa trên tệp; một module mỗi tệp.
 
-Let's tweak our module example to adhere to that format:
+Hãy điều chỉnh ví dụ module của chúng ta để tuân thủ định dạng đó:
 
 ```js
 module.exports.getName = getName;
@@ -225,22 +225,22 @@ function getName(studentID) {
 }
 ```
 
-The `records` and `getName` identifiers are in the top-level scope of this module, but that's not the global scope (as explained in Chapter 4). As such, everything here is *by default* private to the module.
+Các định danh `records` và `getName` nằm trong phạm vi cấp cao nhất của module này, nhưng đó không phải là phạm vi toàn cục (như đã giải thích trong Chương 4). Như vậy, mọi thứ ở đây là *theo mặc định* riêng tư đối với module.
 
-To expose something on the public API of a CommonJS module, you add a property to the empty object provided as `module.exports`. In some older legacy code, you may run across references to just a bare `exports`, but for code clarity you should always fully qualify that reference with the `module.` prefix.
+Để phơi bày một cái gì đó trên API công khai của một module CommonJS, bạn thêm một thuộc tính vào đối tượng trống được cung cấp dưới dạng `module.exports`. Trong một số mã di sản cũ hơn, bạn có thể gặp các tham chiếu đến chỉ một `exports` trần trụi, nhưng để rõ ràng mã, bạn nên luôn luôn định danh đầy đủ tham chiếu đó với tiền tố `module.`.
 
-For style purposes, I like to put my "exports" at the top and my module implementation at the bottom. But these exports can be placed anywhere. I strongly recommend collecting them all together, either at the top or bottom of your file.
+Đối với mục đích phong cách, tôi thích đặt "exports" của mình ở đầu và triển khai module của mình ở dưới cùng. Nhưng các xuất khẩu này có thể được đặt ở bất cứ đâu. Tôi thực sự khuyên bạn nên thu thập tất cả chúng lại với nhau, hoặc ở đầu hoặc cuối tệp của bạn.
 
-Some developers have the habit of replacing the default exports object, like this:
+Một số nhà phát triển có thói quen thay thế đối tượng xuất khẩu mặc định, như thế này:
 
 ```js
-// defining a new object for the API
+// định nghĩa một đối tượng mới cho API
 module.exports = {
     // ..exports..
 };
 ```
 
-There are some quirks with this approach, including unexpected behavior if multiple such modules circularly depend on each other. As such, I recommend against replacing the object. If you want to assign multiple exports at once, using object literal style definition, you can do this instead:
+Có một số điều kỳ quặc với cách tiếp cận này, bao gồm hành vi không mong đợi nếu nhiều module như vậy phụ thuộc vòng tròn vào nhau. Như vậy, tôi khuyên không nên thay thế đối tượng. Nếu bạn muốn gán nhiều xuất khẩu cùng một lúc, sử dụng định nghĩa kiểu literal đối tượng, bạn có thể làm điều này thay thế:
 
 ```js
 Object.assign(module.exports,{
@@ -248,9 +248,9 @@ Object.assign(module.exports,{
 });
 ```
 
-What's happening here is defining the `{ .. }` object literal with your module's public API specified, and then `Object.assign(..)` is performing a shallow copy of all those properties onto the existing `module.exports` object, instead of replacing it This is a nice balance of convenience and safer module behavior.
+Những gì đang xảy ra ở đây là định nghĩa literal đối tượng `{ .. }` với API công khai của module của bạn được chỉ định, và sau đó `Object.assign(..)` đang thực hiện một bản sao nông của tất cả các thuộc tính đó vào đối tượng `module.exports` hiện có, thay vì thay thế nó. Đây là một sự cân bằng tốt đẹp của sự tiện lợi và hành vi module an toàn hơn.
 
-To include another module instance into your module/program, use Node's `require(..)` method. Assuming this module is located at "/path/to/student.js", this is how we can access it:
+Để bao gồm một thể hiện module khác vào module/chương trình của bạn, hãy sử dụng phương thức `require(..)` của Node. Giả sử module này nằm tại "/path/to/student.js", đây là cách chúng ta có thể truy cập nó:
 
 ```js
 var Student = require("/path/to/student.js");
@@ -259,31 +259,31 @@ Student.getName(73);
 // Suzy
 ```
 
-`Student` now references the public API of our example module.
+`Student` bây giờ tham chiếu đến API công khai của module ví dụ của chúng ta.
 
-CommonJS modules behave as singleton instances, similar to the IIFE module definition style presented before. No matter how many times you `require(..)` the same module, you just get additional references to the single shared module instance.
+Các module CommonJS hoạt động như các thể hiện singleton, tương tự như kiểu định nghĩa module IIFE được trình bày trước đó. Bất kể bạn `require(..)` cùng một module bao nhiêu lần, bạn chỉ nhận được các tham chiếu bổ sung đến thể hiện module được chia sẻ duy nhất.
 
-`require(..)` is an all-or-nothing mechanism; it includes a reference of the entire exposed public API of the module. To effectively access only part of the API, the typical approach looks like this:
+`require(..)` là một cơ chế tất cả hoặc không có gì; nó bao gồm một tham chiếu của toàn bộ API công khai được phơi bày của module. Để truy cập hiệu quả chỉ một phần của API, cách tiếp cận điển hình trông như thế này:
 
 ```js
 var getName = require("/path/to/student.js").getName;
 
-// or alternately:
+// hoặc thay thế:
 
 var { getName } = require("/path/to/student.js");
 ```
 
-Similar to the classic module format, the publicly exported methods of a CommonJS module's API hold closures over the internal module details. That's how the module singleton state is maintained across the lifetime of your program.
+Tương tự như định dạng module cổ điển, các phương thức được xuất khẩu công khai của API của một module CommonJS giữ các closure trên các chi tiết module bên trong. Đó là cách trạng thái singleton module được duy trì trong suốt vòng đời của chương trình của bạn.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| In Node `require("student")` statements, non-absolute paths (`"student"`) assume a ".js" file extension and search "node_modules". |
+| Trong các câu lệnh `require("student")` của Node, các đường dẫn không tuyệt đối (`"student"`) giả định phần mở rộng tệp ".js" và tìm kiếm "node_modules". |
 
 ## Modern ES Modules (ESM)
 
-The ESM format shares several similarities with the CommonJS format. ESM is file-based, and module instances are singletons, with everything private *by default*. One notable difference is that ESM files are assumed to be strict-mode, without needing a `"use strict"` pragma at the top. There's no way to define an ESM as non-strict-mode.
+Định dạng ESM chia sẻ một số điểm tương đồng với định dạng CommonJS. ESM dựa trên tệp, và các thể hiện module là singleton, với mọi thứ riêng tư *theo mặc định*. Một sự khác biệt đáng chú ý là các tệp ESM được giả định là chế độ nghiêm ngặt (strict-mode), mà không cần một chỉ thị `"use strict"` ở đầu. Không có cách nào để định nghĩa một ESM là không chế độ nghiêm ngặt.
 
-Instead of `module.exports` in CommonJS, ESM uses an `export` keyword to expose something on the public API of the module. The `import` keyword replaces the `require(..)` statement. Let's adjust "students.js" to use the ESM format:
+Thay vì `module.exports` trong CommonJS, ESM sử dụng từ khóa `export` để phơi bày một cái gì đó trên API công khai của module. Từ khóa `import` thay thế câu lệnh `require(..)`. Hãy điều chỉnh "students.js" để sử dụng định dạng ESM:
 
 ```js
 export { getName };
@@ -305,9 +305,9 @@ function getName(studentID) {
 }
 ```
 
-The only change here is the `export { getName }` statement. As before, `export` statements can appear anywhere throughout the file, though `export` must be at the top-level scope; it cannot be inside any other block or function.
+Thay đổi duy nhất ở đây là câu lệnh `export { getName }`. Như trước đây, các câu lệnh `export` có thể xuất hiện ở bất cứ đâu trong tệp, mặc dù `export` phải ở phạm vi cấp cao nhất; nó không thể ở bên trong bất kỳ khối hoặc hàm nào khác.
 
-ESM offers a fair bit of variation on how the `export` statements can be specified. For example:
+ESM cung cấp một chút biến thể về cách các câu lệnh `export` có thể được chỉ định. Ví dụ:
 
 ```js
 export function getName(studentID) {
@@ -315,9 +315,9 @@ export function getName(studentID) {
 }
 ```
 
-Even though `export` appears before the `function` keyword here, this form is still a `function` declaration that also happens to be exported. That is, the `getName` identifier is *function hoisted* (see Chapter 5), so it's available throughout the whole scope of the module.
+Mặc dù `export` xuất hiện trước từ khóa `function` ở đây, hình thức này vẫn là một khai báo `function` cũng tình cờ được xuất khẩu. Nghĩa là, định danh `getName` được *hoisted hàm* (xem Chương 5), vì vậy nó có sẵn trong toàn bộ phạm vi của module.
 
-Another allowed variation:
+Một biến thể được phép khác:
 
 ```js
 export default function getName(studentID) {
@@ -325,11 +325,11 @@ export default function getName(studentID) {
 }
 ```
 
-This is a so-called "default export," which has different semantics from other exports. In essence, a "default export" is a shorthand for consumers of the module when they `import`, giving them a terser syntax when they only need this single default API member.
+Đây là cái gọi là "xuất khẩu mặc định" (default export), có ngữ nghĩa khác với các xuất khẩu khác. Về bản chất, một "xuất khẩu mặc định" là một cách viết tắt cho người tiêu dùng của module khi họ `import`, cung cấp cho họ một cú pháp ngắn gọn hơn khi họ chỉ cần thành viên API mặc định duy nhất này.
 
-Non-`default` exports are referred to as "named exports."
+Các xuất khẩu không phải `default` được gọi là "xuất khẩu được đặt tên" (named exports).
 
-The `import` keyword—like `export`, it must be used only at the top level of an ESM outside of any blocks or functions—also has a number of variations in syntax. The first is referred to as "named import":
+Từ khóa `import`—giống như `export`, nó phải được sử dụng chỉ ở cấp cao nhất của một ESM bên ngoài bất kỳ khối hoặc hàm nào—cũng có một số biến thể trong cú pháp. Đầu tiên được gọi là "nhập khẩu được đặt tên" (named import):
 
 ```js
 import { getName } from "/path/to/students.js";
@@ -337,9 +337,9 @@ import { getName } from "/path/to/students.js";
 getName(73);   // Suzy
 ```
 
-As you can see, this form imports only the specifically named public API members from a module (skipping anything not named explicitly), and it adds those identifiers to the top-level scope of the current module. This type of import is a familiar style to those used to package imports in languages like Java.
+Như bạn có thể thấy, hình thức này chỉ nhập các thành viên API công khai được đặt tên cụ thể từ một module (bỏ qua bất cứ thứ gì không được đặt tên rõ ràng), và nó thêm các định danh đó vào phạm vi cấp cao nhất của module hiện tại. Loại nhập khẩu này là một phong cách quen thuộc với những người đã quen với nhập khẩu gói trong các ngôn ngữ như Java.
 
-Multiple API members can be listed inside the `{ .. }` set, separated with commas. A named import can also be *renamed* with the `as` keyword:
+Nhiều thành viên API có thể được liệt kê bên trong tập hợp `{ .. }`, được phân tách bằng dấu phẩy. Một nhập khẩu được đặt tên cũng có thể được *đổi tên* với từ khóa `as`:
 
 ```js
 import { getName as getStudentName }
@@ -349,7 +349,7 @@ getStudentName(73);
 // Suzy
 ```
 
-If `getName` is a "default export" of the module, we can import it like this:
+Nếu `getName` là một "xuất khẩu mặc định" của module, chúng ta có thể nhập nó như thế này:
 
 ```js
 import getName from "/path/to/students.js";
@@ -357,16 +357,16 @@ import getName from "/path/to/students.js";
 getName(73);   // Suzy
 ```
 
-The only difference here is dropping the `{ }` around the import binding. If you want to mix a default import with other named imports:
+Sự khác biệt duy nhất ở đây là bỏ `{ }` xung quanh ràng buộc nhập khẩu. Nếu bạn muốn trộn một nhập khẩu mặc định với các nhập khẩu được đặt tên khác:
 
 ```js
-import { default as getName, /* .. others .. */ }
+import { default as getName, /* .. khác .. */ }
    from "/path/to/students.js";
 
 getName(73);   // Suzy
 ```
 
-By contrast, the other major variation on `import` is called "namespace import":
+Ngược lại, biến thể chính khác trên `import` được gọi là "nhập khẩu không gian tên" (namespace import):
 
 ```js
 import * as Student from "/path/to/students.js";
@@ -374,20 +374,20 @@ import * as Student from "/path/to/students.js";
 Student.getName(73);   // Suzy
 ```
 
-As is likely obvious, the `*` imports everything exported to the API, default and named, and stores it all under the single namespace identifier as specified. This approach most closely matches the form of classic modules for most of JS's history.
+Như có thể thấy rõ, `*` nhập tất cả mọi thứ được xuất khẩu sang API, mặc định và được đặt tên, và lưu trữ tất cả dưới định danh không gian tên duy nhất như được chỉ định. Cách tiếp cận này phù hợp nhất với hình thức của các module cổ điển trong hầu hết lịch sử của JS.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| As of the time of this writing, modern browsers have supported ESM for a few years now, but Node's stable'ish support for ESM is fairly recent, and has been evolving for quite a while. The evolution is likely to continue for another year or more; the introduction of ESM to JS back in ES6 created a number of challenging compatibility concerns for Node's interop with CommonJS modules. Consult Node's ESM documentation for all the latest details: https://nodejs.org/api/esm.html |
+| Tại thời điểm viết bài này, các trình duyệt hiện đại đã hỗ trợ ESM trong vài năm nay, nhưng hỗ trợ ổn định của Node cho ESM là khá gần đây, và đã phát triển trong một thời gian khá dài. Sự phát triển có khả năng tiếp tục trong một năm hoặc hơn nữa; việc giới thiệu ESM vào JS trở lại trong ES6 đã tạo ra một số lo ngại về khả năng tương thích đầy thách thức cho khả năng tương tác của Node với các module CommonJS. Tham khảo tài liệu ESM của Node để biết tất cả các chi tiết mới nhất: https://nodejs.org/api/esm.html |
 
-## Exit Scope
+## Thoát Phạm Vi
 
-Whether you use the classic module format (browser or Node), CommonJS format (in Node), or ESM format (browser or Node), modules are one of the most effective ways to structure and organize your program's functionality and data.
+Cho dù bạn sử dụng định dạng module cổ điển (trình duyệt hoặc Node), định dạng CommonJS (trong Node), hoặc định dạng ESM (trình duyệt hoặc Node), các module là một trong những cách hiệu quả nhất để cấu trúc và tổ chức chức năng và dữ liệu của chương trình của bạn.
 
-The module pattern is the conclusion of our journey in this book of learning how we can use the rules of lexical scope to place variables and functions in proper locations. POLE is the defensive *private by default* posture we always take, making sure we avoid over-exposure and interact only with the minimal public API surface area necessary.
+Mẫu module là kết luận của hành trình của chúng ta trong cuốn sách này về việc học cách chúng ta có thể sử dụng các quy tắc của phạm vi từ vựng để đặt các biến và hàm ở các vị trí thích hợp. POLE là tư thế phòng thủ *riêng tư theo mặc định* mà chúng ta luôn thực hiện, đảm bảo chúng ta tránh phơi bày quá mức và chỉ tương tác với diện tích bề mặt API công khai tối thiểu cần thiết.
 
-And underneath modules, the *magic* of how all our module state is maintained is closures leveraging the lexical scope system.
+Và bên dưới các module, *phép thuật* về cách tất cả trạng thái module của chúng ta được duy trì là các closure tận dụng hệ thống phạm vi từ vựng.
 
-That's it for the main text. Congratulations on quite a journey so far! As I've said numerous times throughout, it's a really good idea to pause, reflect, and practice what we've just discussed.
+Đó là tất cả cho văn bản chính. Chúc mừng bạn đã có một hành trình khá dài cho đến nay! Như tôi đã nói nhiều lần trong suốt, đó là một ý tưởng thực sự tốt để tạm dừng, suy ngẫm, và thực hành những gì chúng ta vừa thảo luận.
 
-When you're comfortable and ready, check out the appendices, which dig deeper into some of the corners of these topics, and also challenge you with some practice exercises to solidify what you've learned.
+Khi bạn thoải mái và sẵn sàng, hãy xem các phụ lục, đào sâu hơn vào một số góc của các chủ đề này, và cũng thách thức bạn với một số bài tập thực hành để củng cố những gì bạn đã học.
