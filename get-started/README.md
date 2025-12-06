@@ -1,3 +1,10 @@
+---
+layout: default
+title: Bắt đầu
+has_children: true
+nav_order: 2
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 
 <img src="images/cover.png" width="300">

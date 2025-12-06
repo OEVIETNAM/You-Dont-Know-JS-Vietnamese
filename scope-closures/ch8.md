@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 8
+parent: Phạm Vi & Closures
+nav_order: 9
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 8: Mẫu Module
 

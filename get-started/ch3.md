@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 3
+parent: Bắt đầu
+nav_order: 4
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Chương 3: Đào sâu vào Cội rễ của JS
 

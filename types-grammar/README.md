@@ -1,3 +1,10 @@
+---
+layout: default
+title: Kiểu & Ngữ pháp
+has_children: true
+nav_order: 5
+---
+
 # You Don't Know JS Yet: Các Kiểu & Ngữ Pháp - Ấn bản thứ 2
 
 | LƯU Ý: |

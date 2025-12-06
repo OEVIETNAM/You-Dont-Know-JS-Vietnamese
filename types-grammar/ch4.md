@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 4
+parent: Kiểu & Ngữ pháp
+nav_order: 5
+---
+
 # You Don't Know JS Yet: Types & Grammar - 2nd Edition
 # Chương 4: Ép kiểu giá trị (Coercing Values)
 

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Lời tựa
+parent: Đối tượng & Lớp
+nav_order: 1
+---
+
 # You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 # Lời Tựa
 

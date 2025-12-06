@@ -1,3 +1,10 @@
+---
+layout: default
+title: Lời Tựa
+parent: Phạm Vi & Closures
+nav_order: 1
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Lời Tựa
 

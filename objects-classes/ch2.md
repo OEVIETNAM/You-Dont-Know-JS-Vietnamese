@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 2
+parent: Đối tượng & Lớp
+nav_order: 3
+---
+
 # You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 # Chương 2: Cách Đối tượng Hoạt động
 

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Cảm ơn
+parent: Đối tượng & Lớp
+nav_order: 7
+---
+
 # You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 # Cảm Ơn!
 

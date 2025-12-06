@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 7
+parent: Phạm Vi & Closures
+nav_order: 8
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 7: Sử Dụng Closures
 

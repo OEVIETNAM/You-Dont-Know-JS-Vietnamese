@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 3
+parent: Kiểu & Ngữ pháp
+nav_order: 4
+---
+
 # You Don't Know JS Yet: Các Kiểu & Ngữ Pháp - Ấn bản thứ 2
 
 # Chương 3: Các Giá Trị Đối Tượng

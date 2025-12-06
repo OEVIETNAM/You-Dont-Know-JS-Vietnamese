@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 5
+parent: Phạm Vi & Closures
+nav_order: 6
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 5: Vòng Đời (Không Hề) Bí Mật Của Biến
 

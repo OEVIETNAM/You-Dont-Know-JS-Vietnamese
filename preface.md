@@ -1,3 +1,9 @@
+---
+layout: default
+title: Lời nói đầu (chung)
+nav_order: 1
+---
+
 # You Don't Know JS Yet - Ấn bản thứ 2
 # Lời nói đầu
 

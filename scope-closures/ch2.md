@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 2
+parent: Phạm Vi & Closures
+nav_order: 3
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 2: Minh Họa Phạm Vi Từ Vựng
 

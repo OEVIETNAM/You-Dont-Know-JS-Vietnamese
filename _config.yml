@@ -1,9 +1,15 @@
 title: "You Don't Know JS Yet (Vietnamese)"
 description: "Bản dịch tiếng Việt của bộ sách You Don't Know JS Yet"
-theme: jekyll-theme-cayman
+remote_theme: just-the-docs/just-the-docs
+
+color_scheme: dark
+
+search_enabled: true
+
 plugins:
   - jekyll-seo-tag
   - jekyll-relative-links
+  - jekyll-remote-theme
 
 relative_links:
   enabled: true

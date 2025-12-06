@@ -1,3 +1,9 @@
+---
+layout: default
+title: Home
+nav_order: 1
+---
+
 # You Don't Know JS Yet (bộ sách) - Ấn bản thứ 2
 
 Đây là một bộ sách đi sâu vào các cơ chế cốt lõi của ngôn ngữ JavaScript. Đây là **ấn bản thứ hai** của bộ sách:

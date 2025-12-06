@@ -1,3 +1,10 @@
+---
+layout: default
+title: Phạm Vi & Closures
+has_children: true
+nav_order: 3
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 
 <img src="images/cover.png" width="300">

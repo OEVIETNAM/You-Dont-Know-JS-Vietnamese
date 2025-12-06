@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 1
+parent: Bắt đầu
+nav_order: 2
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Chương 1: JavaScript *Là* Gì?
 

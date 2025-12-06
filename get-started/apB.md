@@ -1,3 +1,10 @@
+---
+layout: default
+title: Phụ lục B
+parent: Bắt đầu
+nav_order: 7
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Phụ lục B: Thực hành, Thực hành, Thực hành!
 

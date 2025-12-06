@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 4
+parent: Bắt đầu
+nav_order: 5
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Chương 4: Bức tranh Lớn hơn
 

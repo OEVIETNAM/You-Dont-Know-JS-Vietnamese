@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 6
+parent: Phạm Vi & Closures
+nav_order: 7
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 6: Hạn Chế Phơi Bày Phạm Vi
 

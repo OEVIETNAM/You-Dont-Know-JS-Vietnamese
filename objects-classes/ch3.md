@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 3
+parent: Đối tượng & Lớp
+nav_order: 4
+---
+
 # You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 # Chương 3: Đối tượng Classy
 

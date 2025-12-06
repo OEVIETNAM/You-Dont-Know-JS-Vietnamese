@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 1
+parent: Phạm Vi & Closures
+nav_order: 2
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 1: Phạm Vi Là Gì?
 

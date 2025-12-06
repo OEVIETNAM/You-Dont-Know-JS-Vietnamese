@@ -1,3 +1,10 @@
+---
+layout: default
+title: Phụ lục A
+parent: Phạm Vi & Closures
+nav_order: 10
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Phụ Lục A: Khám Phá Thêm
 

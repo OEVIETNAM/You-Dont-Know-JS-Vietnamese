@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 4
+parent: Đối tượng & Lớp
+nav_order: 5
+---
+
 # You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 # Chương 4: `this` Hoạt Động
 

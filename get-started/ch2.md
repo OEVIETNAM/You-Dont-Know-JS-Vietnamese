@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 2
+parent: Bắt đầu
+nav_order: 3
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Chương 2: Khảo sát JS
 

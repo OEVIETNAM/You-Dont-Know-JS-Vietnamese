@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 2
+parent: Kiểu & Ngữ pháp
+nav_order: 3
+---
+
 # Chương 2: Các Hành Vi Nguyên Thủy
 
 Cho đến nay, chúng ta đã khám phá bảy kiểu giá trị nguyên thủy tích hợp sẵn trong JS: `null`, `undefined`, `boolean`, `string`, `number`, `bigint`, và `symbol`.

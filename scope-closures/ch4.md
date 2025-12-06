@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 4
+parent: Phạm Vi & Closures
+nav_order: 5
+---
+
 # You Don't Know JS Yet: Phạm Vi & Closures - Ấn bản thứ 2
 # Chương 4: Xung Quanh Phạm Vi Toàn Cục
 

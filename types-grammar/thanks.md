@@ -1,3 +1,10 @@
+---
+layout: default
+title: Cảm ơn
+parent: Kiểu & Ngữ pháp
+nav_order: 6
+---
+
 # You Don't Know JS Yet: Các Kiểu & Ngữ Pháp - Ấn bản thứ 2
 
 ## Cảm Ơn

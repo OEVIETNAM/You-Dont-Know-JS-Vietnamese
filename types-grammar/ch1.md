@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 1
+parent: Kiểu & Ngữ pháp
+nav_order: 2
+---
+
 # Chương 1: Các Giá Trị Nguyên Thủy
 
 | LƯU Ý: |

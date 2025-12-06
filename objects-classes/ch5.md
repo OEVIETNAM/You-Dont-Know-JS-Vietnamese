@@ -1,3 +1,10 @@
+---
+layout: default
+title: Chương 5
+parent: Đối tượng & Lớp
+nav_order: 6
+---
+
 # You Don't Know JS Yet: Đối tượng & Lớp - Ấn bản thứ 2
 # Chương 5: Ủy Quyền (Delegation)
 

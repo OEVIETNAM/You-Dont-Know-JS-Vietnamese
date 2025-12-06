@@ -1,3 +1,10 @@
+---
+layout: default
+title: ES.Next & Beyond
+has_children: true
+nav_order: 7
+---
+
 # You Don't Know JS Yet: ES.Next & Beyond - 2nd Edition
 
 | NOTE: |

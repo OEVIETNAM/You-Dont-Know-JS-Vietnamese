@@ -1,3 +1,10 @@
+---
+layout: default
+title: Lời tựa
+parent: Bắt đầu
+nav_order: 1
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Lời tựa
 

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Đồng bộ & Bất đồng bộ
+has_children: true
+nav_order: 6
+---
+
 # You Don't Know JS Yet: Async & Performance - 2nd Edition
 
 | NOTE: |

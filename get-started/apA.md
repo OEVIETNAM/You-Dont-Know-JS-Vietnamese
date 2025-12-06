@@ -1,3 +1,10 @@
+---
+layout: default
+title: Phụ lục A
+parent: Bắt đầu
+nav_order: 6
+---
+
 # You Don't Know JS Yet: Bắt đầu - Ấn bản thứ 2
 # Phụ lục A: Khám phá Thêm
 
