@@ -1,19 +1,14 @@
-# You Don't Know JS Yet: Types & Grammar - 2nd Edition
-# Chapter 2: Primitive Behaviors
+# Chương 2: Các Hành Vi Nguyên Thủy
 
-| NOTE: |
-| :--- |
-| Work in progress |
+Cho đến nay, chúng ta đã khám phá bảy kiểu giá trị nguyên thủy tích hợp sẵn trong JS: `null`, `undefined`, `boolean`, `string`, `number`, `bigint`, và `symbol`.
 
-So far, we've explored seven built-in primitive value types in JS: `null`, `undefined`, `boolean`, `string`, `number`, `bigint`, and `symbol`.
+Chương 1 đã có khá nhiều thứ để tiếp thu, phức tạp hơn nhiều so với tôi cá là hầu hết độc giả mong đợi. Nếu bạn vẫn đang lấy lại hơi thở sau khi đọc tất cả những điều đó, đừng lo lắng về việc nghỉ ngơi một chút trước khi tiếp tục ở đây!
 
-Chapter 1 was quite a lot to take in, much more involved than I bet most readers expected. If you're still catching your breath after reading all that, don't worry about taking a bit of a break before continuing on here!
+Khi bạn đã tỉnh táo và sẵn sàng tiếp tục, hãy cùng tìm hiểu sâu hơn về các hành vi nhất định được ngụ ý bởi các kiểu giá trị đối với tất cả các giá trị tương ứng của chúng. Chúng ta sẽ xem xét cẩn thận và kỹ lưỡng hơn về tất cả các hành vi khác nhau này.
 
-Once you're clear headed and ready to move on, let's dig into certain behaviors implied by value types for all their respective values. We'll take a careful and  closer look at all of these various behaviors.
+## Tính Bất Biến Của Nguyên Thủy (Primitive Immutability)
 
-## Primitive Immutability
-
-All primitive values are immutable, meaning nothing in a JS program can reach into the contents of the value and modify it in any way.
+Tất cả các giá trị nguyên thủy đều là bất biến (immutable), có nghĩa là không có gì trong chương trình JS có thể can thiệp vào nội dung của giá trị và sửa đổi nó theo bất kỳ cách nào.
 
 ```js
 myAge = 42;
@@ -23,9 +18,9 @@ myAge = 42;
 myAge = 43;
 ```
 
-The `myAge = 43` statement doesn't change the value. It reassigns a different value `43` to `myAge`, completely replacing the previous value of `42`.
+Câu lệnh `myAge = 43` không thay đổi giá trị. Nó gán lại một giá trị khác `43` cho `myAge`, thay thế hoàn toàn giá trị trước đó là `42`.
 
-New values are also created through various operations, but again these do not modify the original value:
+Các giá trị mới cũng được tạo ra thông qua các hoạt động khác nhau, nhưng một lần nữa những điều này không sửa đổi giá trị ban đầu:
 
 ```js
 42 + 1;             // 43
@@ -33,9 +28,9 @@ New values are also created through various operations, but again these do not m
 "Hello" + "!";      // "Hello!"
 ```
 
-The values `43` and `"Hello!"` are new, distinct values from the previous `42` and `"Hello"` values, respectively.
+Các giá trị `43` và `"Hello!"` là mới, các giá trị riêng biệt so với các giá trị `42` và `"Hello"` trước đó, tương ứng.
 
-Even a string value, which looks like merely an array of characters -- and array contents are typically mutable -- is immutable:
+Ngay cả một giá trị chuỗi, trông giống như chỉ là một mảng các ký tự -- và nội dung mảng thường có thể thay đổi được (mutable) -- vẫn là bất biến:
 
 ```js
 greeting = "Hello.";
@@ -45,19 +40,19 @@ greeting[5] = "!";
 console.log(greeting);      // Hello.
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| In non-strict mode, assigning to a read-only property (like `greeting[5] = ..`) silently fails. In strict-mode, the disallowed assignment will throw an exception. |
+| Trong chế độ không nghiêm ngặt (non-strict mode), việc gán cho một thuộc tính chỉ đọc (như `greeting[5] = ..`) sẽ thất bại trong im lặng. Trong chế độ nghiêm ngặt (strict-mode), việc gán không được phép sẽ ném ra một ngoại lệ. |
 
-The nature of primitive values being immutable is not affected *in any way* by how the variable or object property holding the value is declared. For example, whether `const`, `let`, or `var` are used to declare the `greeting` variable above, the string value it holds is immutable.
+Bản chất của các giá trị nguyên thủy là bất biến không bị ảnh hưởng *theo bất kỳ cách nào* bởi cách biến hoặc thuộc tính đối tượng giữ giá trị được khai báo. Ví dụ, cho dù `const`, `let`, hay `var` được sử dụng để khai báo biến `greeting` ở trên, giá trị chuỗi mà nó giữ là bất biến.
 
-`const` doesn't create immutable values, it declares variables that cannot be reassigned (aka, immutable assignments) -- see the "Scope & Closures" title of this series for more information.
+`const` không tạo ra các giá trị bất biến, nó khai báo các biến không thể được gán lại (hay còn gọi là gán bất biến) -- xem tiêu đề "Phạm Vi & Closures" của bộ sách này để biết thêm thông tin.
 
-A property on an object may be marked as read-only -- with the `writable: false` descriptor attribute, as discussed in the "Objects & Classes" title of this series. But that still has no affect on the nature of the value, only on preventing the reassignment of the property.
+Một thuộc tính trên một đối tượng có thể được đánh dấu là chỉ đọc -- với thuộc tính mô tả `writable: false`, như đã thảo luận trong tiêu đề "Đối Tượng & Các Lớp" của bộ sách này. Nhưng điều đó vẫn không ảnh hưởng đến bản chất của giá trị, chỉ ảnh hưởng đến việc ngăn chặn việc gán lại thuộc tính.
 
-### Primitives With Properties?
+### Các Giá Trị Nguyên Thủy Có Thuộc Tính?
 
-Additionally, properties *cannot* be added to any primitive values:
+Ngoài ra, các thuộc tính *không thể* được thêm vào bất kỳ giá trị nguyên thủy nào:
 
 ```js
 greeting = "Hello.";
@@ -67,11 +62,11 @@ greeting.isRendered = true;
 greeting.isRendered;        // undefined
 ```
 
-This snippet looks like it's adding a property `isRendered` to the value in `greeting`, but this assignment silently fails (even in strict-mode).
+Đoạn mã này trông giống như nó đang thêm một thuộc tính `isRendered` vào giá trị trong `greeting`, nhưng phép gán này thất bại trong im lặng (ngay cả trong chế độ nghiêm ngặt).
 
-Property access is not allowed in any way on nullish primitive values `null` and `undefined`. But properties *can* be accessed on all other primitive values -- yes, that sounds counter-intuitive.
+Truy cập thuộc tính không được phép theo bất kỳ cách nào trên các giá trị nguyên thủy nullish là `null` và `undefined`. Nhưng các thuộc tính *có thể* được truy cập trên tất cả các giá trị nguyên thủy khác -- vâng, điều đó nghe có vẻ phản trực giác.
 
-For example, all string values have a read-only `length` property:
+Ví dụ, tất cả các giá trị chuỗi đều có thuộc tính `length` chỉ đọc:
 
 ```js
 greeting = "Hello.";
@@ -79,62 +74,62 @@ greeting = "Hello.";
 greeting.length;            // 6
 ```
 
-`length` can not be set, but it can be accesses, and it exposes the number of code-units stored in the value (see "JS Character Encodings" in Chapter 1), which often means the number of characters in the string.
+`length` không thể được đặt, nhưng nó có thể được truy cập, và nó hiển thị số lượng đơn vị mã (code-units) được lưu trữ trong giá trị (xem "Mã Hóa Ký Tự JS" trong Chương 1), thường có nghĩa là số lượng ký tự trong chuỗi.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Sort of. For most standard characters, that's true; one character is one code-point, which is one code-unit. However, as explained in Chapter 1, extended Unicode characters above code-point `65535` will be stored as two code-units (surrogate halves). Thus, for each such character, `length` will include `2` in its count, even though the character visually prints as one symbol. |
+| Đại loại vậy. Đối với hầu hết các ký tự tiêu chuẩn, điều đó đúng; một ký tự là một điểm mã (code-point), là một đơn vị mã. Tuy nhiên, như đã giải thích trong Chương 1, các ký tự Unicode mở rộng trên điểm mã `65535` sẽ được lưu trữ dưới dạng hai đơn vị mã (cặp thay thế - surrogate halves). Do đó, đối với mỗi ký tự như vậy, `length` sẽ bao gồm `2` trong số đếm của nó, mặc dù ký tự được in trực quan dưới dạng một ký hiệu. |
 
-Non-nullish primitive values also have a couple of standard built-in methods that can be accessed:
+Các giá trị nguyên thủy không phải nullish cũng có một vài phương thức tích hợp tiêu chuẩn có thể được truy cập:
 
 ```js
 greeting = "Hello.";
 
-greeting.toString();    // "Hello." <-- redundant
+greeting.toString();    // "Hello." <-- dư thừa
 greeting.valueOf();     // "Hello."
 ```
 
-Additionally, most of the primitive value-types define their own methods with specific behaviors inherent to that type. We'll cover these later in this chapter.
+Ngoài ra, hầu hết các kiểu giá trị nguyên thủy định nghĩa các phương thức riêng của chúng với các hành vi cụ thể vốn có cho kiểu đó. Chúng ta sẽ đề cập đến những điều này sau trong chương này.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| As already briefly mentioned in Chapter 1, technically, these sorts of property/method accesses on primitive values are facilitated by an implicit coercive behavior called *auto-boxing*. We'll cover this in detail in "Automatic Objects" in Chapter 3. |
+| Như đã đề cập ngắn gọn trong Chương 1, về mặt kỹ thuật, các loại truy cập thuộc tính/phương thức này trên các giá trị nguyên thủy được tạo điều kiện bởi một hành vi ép buộc ngầm định được gọi là *tự động đóng hộp* (auto-boxing). Chúng ta sẽ đề cập chi tiết về điều này trong "Các Đối Tượng Tự Động" trong Chương 3. |
 
-## Primitive Assignments
+## Các Phép Gán Nguyên Thủy
 
-Any assignment of a primitive value from one variable/container to another is a *value-copy*:
+Bất kỳ phép gán nào của một giá trị nguyên thủy từ biến/thùng chứa này sang biến/thùng chứa khác đều là một *bản sao giá trị* (value-copy):
 
 ```js
 myAge = 42;
 
-yourAge = myAge;        // assigned by value-copy
+yourAge = myAge;        // được gán bằng bản sao giá trị
 
 myAge;                  // 42
 yourAge;                // 42
 ```
 
-Here, the `myAge` and `yourAge` variables each have their own copy of the number value `42`.
+Ở đây, các biến `myAge` và `yourAge` mỗi biến có bản sao riêng của giá trị số `42`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Inside the JS engine, it *may* be the case that only one `42` value exists in memory, and the engine points both `myAge` and `yourAge` variables at the shared value. Since primitive values are immutable, there's no danger in a JS engine doing so. But what's important to us as JS developers is, in our programs, `myAge` and `yourAge` act as if they have their own copy of that value, rather than sharing it. |
+| Bên trong công cụ JS, *có thể* trường hợp là chỉ có một giá trị `42` tồn tại trong bộ nhớ, và công cụ trỏ cả hai biến `myAge` và `yourAge` vào giá trị được chia sẻ. Vì các giá trị nguyên thủy là bất biến, không có nguy hiểm nào khi công cụ JS làm như vậy. Nhưng điều quan trọng đối với chúng ta với tư cách là các nhà phát triển JS là, trong các chương trình của chúng ta, `myAge` và `yourAge` hoạt động như thể chúng có bản sao riêng của giá trị đó, thay vì chia sẻ nó. |
 
-If we later reassign `myAge` to `43` (when I have a birthday), it doesn't affect the `42` that's still assigned to `yourAge`:
+Nếu sau đó chúng ta gán lại `myAge` thành `43` (khi tôi có sinh nhật), nó không ảnh hưởng đến `42` vẫn được gán cho `yourAge`:
 
 ```js
-myAge++;            // sort of like: myAge = myAge + 1
+myAge++;            // đại loại giống như: myAge = myAge + 1
 
 myAge;              // 43
-yourAge;            // 42 <-- unchanged
+yourAge;            // 42 <-- không thay đổi
 ```
 
-## String Behaviors
+## Các Hành Vi Của Chuỗi (String Behaviors)
 
-String values have a number of specific behaviors that every JS developer should be aware of.
+Các giá trị chuỗi có một số hành vi cụ thể mà mọi nhà phát triển JS nên biết.
 
-### String Character Access
+### Truy Cập Ký Tự Chuỗi
 
-Though strings are not actually arrays, JS allows `[ .. ]` array-style access of a character at a numeric (`0`-based) index:
+Mặc dù chuỗi thực sự không phải là mảng, JS cho phép truy cập kiểu mảng `[ .. ]` của một ký tự tại một chỉ số số (dựa trên `0`):
 
 ```js
 greeting = "Hello!";
@@ -142,21 +137,21 @@ greeting = "Hello!";
 greeting[4];            // "o"
 ```
 
-If the value/expression between the `[ .. ]` doesn't resolve to a number, the value will be implicitly coerced to its whole/integer numeric representation (if possible).
+Nếu giá trị/biểu thức nằm giữa `[ .. ]` không phân giải thành một số, giá trị sẽ được ép buộc ngầm định thành biểu diễn số nguyên/toàn bộ của nó (nếu có thể).
 
 ```js
 greeting["4"];          // "o"
 ```
 
-If the value/expression resolves to a number outside the integer range of `0` - `length - 1` (or `NaN`), or if it's not a `number` value-type, the access will instead be treated as a property access with the string equivalent property name. If the property access thus fails, the result is `undefined`.
+Nếu giá trị/biểu thức phân giải thành một số nằm ngoài phạm vi số nguyên `0` - `length - 1` (hoặc `NaN`), hoặc nếu nó không phải là kiểu giá trị `number`, việc truy cập thay vào đó sẽ được coi là truy cập thuộc tính với tên thuộc tính tương đương chuỗi. Nếu truy cập thuộc tính do đó thất bại, kết quả là `undefined`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-|  We'll cover coercion in-depth later in the book. |
+|  Chúng ta sẽ đề cập sâu về sự ép buộc (coercion) sau trong cuốn sách. |
 
-### Character Iteration
+### Lặp Ký Tự
 
-Strings are not arrays, but they certainly mimic arrays closely in many ways. One such behavior is that, like arrays, strings are iterables. This means that the characters (code-units) of a string can be iterated individually:
+Chuỗi không phải là mảng, nhưng chúng chắc chắn bắt chước mảng chặt chẽ theo nhiều cách. Một hành vi như vậy là, giống như mảng, chuỗi có thể lặp lại (iterables). Điều này có nghĩa là các ký tự (đơn vị mã) của một chuỗi có thể được lặp lại riêng lẻ:
 
 ```js
 myName = "Kyle";
@@ -174,7 +169,7 @@ chars;
 // [ "K", "y", "l", "e" ]
 ```
 
-Values, such as strings and arrays, are iterables (via `...`, `for..of`, and `Array.from(..)`), if they expose an iterator-producing method at the special symbol property location `Symbol.iterator` (see "Well-Known Symbols" in Chapter 1):
+Các giá trị, chẳng hạn như chuỗi và mảng, là có thể lặp lại (thông qua `...`, `for..of`, và `Array.from(..)`), nếu chúng hiển thị một phương thức tạo iterator (iterator-producing method) tại vị trí thuộc tính symbol đặc biệt `Symbol.iterator` (xem "Các Symbol Nổi Tiếng" trong Chương 1):
 
 ```js
 myName = "Kyle";
@@ -187,35 +182,35 @@ it.next();      // { value: "e", done: false }
 it.next();      // { value: undefined, done: true }
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The specifics of the iterator protocol, including the fact that the `{ value: "e" .. }` result still shows `done: false`, are covered in detail in the "Sync & Async" title of this series. |
+| Các chi tiết cụ thể của giao thức iterator, bao gồm thực tế là kết quả `{ value: "e" .. }` vẫn hiển thị `done: false`, được đề cập chi tiết trong tiêu đề "Đồng Bộ & Bất Đồng Bộ" của bộ sách này. |
 
-### Length Computation
+### Tính Toán Độ Dài (Length Computation)
 
-As mentioned in Chapter 1, string values have a `length` property that automatically exposes the length of the string; this property can only be accessed; attempts to set it are silently ignored.
+Như đã đề cập trong Chương 1, các giá trị chuỗi có một thuộc tính `length` tự động hiển thị độ dài của chuỗi; thuộc tính này chỉ có thể được truy cập; các nỗ lực để thiết lập nó bị bỏ qua trong im lặng.
 
-The reported `length` value somewhat corresponds to the number of characters in the string (actually, code-units), but as we saw in Chapter 1, it's more complex when Unicode characters are involved.
+Giá trị `length` được báo cáo phần nào tương ứng với số lượng ký tự trong chuỗi (thực tế là các đơn vị mã), nhưng như chúng ta đã thấy trong Chương 1, nó phức tạp hơn khi các ký tự Unicode có liên quan.
 
-Most people visually distinguish symbols as separate characters; this notion of an independent visual symbol is referred to as a *grapheme*, or a *grapheme cluster*. So when counting the "length" of a string, we typically mean that we're counting the number of graphemes.
+Hầu hết mọi người phân biệt trực quan các biểu tượng là các ký tự riêng biệt; khái niệm về một biểu tượng trực quan độc lập này được gọi là một *grapheme*, hoặc một *cụm grapheme* (grapheme cluster). Vì vậy, khi đếm "độ dài" của một chuỗi, chúng ta thường có nghĩa là chúng ta đang đếm số lượng grapheme.
 
-But that's not how the computer deals with characters.
+Nhưng đó không phải là cách máy tính xử lý các ký tự.
 
-In JS, each *character* is a code-unit (16 bits), with a code-point value at or below `65535`. The `length` property of a string always counts the number of code-units in the string value, not code-points. A code-unit might represent a single character by itself, or it may be part of a surrogate pair, or it may be combined with an adjacent *combining* symbol, or part of a grapheme cluster. As such, `length` doesn't match the typical notion of counting visual characters/graphemes.
+Trong JS, mỗi *ký tự* là một đơn vị mã (16 bit), với giá trị điểm mã bằng hoặc thấp hơn `65535`. Thuộc tính `length` của một chuỗi luôn đếm số lượng đơn vị mã trong giá trị chuỗi, không phải điểm mã. Một đơn vị mã có thể đại diện cho một ký tự đơn lẻ, hoặc nó có thể là một phần của một cặp thay thế, hoặc nó có thể được kết hợp với một biểu tượng *kết hợp* liền kề, hoặc một phần của một cụm grapheme. Như vậy, `length` không khớp với khái niệm điển hình về đếm các ký tự/grapheme trực quan.
 
-To get closer to an expected/intuitive *grapheme length* for a string, the string value first needs to be normalized with `normalize("NFC")` (see "Normalizing Unicode" in Chapter 1) to produce any *composed* code-units (where possible), in case any characters were originally stored *decomposed* as separate code-units.
+Để tiến gần hơn đến *độ dài grapheme* mong đợi/trực quan cho một chuỗi, giá trị chuỗi trước tiên cần được chuẩn hóa với `normalize("NFC")` (xem "Chuẩn Hóa Unicode" trong Chương 1) để tạo ra bất kỳ đơn vị mã *composed* nào (nếu có thể), trong trường hợp bất kỳ ký tự nào ban đầu được lưu trữ *decomposed* dưới dạng các đơn vị mã riêng biệt.
 
-For example:
+Ví dụ:
 
 ```js
 favoriteItem = "teléfono";
-favoriteItem.length;            // 9 -- uh oh!
+favoriteItem.length;            // 9 -- ôi không!
 
 favoriteItem = favoriteItem.normalize("NFC");
-favoriteItem.length;            // 8 -- phew!
+favoriteItem.length;            // 8 -- phù!
 ```
 
-Unfortunately, as we saw in Chapter 1, we'll still have the possibility of characters of code-point greater the `65535`, and thus needing a surrogate pair to be represented. Such characters will count double in the `length`:
+Thật không may, như chúng ta đã thấy trong Chương 1, chúng ta vẫn sẽ có khả năng các ký tự có điểm mã lớn hơn `65535`, và do đó cần một cặp thay thế để được biểu diễn. Các ký tự như vậy sẽ tính gấp đôi trong `length`:
 
 ```js
 // "☎" === "\u260E"
@@ -227,17 +222,17 @@ cellphone = "📱";
 cellphone.length;               // 2 -- oops!
 ```
 
-So what do we do?
+Vậy chúng ta phải làm gì?
 
-One fix is to use character iteration (via `...` operator) as we saw in the previous section, since it automatically returns each combined character from a surrogate pair:
+Một cách sửa chữa là sử dụng lặp lại ký tự (thông qua toán tử `...`) như chúng ta đã thấy trong phần trước, vì nó tự động trả về từng ký tự kết hợp từ một cặp thay thế:
 
 ```js
 cellphone = "📱";
 cellphone.length;               // 2 -- oops!
-[ ...cellphone ].length;        // 1 -- phew!
+[ ...cellphone ].length;        // 1 -- phù!
 ```
 
-But, unfortunately, grapheme clusters (as explained in Chapter 1) throw yet another wrench into a string's length computation. For example, if we take the thumbs down emoji (`"\u{1F44E}"` and add to it the skin-tone modifier for medium-dark skin (`"\u{1F3FE}"`), we get:
+Nhưng, thật không may, các cụm grapheme (như đã giải thích trong Chương 1) lại ném thêm một cái cờ lê vào việc tính toán độ dài của chuỗi. Ví dụ, nếu chúng ta lấy biểu tượng ngón tay cái hướng xuống (`"\u{1F44E}"` và thêm vào đó công cụ sửa đổi tông màu da cho da ngăm đen (`"\u{1F3FE}"`), chúng ta nhận được:
 
 ```js
 // "👎🏾" = "\u{1F44E}\u{1F3FE}"
@@ -247,27 +242,27 @@ thumbsDown.length;              // 4 -- oops!
 [ ...thumbsDown ].length;       // 2 -- oops!
 ```
 
-As you can see, these are two distinct code-points (not a surrogate pair) that, by virtue of their ordering and adjacency, cause the computer's Unicode rendering to draw the thumbs-down symbol but with a darker skin tone than its default. The computed string length is thus `2`.
+Như bạn có thể thấy, đây là hai điểm mã riêng biệt (không phải là một cặp thay thế) mà, nhờ thứ tự và sự liền kề của chúng, khiến kết xuất Unicode của máy tính vẽ biểu tượng ngón tay cái hướng xuống nhưng với tông màu da tối hơn mặc định của nó. Độ dài chuỗi được tính toán do đó là `2`.
 
-It would take replicating most of a platform's complex Unicode rendering logic to be able to recognize such clusters of code-points as a single "character" for length-counting sake. There are libraries that purport to do so, but they're not necessarily perfect, and they come at a hefty cost in terms of extra code.
+Sẽ cần sao chép hầu hết logic kết xuất Unicode phức tạp của một nền tảng để có thể nhận dạng các cụm điểm mã như vậy là một "ký tự" duy nhất vì mục đích đếm độ dài. Có các thư viện có mục đích làm như vậy, nhưng chúng không nhất thiết phải hoàn hảo, và chúng đi kèm với một chi phí lớn về mã bổ sung.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| As a Twitter user, you might expect to be able to put 280 thumbs-down emojis into a single tweet, since it looks like a single character. Twitter counts the `"👎"` (default thumbs-down), the `"👎🏾"` (medium-dark-skintone thumbs-down), and even the `"👩‍👩‍👦‍👦"` (family emoji grapheme cluster) all as 2 characters each, even though their respective string lengths (from JS's perspective) are `2`, `4`, and `7`; thus, you can only fit half the number of emojis (140 instead of 280) in a tweet. In fact, Twitter implemented this change in 2018 to specifically level the counting of all Unicode characters, at 2 characters per symbol. [^TwitterUnicode] That was a welcomed change for Twitter users, especially those who want to use emoji characters that are most representative of intended gender, skintone, etc. Still, it *is* curious that Twitter chose to count all Unicode/emoji symbols as 2 characters each, instead of the more intuitive 1 character (grapheme) each. |
+| Là một người dùng Twitter, bạn có thể mong đợi có thể đặt 280 biểu tượng cảm xúc ngón tay cái hướng xuống vào một tweet, vì nó trông giống như một ký tự duy nhất. Twitter đếm `"👎"` (ngón tay cái hướng xuống mặc định), `"👎🏾"` (ngón tay cái hướng xuống màu da ngăm đen), và thậm chí là `"👩‍👩‍👦‍👦"` (cụm grapheme emoji gia đình) tất cả đều là 2 ký tự mỗi cái, mặc dù độ dài chuỗi tương ứng của chúng (từ quan điểm của JS) là `2`, `4`, và `7`; do đó, bạn chỉ có thể vừa một nửa số lượng emoji (140 thay vì 280) trong một tweet. Thực tế, Twitter đã thực hiện thay đổi này vào năm 2018 để cân bằng cụ thể việc đếm tất cả các ký tự Unicode, ở mức 2 ký tự mỗi biểu tượng. [^TwitterUnicode] Đó là một thay đổi được hoan nghênh đối với người dùng Twitter, đặc biệt là những người muốn sử dụng các ký tự emoji đại diện nhất cho giới tính, tông màu da dự định, v.v. Tuy nhiên, cũng *thật* tò mò rằng Twitter đã chọn đếm tất cả các biểu tượng Unicode/emoji là 2 ký tự mỗi cái, thay vì 1 ký tự (grapheme) trực quan hơn mỗi cái. |
 
-Counting the *length* of a string to match our human intuitions is a remarkably challenging task, perhaps more of an art than a science. We can get acceptable approximations in many cases, but there's plenty of other cases that may confound our programs.
+Việc đếm *độ dài* của một chuỗi để phù hợp với trực giác con người của chúng ta là một nhiệm vụ khó khăn đáng kể, có lẽ là một nghệ thuật hơn là một khoa học. Chúng ta có thể nhận được các xấp xỉ chấp nhận được trong nhiều trường hợp, nhưng có rất nhiều trường hợp khác có thể làm rối tung các chương trình của chúng ta.
 
-### Internationalization (i18n) and Localization (l10n)
+### Quốc Tế Hóa (i18n) và Bản Địa Hóa (l10n)
 
-To serve the growing need for JS programs to operate as expected in any international language/culture context, the ECMAScript committee also publishes the ECMAScript Internationalization API. [^INTLAPI]
+Để phục vụ nhu cầu ngày càng tăng đối với các chương trình JS hoạt động như mong đợi trong bất kỳ bối cảnh ngôn ngữ/văn hóa quốc tế nào, ủy ban ECMAScript cũng xuất bản API Quốc Tế Hóa ECMAScript. [^INTLAPI]
 
-A JS program defaults to a locale/language according to the environment running the program (web browser page, Node instance, etc). The in-effect locale affects sorting (and value comparisons), formatting, and several other assumed behaviors. Such altered behaviors are perhaps a bit more obvious with strings, but they can also be seen with numbers (and dates!).
+Một chương trình JS mặc định theo một ngôn ngữ/khu vực (locale) theo môi trường chạy chương trình (trang trình duyệt web, thể hiện Node, v.v.). Locale có hiệu lực ảnh hưởng đến việc sắp xếp (và so sánh giá trị), định dạng, và một số hành vi được giả định khác. Các hành vi bị thay đổi như vậy có lẽ rõ ràng hơn một chút với chuỗi, nhưng chúng cũng có thể được nhìn thấy với số (và ngày tháng!).
 
-But string characters also can have language/locale information embedded in them, which takes precedence over the environment default. If the string character is ambiguous/shared in terms of its language/locale (such as `"a"`), the default environment setting is used.
+Nhưng các ký tự chuỗi cũng có thể có thông tin ngôn ngữ/khu vực được nhúng trong chúng, điều này được ưu tiên hơn mặc định môi trường. Nếu ký tự chuỗi mơ hồ/được chia sẻ về mặt ngôn ngữ/khu vực của nó (chẳng hạn như `"a"`), cài đặt môi trường mặc định được sử dụng.
 
-Depending on the contents of the string, it may be interpreted as being ordered from left-to-right (LTR) or right-to-left (RTL). As such, many of the string methods we'll cover later use logical descriptors in their names, like "start", "end", "begin", "end", and "last", rather than directional terms like "left" and "right".
+Tùy thuộc vào nội dung của chuỗi, nó có thể được diễn giải là được sắp xếp từ trái sang phải (LTR) hoặc phải sang trái (RTL). Như vậy, nhiều phương thức chuỗi mà chúng ta sẽ đề cập sau này sử dụng các mô tả logic trong tên của chúng, như "start" (bắt đầu), "end" (kết thúc), "begin" (bắt đầu), "last" (cuối cùng), thay vì các thuật ngữ định hướng như "left" (trái) và "right" (phải).
 
-For example, Hebrew and Arabic are both common RTL languages:
+Ví dụ, tiếng Do Thái và tiếng Ả Rập đều là các ngôn ngữ RTL phổ biến:
 
 ```js
 hebrewHello = "\u{5e9}\u{5dc}\u{5d5}\u{5dd}";
@@ -275,13 +270,13 @@ hebrewHello = "\u{5e9}\u{5dc}\u{5d5}\u{5dd}";
 console.log(hebrewHello);                       // שלום
 ```
 
-Notice that the first listed character in the string literal (`"\u{5e9}"`) is actually the right-most character when the string is rendered?
+Lưu ý rằng ký tự được liệt kê đầu tiên trong literal chuỗi (`"\u{5e9}"`) thực sự là ký tự ngoài cùng bên phải khi chuỗi được hiển thị?
 
-Even though Hebrew is an RTL language, you don't actually type the characters in the string literal in reversed (RTL) order the way they should be rendered. You enter the characters in logical order, where position `0` is the first character, position `1` is the second character, etc. The rendering layer is where RTL characters are reversed to be shown in their correct order.
+Mặc dù tiếng Do Thái là một ngôn ngữ RTL, bạn không thực sự gõ các ký tự trong literal chuỗi theo thứ tự đảo ngược (RTL) theo cách chúng nên được hiển thị. Bạn nhập các ký tự theo thứ tự logic, trong đó vị trí `0` là ký tự đầu tiên, vị trí `1` là ký tự thứ hai, v.v. Lớp hiển thị là nơi các ký tự RTL được đảo ngược để được hiển thị theo đúng thứ tự của chúng.
 
-That also means that if you access `hebrewHello[0]` (or `hebrewHello.charAt(0)`) -- to get the character as position `0` -- you get `"ש"` because that's logically the first character of the string, not `"ם"` (logically the last character of the string). Index-positional access follows the logical position, not the rendered position.
+Điều đó cũng có nghĩa là nếu bạn truy cập `hebrewHello[0]` (hoặc `hebrewHello.charAt(0)`) -- để lấy ký tự tại vị trí `0` -- bạn nhận được `"ש"` vì đó là ký tự đầu tiên về mặt logic của chuỗi, không phải `"ם"` (ký tự cuối cùng về mặt logic của chuỗi). Truy cập vị trí chỉ số tuân theo vị trí logic, không phải vị trí hiển thị.
 
-Here's the same example in another RTL language, Arabic:
+Đây là cùng một ví dụ trong một ngôn ngữ RTL khác, tiếng Ả Rập:
 
 ```js
 arabicHello = "\u{631}\u{62d}\u{628}\u{627}";
@@ -291,7 +286,7 @@ console.log(arabicHello);                       // رحبا
 console.log(arabicHello[0]);                    // ر
 ```
 
-JS programs can force a specific language/locale, using various `Intl` APIs such as `Intl.Collator`: [^INTLCollator]
+Các chương trình JS có thể bắt buộc một ngôn ngữ/khu vực cụ thể, sử dụng các API `Intl` khác nhau như `Intl.Collator`: [^INTLCollator]
 
 ```js
 germanStringSorter = new Intl.Collator("de");
@@ -299,19 +294,19 @@ germanStringSorter = new Intl.Collator("de");
 listOfGermanWords = [ /* .. */ ];
 
 germanStringSorter.compare("Hallo","Welt");
-// -1 (or negative number)
+// -1 (hoặc số âm)
 
-// examples adapted from MDN:
+// ví dụ phỏng theo MDN:
 //
 germanStringSorter.compare("Z","z");
-// 1 (or positive number)
+// 1 (hoặc số dương)
 
 caseFirstSorter = new Intl.Collator("de",{ caseFirst: "upper", });
 caseFirstSorter.compare("Z","z");
-// -1 (or negative number)
+// -1 (hoặc số âm)
 ```
 
-Multiple-word strings can be segmented using `Intl.Segmenter`: [^INTLSegmenter]
+Chuỗi nhiều từ có thể được phân đoạn (segmented) bằng cách sử dụng `Intl.Segmenter`: [^INTLSegmenter]
 
 ```js
 arabicHelloWorld = "\u{645}\u{631}\u{62d}\u{628}\u{627} \
@@ -333,19 +328,19 @@ for (
 //لعالم
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The `segment(..)` method (from instances of`Intl.Segmenter`) returns a standard JS iterator, which the `for..of` loop here consumes. More on iteration protocols in the "Sync & Async" title of this series. |
+| Phương thức `segment(..)` (từ các thể hiện của `Intl.Segmenter`) trả về một iterator JS tiêu chuẩn, mà vòng lặp `for..of` ở đây tiêu thụ. Thêm về các giao thức lặp trong tiêu đề "Đồng Bộ & Bất Đồng Bộ" của bộ sách này. |
 
-### String Comparison
+### So Sánh Chuỗi (String Comparison)
 
-String values can be compared (for both equality and relational ordering) to other string values, using various built-in operators. It's important to keep in mind that such comparisons are sensitive to the actual string contents, including especially the underlying code-points from non-BPM Unicode characters.
+Các giá trị chuỗi có thể được so sánh (cho cả sự bằng nhau và thứ tự quan hệ) với các giá trị chuỗi khác, sử dụng các toán tử tích hợp khác nhau. Điều quan trọng cần ghi nhớ là các so sánh như vậy nhạy cảm với nội dung chuỗi thực tế, bao gồm đặc biệt là các điểm mã bên dưới từ các ký tự Unicode không phải BPM.
 
-Both equality and relational comparison are case-sensitive, for any characters where uppercase and lowercase are well-defined. To make case-insensitive comparisons, normalize the casing of both values first (with `toUpperCase()` or `toLowerCase()`).
+Cả so sánh bằng và so sánh quan hệ đều phân biệt chữ hoa chữ thường, đối với bất kỳ ký tự nào mà chữ hoa và chữ thường được định nghĩa rõ ràng. Để thực hiện các so sánh không phân biệt chữ hoa chữ thường, hãy chuẩn hóa chữ hoa/thường của cả hai giá trị trước (với `toUpperCase()` hoặc `toLowerCase()`).
 
-#### String Equality
+#### Sự Bằng Nhau Của Chuỗi (String Equality)
 
-The `===` and `==` operators (along with their negated counterparts `!==` and `!=`, respectively) are the most common way equality comparisons are made for primitive values, including string values:
+Các toán tử `===` và `==` (cùng với các đối tác phủ định của chúng tương ứng là `!==` và `!=`) là cách phổ biến nhất để thực hiện các so sánh bằng cho các giá trị nguyên thủy, bao gồm các giá trị chuỗi:
 
 ```js
 "my name" === "my n\x61me";               // true
@@ -353,43 +348,43 @@ The `===` and `==` operators (along with their negated counterparts `!==` and `!
 "my name" !== String.raw`my n\x61me`;     // true
 ```
 
-The `===` operator[^StrictEquality] -- often referred to as "strict equality" -- first checks to see if the types match, and if not, returns `false` right away. If the types match, then it checks to see if the values are the same; for strings, this is a per-code-unit comparison, from start to end.
+Toán tử `===`[^StrictEquality] -- thường được gọi là "sự bằng nhau nghiêm ngặt" (strict equality) -- trước tiên kiểm tra xem các kiểu có khớp không, và nếu không, trả về `false` ngay lập tức. Nếu các kiểu khớp nhau, thì nó kiểm tra xem các giá trị có giống nhau không; đối với chuỗi, đây là một so sánh từng đơn vị mã, từ đầu đến cuối.
 
-Despite the "strict" naming, there are nuances to `===` (such as `-0` and `NaN` handling), but we'll cover those later.
+Mặc dù có tên là "nghiêm ngặt", có những sắc thái đối với `===` (như xử lý `-0` và `NaN`), nhưng chúng ta sẽ đề cập đến những điều đó sau.
 
-##### Coercive Equality
+##### Sự Bằng Nhau Ép Buộc (Coercive Equality)
 
-By contrast, the `==` operator[^LooseEquality] -- often referred to as "loose equality" -- performs *coercive equality*: if the value-types of the two operands do not match, `==` first coerces one or both operands until the value-types *do* match, and then it hands off the comparison internally to `===`.
+Ngược lại, toán tử `==`[^LooseEquality] -- thường được gọi là "sự bằng nhau lỏng lẻo" (loose equality) -- thực hiện *sự bằng nhau ép buộc*: nếu các kiểu giá trị của hai toán hạng không khớp, `==` trước tiên ép buộc một hoặc cả hai toán hạng cho đến khi các kiểu giá trị *khớp*, và sau đó nó chuyển giao so sánh nội bộ cho `===`.
 
-Coercion is an extremely important topic -- it's an inherent part of the JS types system, one of the language's 3 pillars -- but we're only going to briefly introduce it here in this chapter, and revisit it in detail later.
+Ép buộc (Coercion) là một chủ đề cực kỳ quan trọng -- nó là một phần vốn có của hệ thống kiểu JS, một trong 3 trụ cột của ngôn ngữ -- nhưng chúng ta sẽ chỉ giới thiệu ngắn gọn ở đây trong chương này, và xem xét lại chi tiết sau.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| You may have heard the oft-quoted, but nevertheless inaccurate, explanation that the difference between `==` and `===` is that `==` compares the values while `==` compares both the values and the types. Not true, and you can read the spec yourself to verify -- both `isStrictlyEqual(..)` and `isLooselyEqual(..)` specification algorithms are linked as footnotes in the preceding paragraphs. To summarize, though: both `==` and `===` are aware of and sensitive to the types of the operands. If the operand types are the same, both operators do literally the exact same thing; if the types differ, `==` forces coercion until the types match, whereas `===` returns `false` immediately. |
+| Bạn có thể đã nghe giải thích thường được trích dẫn, nhưng tuy nhiên không chính xác, rằng sự khác biệt giữa `==` và `===` là `==` so sánh các giá trị trong khi `===` so sánh cả giá trị và các kiểu. Không đúng, và bạn có thể tự đọc thông số kỹ thuật để xác minh -- cả hai thuật toán đặc tả `isStrictlyEqual(..)` và `isLooselyEqual(..)` đều được liên kết dưới dạng chú thích trong các đoạn trước. Tuy nhiên, để tóm tắt: cả `==` và `===` đều nhận thức và nhạy cảm với các kiểu của các toán hạng. Nếu các kiểu toán hạng giống nhau, cả hai toán tử thực hiện chính xác cùng một điều theo nghĩa đen; nếu các kiểu khác nhau, `==` buộc ép buộc cho đến khi các kiểu khớp nhau, trong khi `===` trả về `false` ngay lập tức. |
 
-It's extremely common for developers to assert that the `==` operator is confusing and too hard to use without surprises (thus the near universal preference for `===`). I think that's totally bogus, and in fact, JS developers should be defaulting to `==` (and avoiding `===` if possible). But we need a lot more discussion to back such a controversial statement; hold onto your objections until we revisit it later.
+Rất phổ biến khi các nhà phát triển khẳng định rằng toán tử `==` gây nhầm lẫn và quá khó sử dụng mà không có bất ngờ (do đó sự ưu tiên gần như phổ quát cho `===`). Tôi nghĩ điều đó hoàn toàn sai lầm, và thực tế, các nhà phát triển JS nên mặc định sử dụng `==` (và tránh `===` nếu có thể). Nhưng chúng ta cần thảo luận nhiều hơn để hỗ trợ một tuyên bố gây tranh cãi như vậy; hãy giữ lại những phản đối của bạn cho đến khi chúng ta xem xét lại nó sau.
 
-For now, to gain some intuition about the coercive nature of `==`, the most illuminating observation is that if the types don't match, `==` *prefers* numeric comparison. That means it will attempt to convert both operands to numbers, and then perform the equality check (the same as `===`).
+Bây giờ, để có được một số trực giác về bản chất ép buộc của `==`, quan sát soi sáng nhất là nếu các kiểu không khớp, `==` *thích* so sánh số hơn. Điều đó có nghĩa là nó sẽ cố gắng chuyển đổi cả hai toán hạng thành số, và sau đó thực hiện kiểm tra bằng nhau (giống như `===`).
 
-So, as it relates to our present discussion, actual string equality can *only be* checked if both operands are already strings:
+Vì vậy, vì nó liên quan đến cuộc thảo luận hiện tại của chúng ta, sự bằng nhau chuỗi thực tế *chỉ có thể được* kiểm tra nếu cả hai toán hạng đã là chuỗi:
 
 ```js
-// actual string equality check (via === internally):
+// kiểm tra bằng nhau chuỗi thực tế (thông qua === nội bộ):
 "42" == "42";           // true
 ```
 
-`==` does not really perform string equality checks itself. If the operand value-types are both strings, `==` just hands off the comparison to `===`. If they're not both strings, the coercive steps in `==` will reduce the comparison matching to numeric instead of string:
+`==` không thực sự thực hiện kiểm tra bằng nhau chuỗi. Nếu các kiểu giá trị toán hạng đều là chuỗi, `==` chỉ chuyển giao so sánh cho `===`. Nếu chúng không phải là cả hai chuỗi, các bước ép buộc trong `==` sẽ giảm so sánh khớp thành số thay vì chuỗi:
 
 ```js
-// numeric (not string!) equality check:
+// kiểm tra bằng nhau số (không phải chuỗi!):
 42 == "42";             // true
 ```
 
-We'll cover numeric equality later in this chapter.
+Chúng ta sẽ đề cập đến sự bằng nhau số sau trong chương này.
 
-##### *Really* Strict Equality
+##### *Thực Sự* Nghiêm Ngặt Bằng Nhau (*Really* Strict Equality)
 
-In addition to `==` and `===`, JS provides the `Object.is(..)` utility, which returns `true` if both arguments are *exactly identical*, and `false` otherwise (no exceptions or nuances):
+Ngoài `==` và `===`, JS cung cấp tiện ích `Object.is(..)`, trả về `true` nếu cả hai đối số *hoàn toàn giống hệt nhau*, và `false` nếu không (không có ngoại lệ hoặc sắc thái):
 
 ```js
 Object.is("42",42);             // false
@@ -397,39 +392,39 @@ Object.is("42",42);             // false
 Object.is("42","\x34\x32");     // true
 ```
 
-Since `===` adds a `=` onto the end of `==` to make it more strict in behavior, I kind of half-joke that the `Object.is(..)` utility is like a `====` (a fourth `=` added) operator, for the really-truly-strict-no-exceptions kind of equality checking!
+Vì `===` thêm một dấu `=` vào cuối `==` để làm cho nó nghiêm ngặt hơn về hành vi, tôi nói đùa nửa vời rằng tiện ích `Object.is(..)` giống như một toán tử `====` (thêm dấu `=` thứ tư), cho loại kiểm tra bằng nhau thực-sự-nghiêm-ngặt-không-ngoại-lệ!
 
-That said, `===` (and `==` by virtue of its internal delegation to `===`) are *extremely predictable*, with no weird exceptions, when it comes to comparing two actually-already-string values. I strongly recommend using `==` for such checks (or `===`), and reserve `Object.is(..)` for the corner cases (which are numeric).
+Điều đó nói rằng, `===` (và `==` nhờ vào sự ủy quyền nội bộ của nó cho `===`) là *cực kỳ dễ đoán*, không có ngoại lệ kỳ lạ, khi nói đến việc so sánh hai giá trị thực-sự-đã-là-chuỗi. Tôi thực sự khuyên bạn nên sử dụng `==` cho các kiểm tra như vậy (hoặc `===`), và dành `Object.is(..)` cho các trường hợp góc (là số).
 
-#### String Relational Comparisons
+#### So Sánh Quan Hệ Chuỗi (String Relational Comparisons)
 
-In addition to equality checks between strings, JS supports relational comparisons between primitive values, like strings: `<`, `<=`, `>`, and `>=`.
+Ngoài các kiểm tra bằng nhau giữa các chuỗi, JS hỗ trợ các so sánh quan hệ giữa các giá trị nguyên thủy, như chuỗi: `<`, `<=`, `>`, và `>=`.
 
-The `<` (less-than) and `>` (greater-than) operations compare two string values lexicographically -- like you would sort words in a dictionary -- and should thus be fairly self explanatory:
+Các toán tử `<` (nhỏ hơn) và `>` (lớn hơn) so sánh hai giá trị chuỗi theo thứ tự từ điển (lexicographically) -- giống như bạn sắp xếp các từ trong từ điển -- và do đó, khá tự giải thích:
 
 ```js
 "hello" < "world";          // true
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| As mentioned earlier, the running JS program has a default locale, and these operators compare according to that locale. |
+| Như đã đề cập trước đó, chương trình JS đang chạy có một ngôn ngữ mặc định, và các toán tử này so sánh theo ngôn ngữ đó. |
 
-Like `==`, the `<` and `>` operators are numerically coercive. Any non-number values are coerced to numbers. So the only way to do a relational comparison with strings is to ensure both operands are already string values.
+Giống như `==`, các toán tử `<` và `>` là ép buộc về mặt số học. Bất kỳ giá trị nào không phải là số đều bị ép buộc thành số. Vì vậy, cách duy nhất để thực hiện so sánh quan hệ với chuỗi là đảm bảo cả hai toán hạng đã là giá trị chuỗi.
 
-Perhaps somewhat surprisingly, the `<` and `>` have no strict-comparison equivalent, the way `===` avoids the coercion of `==`. These operators are always coercive (when the types don't match), and there's no way in JS to avoid that.
+Có lẽ hơi ngạc nhiên, `<` và `>` không có tương đương so sánh nghiêm ngặt, giống như cách `===` tránh sự ép buộc của `==`. Các toán tử này luôn bị ép buộc (khi các kiểu không khớp), và không có cách nào trong JS để tránh điều đó.
 
-So what happens when both values are *numeric-looking* strings?
+Vì vậy, điều gì xảy ra khi cả hai giá trị là chuỗi *trông giống số*?
 
 ```js
 "100" < "11";               // true
 ```
 
-Numerically, of course, `100` should *not be* less than `11`.
+Về mặt số học, tất nhiên, `100` *không nên* nhỏ hơn `11`.
 
-But relational comparisons between two strings use the lexicographic ordering. So the second `"0"` character (in `"100"`) is less than the second `"1"` (in `"11"`), and thus `"100"` would be sorted in a *dictionary* before `"11"`. The relational operators only coerce to numbers if the operand types are not already strings.
+Nhưng các so sánh quan hệ giữa hai chuỗi sử dụng thứ tự từ điển. Vì vậy, ký tự `"0"` thứ hai (trong `"100"`) nhỏ hơn ký tự `"1"` thứ hai (trong `"11"`), và do đó `"100"` sẽ được sắp xếp trong *từ điển* trước `"11"`. Các toán tử quan hệ chỉ ép buộc thành số nếu các kiểu toán hạng chưa phải là chuỗi.
 
-The `<=` (less-than-or-equal) and `>=` (greater-than-or-equal) operators are effectively a shorthand for a compound check.
+Các toán tử `<=` (nhỏ hơn hoặc bằng) và `>=` (lớn hơn hoặc bằng) thực sự là một cách viết tắt cho một kiểm tra hỗn hợp.
 
 ```js
 "hello" <= "hello";                             // true
@@ -439,40 +434,40 @@ The `<=` (less-than-or-equal) and `>=` (greater-than-or-equal) operators are eff
 ("hello" > "hello") || ("hello" == "hello");    // true
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Here's an interesting bit of specification nuance: JS doesn't actually define the underlying greater-than (for `>`) or greater-than-or-equal (for `>=`) operations. Instead, it defines them by reversing the arguments to their *less-than* complement counterparts. So `x > y` is treated by JS essentially as `y <= x`, and `x >= y` is treated by JS essentially as `y < x`. So JS only needs to specify how `<` and `==` work, and thus gets `>` and `>=` for free! |
+| Đây là một chút sắc thái thông số kỹ thuật thú vị: JS không thực sự định nghĩa các hoạt động lớn hơn (cho `>`) hoặc lớn hơn hoặc bằng (cho `>=`) cơ bản. Thay vào đó, nó định nghĩa chúng bằng cách đảo ngược các đối số cho các đối tác bổ sung *nhỏ hơn* của chúng. Vì vậy, `x > y` được JS xử lý về cơ bản là `y <= x`, và `x >= y` được JS xử lý về cơ bản là `y < x`. Vì vậy, JS chỉ cần chỉ định cách `<` và `==` hoạt động, và do đó nhận được `>` và `>=` miễn phí! |
 
-##### Locale-Aware Relational Comparisons
+##### So Sánh Quan Hệ Nhận Biết Ngôn Ngữ (Locale-Aware Relational Comparisons)
 
-As I mentioned a moment ago, the relational operators assume and use the current in-effect locale. However, it can sometimes be useful to force a specific locale for comparisons (such as when sorting a list of strings).
+Như tôi đã đề cập một chút trước đây, các toán tử quan hệ giả định và sử dụng ngôn ngữ có hiệu lực hiện tại. Tuy nhiên, đôi khi có thể hữu ích để buộc một ngôn ngữ cụ thể để so sánh (chẳng hạn như khi sắp xếp một danh sách các chuỗi).
 
-JS provides the method `localCompare(..)` on JS strings for this purpose:
+JS cung cấp phương thức `localeCompare(..)` trên các chuỗi JS cho mục đích này:
 
 ```js
 "hello".localeCompare("world");
-// -1 (or negative number)
+// -1 (hoặc số âm)
 
 "world".localeCompare("hello","en");
-// 1 (or positive number)
+// 1 (hoặc số dương)
 
 "hello".localeCompare("hello","en",{ ignorePunctuation: true });
 // 0
 
-// examples from MDN:
+// ví dụ từ MDN:
 //
-// in German, ä sorts before z
+// trong tiếng Đức, ä được sắp xếp trước z
 "ä".localeCompare("z","de");
-// -1 (or negative number) // a negative value
+// -1 (hoặc số âm)
 
-// in Swedish, ä sorts after z
+// trong tiếng Thụy Điển, ä được sắp xếp sau z
 "ä".localeCompare("z","sv");
-// 1 (or positive number)
+// 1 (hoặc số dương)
 ```
 
-The optional second and third arguments to `localeCompare(..)` control which locale to use, via the `Intl.Collator` API[^INTLCollatorApi], as covered earlier.
+Các đối số thứ hai và thứ ba tùy chọn cho `localeCompare(..)` kiểm soát ngôn ngữ nào sẽ được sử dụng, thông qua API `Intl.Collator`[^INTLCollatorApi], như đã trình bày trước đó.
 
-You might use `localeCompare(..)` when sorting an array of strings:
+Bạn có thể sử dụng `localeCompare(..)` khi sắp xếp một mảng các chuỗi:
 
 ```js
 studentNames = [
@@ -481,7 +476,7 @@ studentNames = [
     "Jason"
 ];
 
-// Array::sort() mutates the array in place
+// Array::sort() sửa đổi mảng tại chỗ
 studentNames.sort(function alphabetizeNames(name1,name2){
     return name1.localeCompare(name2);
 });
@@ -490,7 +485,7 @@ studentNames;
 // [ "Jason", "Kyle", "Lisa" ]
 ```
 
-But as discussed earlier, a more straightforward way (and slightly more performant when sorting many strings) is using `Intl.Collator` directly:
+Nhưng như đã thảo luận trước đó, một cách đơn giản hơn (và hiệu quả hơn một chút khi sắp xếp nhiều chuỗi) là sử dụng trực tiếp `Intl.Collator`:
 
 ```js
 studentNames = [
@@ -501,16 +496,16 @@ studentNames = [
 
 nameSorter = new Intl.Collator("en");
 
-// Array::sort() mutates the array in place
+// Array::sort() sửa đổi mảng tại chỗ
 studentNames.sort(nameSorter.compare);
 
 studentNames;
 // [ "Jason", "Kyle", "Lisa" ]
 ```
 
-### String Concatenation
+### Nối Chuỗi (String Concatenation)
 
-Two or more string values can be concatenated (combined) into a new string value, using the `+` operator:
+Hai hoặc nhiều giá trị chuỗi có thể được nối (kết hợp) thành một giá trị chuỗi mới, sử dụng toán tử `+`:
 
 ```js
 greeting = "Hello, " + "Kyle!";
@@ -518,9 +513,9 @@ greeting = "Hello, " + "Kyle!";
 greeting;               // Hello, Kyle!
 ```
 
-The `+` operator will act as a string concatenation if either of the two operands (values on left or right sides of the operator) are already a string (even an empty string `""`).
+Toán tử `+` sẽ hoạt động như một phép nối chuỗi nếu một trong hai toán hạng (giá trị ở bên trái hoặc bên phải của toán tử) đã là một chuỗi (ngay cả một chuỗi rỗng `""`).
 
-If one operand is a string and the other is not, the one that's not a string will be coerced to its string representation for the purposes of the concatenation:
+Nếu một toán hạng là chuỗi và toán hạng kia thì không, toán hạng không phải là chuỗi sẽ được ép buộc thành biểu diễn chuỗi của nó cho mục đích nối:
 
 ```js
 userCount = 7;
@@ -530,7 +525,7 @@ status = "There are " + userCount + " users online";
 status;         // There are 7 users online
 ```
 
-String concatenation of this sort is essentially interpolation of data into the string, which is the main purpose of template literals (see Chapter 1). So the following code will have the same outcome but is generally considered to be the more preferred approach:
+Việc nối chuỗi kiểu này về cơ bản là nội suy dữ liệu vào chuỗi, đây là mục đích chính của template literals (xem Chương 1). Vì vậy, đoạn mã sau sẽ có kết quả tương tự nhưng thường được coi là phương pháp ưu tiên hơn:
 
 ```js
 userCount = 7;
@@ -540,63 +535,63 @@ status = `There are ${userCount} users online`;
 status;         // There are 7 users online
 ```
 
-Other options for string concatenation include `"one".concat("two","three")` and `[ "one", "two", "three" ].join("")`, but these kinds of approaches are only preferable when the number of strings to concatenate is dependent on runtime conditions/computation. If the string has a fixed/known set of content, as above, template literals are the better option.
+Các tùy chọn khác để nối chuỗi bao gồm `"one".concat("two","three")` và `[ "one", "two", "three" ].join("")`, nhưng các loại phương pháp này chỉ thích hợp khi số lượng chuỗi cần nối phụ thuộc vào điều kiện thời gian chạy/tính toán. Nếu chuỗi có một tập hợp nội dung cố định/đã biết, như trên, template literals là lựa chọn tốt hơn.
 
-### String Value Methods
+### Các Phương Thức Giá Trị Chuỗi
 
-String values provide a whole slew of additional string-specific methods (as properties):
+Các giá trị chuỗi cung cấp một loạt các phương thức cụ thể cho chuỗi bổ sung (dưới dạng thuộc tính):
 
-* `charAt(..)`: produces a new string value at the numeric index, similar to `[ .. ]`; unlike `[ .. ]`, the result is always a string, either the character at position `0` (if a valid number outside the indices range), or the empty string `""` (if missing/invalid index)
+* `charAt(..)`: tạo ra một giá trị chuỗi mới tại chỉ mục số, tương tự như `[ .. ]`; không giống như `[ .. ]`, kết quả luôn là một chuỗi, hoặc là ký tự tại vị trí `0` (nếu một số hợp lệ nằm ngoài phạm vi chỉ mục), hoặc chuỗi rỗng `""` (nếu thiếu/chỉ mục không hợp lệ)
 
-* `at(..)` is similar to `charAt(..)`, but negative indices count backwards from the end of the string
+* `at(..)` tương tự như `charAt(..)`, nhưng các chỉ mục âm đếm ngược từ cuối chuỗi
 
-* `charCodeAt(..)`: returns the numeric code-unit (see "JS Character Encodings" in Chapter 1) at the specified index
+* `charCodeAt(..)`: trả về đơn vị mã số (xem "Mã Hóa Ký Tự JS" trong Chương 1) tại chỉ mục đã chỉ định
 
-* `codePointAt(..)`: returns the whole code-point starting at the specified index; if a surrogate pair is found there, the whole character (code-point) s returned
+* `codePointAt(..)`: trả về toàn bộ điểm mã bắt đầu tại chỉ mục đã chỉ định; nếu một cặp thay thế được tìm thấy ở đó, toàn bộ ký tự (điểm mã) được trả về
 
-* `substr(..)` / `substring(..)` / `slice(..)`: produces a new string value that represents a range of characters from the original string; these differ in how the range's start/end indices are specified or determined
+* `substr(..)` / `substring(..)` / `slice(..)`: tạo ra một giá trị chuỗi mới đại diện cho một phạm vi các ký tự từ chuỗi ban đầu; chúng khác nhau ở cách chỉ mục bắt đầu/kết thúc của phạm vi được chỉ định hoặc xác định
 
-* `toUpperCase()`: produces a new string value that's all uppercase characters
+* `toUpperCase()`: tạo ra một giá trị chuỗi mới là tất cả các ký tự chữ hoa
 
-* `toLowerCase()`: produces a new string value that's all lowercase characters
+* `toLowerCase()`: tạo ra một giá trị chuỗi mới là tất cả các ký tự chữ thường
 
-* `toLocaleUpperCase()` / `toLocaleLowerCase()`: uses locale mappings for uppercase or lowercase operations
+* `toLocaleUpperCase()` / `toLocaleLowerCase()`: sử dụng ánh xạ ngôn ngữ cho các hoạt động chữ hoa hoặc chữ thường
 
-* `concat(..)`: produces a new string value that's the concatenation of the original string and all of the string value arguments passed in
+* `concat(..)`: tạo ra một giá trị chuỗi mới là sự nối của chuỗi ban đầu và tất cả các đối số giá trị chuỗi được truyền vào
 
-* `indexOf(..)`: searches for a string value argument in the original string, optionally starting from the position specified in the second argument; returns the `0`-based index position if found, or `-1` if not found
+* `indexOf(..)`: tìm kiếm một đối số giá trị chuỗi trong chuỗi ban đầu, tùy chọn bắt đầu từ vị trí được chỉ định trong đối số thứ hai; trả về vị trí chỉ mục dựa trên `0` nếu tìm thấy, hoặc `-1` nếu không tìm thấy
 
-* `lastIndexOf(..)`: like `indexOf(..)` but, from the end of the string (right in LTR locales, left in RTL locales)
+* `lastIndexOf(..)`: giống như `indexOf(..)` nhưng, từ cuối chuỗi (phải trong ngôn ngữ LTR, trái trong ngôn ngữ RTL)
 
-* `includes(..)`: similar to `indexOf(..)` but returns a boolean result
+* `includes(..)`: tương tự như `indexOf(..)` nhưng trả về kết quả boolean
 
-* `search(..)`: similar to `indexOf(..)` but with a regular-expression matching as specified
+* `search(..)`: tương tự như `indexOf(..)` nhưng với một khớp biểu thức chính quy (regular-expression) như được chỉ định
 
-* `trimStart()` / `trimEnd()` / `trim()`: produces a new string value with whitespace trimmed from the start of the string (left in LTR locales, right in RTL locales), or the end of the string (right in LTR locales, left in RTL locales), or both
+* `trimStart()` / `trimEnd()` / `trim()`: tạo ra một giá trị chuỗi mới với khoảng trắng được cắt từ đầu chuỗi (trái trong ngôn ngữ LTR, phải trong ngôn ngữ RTL), hoặc cuối chuỗi (phải trong ngôn ngữ LTR, trái trong ngôn ngữ RTL), hoặc cả hai
 
-* `repeat(..)`: produces a new string with the original string value repeated the specified number of times
+* `repeat(..)`: tạo ra một chuỗi mới với giá trị chuỗi ban đầu được lặp lại số lần đã chỉ định
 
-* `split(..)`: produces an array of string values as split at the specified string or regular-expression boundaries
+* `split(..)`: tạo ra một mảng các giá trị chuỗi được phân tách tại chuỗi đã chỉ định hoặc ranh giới biểu thức chính quy
 
-* `padStart(..)` / `padEnd(..)`: produces a new string value with padding (default " " whitespace, but can be overridden) applied to either the start (left in LTR locales, right in RTL locales) or the end (right in LTR locales), left in RTL locales), so that the final string result is at least of a specified length
+* `padStart(..)` / `padEnd(..)`: tạo ra một giá trị chuỗi mới với phần đệm (mặc định là khoảng trắng " ", nhưng có thể được ghi đè) áp dụng cho đầu (trái trong ngôn ngữ LTR, phải trong ngôn ngữ RTL) hoặc cuối (phải trong ngôn ngữ LTR, trái trong ngôn ngữ RTL), sao cho kết quả chuỗi cuối cùng có ít nhất một độ dài đã chỉ định
 
-* `startsWith(..)` / `endsWith(..)`: checks either the start (left in LTR locales, right in RTL locales) or the end (right in LTR locales) of the original string for the string value argument; returns a boolean result
+* `startsWith(..)` / `endsWith(..)`: kiểm tra đầu (trái trong ngôn ngữ LTR, phải trong ngôn ngữ RTL) hoặc cuối (phải trong ngôn ngữ LTR) của chuỗi ban đầu cho đối số giá trị chuỗi; trả về kết quả boolean
 
-* `match(..)` / `matchAll(..)`: returns an array-like regular-expression matching result against the original string
+* `match(..)` / `matchAll(..)`: trả về kết quả khớp biểu thức chính quy giống mảng so với chuỗi ban đầu
 
-* `replace(..)`: returns a new string with a replacement from the original string, of one or more matching occurrences of the specified regular-expression match
+* `replace(..)`: trả về một chuỗi mới với sự thay thế từ chuỗi ban đầu, của một hoặc nhiều lần xuất hiện khớp của khớp biểu thức chính quy đã chỉ định
 
-* `normalize(..)`: produces a new string with Unicode normalization (see "Unicode Normalization" in Chapter 1) having been performed on the contents
+* `normalize(..)`: tạo ra một chuỗi mới với chuẩn hóa Unicode (xem "Chuẩn Hóa Unicode" trong Chương 1) đã được thực hiện trên nội dung
 
-* `localCompare(..)`: function that compares two strings according to the current locale (useful for sorting); returns a negative number (usually `-1` but not guaranteed) if the original string value is comes before the argument string value lexicographically, a positive number (usually `1` but not guaranteed) if the original string value comes after the argument string value lexicographically, and `0` if the two strings are identical
+* `localCompare(..)`: hàm so sánh hai chuỗi theo ngôn ngữ hiện tại (hữu ích cho việc sắp xếp); trả về một số âm (thường là `-1` nhưng không được đảm bảo) nếu giá trị chuỗi ban đầu đứng trước giá trị chuỗi đối số theo từ điển, một số dương (thường là `1` nhưng không được đảm bảo) nếu giá trị chuỗi ban đầu đứng sau giá trị chuỗi đối số theo từ điển, và `0` nếu hai chuỗi giống hệt nhau
 
-* `anchor()`, `big()`, `blink()`, `bold()`, `fixed()`, `fontcolor()`, `fontsize()`, `italics()`, `link()`, `small()`, `strike()`, `sub()`, and `sup()`: historically, these were useful in generating HTML string snippets; they're now deprecated and should be avoided
+* `anchor()`, `big()`, `blink()`, `bold()`, `fixed()`, `fontcolor()`, `fontsize()`, `italics()`, `link()`, `small()`, `strike()`, `sub()`, và `sup()`: về mặt lịch sử, những thứ này hữu ích trong việc tạo các đoạn chuỗi HTML; chúng hiện đã bị phản đối và nên tránh
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Many of the methods described above rely on position indices. As mentioned earlier in the "Length Computation" section, these positions are dependent on the internal contents of the string value, which means that if an extended Unicode character is present and takes up two code-unit slots, that will count as two index positions instead of one. Failing to account for *decomposed* code-units, surrogate pairs, and grapheme cluseters is a common source of bugs in JS string handling. |
+| Nhiều phương thức được mô tả ở trên dựa vào chỉ mục vị trí. Như đã đề cập trước đó trong phần "Tính Toán Độ Dài", các vị trí này phụ thuộc vào nội dung bên trong của giá trị chuỗi, điều này có nghĩa là nếu một ký tự Unicode mở rộng hiện diện và chiếm hai khe đơn vị mã, điều đó sẽ được tính là hai vị trí chỉ mục thay vì một. Việc không tính đến các đơn vị mã *decomposed*, các cặp thay thế, và các cụm grapheme là một nguồn lỗi phổ biến trong xử lý chuỗi JS. |
 
-These string methods can all be called directly on a literal value, or on a variable/property that's holding a string value. When applicable, they produce a new string value rather than modifying the existing string value (since strings are immutable):
+Các phương thức chuỗi này đều có thể được gọi trực tiếp trên một giá trị literal, hoặc trên một biến/thuộc tính đang giữ một giá trị chuỗi. Khi áp dụng, chúng tạo ra một giá trị chuỗi mới thay vì sửa đổi giá trị chuỗi hiện có (vì chuỗi là bất biến):
 
 ```js
 "all these letters".toUpperCase();      // ALL THESE LETTERS
@@ -606,15 +601,15 @@ greeting.repeat(2);                     // Hello!Hello!
 greeting;                               // Hello!
 ```
 
-### Static `String` Helpers
+### Tiện Ích `String` Tĩnh (Static `String` Helpers)
 
-The following string utility functions are provided directly on the `String` object, rather than as methods on individual string values:
+Các hàm tiện ích chuỗi sau đây được cung cấp trực tiếp trên đối tượng `String`, thay vì là các phương thức trên các giá trị chuỗi riêng lẻ:
 
-* `String.fromCharCode(..)` / `String.fromCodePoint(..)`: produce a string from one or more arguments representing the code-units (`fromCharCode(..)`) or whole code-points (`fromCodePoint(..)`)
+* `String.fromCharCode(..)` / `String.fromCodePoint(..)`: tạo ra một chuỗi từ một hoặc nhiều đối số đại diện cho các đơn vị mã (`fromCharCode(..)`) hoặc toàn bộ điểm mã (`fromCodePoint(..)`)
 
-* `String.raw(..)`: a default template-tag function that allows interpolation on a template literal but prevents character escape sequences from being parsed, so they remain in their *raw* individual input characters from the literal
+* `String.raw(..)`: một hàm thẻ template mặc định cho phép nội suy trên một template literal nhưng ngăn chặn các chuỗi thoát ký tự được phân tích cú pháp, vì vậy chúng vẫn ở dạng các ký tự đầu vào riêng lẻ *thô* (raw) từ literal
 
-Moreover, most values (especially primitives) can be explicitly coerced to their string equivalent by passing them to the `String(..)` function (no `new` keyword). For example:
+Hơn nữa, hầu hết các giá trị (đặc biệt là nguyên thủy) có thể được ép buộc rõ ràng thành tương đương chuỗi của chúng bằng cách chuyển chúng cho hàm `String(..)` (không có từ khóa `new`). Ví dụ:
 
 ```js
 String(true);           // "true"
@@ -623,19 +618,19 @@ String(Infinity);       // "Infinity"
 String(undefined);      // "undefined"
 ```
 
-We'll cover much more detail about such type coercions in a later chapter.
+Chúng ta sẽ đề cập chi tiết hơn nhiều về các loại ép buộc kiểu như vậy trong một chương sau.
 
-## Number Behaviors
+## Các Hành Vi Của Số (Number Behaviors)
 
-Numbers are used for a variety of tasks in our programs, but mostly for mathematical computations. Pay close attention to how JS numbers behave, to ensure the outcomes are as expected.
+Số được sử dụng cho nhiều nhiệm vụ khác nhau trong các chương trình của chúng ta, nhưng chủ yếu là cho các tính toán toán học. Hãy chú ý kỹ đến cách các số JS hoạt động, để đảm bảo kết quả như mong đợi.
 
-### Floating Point Imprecision
+### Sự Không Chính Xác Của Dấu Phẩy Động (Floating Point Imprecision)
 
-We need to revisit our discussion of IEEE-754 from Chapter 1.
+Chúng ta cần xem xét lại cuộc thảo luận của chúng ta về IEEE-754 từ Chương 1.
 
-One of the classic gotchas of any IEEE-754 number system in any programming language -- NOT UNIQUELY JS! -- is that not all operations and values can fit neatly into the IEEE-754 representations.
+Một trong những vấn đề cổ điển của bất kỳ hệ thống số IEEE-754 nào trong bất kỳ ngôn ngữ lập trình nào -- KHÔNG CHỈ RIÊNG JS! -- là không phải tất cả các hoạt động và giá trị đều có thể phù hợp gọn gàng vào các biểu diễn IEEE-754.
 
-The most common illustration is:
+Minh họa phổ biến nhất là:
 
 ```js
 point3a = 0.1 + 0.2;
@@ -647,11 +642,11 @@ point3b;                        // 0.3
 point3a === point3b;            // false <-- oops!
 ```
 
-The operation `0.1 + 0.2` ends up creating floating-point error (drift), where the value stored is actually `0.30000000000000004`.
+Phép toán `0.1 + 0.2` kết thúc bằng việc tạo ra lỗi dấu phẩy động (độ trôi), trong đó giá trị được lưu trữ thực sự là `0.30000000000000004`.
 
-The respective bit representations are:
+Các biểu diễn bit tương ứng là:
 
-```
+```text
 // 0.30000000000000004
 00111111110100110011001100110011
 00110011001100110011001100110100
@@ -661,27 +656,27 @@ The respective bit representations are:
 00110011001100110011001100110011
 ```
 
-If you look closely at those bit patterns, only the last 2 bits differ, from `00` to `11`. But that's enough for those two numbers to be unequal!
+Nếu bạn nhìn kỹ vào các mẫu bit đó, chỉ có 2 bit cuối cùng khác nhau, từ `00` thành `11`. Nhưng điều đó đủ để hai số đó không bằng nhau!
 
-Again, just to reinforce: this behavior is **NOT IN ANY WAY** unique to JS. This is exactly how any IEEE-754 conforming programming language will work in the same scenario. As I asserted above, the majority of all programming languages use IEEE-754, and thus they will all suffer this same fate.
+Một lần nữa, chỉ để củng cố: hành vi này **KHÔNG PHẢI LÀ DUY NHẤT** đối với JS theo bất kỳ cách nào. Đây chính xác là cách bất kỳ ngôn ngữ lập trình tuân thủ IEEE-754 nào sẽ hoạt động trong cùng một kịch bản. Như tôi đã khẳng định ở trên, phần lớn tất cả các ngôn ngữ lập trình đều sử dụng IEEE-754, và do đó tất cả chúng đều sẽ chịu chung số phận này.
 
-The temptation to make fun of JS for `0.1 + 0.2 !== 0.3` is strong, I know. But here it's completely bogus.
+Sự cám dỗ để chế giễu JS vì `0.1 + 0.2 !== 0.3` là rất mạnh, tôi biết. Nhưng ở đây nó hoàn toàn sai lầm.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Pretty much all programmers need to be aware of IEEE-754 and make sure they are careful about these kinds of gotchas. It's somewhat amazing, in a disappointing way, how few of them have any idea how IEEE-754 works. If you've taken your time reading and understanding these concepts so far, you're now in that rare tiny percentage who actually put in the effort to understand the numbers in their programs! |
+| Hầu như tất cả các lập trình viên đều cần biết về IEEE-754 và đảm bảo rằng họ cẩn thận về các loại vấn đề này. Thật đáng kinh ngạc, theo một cách đáng thất vọng, có bao nhiêu ít người trong số họ có bất kỳ ý tưởng nào về cách IEEE-754 hoạt động. Nếu bạn đã dành thời gian đọc và hiểu các khái niệm này cho đến nay, bạn hiện đang ở trong tỷ lệ nhỏ hiếm hoi những người thực sự nỗ lực để hiểu các con số trong chương trình của họ! |
 
-#### Epsilon Threshold
+#### Ngưỡng Epsilon
 
-A common piece of advice to work around such floating-point imprecision uses this *very small* `number` value defined by JS:
+Một lời khuyên phổ biến để giải quyết sự không chính xác của dấu phẩy động như vậy sử dụng giá trị `number` *rất nhỏ* này được định nghĩa bởi JS:
 
 ```js
 Number.EPSILON;                 // 2.220446049250313e-16
 ```
 
-*Epsilon* is the smallest difference JS can represent between `1` and the next value greater than `1`. While this value is technically implementation/platform dependent, it's generally about `2.2E-16`, or `2^-52`.
+*Epsilon* là sự khác biệt nhỏ nhất mà JS có thể biểu diễn giữa `1` và giá trị tiếp theo lớn hơn `1`. Mặc dù giá trị này về mặt kỹ thuật phụ thuộc vào việc triển khai/nền tảng, nhưng nó thường vào khoảng `2.2E-16`, hoặc `2^-52`.
 
-To those not paying close enough attention to the details here -- including my past self! -- it's generally assumed that any skew in floating point precision from a single operation should never be greater than `Number.EPSILON`. Thus, in theory, we can use `Number.EPSILON` as a *very small* tolerance value to ensure number equality comparisons are *safe*:
+Đối với những người không chú ý đủ kỹ đến các chi tiết ở đây -- bao gồm cả bản thân tôi trong quá khứ! -- thường được giả định rằng bất kỳ độ lệch nào trong độ chính xác dấu phẩy động từ một thao tác đơn lẻ sẽ không bao giờ lớn hơn `Number.EPSILON`. Do đó, về mặt lý thuyết, chúng ta có thể sử dụng `Number.EPSILON` như một giá trị dung sai *rất nhỏ* để đảm bảo so sánh bằng số là *an toàn*:
 
 ```js
 function safeNumberEquals(a,b) {
@@ -691,15 +686,15 @@ function safeNumberEquals(a,b) {
 point3a = 0.1 + 0.2;
 point3b = 0.3;
 
-// are these safely "equal"?
+// những cái này có "bằng nhau" một cách an toàn không?
 safeNumberEquals(point3a,point3b);      // true
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| In the first edition "Types & Grammar" book, I indeed recommended exactly this approach. I was wrong. I should have researched the topic more closely. |
+| Trong cuốn sách "Các Kiểu & Ngữ Pháp" ấn bản đầu tiên, tôi thực sự đã đề xuất chính xác phương pháp này. Tôi đã sai. Tôi nên nghiên cứu chủ đề kỹ hơn. |
 
-But, it turns out, this approach isn't safe at all:
+Nhưng, hóa ra, phương pháp này không an toàn chút nào:
 
 ```js
 point3a = 10.1 + 0.2;
@@ -708,27 +703,27 @@ point3b = 10.3;
 safeNumberEquals(point3a,point3b);      // false :(
 ```
 
-Well... that's a bummer!
+Chà... thật đáng tiếc!
 
-Unfortunately, `Number.EPSILON` only works as a "safely equal" error threshold for certain small numbers/operations, and in other cases, it's far too small, and yields false negatives.
+Thật không may, `Number.EPSILON` chỉ hoạt động như một ngưỡng lỗi "bằng nhau an toàn" cho một số số/hoạt động nhỏ nhất định, và trong các trường hợp khác, nó quá nhỏ, và mang lại các kết quả âm tính giả.
 
-You could scale `Number.EPSILON` by some factor to produce a larger threshold that avoids false negatives but still filters out all the floating point skew in your program. But what factor to use is entirely a manual judgement call based on what magnitude of values, and operations on them, your program will entail. There's no automatic way to compute a reliable, universal threshold.
+Bạn có thể chia tỷ lệ `Number.EPSILON` theo một số yếu tố để tạo ra ngưỡng lớn hơn giúp tránh âm tính giả nhưng vẫn lọc ra tất cả độ lệch dấu phẩy động trong chương trình của bạn. Nhưng sử dụng yếu tố nào hoàn toàn là một quyết định thủ công dựa trên độ lớn của các giá trị, và các hoạt động trên chúng, mà chương trình của bạn sẽ đòi hỏi. Không có cách tự động nào để tính toán một ngưỡng đáng tin cậy, phổ quát.
 
-Unless you really know what you're doing, you should just *not* use this `Number.EPSILON` threshold approach at all.
+Trừ khi bạn thực sự biết mình đang làm gì, bạn chỉ nên *không* sử dụng phương pháp ngưỡng `Number.EPSILON` này chút nào.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| If you'd like to read more details and solid advice on this topic, I highly recommend reading this post. [^EpsilonBad] But if we can't use `Number.EPSILON` to avoid the perils of floating-point skew, what do we do? If you can avoid floating-point altogether by scaling all your numbers up so they're all whole number integers (or bigints) while performing math, do so. Only deal with decimal values when you have to output/represent a final value after all the math is done. If that's not possible/practical, use an arbitrary precision decimal emulation library and avoid `number` values entirely. Or do your math in another external programming environment that's not based on IEEE-754. |
+| Nếu bạn muốn đọc thêm chi tiết và lời khuyên chắc chắn về chủ đề này, tôi thực sự khuyên bạn nên đọc bài đăng này. [^EpsilonBad] Nhưng nếu chúng ta không thể sử dụng `Number.EPSILON` để tránh những nguy hiểm của độ lệch dấu phẩy động, chúng ta phải làm gì? Nếu bạn có thể tránh dấu phẩy động hoàn toàn bằng cách chia tỷ lệ tất cả các số của mình lên để chúng đều là số nguyên (hoặc bigints) trong khi thực hiện phép toán, hãy làm như vậy. Chỉ xử lý các giá trị thập phân khi bạn phải xuất/biểu diễn một giá trị cuối cùng sau khi tất cả các phép toán đã hoàn tất. Nếu điều đó không khả thi/thực tế, hãy sử dụng thư viện giả lập thập phân độ chính xác tùy ý và tránh hoàn toàn các giá trị `number`. Hoặc thực hiện phép toán của bạn trong một môi trường lập trình bên ngoài khác không dựa trên IEEE-754. |
 
-### Numeric Comparison
+### So Sánh Số (Numeric Comparison)
 
-Like strings, number values can be compared (for both equality and relational ordering) using the same operators.
+Giống như chuỗi, các giá trị số có thể được so sánh (cho cả sự bằng nhau và thứ tự quan hệ) bằng cách sử dụng các toán tử tương tự.
 
-Remember that no matter what form the number value takes when being specified as a literal (base-10, octal, hexadecimal, exponential, etc), the underlying value stored is what will be compared. Also keep in mind the floating point imprecision issues discussed in the previous section, as the comparisons will be sensitive to the exact binary contents.
+Hãy nhớ rằng bất kể hình thức nào mà giá trị số có khi được chỉ định dưới dạng literal (cơ số 10, bát phân, thập lục phân, số mũ, v.v.), giá trị cơ bản được lưu trữ là những gì sẽ được so sánh. Cũng hãy ghi nhớ các vấn đề không chính xác của dấu phẩy động đã thảo luận trong phần trước, vì các so sánh sẽ nhạy cảm với nội dung nhị phân chính xác.
 
-#### Numeric Equality
+#### Sự Bằng Nhau Của Số (Numeric Equality)
 
-Just like strings, equality comparisons for numbers use either the `==` / `===` operators or `Object.is(..)`. Also recall that if the types of both operands are the same, `==` performs identically to `===`.
+Giống như chuỗi, các so sánh bằng cho số sử dụng hoặc là các toán tử `==` / `===` hoặc `Object.is(..)`. Cũng hãy nhớ rằng nếu các kiểu của cả hai toán hạng giống nhau, `==` thực hiện giống hệt như `===`.
 
 ```js
 42 == 42;                   // true
@@ -741,16 +736,16 @@ Object.is(42,42);           // true
 Object.is(42,43);           // false
 ```
 
-For `==` coercive equality (when the operand types don't match), if either operand is not a string value, `==` prefers a numeric equality check (meaning both operands are coerced to numbers).
+Đối với sự bằng nhau ép buộc `==` (khi các kiểu toán hạng không khớp), nếu một trong hai toán hạng không phải là giá trị chuỗi, `==` thích kiểm tra bằng nhau số hơn (có nghĩa là cả hai toán hạng đều được ép buộc thành số).
 
 ```js
-// numeric (not string!) comparison
+// so sánh số (không phải chuỗi!)
 42 == "42";                 // true
 ```
 
-In this snippet, the coercive equality coerces `"42"` to `42`, not vice versa (`42` to `"42"`). Once both types are `number`, then their values are compared for exact equality, the same as `===` would.
+Trong đoạn mã này, sự bằng nhau ép buộc ép buộc `"42"` thành `42`, không phải ngược lại (`42` thành `"42"`). Khi cả hai kiểu đều là `number`, thì các giá trị của chúng được so sánh cho sự bằng nhau chính xác, giống như `===` sẽ làm.
 
-Recall that JS doesn't distinguish between values like `42`, `42.0`, and `42.000000`; under the covers, they're all the same. Unsurpisingly, the `==` and `===` equality checks verify that:
+Hãy nhớ lại rằng JS không phân biệt giữa các giá trị như `42`, `42.0`, và `42.000000`; dưới vỏ bọc, chúng đều giống nhau. Không có gì đáng ngạc nhiên, các kiểm tra bằng nhau `==` và `===` xác minh điều đó:
 
 ```js
 42 == 42.0;                 // true
@@ -758,32 +753,32 @@ Recall that JS doesn't distinguish between values like `42`, `42.0`, and `42.000
 42.00 === 42.000;           // true
 ```
 
-The intuition you likely have is, if two numbers are literally the same, they're equal. And that's how JS interprets it. But `0.3` is not literally the same as the result of `0.1 + 0.2`, because (as we saw earlier), the latter produces an underlying value that's *very close* to `0.3`, but is not exactly identical.
+Trực giác bạn có thể có là, nếu hai số theo nghĩa đen giống nhau, chúng bằng nhau. Và đó là cách JS diễn giải nó. Nhưng `0.3` không hoàn toàn giống với kết quả của `0.1 + 0.2`, bởi vì (như chúng ta đã thấy trước đó), cái sau tạo ra một giá trị cơ bản *rất gần* với `0.3`, nhưng không hoàn toàn giống hệt nhau.
 
-What's interesting is, the two values are *so close* that their difference is less than the `Number.EPSILON` threshold, so JS can't actually represent that difference *accurately*.
+Điều thú vị là, hai giá trị *gần nhau đến mức* sự khác biệt của chúng nhỏ hơn ngưỡng `Number.EPSILON`, vì vậy JS không thể thực sự biểu diễn sự khác biệt đó *một cách chính xác*.
 
-You might then think, at least informally, that such JS numbers should be "equal", since the difference between them is too small to represent. But notice: JS *can* represent that there *is* a difference, which is why you see that `4` at the very end of the decimal when JS evaluates `0.1 + 0.2`. And you *could* type out the number literal `0.00000000000000004` (aka, `4e-17`), being that difference between `0.3` and `0.1 + 0.2`.
+Sau đó, bạn có thể nghĩ, ít nhất là một cách không chính thức, rằng các số JS như vậy nên "bằng nhau", vì sự khác biệt giữa chúng quá nhỏ để biểu diễn. Nhưng hãy chú ý: JS *có thể* biểu diễn rằng *có* một sự khác biệt, đó là lý do tại sao bạn thấy số `4` ở cuối cùng của số thập phân khi JS đánh giá `0.1 + 0.2`. Và bạn *có thể* gõ ra literal số `0.00000000000000004` (aka, `4e-17`), là sự khác biệt giữa `0.3` và `0.1 + 0.2`.
 
-What JS cannot do, with its IEEE-754 floating point numbers, is represent a number that small in an *accurate* enough way that operations on it produce expected results. It's too small to be fully and properly represented in the `number` type JS provides.
+Những gì JS không thể làm, với các số dấu phẩy động IEEE-754 của nó, là biểu diễn một số nhỏ như vậy theo một cách *đủ chính xác* để các hoạt động trên nó tạo ra kết quả như mong đợi. Nó quá nhỏ để được biểu diễn đầy đủ và đúng đắn trong kiểu `number` mà JS cung cấp.
 
-So `0.1 + 0.2 == 0.3` resolves to `false`, because there's a difference between the two values, even though JS can't accurately represent or do anything with a value as small as that difference.
+Vì vậy `0.1 + 0.2 == 0.3` phân giải thành `false`, bởi vì có một sự khác biệt giữa hai giá trị, mặc dù JS không thể biểu diễn chính xác hoặc làm bất cứ điều gì với một giá trị nhỏ như sự khác biệt đó.
 
-Also like we saw with strings, the `!=` (coercive not-equal) and `!==` (strict-not-equal) operators work with numbers. `x != y` is basically `!(x == y)`, and `x !== y` is basically `!(x === y)`.
+Cũng giống như chúng ta đã thấy với chuỗi, các toán tử `!=` (không bằng ép buộc) và `!==` (không bằng nghiêm ngặt) hoạt động với số. `x != y` về cơ bản là `!(x == y)`, và `x !== y` về cơ bản là `!(x === y)`.
 
-There are two frustrating exceptions in numeric equality (whether you use `==` or `===`):
+Có hai ngoại lệ khó chịu trong sự bằng nhau số (cho dù bạn sử dụng `==` hay `===`):
 
 ```js
 NaN === NaN;                // false -- ugh!
 -0 === 0;                   // true -- ugh!
 ```
 
-`NaN` is never equal to itself (even with `===`), and `-0` is always equal to `0` (even with `===`). It sometimes surprises folks that even `===` has these two exceptions in it.
+`NaN` không bao giờ bằng chính nó (ngay cả với `===`), và `-0` luôn bằng `0` (ngay cả với `===`). Đôi khi mọi người ngạc nhiên rằng ngay cả `===` cũng có hai ngoại lệ này trong đó.
 
-However, the `Object.is(..)` equality check has neither of these exceptions, so for equality comparisons with `NaN` and `-0`, avoid the `==` / `===` operators and use `Object.is(..)` -- or for `NaN` specifically, `Number.isNaN(..)`.
+Tuy nhiên, kiểm tra bằng nhau `Object.is(..)` không có ngoại lệ nào trong số này, vì vậy đối với các so sánh bằng với `NaN` và `-0`, hãy tránh các toán tử `==` / `===` và sử dụng `Object.is(..)` -- hoặc đối với `NaN` cụ thể, `Number.isNaN(..)`.
 
-#### Numeric Relational Comparisons
+#### So Sánh Quan Hệ Số
 
-Just like with string values, the JS relational operators (`<`, `<=`, `>`, and `>=`) operate with numbers. The `<` (less-than) and `>` (greater-than) operations should be fairly self explanatory:
+Cũng giống như với các giá trị chuỗi, các toán tử quan hệ JS (`<`, `<=`, `>`, và `>=`) hoạt động với số. Các phép toán `<` (nhỏ hơn) và `>` (lớn hơn) nên khá tự giải thích:
 
 ```js
 41 < 42;                    // true
@@ -791,23 +786,23 @@ Just like with string values, the JS relational operators (`<`, `<=`, `>`, and `
 0.1 + 0.2 > 0.3;            // true (ugh, IEEE-754)
 ```
 
-Remember: just like `==`, the `<` and `>` operators are also coercive, meaning that any non-number values are coerced to numbers -- unless both operands are already strings, as we saw earlier. There are no strict relational comparison operators.
+Hãy nhớ: giống như `==`, các toán tử `<` và `>` cũng là ép buộc, có nghĩa là bất kỳ giá trị nào không phải là số đều được ép buộc thành số -- trừ khi cả hai toán hạng đã là chuỗi, như chúng ta đã thấy trước đó. Không có toán tử so sánh quan hệ nghiêm ngặt nào.
 
-If you're doing relational comparisons between numbers, the only way to avoid coercion is to ensure that the comparisons always have two numbers. Otherwise, these operators will do *coercive relational* comparisons similar to how `==` performs *coercive equality* comparisons.
+Nếu bạn đang thực hiện so sánh quan hệ giữa các số, cách duy nhất để tránh ép buộc là đảm bảo rằng các so sánh luôn có hai số. Nếu không, các toán tử này sẽ thực hiện các so sánh *quan hệ ép buộc* tương tự như cách `==` thực hiện các so sánh *bằng nhau ép buộc*.
 
-### Mathematical Operators
+### Các Toán Tử Toán Học (Mathematical Operators)
 
-As I asserted earlier, the main reason to have numbers in a programming language is to perform mathematical operations with them. So let's talk about how we do so.
+Như tôi đã khẳng định trước đó, lý do chính để có các số trong một ngôn ngữ lập trình là để thực hiện các phép toán toán học với chúng. Vì vậy, hãy nói về cách chúng ta làm điều đó.
 
-The basic arithmetic operators are `+` (addition), `-` (subtraction), `*` (multiplication), and `/` (division). Also available are the operators `**` (exponentiation) and `%` (modulo, aka *division remainder*). There are also `+=`, `-=`, `*=`, `/=`, `**=`, and `%=` forms of the operators, which additionally assign the result back to the left operand -- must be a valid assignment target like a variable or property.
+Các toán tử số học cơ bản là `+` (cộng), `-` (trừ), `*` (nhân), và `/` (chia). Cũng có sẵn là các toán tử `**` (lũy thừa) và `%` (modulo, hay còn gọi là *phần dư phép chia*). Cũng có các dạng `+=`, `-=`, `*=`, `/=`, `**=`, và `%=` của các toán tử, các dạng này gán thêm kết quả trở lại toán hạng bên trái -- phải là một mục tiêu gán hợp lệ như một biến hoặc thuộc tính.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| As we've already seen, the `+` operator is overloaded to work with both numbers and strings. When one or both operands is a string, the result is a string concatenation (including coercing either operand to a string if necessary). But if neither operand is a string, the result is a numeric addition, as expected. |
+| Như chúng ta đã thấy, toán tử `+` được nạp chồng (overloaded) để hoạt động với cả số và chuỗi. Khi một hoặc cả hai toán hạng là một chuỗi, kết quả là một phép nối chuỗi (bao gồm cả việc ép buộc một trong hai toán hạng thành một chuỗi nếu cần thiết). Nhưng nếu không có toán hạng nào là chuỗi, kết quả là một phép cộng số, như mong đợi. |
 
-All these mathematical operators are *binary*, meaning they expect two value operands, one on either side of the operator; they all expect the operands to be number values. If either or both operands are non-numbers, the non-number operand(s) is/are coerced to numbers to perform the operation. We'll cover coercion in detail in a later chapter.
+Tất cả các toán tử toán học này là *nhị phân* (binary), có nghĩa là chúng mong đợi hai toán hạng giá trị, mỗi cái ở một bên của toán tử; tất cả chúng đều mong đợi các toán hạng là giá trị số. Nếu một trong hai hoặc cả hai toán hạng là không phải số, (các) toán hạng không phải số được ép buộc thành số để thực hiện phép toán. Chúng ta sẽ đề cập chi tiết về sự ép buộc trong một chương sau.
 
-Consider:
+Hãy xem xét:
 
 ```js
 40 + 2;                 // 42
@@ -817,15 +812,15 @@ Consider:
 7 ** 2;                 // 49
 49 % 2;                 // 1
 
-40 + "2";               // "402" (string concatenation)
-44 - "2";               // 42 (because "2" is coerced to 2)
+40 + "2";               // "402" (nối chuỗi)
+44 - "2";               // 42 (vì "2" được ép buộc thành 2)
 21 * "2";               // 42 (..ditto..)
 84 / "2";               // 42 (..ditto..)
-"7" ** "2";             // 49 (both operands are coerced to numbers)
+"7" ** "2";             // 49 (cả hai toán hạng được ép buộc thành số)
 "49" % "2";             // 1 (..ditto..)
 ```
 
-The `+` and `-` operators also come in a *unary* form, meaning they only have one operand; again, the operand is expected to be a number, and coerced to a number if not:
+Các toán tử `+` và `-` cũng có dạng *đơn nguyên* (unary), có nghĩa là chúng chỉ có một toán hạng; một lần nữa, toán hạng được mong đợi là một số, và được ép buộc thành một số nếu không phải:
 
 ```js
 +42;                    // 42
@@ -835,9 +830,9 @@ The `+` and `-` operators also come in a *unary* form, meaning they only have on
 -"42";                  // -42
 ```
 
-You might have noticed that `-42` looks like it's just a "negative forty-two" numeric literal. That's not quite right. A nuance of JS syntax is that it doesn't recognize negative numeric literals. Instead, JS treats this as a positive numeric literal `42` that's preceded, and negated, by the unary `-` operator in front of it.
+Bạn có thể đã nhận thấy rằng `-42` trông giống như nó chỉ là một literal số "âm bốn mươi hai". Điều đó không hoàn toàn đúng. Một sắc thái của cú pháp JS là nó không nhận ra các literal số âm. Thay vào đó, JS coi đây là một literal số dương `42` được đặt trước, và bị phủ định, bởi toán tử đơn nguyên `-` ở phía trước nó.
 
-Somewhat surprisingly, then:
+Hơi ngạc nhiên, sau đó:
 
 ```js
 -42;                    // -42
@@ -846,13 +841,13 @@ Somewhat surprisingly, then:
     42;                 // -42
 ```
 
-As you can see, whitespace (and even new lines) are allowed between the `-` unary operator and its operand; actually, this is true of all operators and operands.
+Như bạn có thể thấy, khoảng trắng (và thậm chí dòng mới) được phép giữa toán tử đơn nguyên `-` và toán hạng của nó; thực tế, điều này đúng với tất cả các toán tử và toán hạng.
 
-#### Increment and Decrement
+#### Tăng và Giảm (Increment and Decrement)
 
-There are two other unary numeric operators: `++` (increment) and `--` decrement. They both perform their respective operation and then reassign the result to the operand -- must be a valid assignment target like a variable or property.
+Có hai toán tử số học đơn nguyên khác: `++` (tăng) và `--` (giảm). Cả hai đều thực hiện phép toán tương ứng của mình và sau đó gán lại kết quả cho toán hạng -- phải là một mục tiêu gán hợp lệ như một biến hoặc thuộc tính.
 
-You may sort of think of `++` as equivalent to `+= 1`, and `--` as equivalent to `-= 1`:
+Bạn có thể nghĩ về `++` tương đương với `+= 1`, và `--` tương đương với `-= 1`:
 
 ```js
 myAge = 42;
@@ -863,7 +858,7 @@ myAge;                  // 43
 numberOfHeadHairs--;
 ```
 
-However, these are special operators in that they can appear in a postfix (after the operand) position, as above, or in a prefix (before the operand) position:
+Tuy nhiên, đây là các toán tử đặc biệt ở chỗ chúng có thể xuất hiện ở vị trí hậu tố (sau toán hạng), như trên, hoặc ở vị trí tiền tố (trước toán hạng):
 
 ```js
 myAge = 42;
@@ -874,33 +869,33 @@ myAge;                  // 43
 --numberofHeadHairs;
 ```
 
-It may seem peculiar that prefix and postfix positions seem to give the same result (incrementing or decrementing) in such examples. The difference is subtle, and isn't related to the final reassigned result. We'll revisit these particular operators in a later chapter to dig into the positional differences.
+Có vẻ kỳ lạ là các vị trí tiền tố và hậu tố dường như cho cùng một kết quả (tăng hoặc giảm) trong các ví dụ như vậy. Sự khác biệt là tinh tế, và không liên quan đến kết quả được gán lại cuối cùng. Chúng ta sẽ xem xét lại các toán tử cụ thể này trong một chương sau để tìm hiểu sâu về sự khác biệt vị trí.
 
-### Bitwise Operators
+### Các Toán Tử Bitwise (Bitwise Operators)
 
-JS provides several bitwise operators to perform bit-level operations on number values.
+JS cung cấp một số toán tử bitwise để thực hiện các thao tác cấp bit trên các giá trị số.
 
-However, these bit operations are not performed against the packed bit-pattern of IEEE-754 numbers (see Chapter 1). Instead, the operand number is first converted to a 32-bit signed *integer*, the bit operation is performed, and then the result is converted back into an IEEE-754 number.
+Tuy nhiên, các thao tác bit này không được thực hiện đối với mẫu bit đã đóng gói của các số IEEE-754 (xem Chương 1). Thay vào đó, số toán hạng trước tiên được chuyển đổi thành *số nguyên* có dấu 32-bit, thao tác bit được thực hiện, và sau đó kết quả được chuyển đổi trở lại thành số IEEE-754.
 
-Keep in mind, just like any other primitive operators, these just compute new values, not actually modifying a value in place.
+Hãy nhớ rằng, giống như bất kỳ toán tử nguyên thủy nào khác, chúng chỉ tính toán các giá trị mới, không thực sự sửa đổi một giá trị tại chỗ.
 
-* `&` (bitwise AND): Performs an AND operation with each corresponding bit from the two operands; `42 & 36 === 32` (i.e., `0b00...101010 & 0b00...100100 === 0b00..100000`)
+* `&` (bitwise AND): Thực hiện một phép toán AND với mỗi bit tương ứng từ hai toán hạng; `42 & 36 === 32` (tức là, `0b00...101010 & 0b00...100100 === 0b00..100000`)
 
-* `|` (bitwise OR): Performs an OR operation with each corresponding bit from the two operands; `42 | 36 === 46` (i.e., `0b00...101010 | 0b00...100100 === 0b00...101110`)
+* `|` (bitwise OR): Thực hiện một phép toán OR với mỗi bit tương ứng từ hai toán hạng; `42 | 36 === 46` (tức là, `0b00...101010 | 0b00...100100 === 0b00...101110`)
 
-* `^` (bitwise XOR): Performs an XOR (eXclusive-OR) operation with each corresponding bit from the two operands; `42 ^ 36 === 14` (i.e., `0b00...101010 ^ 0b00...100100 === 0b00...001110`)
+* `^` (bitwise XOR): Thực hiện một phép toán XOR (eXclusive-OR) với mỗi bit tương ứng từ hai toán hạng; `42 ^ 36 === 14` (tức là, `0b00...101010 ^ 0b00...100100 === 0b00...001110`)
 
-* `~` (bitwise NOT): Performs a NOT operation against the bits of a single operand; `~42 === -43` (i.e., `~0b00...101010 === 0b11...010101`); using 2's complement, the signed integer has the first bit set to `1` meaning negative, and the rest of the bits (when flipped back, according to 2's complement, which is 1's complement bit flipping and then adding `1`) would be `43` (`0b10...101011`); the equivalent of `~` in decimal number arithmetic is `~x === -(x + 1)`, so `~42 === -43`
+* `~` (bitwise NOT): Thực hiện một phép toán NOT đối với các bit của một toán hạng duy nhất; `~42 === -43` (tức là, `~0b00...101010 === 0b11...010101`); sử dụng bù 2 (2's complement), số nguyên có dấu có bit đầu tiên được đặt thành `1` có nghĩa là âm, và phần còn lại của các bit (khi lật lại, theo bù 2, là lật bit bù 1 và sau đó cộng thêm `1`) sẽ là `43` (`0b10...101011`); tương đương của `~` trong số học thập phân là `~x === -(x + 1)`, vì vậy `~42 === -43`
 
-* `<<` (left shift): Performs a left-shift of the bits of the left operand by the count of bits specified by the right operand; `42 << 3 == 336` (i.e., `0b00...101010 << 3 === 0b00...101010000`)
+* `<<` (dịch trái - left shift): Thực hiện dịch trái các bit của toán hạng trái theo số lượng bit được chỉ định bởi toán hạng phải; `42 << 3 == 336` (tức là, `0b00...101010 << 3 === 0b00...101010000`)
 
-* `>>` (right shift): Performs a sign-propagating right-shift of the bits of the left operand by the count of bits specified by the right operand, discarding the bits that fall off the right side; whatever the leftmost bit is (`0`, or `1` is negative) is copied in as bits on the left (thereby preserving the sign of the original value in the result); `42 >> 3 === 5` (i.e., `0b00..101010 >> 3 === 0b00...000101`)
+* `>>` (dịch phải - right shift): Thực hiện dịch phải lan truyền dấu (sign-propagating) các bit của toán hạng trái theo số lượng bit được chỉ định bởi toán hạng phải, loại bỏ các bit rơi ra khỏi phía bên phải; bất kể bit ngoài cùng bên trái là gì (`0`, hoặc `1` là âm) được sao chép vào dưới dạng các bit ở bên trái (do đó bảo toàn dấu của giá trị ban đầu trong kết quả); `42 >> 3 === 5` (tức là, `0b00..101010 >> 3 === 0b00...000101`)
 
-* `>>>` (zero-fill right shift, aka unsigned right shift): Performs the same right-shift as `>>`, but `0` fills on the bits shifted in from the left side instead of copying the leftmost bit (thereby ignoring the sign of the original value in the result); `42 >>> 3 === 5` but `-43 >>> 3 === 536870906` (i.e., `0b11...010101 >>> 3 === 0b0001...111010`)
+* `>>>` (dịch phải điền không - zero-fill right shift, hay còn gọi là dịch phải không dấu): Thực hiện dịch phải tương tự như `>>`, nhưng điền `0` vào các bit được dịch vào từ phía bên trái thay vì sao chép bit ngoài cùng bên trái (do đó bỏ qua dấu của giá trị ban đầu trong kết quả); `42 >>> 3 === 5` nhưng `-43 >>> 3 === 536870906` (tức là, `0b11...010101 >>> 3 === 0b0001...111010`)
 
-* `&=`, `|=`, `<<=`, `>>=`, and `>>>=` (bitwise operators with assignment): Performs the corresponding bitwise operation, but then assigns the result to the left operand (which must be a valid assignment target, like a variable or property, not just a literal value); note that `~=` is missing from the list, because there is no such "binary negate with assignment" operator
+* `&=`, `|=`, `<<=`, `>>=`, và `>>>=` (toán tử bitwise với phép gán): Thực hiện thao tác bitwise tương ứng, nhưng sau đó gán kết quả cho toán hạng bên trái (phải là một mục tiêu gán hợp lệ, như một biến hoặc thuộc tính, không chỉ là một giá trị literal); lưu ý rằng `~=` bị thiếu trong danh sách, vì không có toán tử "phủ định nhị phân với phép gán" như vậy
 
-In all honesty, bitwise operations are not very common in JS. But you may sometimes see a statement like:
+Thực lòng mà nói, các thao tác bitwise không phổ biến lắm trong JS. Nhưng đôi khi bạn có thể thấy một câu lệnh như:
 
 ```js
 myGPA = 3.54;
@@ -908,23 +903,23 @@ myGPA = 3.54;
 myGPA | 0;              // 3
 ```
 
-Since the bitwise operators act only on 32-bit integers, the `| 0` operation truncates (i.e., `Math.trunc(..)`) any decimal value, leaving only the integer.
+Vì các toán tử bitwise chỉ hoạt động trên các số nguyên 32-bit, phép toán `| 0` cắt bớt (tức là, `Math.trunc(..)`) bất kỳ giá trị thập phân nào, chỉ để lại số nguyên.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| A common misconception is that `| 0` is like *floor* (i.e., `Math.floor(..)`). The result of `| 0` agrees with `Math.floor(..)` on positive numbers, but differs on negative numbers, because by standard definition, *floor* is an operation that rounds-down towards `-Infinity`. `| 0` merely discards the decimal bits, which is in fact truncation. |
+| Một quan niệm sai lầm phổ biến là `\| 0` giống như *floor* (làm tròn xuống) (tức là, `Math.floor(..)`). Kết quả của `\| 0` đồng ý với `Math.floor(..)` trên các số dương, nhưng khác nhau trên các số âm, vì theo định nghĩa chuẩn, *floor* là một phép toán làm tròn xuống về phía `-Infinity`. `\| 0` chỉ đơn thuần loại bỏ các bit thập phân, thực tế là cắt bớt (truncation). |
 
-### Number Value Methods
+### Các Phương Thức Giá Trị Số
 
-Number values provide the following methods (as properties) for number-specific operations:
+Các giá trị số cung cấp các phương thức sau (như các thuộc tính) cho các hoạt động cụ thể của số:
 
-* `toExponential(..)`: produces a string representation of the number using scientific notation (e.g., `"4.2e+1"`)
+* `toExponential(..)`: tạo ra một biểu diễn chuỗi của số bằng cách sử dụng ký hiệu khoa học (ví dụ, `"4.2e+1"`)
 
-* `toFixed(..)`: produces a non-scientific-notation string representation of the number with the specified number of decimal places (rounding or zero-padding as necessary)
+* `toFixed(..)`: tạo ra một biểu diễn chuỗi không phải ký hiệu khoa học của số với số lượng chữ số thập phân được chỉ định (làm tròn hoặc đệm không nếu cần thiết)
 
-* `toPrecision(..)`: like `toFixed(..)`, except it applies the numeric argument as the number of significant digits (i.e., precision) including both the whole number and decimal places if any
+* `toPrecision(..)`: giống như `toFixed(..)`, ngoại trừ nó áp dụng đối số số làm số lượng chữ số có nghĩa (tức là, độ chính xác) bao gồm cả số nguyên và vị trí thập phân nếu có
 
-* `toLocaleString(..)`: produces a string representation of the number according to the current locale
+* `toLocaleString(..)`: tạo ra một biểu diễn chuỗi của số theo ngôn ngữ hiện tại
 
 ```js
 myAge = 42;
@@ -932,29 +927,29 @@ myAge = 42;
 myAge.toExponential(3);         // "4.200e+1"
 ```
 
-One particular nuance of JS syntax is that `.` can be ambiguous when dealing with number literals and property/method access.
+Một sắc thái cụ thể của cú pháp JS là `.` có thể mơ hồ khi xử lý các literal số và truy cập thuộc tính/phương thức.
 
-If a `.` comes immediately (no whitespace) after a numeric literal digit, and there's not already a `.` decimal in the number value, the `.` is assumed to be a starting the decimal portion of the number. But if the position of the `.` is unambiguously *not* part of the numeric literal, then it's always treated as a property access.
+Nếu một dấu `.` xuất hiện ngay lập tức (không có khoảng trắng) sau một chữ số literal, và chưa có dấu `.` thập phân nào trong giá trị số, dấu `.` được giả định là bắt đầu phần thập phân của số. Nhưng nếu vị trí của dấu `.` rõ ràng *không phải* là một phần của literal số, thì nó luôn được coi là một truy cập thuộc tính.
 
 ```js
 42 .toExponential(3);           // "4.200e+1"
 ```
 
-Here, the whitespace disambiguates the `.`, designating it as a property/method access. It's perhaps more common/preferred to use `(..)` instead of whitespace for such disambiguation:
+Ở đây, khoảng trắng làm rõ dấu `.`, chỉ định nó là một truy cập thuộc tính/phương thức. Có lẽ phổ biến hơn/được ưu tiên hơn là sử dụng `(..)` thay vì khoảng trắng cho việc làm rõ như vậy:
 
 ```js
 (42).toExponential(3);          // "4.200e+1"
 ```
 
-An unusual-looking effect of this JS parsing grammar rule:
+Một hiệu ứng trông khác thường của quy tắc ngữ pháp phân tích cú pháp JS này:
 
 ```js
 42..toExponential(3);           // "4.200e+1"
 ```
 
-So called the "double-dot" idiom, the first `.` in this expression is a decimal, and thus the second `.` is unambiguously *not* a decimal, but rather a property/method access.
+Được gọi là thành ngữ "dấu chấm đôi", dấu `.` đầu tiên trong biểu thức này là một số thập phân, và do đó dấu `.` thứ hai rõ ràng *không phải* là một số thập phân, mà là một truy cập thuộc tính/phương thức.
 
-Also, notice there's no digits after the first `.`; it's perfectly legal syntax to leave a trailing `.` on a numeric literal:
+Ngoài ra, hãy chú ý không có chữ số nào sau dấu `.` đầu tiên; cú pháp hoàn toàn hợp lệ để để lại một dấu `.` ở cuối trên một literal số:
 
 ```js
 myAge = 41. + 1.;
@@ -962,62 +957,62 @@ myAge = 41. + 1.;
 myAge;                          // 42
 ```
 
-Values of `bigint` type cannot have decimals, so the parsing is unambiguous that a `.` after a literal (with the trailing `n`) is always a property access:
+Các giá trị của kiểu `bigint` không thể có số thập phân, vì vậy việc phân tích cú pháp là rõ ràng rằng một dấu `.` sau một literal (với hậu tố `n`) luôn là một truy cập thuộc tính:
 
 ```js
 42n.toString();                 // 42
 ```
 
-### Static `Number` Properties
+### Các Thuộc Tính `Number` Tĩnh
 
-* `Number.EPSILON`: The smallest value possible between `1` and the next highest number
+* `Number.EPSILON`: Giá trị nhỏ nhất có thể giữa `1` và số cao nhất tiếp theo
 
-* `Number.NaN`: The same as the global `NaN` symbol, the special invalid number
+* `Number.NaN`: Giống như symbol `NaN` toàn cục, số không hợp lệ đặc biệt
 
-* `Number.MIN_SAFE_INTEGER` / `Number.MAX_SAFE_INTEGER`: The positive and negative integers with the largest absolute value (furthest from `0`)
+* `Number.MIN_SAFE_INTEGER` / `Number.MAX_SAFE_INTEGER`: Các số nguyên dương và âm có giá trị tuyệt đối lớn nhất (xa nhất từ `0`)
 
-* `Number.MIN_VALUE` / `Number.MAX_VALUE`: The minimum (positive value closest to `0`) and the maximum (positive value furthest from `0`) representable by the `number` type
+* `Number.MIN_VALUE` / `Number.MAX_VALUE`: Tối thiểu (giá trị dương gần nhất với `0`) và tối đa (giá trị dương xa nhất từ `0`) có thể biểu diễn bởi kiểu `number`
 
-* `Number.NEGATIVE_INFINITY` / `Number.POSITIVE_INFINITY`: Same as global `-Infinity` and `Infinity`, the values that represent the largest (non-finite) values furthest from `0`
+* `Number.NEGATIVE_INFINITY` / `Number.POSITIVE_INFINITY`: Giống như toàn cục `-Infinity` và `Infinity`, các giá trị đại diện cho các giá trị lớn nhất (không hữu hạn) xa nhất từ `0`
 
-### Static `Number` Helpers
+### Tiện Ích `Number` Tĩnh
 
-* `Number.isFinite(..)`: returns a boolean indicating if the value is finite -- a `number` that's not `NaN`, nor one of the two infinities
+* `Number.isFinite(..)`: trả về một boolean cho biết giá trị có phải là hữu hạn không -- một `number` không phải là `NaN`, cũng không phải là một trong hai vô cực
 
-* `Number.isInteger(..)` / `Number.isSafeInteger(..)`: both return booleans indicating if the value is a whole `number` with no decimal places, and if it's within the *safe* range for integers (`-2^53 + 1` - `2^53 - 1`)
+* `Number.isInteger(..)` / `Number.isSafeInteger(..)`: cả hai đều trả về boolean cho biết giá trị có phải là một `number` nguyên không có vị trí thập phân, và liệu nó có nằm trong phạm vi *an toàn* cho các số nguyên hay không (`-2^53 + 1` - `2^53 - 1`)
 
-* `Number.isNaN(..)`: The bug-fixed version of the global `isNaN(..)` utility, which identifies if the argument provided is the special `NaN` value
+* `Number.isNaN(..)`: Phiên bản đã sửa lỗi của tiện ích `isNaN(..)` toàn cục, xác định xem đối số được cung cấp có phải là giá trị `NaN` đặc biệt hay không
 
-* `Number.parseFloat(..)` / `Number.parseInt(..)`: utilities to parse string values for numeric digits, left-to-right, until the end of the string or the first non-float (or non-integer) character is encountered
+* `Number.parseFloat(..)` / `Number.parseInt(..)`: các tiện ích để phân tích cú pháp các giá trị chuỗi cho các chữ số, từ trái sang phải, cho đến khi gặp kết thúc của chuỗi hoặc ký tự không phải float (hoặc không phải integer) đầu tiên
 
-### Static `Math` Namespace
+### Không Gian Tên `Math` Tĩnh
 
-Since the main usage of `number` values is for performing mathematical operations, JS includes many standard mathematical constants and operation utilities on the `Math` namespace.
+Vì việc sử dụng chính các giá trị `number` là để thực hiện các phép toán toán học, JS bao gồm nhiều hằng số toán học tiêu chuẩn và các tiện ích hoạt động trên không gian tên `Math`.
 
-There's a bunch of these, so I'll omit listing every single one. But here's a few for illustration purposes:
+Có rất nhiều thứ này, vì vậy tôi sẽ bỏ qua việc liệt kê từng cái một. Nhưng đây là một vài cái cho mục đích minh họa:
 
 ```js
 Math.PI;                        // 3.141592653589793
 
-// absolute value
+// giá trị tuyệt đối
 Math.abs(-32.6);                // 32.6
 
-// rounding
+// làm tròn
 Math.round(-32.6);              // -33
 
-// min/max selection
+// lựa chọn min/max
 Math.min(100,Math.max(0,42));   // 42
 ```
 
-Unlike `Number`, which is also the `Number(..)` function (for number coercion), `Math` is just an object that holds these properties and static function utilities; it cannot be called as a function.
+Không giống như `Number`, cũng là hàm `Number(..)` (cho việc ép buộc số), `Math` chỉ là một đối tượng giữ các thuộc tính và các tiện ích hàm tĩnh này; nó không thể được gọi như một hàm.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| One peculiar member of the `Math` namespace is `Math.random()`, for producing a random floating point value between `0` and `1.0`. It's unusual to consider random number generation -- a task that's inherently stateful/side-effect'ing -- as a mathematical operation. It's also long been a footgun security-wise, as the pseudo-random number generator (PRNG) that JS uses is *not* secure (can be predicted) from a cryptography perspective. The web platform stepped in several years ago with the safer `crypto.getRandomValues(..)` API (based on a better PRNG), which fills a typed-array with random bits that can be interpreted as one or more integers (of type-specified maximum magnitude). Using `Math.random()` is universally discouraged now. |
+| Một thành viên kỳ lạ của không gian tên `Math` là `Math.random()`, để tạo ra một giá trị dấu phẩy động ngẫu nhiên giữa `0` và `1.0`. Thật bất thường khi coi việc tạo số ngẫu nhiên -- một nhiệm vụ vốn có trạng thái/tác dụng phụ -- như một phép toán toán học. Nó cũng từ lâu đã là một nguy cơ bảo mật, vì bộ tạo số giả ngẫu nhiên (PRNG) mà JS sử dụng *không* an toàn (có thể dự đoán được) từ góc độ mật mã học. Nền tảng web đã can thiệp vài năm trước với API `crypto.getRandomValues(..)` an toàn hơn (dựa trên PRNG tốt hơn), điền vào một typed-array với các bit ngẫu nhiên có thể được diễn giải là một hoặc nhiều số nguyên (có độ lớn tối đa được chỉ định theo kiểu). Việc sử dụng `Math.random()` hiện bị không khuyến khích rộng rãi. |
 
-### BigInts and Numbers Don't Mix
+### BigInts và Numbers Không Trộn Lẫn
 
-As we covered in Chapter 1, values of `number` type and `bigint` type cannot mix in the same operations. That can trip you up even if you're doing a simple increment of the value (like in a loop):
+Như chúng ta đã đề cập trong Chương 1, các giá trị của kiểu `number` và kiểu `bigint` không thể trộn lẫn trong cùng một phép toán. Điều đó có thể khiến bạn vấp ngã ngay cả khi bạn đang thực hiện một phép tăng đơn giản của giá trị (như trong một vòng lặp):
 
 ```js
 myAge = 42n;
@@ -1032,7 +1027,7 @@ myAge++;
 myAge;                      // 44n
 ```
 
-As such, if you're using both `number` and `bigint` values in your programs, you'll need to manually coerce one value-type to the other somewhat regularly. The `BigInt(..)` function (no `new` keyword) can coerce a `number` value to `bigint`. Vice versa, to go the other direction from `bigint` to `number`, use the `Number(..)` function (again, no `new` keyword):
+Như vậy, nếu bạn đang sử dụng cả hai giá trị `number` và `bigint` trong các chương trình của mình, bạn sẽ cần phải ép buộc thủ công một kiểu giá trị sang kiểu kia một cách khá thường xuyên. Hàm `BigInt(..)` (không có từ khóa `new`) có thể ép buộc một giá trị `number` thành `bigint`. Ngược lại, để đi theo hướng khác từ `bigint` sang `number`, hãy sử dụng hàm `Number(..)` (một lần nữa, không có từ khóa `new`):
 
 ```js
 BigInt(42);                 // 42n
@@ -1040,7 +1035,7 @@ BigInt(42);                 // 42n
 Number(42n);                // 42
 ```
 
-Keep in mind though: coercing between these types has some risk:
+Tuy nhiên, hãy nhớ rằng: việc ép buộc giữa các kiểu này có một số rủi ro:
 
 ```js
 BigInt(4.2);                // RangeError thrown!
@@ -1050,22 +1045,22 @@ BigInt(Infinity);           // RangeError thrown!
 Number(2n ** 1024n);        // Infinity
 ```
 
-## Primitives Are Foundational
+## Các Nguyên Thủy Là Nền Tảng
 
-Over the last two chapters, we've dug deep into how primitive values behave in JS. I bet more than a few readers were, like me, ready to skip over these topics. But now, hopefully, you see the importance of understanding these concepts.
+Trong hai chương vừa qua, chúng ta đã đào sâu vào cách các giá trị nguyên thủy hoạt động trong JS. Tôi cá là không ít độc giả, giống như tôi, đã sẵn sàng bỏ qua những chủ đề này. Nhưng bây giờ, hy vọng, bạn thấy tầm quan trọng của việc hiểu những khái niệm này.
 
-The story doesn't end here, though. Far from it! In the next chapter, we'll turn our attention to understanding JS's object types (objects, arrays, etc).
+Câu chuyện không kết thúc ở đây, mặc dù vậy. Còn xa mới kết thúc! Trong chương tiếp theo, chúng ta sẽ chuyển sự chú ý sang việc hiểu các kiểu đối tượng của JS (đối tượng, mảng, v.v.).
 
-[^TwitterUnicode]: "New update to the Twitter-Text library: Emoji character count"; Andy Piper; Oct 2018; https://twittercommunity.com/t/new-update-to-the-twitter-text-library-emoji-character-count/114607 ; Accessed July 2022
+[^TwitterUnicode]: "Cập nhật mới cho thư viện Twitter-Text: Đếm ký tự Emoji"; Andy Piper; Tháng 10 2018; <https://twittercommunity.com/t/new-update-to-the-twitter-text-library-emoji-character-count/114607> ; Truy cập Tháng 7 2022
 
-[^INTLAPI]: ECMAScript 2022 Internationalization API Specification; https://402.ecma-international.org/9.0/ ; Accessed August 2022
+[^INTLAPI]: Đặc tả API Quốc tế hóa ECMAScript 2022; <https://402.ecma-international.org/9.0/> ; Truy cập Tháng 8 2022
 
-[^INTLCollator]: "Intl.Collator", MDN; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator ; Accessed August 2022
+[^INTLCollator]: "Intl.Collator", MDN; <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator> ; Truy cập Tháng 8 2022
 
-[^INTLSegmenter]: "Intl.Segmenter", MDN; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter ; Accessed August 2022
+[^INTLSegmenter]: "Intl.Segmenter", MDN; <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter> ; Truy cập Tháng 8 2022
 
-[^StrictEquality]: "7.2.16 IsStrictlyEqual(x,y)", ECMAScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-isstrictlyequal ; Accessed August 2022
+[^StrictEquality]: "7.2.16 IsStrictlyEqual(x,y)", Đặc tả ngôn ngữ ECMAScript 2022; <https://262.ecma-international.org/13.0/#sec-isstrictlyequal> ; Truy cập Tháng 8 2022
 
-[^LooseEquality]: "7.2.15 IsLooselyEqual(x,y)", ECMAScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-islooselyequal ; Accessed August 2022
+[^LooseEquality]: "7.2.15 IsLooselyEqual(x,y)", Đặc tả ngôn ngữ ECMAScript 2022; <https://262.ecma-international.org/13.0/#sec-islooselyequal> ; Truy cập Tháng 8 2022
 
-[^EpsilonBad]: "PLEASE don't follow the code recipe in the accepted answer", Stack Overflow; Daniel Scott; July 2019; https://stackoverflow.com/a/56967003/228852 ; Accessed August 2022
+[^EpsilonBad]: "LÀM ƠN đừng làm theo công thức mã trong câu trả lời được chấp nhận", Stack Overflow; Daniel Scott; Tháng 7 2019; <https://stackoverflow.com/a/56967003/228852> ; Truy cập Tháng 8 2022

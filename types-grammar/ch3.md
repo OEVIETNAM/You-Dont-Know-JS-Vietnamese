@@ -1,34 +1,35 @@
-# You Don't Know JS Yet: Types & Grammar - 2nd Edition
-# Chapter 3: Object Values
+# You Don't Know JS Yet: Các Kiểu & Ngữ Pháp - Ấn bản thứ 2
 
-| NOTE: |
+# Chương 3: Các Giá Trị Đối Tượng
+
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang thực hiện |
 
-Now that we're comfortable with the built-in primitive types, we turn our attention to the `object` types in JS.
+Bây giờ chúng ta đã thoải mái với các kiểu giá trị nguyên thủy tích hợp sẵn, chúng ta chuyển sự chú ý sang các kiểu `object` (đối tượng) trong JS.
 
-I could write a whole book talking about objects in-depth; in fact, I already did! The "Objects & Classes" title of this series covers objects in-depth already, so make sure you've read that before continuing with this chapter.
+Tôi có thể viết cả một cuốn sách nói sâu về các đối tượng; thực tế, tôi đã làm rồi! Tiêu đề "Đối Tượng & Lớp" (Objects & Classes) của loạt sách này đã bao gồm các đối tượng một cách chuyên sâu, vì vậy hãy chắc chắn rằng bạn đã đọc nó trước khi tiếp tục với chương này.
 
-Rather than repeat that book's content, here we'll focus our attention on how the `object` value-type behaves and interacts with other values in JS.
+Thay vì lặp lại nội dung của cuốn sách đó, ở đây chúng ta sẽ tập trung sự chú ý vào cách loại giá trị `object` hoạt động và tương tác với các giá trị khác trong JS.
 
-## Types of Objects
+## Các Kiểu Đối Tượng
 
-The `object` value-type comprises several sub-types, each with specialized behaviors, including:
+Kiểu giá trị `object` bao gồm một vài kiểu phụ, mỗi kiểu có các hành vi chuyên biệt, bao gồm:
 
-* plain objects
-* fundamental objects (boxed primitives)
-* built-in objects
-* arrays
-* regular expressions
-* functions (aka, "callable objects")
+* đối tượng thuần (plain objects)
+* đối tượng cơ bản (fundamental objects) (nguyên thủy đóng hộp - boxed primitives)
+* đối tượng tích hợp (built-in objects)
+* mảng (arrays)
+* biểu thức chính quy (regular expressions)
+* hàm (functions) (hay còn gọi là "đối tượng có thể gọi" - "callable objects")
 
-Beyond the specialized behaviors, one shared characteristic is that all objects can act as collections (of properties) holding values (including functions/methods).
+Ngoài các hành vi chuyên biệt, một đặc điểm chung là tất cả các đối tượng có thể hoạt động như các tập hợp (của các thuộc tính) chứa các giá trị (bao gồm cả hàm/phương thức).
 
-## Plain Objects
+## Các Đối Tượng Thuần (Plain Objects)
 
-The general object value-type is sometimes referred to as *plain ol' javascript objects* (POJOs).
+Kiểu giá trị đối tượng chung đôi khi được gọi là *đối tượng javascript thuần* (plain ol' javascript objects - POJOs).
 
-Plain objects have a literal form:
+Các đối tượng thuần có dạng literal:
 
 ```js
 address = {
@@ -39,9 +40,9 @@ address = {
 };
 ```
 
-This plain object (POJO), as defined with the `{ .. }` curly braces, is a collection of named properties (`street`, `city`, `state`, and `zip`). Properties can hold any values, primitives or other objects (including arrays, functions, etc).
+Đối tượng thuần này (POJO), như được định nghĩa với dấu ngoặc nhọn `{ .. }`, là một tập hợp các thuộc tính được đặt tên (`street`, `city`, `state`, và `zip`). Các thuộc tính có thể chứa bất kỳ giá trị nào, nguyên thủy hoặc các đối tượng khác (bao gồm mảng, hàm, v.v.).
 
-The same object could also have been defined imperatively using the `new Object()` constructor:
+Cùng một đối tượng cũng có thể được định nghĩa một cách mệnh lệnh bằng cách sử dụng hàm tạo `new Object()`:
 
 ```js
 address = new Object();
@@ -51,31 +52,31 @@ address.state = "CA";
 address.zip = "94114";
 ```
 
-Plain objects are by default `[[Prototype]]` linked to `Object.prototype`, giving them delegated access to several general object methods, such as:
+Các đối tượng thuần theo mặc định được liên kết `[[Prototype]]` với `Object.prototype`, cung cấp cho chúng quyền truy cập được ủy quyền tới một vài phương thức đối tượng chung, chẳng hạn như:
 
 * `toString()` / `toLocaleString()`
 * `valueOf()`
 * `isPrototypeOf(..)`
-* `hasOwnProperty(..)` (recently deprecated -- alternative: static `Object.hasOwn(..)` utility)
+* `hasOwnProperty(..)` (gần đây đã bị phản đối -- thay thế: tiện ích tĩnh `Object.hasOwn(..)`)
 * `propertyIsEnumerable(..)`
-* `__proto__` (getter function)
+* `__proto__` (hàm getter)
 
 ```js
 address.isPrototypeOf(Object.prototype);    // true
 address.isPrototypeOf({});                  // false
 ```
 
-## Fundamental Objects
+## Các Đối Tượng Cơ Bản (Fundamental Objects)
 
-JS defines several *fundamental* object types, which are instances of various built-in constructors, including:
+JS xác định một vài kiểu đối tượng *cơ bản*, là các thể hiện của các hàm tạo tích hợp khác nhau, bao gồm:
 
 * `new String()`
 * `new Number()`
 * `new Boolean()`
 
-Note that these constructors must be used with the `new` keyword to construct instances of the fundamental objects. Otherwise, these functions actually perform type coercion (see Chapter 4).
+Lưu ý rằng các hàm tạo này phải được sử dụng với từ khóa `new` để xây dựng các thể hiện của các đối tượng cơ bản. Nếu không, các hàm này thực sự thực hiện ép kiểu (xem Chương 4).
 
-These fundamental object constructors create object value-types instead of a primitives:
+Các hàm tạo đối tượng cơ bản này tạo ra các kiểu giá trị đối tượng thay vì nguyên thủy:
 
 ```js
 myName = "Kyle";
@@ -85,41 +86,41 @@ myNickname = new String("getify");
 typeof myNickname;                  // "object"
 ```
 
-In other words, an instance of a fundamental object constructor can actually be seen as a wrapper around the corresponding underlying primitive value.
+Nói cách khác, một thể hiện của một hàm tạo đối tượng cơ bản thực sự có thể được xem như một lớp vỏ bao quanh giá trị nguyên thủy tương ứng.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| It's nearly universally regarded as *bad practice* to ever directly instantiate these fundamental objects. The primitive counterparts are generally more predictable, more performant, and offer *auto-boxing* (see "Automatic Objects" section below) whenever the underlying object-wrapper form is needed for property/method access. |
+| Nó gần như được coi là *thực hành tồi* (bad practice) khi khởi tạo trực tiếp các đối tượng cơ bản này. Các đối tác nguyên thủy thường dễ đoán hơn, hiệu quả hơn, và cung cấp *tự động đóng hộp* (auto-boxing) (xem phần "Các Đối Tượng Tự Động" bên dưới) bất cứ khi nào dạng đối tượng-bao-quanh cơ bản là cần thiết cho truy cập thuộc tính/phương thức. |
 
-The `Symbol(..)` and `BigInt(..)` functions are referred to in the specification as "constructors", though they're not used with the `new` keyword, and the values they produce in a JS program are indeed primitives.
+Các hàm `Symbol(..)` và `BigInt(..)` được đề cập trong đặc tả là "các hàm tạo" (constructors), mặc dù chúng không được sử dụng với từ khóa `new`, và các giá trị chúng tạo ra trong một chương trình JS thực sự là nguyên thủy.
 
-How, there are internal *fundamental objects* for these two types, used for prototype delegation and *auto-boxing*.
+Tuy nhiên, có các *đối tượng cơ bản* nội bộ cho hai kiểu này, được sử dụng cho sự ủy quyền prototype và *tự động đóng hộp* (auto-boxing).
 
-By contrast, for `null` and `undefined` primitive values, there aren't `Null()` or `Undefined()` "constructors", nor corresponding fundamental objects or prototypes.
+Ngược lại, đối với các giá trị nguyên thủy `null` và `undefined`, không có các "hàm tạo" `Null()` hoặc `Undefined()`, cũng như không có các đối tượng cơ bản hoặc prototype tương ứng.
 
 ### Prototypes
 
-Instances of the fundamental object constructors are `[[Prototype]]` linked to their constructors' `prototype` objects:
+Các thể hiện của các hàm tạo đối tượng cơ bản được liên kết `[[Prototype]]` với các đối tượng `prototype` của hàm tạo của chúng:
 
-* `String.prototype`: defines `length` property, as well as string-specific methods, like `toUpperCase()`, etc.
+* `String.prototype`: định nghĩa thuộc tính `length`, cũng như các phương thức cụ thể của chuỗi, như `toUpperCase()`, v.v.
 
-* `Number.prototype`: defines number-specific methods, like `toPrecision(..)`, `toFixed(..)`, etc.
+* `Number.prototype`: định nghĩa các phương thức cụ thể của số, như `toPrecision(..)`, `toFixed(..)`, v.v.
 
-* `Boolean.prototype`: defines default `toString()` and `valueOf()` methods.
+* `Boolean.prototype`: định nghĩa các phương thức mặc định `toString()` và `valueOf()`.
 
-* `Symbol.prototype`: defines `description` (getter), as well as default `toString()` and `valueOf()` methods.
+* `Symbol.prototype`: định nghĩa `description` (getter), cũng như các phương thức mặc định `toString()` và `valueOf()`.
 
-* `BigInt.prototype`: defines default `toString()`, `toLocaleString()`, and `valueOf()` methods.
+* `BigInt.prototype`: định nghĩa các phương thức mặc định `toString()`, `toLocaleString()`, và `valueOf()`.
 
-Any direct instance of the built-in constructors have `[[Prototype]]` delegated access to its respective `prototype` properties/methods. Moreover, corresponding primitive values also have such delegated access, by way of *auto-boxing*.
+Bất kỳ thể hiện trực tiếp nào của các hàm tạo tích hợp đều có quyền truy cập `[[Prototype]]` được ủy quyền tới các thuộc tính/phương thức `prototype` tương ứng của nó. Hơn nữa, các giá trị nguyên thủy tương ứng cũng có quyền truy cập được ủy quyền như vậy, thông qua cách *tự động đóng hộp* (auto-boxing).
 
-### Automatic Objects
+### Các Đối Tượng Tự Động (Automatic Objects)
 
-I've mentioned *auto-boxing* several times (including Chapters 1 and 2, and a few times so far in this chapter). It's finally time for us to explain that concept.
+Tôi đã đề cập đến *tự động đóng hộp* (auto-boxing) vài lần (bao gồm Chương 1 và 2, và một vài lần cho đến nay trong chương này). Cuối cùng đã đến lúc chúng ta giải thích khái niệm đó.
 
-Accessing a property or method on a value requires that the value be an object. As we've already seen in Chapter 1, primitives *are not* objects, so JS needs to then temporarily convert/wrap such a primitive to its fundamental object counterpart[^AutoBoxing] to perform that access.
+Việc truy cập một thuộc tính hoặc phương thức trên một giá trị yêu cầu giá trị đó phải là một đối tượng. Như chúng ta đã thấy trong Chương 1, các nguyên thủy *không phải* là đối tượng, vì vậy JS sau đó cần tạm thời chuyển đổi/đóng gói một nguyên thủy như vậy thành đối tác đối tượng cơ bản của nó[^AutoBoxing] để thực hiện quyền truy cập đó.
 
-For example:
+Ví dụ:
 
 ```js
 myName = "Kyle";
@@ -129,37 +130,37 @@ myName.length;              // 4
 myName.toUpperCase();       // "KYLE"
 ```
 
-Accessing the `length` property or the `toUpperCase()` method, is only allowed on a primitive string value because JS *auto-boxes* the primitive `string` into a wrapper fundamental object, an instance of `new String(..)`. Otherwise, all such accesses would have to fail, since primitives do not have any properties.
+Truy cập thuộc tính `length` hoặc phương thức `toUpperCase()`, chỉ được phép trên một giá trị chuỗi nguyên thủy vì JS *tự động đóng hộp* (auto-boxes) nguyên thủy `string` thành một đối tượng cơ bản bao quanh, một thể hiện của `new String(..)`. Nếu không, tất cả các truy cập như vậy sẽ phải thất bại, vì các nguyên thủy không có bất kỳ thuộc tính nào.
 
-More importantly, when the primitive value is *auto-boxed* to its fundamental object counterpart, those internally created objects have access to predefined properties/methods (like `length` and `toUpperCase()`) via a `[[Prototype]]` link to their respective fundamental object's prototype.
+Quan trọng hơn, khi giá trị nguyên thủy được *tự động đóng hộp* thành đối tác đối tượng cơ bản của nó, những đối tượng được tạo ra bên trong đó có quyền truy cập vào các thuộc tính/phương thức được xác định trước (như `length` và `toUpperCase()`) thông qua một liên kết `[[Prototype]]` tới prototype của đối tượng cơ bản tương ứng của chúng.
 
-So an *auto-boxed* `string` is an instance of `new String()`, and is thus linked to `String.prototype`. Further, the same is true of `number` (wrapped as an instance of `new Number()`) and `boolean` (wrapped as an instance of `new Boolean()`).
+Vì vậy, một `string` được *tự động đóng hộp* là một thể hiện của `new String()`, và do đó được liên kết với `String.prototype`. Hơn nữa, điều tương tự cũng đúng với `number` (được đóng gói như một thể hiện của `new Number()`) và `boolean` (được đóng gói như một thể hiện của `new Boolean()`).
 
-Even though the `Symbol(..)` and `BigInt(..)` "constructors" (used without `new`produce primitive values, these primitive values can also be *auto-boxed* to their internal fundamental object wrapper forms, for the purposes of delegated access to properties/methods.
+Mặc dù các "hàm tạo" `Symbol(..)` và `BigInt(..)` (được sử dụng không có `new`) tạo ra các giá trị nguyên thủy, các giá trị nguyên thủy này cũng có thể được *tự động đóng hộp* thành các dạng bao quanh đối tượng cơ bản nội bộ của chúng, cho mục đích truy cập được ủy quyền tới các thuộc tính/phương thức.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| See the "Objects & Classes" book of this series for more on `[[Prototype]]` linkages and delegated/inherited access to the fundamental object constructors' prototype objects. |
+| Xem cuốn sách "Đối Tượng & Lớp" (Objects & Classes) của loạt sách này để biết thêm về các liên kết `[[Prototype]]` và quyền truy cập được ủy quyền/kế thừa tới các đối tượng prototype của các hàm tạo đối tượng cơ bản. |
 
-Since `null` and `undefined` have no corresponding fundamental objects, there is no *auto-boxing* of these values.
+Vì `null` và `undefined` không có các đối tượng cơ bản tương ứng, không có *tự động đóng hộp* cho các giá trị này.
 
-A subjective question to consider: is *auto-boxing* a form of coercion? I say it is, though some disagree. Internally, a primitive is converted to an object, meaning a change in value-type has occurred. Yes, it's temporary, but plenty of coercions are temporary. Moreover, the conversion is rather *implicit* (implied by the property/method access, but only happens internally). We'll revisit the nature of coercion in Chapter 4.
+Một câu hỏi chủ quan để xem xét: *tự động đóng hộp* có phải là một hình thức ép kiểu không? Tôi nói là có, mặc dù một số người không đồng ý. Bên trong, một nguyên thủy được chuyển đổi thành một đối tượng, có nghĩa là một sự thay đổi trong kiểu giá trị đã xảy ra. Có, nó là tạm thời, nhưng rất nhiều phép ép kiểu là tạm thời. Hơn nữa, việc chuyển đổi khá là *ngầm định* (được ngụ ý bởi quyền truy cập thuộc tính/phương thức, nhưng chỉ xảy ra bên trong). Chúng ta sẽ xem xét lại bản chất của ép kiểu trong Chương 4.
 
-## Other Built-in Objects
+## Các Đối Tượng Tích Hợp Khác (Other Built-in Objects)
 
-In addition to fundamental object constructors, JS defines a number of other built-in constructors that create further specialized object sub-types:
+Ngoài các hàm tạo đối tượng cơ bản, JS xác định một số hàm tạo tích hợp khác tạo ra các kiểu phụ đối tượng chuyên biệt hơn:
 
 * `new Date(..)`
 * `new Error(..)`
-* `new Map(..)`, `new Set(..)`, `new WeakMap(..)`, `new WeakSet(..)` -- keyed collections
-* `new Int8Array(..)`, `new Uint32Array(..)`, etc -- indexed, typed-array collections
-* `new ArrayBuffer(..)`, `new SharedArrayBuffer(..)`, etc -- structured data collections
+* `new Map(..)`, `new Set(..)`, `new WeakMap(..)`, `new WeakSet(..)` -- các bộ sưu tập có khóa (keyed collections)
+* `new Int8Array(..)`, `new Uint32Array(..)`, v.v. -- các bộ sưu tập mảng định kiểu, được lập chỉ mục (indexed, typed-array collections)
+* `new ArrayBuffer(..)`, `new SharedArrayBuffer(..)`, v.v. -- các bộ sưu tập dữ liệu cấu trúc (structured data collections)
 
-## Arrays
+## Mảng (Arrays)
 
-Arrays are objects that are specialized to behave as numerically indexed collections of values, as opposed to holding values at named properties like plain objects do.
+Mảng là các đối tượng được chuyên biệt hóa để hành xử như các tập hợp các giá trị được lập chỉ mục bằng số, trái ngược với việc giữ các giá trị tại các thuộc tính được đặt tên như các đối tượng thuần làm.
 
-Arrays have a literal form:
+Mảng có một dạng literal:
 
 ```js
 favoriteNumbers = [ 3, 12, 42 ];
@@ -167,7 +168,7 @@ favoriteNumbers = [ 3, 12, 42 ];
 favoriteNumbers[2];                 // 42
 ```
 
-The same array could also have been defined imperatively using the `new Array()` constructor:
+Cùng một mảng cũng có thể được định nghĩa một cách mệnh lệnh bằng cách sử dụng hàm tạo `new Array()`:
 
 ```js
 favoriteNumbers = new Array();
@@ -176,7 +177,7 @@ favoriteNumbers[1] = 12;
 favoriteNumbers[2] = 42;
 ```
 
-Arrays are `[[Prototype]]` linked to `Array.prototype`, giving them delegated access to a variety of array-oriented methods, such as `map(..)`, `includes(..)`, etc:
+Mảng được liên kết `[[Prototype]]` với `Array.prototype`, cung cấp cho chúng quyền truy cập được ủy quyền tới một loạt các phương thức hướng mảng, chẳng hạn như `map(..)`, `includes(..)`, v.v.:
 
 ```js
 favoriteNumbers.map(v => v * 2);
@@ -185,29 +186,27 @@ favoriteNumbers.map(v => v * 2);
 favoriteNumbers.includes(42);       // true
 ```
 
-Some of the methods defined on `Array.prototype` -- for example, `push(..)`, `pop(..)`, `sort(..)`, etc -- behave by modifying the array value in place. Other methods -- for example, `concat(..)`, `map(..)`, `slice(..)` -- behave by creating a new array to return, leaving the original array intact. A third category of array functions -- for example, `indexOf(..)`, `includes(..)`, etc -- merely computes and returns a (non-array) result.
+Một số phương thức được định nghĩa trên `Array.prototype` -- ví dụ, `push(..)`, `pop(..)`, `sort(..)`, v.v. -- hoạt động bằng cách sửa đổi giá trị mảng tại chỗ (in place). Các phương thức khác -- ví dụ, `concat(..)`, `map(..)`, `slice(..)` -- hoạt động bằng cách tạo ra một mảng mới để trả về, giữ nguyên mảng ban đầu. Một danh mục thứ ba của các hàm mảng -- ví dụ, `indexOf(..)`, `includes(..)`, v.v. -- chỉ đơn thuần tính toán và trả về một kết quả (không phải mảng).
 
-## Regular Expressions
-
-// TODO
-
-## Functions
+## Biểu Thức Chính Quy (Regular Expressions)
 
 // TODO
 
-## Proposed: Records/Tuples
+## Hàm (Functions)
 
-At the time of this writing, a (stage-2) proposal[^RecordsTuplesProposal] exists to add a new set of features to JS, which correspond closely to plain objects and arrays, but with some notable differences.
+// TODO
 
-Records are similar to plain objects, but are immutable (sealed, read-only), and (unlike objects) are treated as primitive values, for the purposes of value assignment and equality comparison. The syntax difference is a `#` before the `{ }` delimiter. Records can only contain primitive values (including records and tuples).
+## Đề xuất: Records/Tuples
 
-Tuples have exactly the same relationship, but to arrays, including the `#` before the `[ ]` delimiters.
+Tại thời điểm viết bài này, một đề xuất (giai đoạn 2)[^RecordsTuplesProposal] tồn tại để thêm một tập hợp các tính năng mới vào JS, tương ứng chặt chẽ với các đối tượng thuần và mảng, nhưng với một số khác biệt đáng chú ý.
 
-It's important to note that while these look and seem like objects/arrays, they are indeed primitive (non-object) values.
+Records (Bản ghi) tương tự như các đối tượng thuần, nhưng là bất biến (được niêm phong, chỉ đọc), và (không giống như các đối tượng) được coi là giá trị nguyên thủy, cho các mục đích gán giá trị và so sánh bằng. Sự khác biệt về cú pháp là một dấu `#` trước dấu phân cách `{ }`. Records chỉ có thể chứa các giá trị nguyên thủy (bao gồm cả records và tuples).
 
-[^FundamentalObjects]: "20 Fundamental Objects", EcamScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-fundamental-objects ; Accessed August 2022
+Tuples (Bộ n-số) có mối quan hệ chính xác tương tự, nhưng với mảng, bao gồm cả dấu `#` trước các dấu phân cách `[ ]`.
 
-[^AutoBoxing]: "6.2.4.6 PutValue(V,W)", Step 5.a, ECMAScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-putvalue ; Accessed August 2022
+Điều quan trọng cần lưu ý là trong khi những thứ này trông và có vẻ giống như đối tượng/mảng, chúng thực sự là các giá trị nguyên thủy (không phải đối tượng).
+
+[^AutoBoxing]: "6.2.4.6 PutValue(V,W)", Step 5.a, ECMAScript 2022 Language Specification; <https://262.ecma-international.org/13.0/#sec-putvalue> ; Accessed August 2022
 
 [^RecordsTuplesProposal]: "JavaScript Records & Tuples Proposal"; Robin Ricard, Rick Button, Nicolò Ribaudo;
-https://github.com/tc39/proposal-record-tuple ; Accessed August 2022
+<https://github.com/tc39/proposal-record-tuple> ; Accessed August 2022

@@ -1,16 +1,16 @@
-# You Don't Know JS Yet: Types & Grammar - 2nd Edition
+# You Don't Know JS Yet: Các Kiểu & Ngữ Pháp - Ấn bản thứ 2
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang thực hiện |
 
-[Table of Contents](toc.md)
+[Mục Lục](toc.md)
 
-* [Foreword](foreword.md) (by TBA)
-* [Preface](../preface.md)
-* [Chapter 1: Primitive Values](ch1.md)
-* [Chapter 2: Primitive Behaviors](ch2.md)
-* [Chapter 3: Object Values](ch3.md)
-* [Chapter 4: Coercing Values](ch4.md)
-* Chapter 5: TODO
-* [Thank You!](thanks.md)
+* [Lời Nói Đầu](foreword.md) (bởi TBA)
+* [Lời Tựa](../preface.md)
+* [Chương 1: Các Giá Trị Nguyên Thủy](ch1.md)
+* [Chương 2: Các Hành Vi Nguyên Thủy](ch2.md)
+* [Chương 3: Các Giá Trị Đối Tượng](ch3.md)
+* [Chương 4: Ép Kiểu Giá Trị](ch4.md)
+* Chương 5: TODO
+* [Cảm Ơn!](thanks.md)

@@ -1,6 +1,7 @@
-# You Don't Know JS Yet: Types & Grammar - 2nd Edition
-# Foreword
+# You Don't Know JS Yet: Các Kiểu & Ngữ Pháp - Ấn bản thứ 2
 
-| NOTE: |
+## Lời Nói Đầu
+
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang thực hiện |
