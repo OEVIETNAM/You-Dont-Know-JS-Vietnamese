@@ -1,19 +1,18 @@
-# You Don't Know JS Yet: Types & Grammar - 2nd Edition
-# Chapter 1: Primitive Values
+# Chương 1: Các Giá Trị Nguyên Thủy
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Work in progress |
+| Đang thực hiện |
 
-In Chapter 1 of the "Objects & Classes" book of this series, we confronted the common misconception that "everything in JS is an object". We now circle back to that topic, and again dispel that myth.
+Trong Chương 1 của cuốn sách "Đối Tượng & Các Lớp" thuộc bộ sách này, chúng ta đã đối mặt với quan niệm sai lầm phổ biến rằng "mọi thứ trong JS đều là đối tượng". Bây giờ chúng ta quay lại chủ đề đó, và một lần nữa xua tan huyền thoại đó.
 
-Here, we'll look at the core value types of JS, specifically the non-object types called *primitives*.
+Ở đây, chúng ta sẽ xem xét các kiểu giá trị cốt lõi của JS, đặc biệt là các kiểu không phải đối tượng được gọi là *nguyên thủy* (primitives).
 
-## Value Types
+## Các Kiểu Giá Trị
 
-JS doesn't apply types to variables or properties -- what I call, "container types" -- but rather, values themselves have types -- what I call, "value types".
+JS không áp dụng các kiểu cho các biến hoặc thuộc tính -- cái mà tôi gọi là "các kiểu chứa" (container types) -- mà thay vào đó, chính các giá trị có các kiểu -- cái mà tôi gọi là "các kiểu giá trị" (value types).
 
-The language provides seven built-in, primitive (non-object) value types: [^PrimitiveValues]
+Ngôn ngữ cung cấp bảy kiểu giá trị nguyên thủy (không phải đối tượng) được tích hợp sẵn: [^PrimitiveValues]
 
 * `undefined`
 * `null`
@@ -23,11 +22,11 @@ The language provides seven built-in, primitive (non-object) value types: [^Prim
 * `symbol`
 * `string`
 
-These value-types define collections of one or more concrete values, each with a set of shared behaviors for all values of each type.
+Các kiểu giá trị này định nghĩa các tập hợp của một hoặc nhiều giá trị cụ thể, mỗi tập hợp có một bộ các hành vi chung cho tất cả các giá trị của mỗi kiểu.
 
 ### Type-Of
 
-Any value's value-type can be inspected via the `typeof` operator, which always returns a `string` value representing the underlying JS value-type:
+Kiểu giá trị của bất kỳ giá trị nào cũng có thể được kiểm tra thông qua toán tử `typeof`, toán tử này luôn trả về một giá trị `string` đại diện cho kiểu giá trị JS cơ bản:
 
 ```js
 typeof true;            // "boolean"
@@ -39,20 +38,20 @@ typeof 42n;             // "bigint"
 typeof Symbol("42");    // "symbol"
 ```
 
-The `typeof` operator, when used against a variable instead of a value, is reporting the value-type of *the value in the variable*:
+Toán tử `typeof`, khi được sử dụng đối với một biến thay vì một giá trị, sẽ báo cáo kiểu giá trị của *giá trị trong biến đó*:
 
 ```js
 greeting = "Hello";
 typeof greeting;        // "string"
 ```
 
-JS variables themselves don't have types. They hold any arbitrary value, which itself has a value-type.
+Bản thân các biến JS không có kiểu. Chúng giữ bất kỳ giá trị tùy ý nào, mà bản thân giá trị đó có một kiểu giá trị.
 
-### Non-objects?
+### Không phải đối tượng?
 
-What specifically makes the 7 primitive value types distinct from the object value types (and sub-types)? Why shouldn't we just consider them all as essentially *objects* under the covers?
+Điều gì cụ thể làm cho 7 kiểu giá trị nguyên thủy khác biệt với các kiểu giá trị đối tượng (và các kiểu phụ)? Tại sao chúng ta không coi tất cả chúng về cơ bản là *đối tượng* ở bên dưới?
 
-Consider:
+Hãy xem xét:
 
 ```js
 myName = "Kyle";
@@ -62,13 +61,13 @@ myName.nickname = "getify";
 console.log(myName.nickname);           // undefined
 ```
 
-This snippet appears to silently fail to add a `nickname` property to a primitive string. Taken at face value, that might imply that primitives are really just objects under the covers, as many have (wrongly) asserted over the years.
+Đoạn mã này có vẻ âm thầm thất bại trong việc thêm thuộc tính `nickname` vào một chuỗi nguyên thủy. Nhìn bề ngoài, điều đó có thể ngụ ý rằng các nguyên thủy thực sự chỉ là các đối tượng ở bên dưới, như nhiều người đã (nhầm lẫn) khẳng định trong nhiều năm qua.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| One might explain that silent failure as an example of *auto-boxing* (see "Automatic Objects" in Chapter 3), where the primitive is implicitly converted to a `String` instance wrapper object while attempting to assign the property, and then this internal object is thrown away after the statement completes. In fact, I said exactly that in the first edition of this book. But I was wrong; oops! |
+| Người ta có thể giải thích sự thất bại âm thầm đó là một ví dụ về *auto-boxing* (xem "Các Đối Tượng Tự Động" trong Chương 3), nơi nguyên thủy được chuyển đổi ngầm định thành một thể hiện đối tượng bao bọc `String` trong khi cố gắng gán thuộc tính, và sau đó đối tượng nội bộ này bị vứt bỏ sau khi câu lệnh hoàn thành. Trên thực tế, tôi đã nói chính xác như vậy trong ấn bản đầu tiên của cuốn sách này. Nhưng tôi đã sai; thật đáng tiếc! |
 
-Something deeper is at play, as we see in this version of the previous snippet:
+Một cái gì đó sâu sắc hơn đang diễn ra, như chúng ta thấy trong phiên bản này của đoạn trích trước:
 
 ```js
 "use strict";
@@ -80,29 +79,29 @@ myName.nickname = "getify";
 // on string 'Kyle'
 ```
 
-Interesting! In strict-mode, JS enforces a restriction that disallows setting a new property on a primitive value, as if implicitly promoting it to a new object.
+Thú vị thật! Trong chế độ nghiêm ngặt (strict-mode), JS thực thi một hạn chế không cho phép thiết lập một thuộc tính mới trên một giá trị nguyên thủy, như thể ngầm định thăng cấp nó thành một đối tượng mới.
 
-By contrast, in non-strict mode, JS allows the violation to go unmentioned. So why? Because strict-mode was added to the language in ES5.1 (2011), more than 15 years in, and such a change would have broken existing programs had it not been defined as sensitive to the new strict-mode declaration.
+Ngược lại, trong chế độ không nghiêm ngặt, JS cho phép vi phạm diễn ra mà không bị nhắc đến. Vậy tại sao? Bởi vì chế độ nghiêm ngặt đã được thêm vào ngôn ngữ trong ES5.1 (2011), hơn 15 năm sau, và một sự thay đổi như vậy sẽ phá vỡ các chương trình hiện có nếu nó không được định nghĩa là nhạy cảm với khai báo chế độ nghiêm ngặt mới.
 
-So what can we conclude about the distinction between primitives and objects? Primitives are values that *are not allowed to have properties*; only objects are allowed such.
+Vậy chúng ta có thể kết luận gì về sự phân biệt giữa các nguyên thủy và các đối tượng? Các nguyên thủy là các giá trị *không được phép có các thuộc tính*; chỉ các đối tượng mới được phép như vậy.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| This particular distinction seems to be contradicted by expressions like `"hello".length`; even in strict-mode, it returns the expected value `5`. So it certainly *seems* like the string has a `length` property! But, as just previously mentioned, the correct explanation is *auto-boxing*; we'll cover the topic in "Automatic Objects" in Chapter 3. |
+| Sự phân biệt cụ thể này dường như mâu thuẫn với các biểu thức như `"hello".length`; ngay cả trong chế độ nghiêm ngặt, nó trả về giá trị mong đợi `5`. Vì vậy, chắc chắn *có vẻ* như chuỗi có thuộc tính `length`! Nhưng, như vừa đề cập trước đó, lời giải thích chính xác là *auto-boxing*; chúng ta sẽ đề cập đến chủ đề này trong "Các Đối Tượng Tự Động" ở Chương 3. |
 
-## Empty Values
+## Các Giá Trị Rỗng
 
-The `null` and `undefined` types both typically represent an emptiness or absence of value.
+Các kiểu `null` và `undefined` đều thường đại diện cho một sự trống rỗng hoặc vắng mặt của giá trị.
 
-Unfortunately, the `null` value-type has an unexpected `typeof` result. Instead of `"null"`, we see:
+Thật không may, kiểu giá trị `null` có một kết quả `typeof` không mong đợi. Thay vì `"null"`, chúng ta thấy:
 
 ```js
 typeof null;            // "object"
 ```
 
-No, that doesn't mean that `null` is somehow a special kind of object. It's just a legacy of early days of JS, which cannot be changed because of how much code out in the wild it would break.
+Không, điều đó không có nghĩa là `null` bằng cách nào đó là một loại đối tượng đặc biệt. Nó chỉ là một di sản của những ngày đầu của JS, cái mà không thể thay đổi vì nó sẽ phá vỡ rất nhiều mã ngoài kia.
 
-The `undefined` type is reported both for explicit `undefined` values and any place where a seemingly missing value is encountered:
+Kiểu `undefined` được báo cáo cho cả các giá trị `undefined` rõ ràng và bất kỳ nơi nào gặp phải một giá trị dường như bị thiếu:
 
 ```js
 typeof undefined;               // "undefined"
@@ -119,44 +118,44 @@ whatever = [];
 typeof whatever[10];            // "undefined"
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| The `typeof nonExistent` expression is referring to an undeclared variable `nonExistent`. Normally, accessing an undeclared variable reference would cause an exception, but the `typeof` operator is afforded the special ability to safely access even non-existent identifiers and calmly return `"undefined"` instead of throwing an exception. |
+| Biểu thức `typeof nonExistent` đang đề cập đến một biến chưa được khai báo `nonExistent`. Thông thường, việc truy cập một tham chiếu biến chưa được khai báo sẽ gây ra ngoại lệ, nhưng toán tử `typeof` được dành cho khả năng đặc biệt để truy cập an toàn ngay cả các định danh không tồn tại và bình tĩnh trả về `"undefined"` thay vì ném ra ngoại lệ. |
 
-However, each respective "empty" type has exactly one value, of the same name. So `null` is the only value in the `null` value-type, and `undefined` is the only value in the `undefined` value-type.
+Tuy nhiên, mỗi kiểu "rỗng" tương ứng có chính xác một giá trị, cùng tên. Vì vậy `null` là giá trị duy nhất trong kiểu giá trị `null`, và `undefined` là giá trị duy nhất trong kiểu giá trị `undefined`.
 
 ### Null'ish
 
-Semantically, `null` and `undefined` types both represent general emptiness, or absence of another affirmative, meaningful value.
+Về mặt ngữ nghĩa, các kiểu `null` và `undefined` đều đại diện cho sự trống rỗng chung, hoặc sự vắng mặt của một giá trị khẳng định, có ý nghĩa khác.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| JS operations which behave the same whether `null` or `undefined` is encountered, are referred to as "null'ish" (or "nullish"). I guess "undefined'ish" would look/sound too weird! |
+| Các hoạt động JS cư xử giống nhau cho dù gặp `null` hay `undefined`, được gọi là "null'ish" (hoặc "nullish"). Tôi đoán "undefined'ish" sẽ trông/nghe quá kỳ quặc! |
 
-For a lot of JS, especially the code developers write, these two *nullish* values are interchangeable; the decision to intentionally use/assign `null` or `undefined` in any given scenario is situation dependent and left up to the developer.
+Đối với rất nhiều JS, đặc biệt là mã mà các nhà phát triển viết, hai giá trị *nullish* này có thể thay thế cho nhau; quyết định cố ý sử dụng/gán `null` hoặc `undefined` trong bất kỳ tình huống cụ thể nào phụ thuộc vào tình huống và để lại cho nhà phát triển.
 
-JS provides a number of capabilities for helping treat the two nullish values as indistinguishable.
+JS cung cấp một số khả năng để giúp coi hai giá trị nullish là không thể phân biệt.
 
-For example, the `==` (coercive-equality comparison) operator specifically treats `null` and `undefined` as coercively equal to each other, but to no other values in the language. As such, a `.. == null` check is safe to perform if you want to check if a value is specifically either `null` or `undefined`:
+Ví dụ, toán tử `==` (so sánh bằng ép buộc) xử lý cụ thể `null` và `undefined` là bằng nhau về mặt ép buộc với nhau, nhưng không bằng với bất kỳ giá trị nào khác trong ngôn ngữ. Do đó, một kiểm tra `.. == null` là an toàn để thực hiện nếu bạn muốn kiểm tra xem một giá trị có cụ thể là `null` hoặc `undefined` hay không:
 
 ```js
 if (greeting == null) {
-    // greeting is nullish/empty
+    // greeting bị nullish/rỗng
 }
 ```
 
-Another (recent) addition to JS is the `??` (nullish-coalescing) operator:
+Một bổ sung khác (gần đây) cho JS là toán tử `??` (nullish-coalescing):
 
 ```js
 who = myName ?? "User";
 
-// equivalent to:
+// tương đương với:
 who = (myName != null) ? myName : "User";
 ```
 
-As the ternary equivalent illustrates, `??` checks to see if `myName` is non-nullish, and if so, returns its value. Otherwise, it returns the other operand (here, `"User"`).
+Như tương đương ba ngôi minh họa, `??` kiểm tra xem `myName` có phải là non-nullish không, và nếu có, trả về giá trị của nó. Ngược lại, nó trả về toán hạng khác (ở đây là `"User"`).
 
-Along with `??`, JS also added the `?.` (nullish conditional-chaining) operator:
+Cùng với `??`, JS cũng đã thêm toán tử `?.` (chuỗi điều kiện nullish):
 
 ```js
 record = {
@@ -174,43 +173,43 @@ console.log( record?.billingAddress?.street );
 // undefined
 ```
 
-The `?.` operator checks the value immediately preceding (to the left) value, and if it's nullish, the operator stops and returns an `undefined` value. Otherwise, it performs the `.` property access against that value and continues with the expression.
+Toán tử `?.` kiểm tra giá trị ngay trước (bên trái), và nếu nó là nullish, toán tử dừng lại và trả về giá trị `undefined`. Ngược lại, nó thực hiện truy cập thuộc tính `.` đối với giá trị đó và tiếp tục với biểu thức.
 
-Just to be clear: `record?.` is saying, "check `record` for nullish before `.` property access". Additionally, `billingAddress?.` is saying, "check `billingAddress` for nullish before `.` property access".
+Chỉ để rõ ràng: `record?.` đang nói, "kiểm tra `record` cho nullish trước khi truy cập thuộc tính `.`". Ngoài ra, `billingAddress?.` đang nói, "kiểm tra `billingAddress` cho nullish trước khi truy cập thuộc tính `.`".
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Some JS developers believe that the newer `?.` is superior to `.`, and should thus almost always be used instead of `.`. I believe that's an unwise perspective. First of all, it's adding extra visual clutter, which should only be done if you're getting benefit from it. Secondly, you should be aware of, and planning for, the emptiness of some value, to justify using `?.`. If you always expect a non-nullish value to be present in some expression, using `?.` to access a property on it is not only unnecessary/wasteful, but also could potentially hide future bugs where your assumption of value-presence had failed but `?.` covered it up. As with most features in JS, use `.` where it's most appropriate, and use `?.` where it's most appropriate. Never substitute one when the other is more appropriate. |
+| Một số nhà phát triển JS tin rằng `?.` mới hơn là vượt trội hơn `.`, và do đó hầu như luôn luôn nên được sử dụng thay vì `.`. Tôi tin rằng đó là một quan điểm không khôn ngoan. Trước hết, nó thêm sự lộn xộn trực quan, điều này chỉ nên được thực hiện nếu bạn nhận được lợi ích từ nó. Thứ hai, bạn nên nhận thức được, và lập kế hoạch cho, sự trống rỗng của một số giá trị, để biện minh cho việc sử dụng `?.`. Nếu bạn luôn mong đợi một giá trị non-nullish có mặt trong một biểu thức nào đó, việc sử dụng `?.` để truy cập một thuộc tính trên nó không chỉ không cần thiết/lãng phí, mà còn có khả năng che giấu các lỗi trong tương lai khi giả định về sự hiện diện giá trị của bạn đã thất bại nhưng `?.` đã che đậy nó. Như với hầu hết các tính năng trong JS, hãy sử dụng `.` nơi nó thích hợp nhất, và sử dụng `?.` nơi nó thích hợp nhất. Đừng bao giờ thay thế cái này khi cái kia thích hợp hơn. |
 
-There's also a somewhat strange `?.[` form of the operator, not `?[`, for when you need to use `[ .. ]` style access instead of `.` access:
+Cũng có một dạng hơi lạ `?.[` của toán tử, không phải `?[`, cho khi bạn cần sử dụng kiểu truy cập `[ .. ]` thay vì truy cập `.`:
 
 ```js
 record?.["shipping" + "Address"]?.state;    // XY
 ```
 
-Yet another variation, referred to as "optional-call", is `?.(`, and is used when conditionally calling a function if the value is non-nullish:
+Lại một biến thể khác, được gọi là "optional-call", là `?.(`, và được sử dụng khi gọi một hàm có điều kiện nếu giá trị là non-nullish:
 
 ```js
-// instead of:
+// thay vì:
 //   if (someFunc) someFunc(42);
 //
-// or:
+// hoặc:
 //   someFunc && someFunc(42);
 
 someFunc?.(42);
 ```
 
-The `?.(` operator seems like it is checking to see if `someFunc(..)` is a valid function that can be called. But it's not! It's only checking to make sure the value is non-nullish before trying to invoke it. If it's some other non-nullish but also non-function value type, the execution attempt will still fail with a `TypeError` exception.
+Toán tử `?.(` có vẻ như nó đang kiểm tra xem `someFunc(..)` có phải là một hàm hợp lệ có thể được gọi hay không. Nhưng không phải vậy! Nó chỉ kiểm tra để đảm bảo giá trị là non-nullish trước khi cố gắng gọi nó. Nếu đó là một kiểu giá trị non-nullish khác nhưng cũng không phải là hàm, nỗ lực thực thi vẫn sẽ thất bại với một ngoại lệ `TypeError`.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Because of that gotcha, I *strongly dislike* this operator form, and caution anyone against ever using it. I think it's a poorly conceived feature that does more harm (to JS itself, and to programs) than good. There's very few JS features I would go so far as to say, "never use it." But this is one of the truly *bad parts* of the language, in my opinion. |
+| Vì cái bẫy đó, tôi *cực kỳ không thích* dạng toán tử này, và cảnh báo bất kỳ ai không bao giờ sử dụng nó. Tôi nghĩ đó là một tính năng được quan niệm kém gây hại nhiều hơn (cho chính JS, và cho các chương trình) là tốt. Có rất ít tính năng JS mà tôi sẽ đi xa đến mức nói, "đừng bao giờ sử dụng nó." Nhưng đây là một trong những *phần tồi tệ* thực sự của ngôn ngữ, theo ý kiến của tôi. |
 
-### Distinct'ish
+### Khác biệt một chút (Distinct'ish)
 
-It's important to keep in mind that `null` and `undefined` *are* actually distinct types, and thus `null` can be noticeably different from `undefined`. You can, carefully, construct programs that mostly treat them as indistinguishable. But that requires care and discipline by the developer. From JS's perspective, they're more often distinct.
+Điều quan trọng cần ghi nhớ là các kiểu `null` và `undefined` thực sự *là* các kiểu riêng biệt, và do đó `null` có thể khác biệt đáng kể so với `undefined`. Bạn có thể, một cách cẩn thận, xây dựng các chương trình mà hầu như coi chúng là không thể phân biệt. Nhưng điều đó đòi hỏi sự cẩn thận và kỷ luật của nhà phát triển. Từ quan điểm của JS, chúng thường khác biệt hơn.
 
-There are cases where `null` and `undefined` will trigger different behavior by the language, which is important to keep in mind. We won't cover all the cases exhaustively here, but here's on example:
+Có những trường hợp `null` và `undefined` sẽ kích hoạt hành vi khác nhau bởi ngôn ngữ, điều quan trọng cần ghi nhớ. Chúng tôi sẽ không đề cập đến tất cả các trường hợp một cách thấu đáo ở đây, nhưng đây là một ví dụ:
 
 ```js
 function greet(msg = "Hello") {
@@ -224,15 +223,15 @@ greet("Hi");        // Hi
 greet(null);        // null
 ```
 
-The `= ..` clause on a parameter is referred to as the "parameter default". It only kicks in and assigns its default value to the parameter if the argument in that position is missing, or is exactly the `undefined` value. If you pass `null`, that clause doesn't trigger, and `null` is thus assigned to the parameter.
+Mệnh đề `= ..` trên một tham số được gọi là "mặc định tham số". Nó chỉ kích hoạt và gán giá trị mặc định của nó cho tham số nếu đối số ở vị trí đó bị thiếu, hoặc chính xác là giá trị `undefined`. Nếu bạn truyền `null`, mệnh đề đó không kích hoạt, và `null` do đó được gán cho tham số.
 
-There's no *right* or *wrong* way to use `null` or `undefined` in a program. So the takeaway is: be careful when choosing one value or the other. And if you're using them interchangeably, be extra careful.
+Không có cách *đúng* hay *sai* để sử dụng `null` hoặc `undefined` trong một chương trình. Vì vậy, bài học là: hãy cẩn thận khi chọn giá trị này hay giá trị kia. Và nếu bạn đang sử dụng chúng thay thế cho nhau, hãy cẩn thận hơn nữa.
 
-## Boolean Values
+## Các Giá Trị Boolean
 
-The `boolean` type contains two values: `false` and `true`.
+Kiểu `boolean` chứa hai giá trị: `false` và `true`.
 
-In the "old days", programming languages would, by convention, use `0` to mean `false` and `1` to mean `true`. So you can think of the `boolean` type, and the keywords `false` and `true`, as a semantic convenience sugar on top of the `0` and `1` values:
+Trong "ngày xưa", các ngôn ngữ lập trình, theo quy ước, sẽ sử dụng `0` để có nghĩa là `false` và `1` để có nghĩa là `true`. Vì vậy, bạn có thể nghĩ về kiểu `boolean`, và các từ khóa `false` và `true`, như một cú pháp tiện lợi về mặt ngữ nghĩa trên các giá trị `0` và `1`:
 
 ```js
 // isLoggedIn = 1;
@@ -242,33 +241,33 @@ isComplete = 0;
 // isComplete = false;
 ```
 
-Boolean values are how all decision making happens in a JS program:
+Các giá trị Boolean là cách tất cả việc ra quyết định diễn ra trong một chương trình JS:
 
 ```js
 if (isLoggedIn) {
-    // do something
+    // làm gì đó
 }
 
 while (!isComplete) {
-    // keep going
+    // tiếp tục
 }
 ```
 
-The `!` operator negates/flips a boolean value to the other one: `false` becomes `true`, and `true` becomes `false`.
+Toán tử `!` phủ định/lật một giá trị boolean sang giá trị kia: `false` trở thành `true`, và `true` trở thành `false`.
 
-## String Values
+## Các Giá Trị Chuỗi
 
-The `string` type contains any value which is a collection of one or more characters, delimited (surrounding on either side) by quote characters:
+Kiểu `string` chứa bất kỳ giá trị nào là tập hợp của một hoặc nhiều ký tự, được phân cách (bao quanh ở hai bên) bởi các ký tự trích dẫn:
 
 ```js
 myName = "Kyle";
 ```
 
-JS does not distinguish a single character as a different type as some languages do; `"a"` is a string just like `"abc"` is.
+JS không phân biệt một ký tự đơn lẻ là một kiểu khác như một số ngôn ngữ làm; `"a"` là một chuỗi giống như `"abc"`.
 
-Strings can be delimited by double-quotes (`"`), single-quotes (`'`), or back-ticks (`` ` ``). The ending delimiter must always match the starting delimiter.
+Các chuỗi có thể được phân cách bằng dấu ngoặc kép (`"`), dấu ngoặc đơn (`'`), hoặc dấu back-tick (`` ` ``). Dấu phân cách kết thúc phải luôn khớp với dấu phân cách bắt đầu.
 
-Strings have an intrinsic length which corresponds to how many code-points -- actually, code-units, more on that in a bit -- they contain.
+Các chuỗi có độ dài nội tại tương ứng với bao nhiêu code-point -- thực ra là các đơn vị mã (code-units), sẽ nói thêm về điều đó một chút nữa -- mà chúng chứa.
 
 ```js
 myName = "Kyle";
@@ -276,45 +275,45 @@ myName = "Kyle";
 myName.length;      // 4
 ```
 
-This does not necessarily correspond to the number of visible characters present between the start and end delimiters (aka, the string literal). It can sometimes be a little confusing to keep straight the difference between a string literal and the underlying string value, so pay close attention.
+Điều này không nhất thiết tương ứng với số lượng ký tự hiển thị hiện diện giữa các dấu phân cách bắt đầu và kết thúc (còn gọi là ký tự chuỗi). Đôi khi có thể hơi khó hiểu để giữ thẳng sự khác biệt giữa một ký tự chuỗi và giá trị chuỗi bên dưới, vì vậy hãy chú ý kỹ.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| We'll cover length computation of strings in detail, in Chapter 2. |
+| Chúng ta sẽ đề cập đến việc tính toán độ dài của các chuỗi một cách chi tiết, trong Chương 2. |
 
-### JS Character Encodings
+### Mã Hóa Ký Tự JS
 
-What type of character encoding does JS use for string characters?
+JS sử dụng loại mã hóa ký tự nào cho các ký tự chuỗi?
 
-You've probably heard of "Unicode" and perhaps even "UTF-8" (8-bit) or "UTF-16" (16-bit). If you're like me (before doing the research it took to write this text), you might have just hand-waved and decided that's all you need to know about character encodings in JS strings.
+Bạn có thể đã nghe nói về "Unicode" và có lẽ ngay cả "UTF-8" (8-bit) hoặc "UTF-16" (16-bit). Nếu bạn giống tôi (trước khi thực hiện nghiên cứu để viết văn bản này), bạn có thể chỉ vẫy tay và quyết định đó là tất cả những gì bạn cần biết về mã hóa ký tự trong các chuỗi JS.
 
-But... it's not. Not even close.
+Nhưng... không phải vậy. Thậm chí không gần.
 
-It turns out, you need to understand how a variety of aspects of Unicode work, and even to consider concepts from UCS-2 (2-byte Universal Character Set), which is similar to UTF-16, but not quite the same. [^UTFUCS]
+Hóa ra, bạn cần hiểu cách một loạt các khía cạnh của Unicode hoạt động, và thậm chí xem xét các khái niệm từ UCS-2 (Bộ Ký Tự Phổ Quát 2-byte), tương tự như UTF-16, nhưng không hoàn toàn giống. [^UTFUCS]
 
-Unicode defines all the "characters" we can represent universally in computer programs, by assigning a specific number to each, called code-points. These numbers range from `0` all the way up to a maximum of `1114111` (`10FFFF` in hexadecimal).
+Unicode định nghĩa tất cả các "ký tự" chúng ta có thể đại diện phổ biến trong các chương trình máy tính, bằng cách gán một số cụ thể cho mỗi ký tự, được gọi là các điểm mã (code-points). Những con số này nằm trong khoảng từ `0` đến tối đa `1114111` (`10FFFF` trong hệ thập lục phân).
 
-The standard notation for Unicode characters is `U+` followed by 4-6 hexadecimal characters. For example, the `❤` (heart symbol) is code-point `10084` (`2764` in hexadecimal), and is thus notated with `U+2764`.
+Ký hiệu tiêu chuẩn cho các ký tự Unicode là `U+` theo sau là 4-6 ký tự thập lục phân. Ví dụ, `❤` (biểu tượng trái tim) là code-point `10084` (`2764` trong hệ thập lục phân), và do đó được ký hiệu bằng `U+2764`.
 
-The first group of 65,535 code points in Unicode is called the BMP (Basic Multilingual Plane). These can all be represented with 16 bits (2 bytes). When representing Unicode characters from the BMP, it's fairly straightforward, as they can *fit* neatly into single UTF-16 JS characters.
+Nhóm 65.535 code-point đầu tiên trong Unicode được gọi là BMP (Basic Multilingual Plane - Mặt Phẳng Đa Ngôn Ngữ Cơ Bản). Tất cả những thứ này có thể được biểu diễn bằng 16 bit (2 byte). Khi biểu diễn các ký tự Unicode từ BMP, nó khá đơn giản, vì chúng có thể *vừa vặn* gọn gàng vào các ký tự JS UTF-16 đơn lẻ.
 
-All the rest of the code points are grouped into 16 so called "supplemental planes" or "astral planes". These code-points require more than 16 bits to represent -- 21 bits to be exact -- so when representing extended/supplemental characters above the BMP, JS actually stores these code-points as a pairing of two adjacent 16-bit code units, called *surrogate halves* (or *surrogate pairs*).
+Tất cả các code-point còn lại được nhóm thành 16 cái gọi là "mặt phẳng bổ sung" hoặc "mặt phẳng thiên văn" (astral planes). Các code-point này yêu cầu nhiều hơn 16 bit để biểu diễn -- chính xác là 21 bit -- vì vậy khi biểu diễn các ký tự mở rộng/bổ sung phía trên BMP, JS thực sự lưu trữ các code-point này dưới dạng một cặp hai đơn vị mã 16-bit liền kề, được gọi là *một nửa thay thế* (surrogate halves) (hoặc *cặp thay thế* - surrogate pairs).
 
-For example, the Unicode code point `127878` (hexadecimal `1F386`) is `🎆` (fireworks symbol). JS stores this in a string value as two surrogate-halve code units: `U+D83C` and `U+DF86`. Keep in mind that these two parts of the whole character do *not* standalone; they're only valid/meaningful when paired immediately adjacent to each other.
+Ví dụ, code-point Unicode `127878` (thập lục phân `1F386`) là `🎆` (biểu tượng pháo hoa). JS lưu trữ cái này trong một giá trị chuỗi dưới dạng hai đơn vị mã nửa thay thế: `U+D83C` và `U+DF86`. Hãy nhớ rằng hai phần này của toàn bộ ký tự *không* đứng một mình; chúng chỉ hợp lệ/có ý nghĩa khi được ghép nối ngay lập tức liền kề với nhau.
 
-This has implications on the length of strings, because a single visible character like the `🎆` fireworks symbol, when in a JS string, is a counted as 2 characters for the purposes of the string length!
+Điều này có ý nghĩa về độ dài của chuỗi, bởi vì một ký tự hiển thị đơn lẻ như biểu tượng pháo hoa `🎆`, khi ở trong một chuỗi JS, được tính là 2 ký tự cho mục đích của độ dài chuỗi!
 
-We'll revisit Unicode characters in a bit, and then cover the challenges of computing string length in Chapter 2.
+Chúng ta sẽ xem xét lại các ký tự Unicode một chút nữa, và sau đó đề cập đến những thách thức của việc tính toán độ dài chuỗi trong Chương 2.
 
-### Escape Sequences
+### Các Chuỗi Thoát (Escape Sequences)
 
-If `"` or `'` are used to delimit a string literal, the contents are only parsed for *character-escape sequences*: `\` followed by one or more characters that JS recognizes and parses with special meaning. Any other characters in a string that don't parse as escape-sequences (single-character or multi-character), are inserted as-is into the string value.
+Nếu `"` hoặc `'` được sử dụng để phân cách một ký tự chuỗi, nội dung chỉ được phân tích cú pháp cho *các chuỗi thoát ký tự*: `\` theo sau là một hoặc nhiều ký tự mà JS nhận ra và phân tích cú pháp với ý nghĩa đặc biệt. Bất kỳ ký tự nào khác trong một chuỗi không phân tích cú pháp dưới dạng chuỗi thoát (ký tự đơn hoặc đa ký tự), đều được chèn nguyên trạng vào giá trị chuỗi.
 
-For single-character escape sequences, the following characters are recognized after a `\`: `b`, `f`, `n`, `r`, `t`, `v`, `0`, `'`, `"`, and `\`. For example,  `\n` means new-line, `\t` means tab, etc.
+Đối với các chuỗi thoát ký tự đơn, các ký tự sau đây được nhận ra sau một `\`: `b`, `f`, `n`, `r`, `t`, `v`, `0`, `'`, `"`, và `\`. Ví dụ, `\n` có nghĩa là dòng mới, `\t` có nghĩa là tab, v.v.
 
-If a `\` is followed by any other character (except `x` and `u` -- explained below), like for example `\k`, that sequence is interpreted as the `\` being an unnecessary escape, which is thus dropped, leaving just the literal character itself (`k`).
+Nếu một `\` được theo sau bởi bất kỳ ký tự nào khác (ngoại trừ `x` và `u` -- được giải thích bên dưới), ví dụ như `\k`, chuỗi đó được hiểu là `\` là một sự thoát không cần thiết, do đó bị loại bỏ, chỉ để lại ký tự chữ đen (literal character) đó (`k`).
 
-To include a `"` in the middle of a `"`-delimited string literal, use the `\"` escape sequence. Similarly, if you're including a `'` character in the middle of a `'`-delimited string literal, use the `\'` escape sequence. By contrast, a `'` does *not* need to be escaped inside a `"`-delimited string, nor vice versa.
+Để bao gồm một `"` ở giữa một ký tự chuỗi được phân cách bởi `"`, hãy sử dụng chuỗi thoát `\"`. Tương tự, nếu bạn bao gồm một ký tự `'` ở giữa một ký tự chuỗi được phân cách bởi `'`, hãy sử dụng chuỗi thoát `\'`. Ngược lại, một `'` *không* cần phải được thoát bên trong một chuỗi được phân cách bởi `"`, cũng như ngược lại.
 
 ```js
 myTitle = "Kyle Simpson (aka, \"getify\"), former O'Reilly author";
@@ -323,11 +322,11 @@ console.log(myTitle);
 // Kyle Simpson (aka, "getify"), former O'Reilly author
 ```
 
-In text, forward slash `/` is most common. But occasionally, you need a backward slash `\`. To include a literal `\` backslash character without it performing as the start of a character-escape sequence, use the `\\` (double backslashes).
+Trong văn bản, dấu gạch chéo `/` là phổ biến nhất. Nhưng thỉnh thoảng, bạn cần một dấu gạch chéo ngược `\`. Để bao gồm một ký tự gạch chéo ngược `\` theo nghĩa đen mà không thực hiện như sự bắt đầu của một chuỗi thoát ký tự, hãy sử dụng `\\` (hai dấu gạch chéo ngược).
 
-So, then... what would `\\\` (three backslashes) in a string parse as? The first two `\`'s would be a `\\` escape sequence, thereby inserting just a single `\` character in the string value, and the remaining `\` would just escape whatever character comes immediately after it.
+Vậy thì... `\\\` (ba dấu gạch chéo ngược) trong một chuỗi sẽ phân tích cú pháp như thế nào? Hai `\` đầu tiên sẽ là một chuỗi thoát `\\`, do đó chèn chỉ một ký tự `\` duy nhất trong giá trị chuỗi, và `\` còn lại sẽ chỉ thoát bất kỳ ký tự nào đến ngay sau nó.
 
-One place backslashes show up commonly is in Windows file paths, which use the `\` separator instead of the `/` separator used in linux/unix style paths:
+Một nơi các dấu gạch chéo ngược xuất hiện phổ biến là trong các đường dẫn tệp Windows, sử dụng dấu phân cách `\` thay vì dấu phân cách `/` được sử dụng trong các đường dẫn kiểu linux/unix:
 
 ```js
 windowsFontsPath =
@@ -337,13 +336,13 @@ console.log(windowsFontsPath);
 // C:\Windows\Fonts\"
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| What about four backslashes `\\\\` in a string literal? Well, that's just two `\\` escape sequences next to each other, so it results in two adjacent backslashes (`\\`) in the underlying string value. You might recognize there's an odd/even rule pattern at play. You should thus be able to deciper any odd (`\\\\\`, `\\\\\\\\\`, etc) or even (`\\\\\\`, `\\\\\\\\\\`, etc) number of backslashes in a string literal. |
+| Còn bốn dấu gạch chéo ngược `\\\\` trong một ký tự chuỗi thì sao? Chà, đó chỉ là hai chuỗi thoát `\\` cạnh nhau, vì vậy nó dẫn đến hai dấu gạch chéo ngược liền kề (`\\`) trong giá trị chuỗi bên dưới. Bạn có thể nhận ra có một mô hình quy tắc lẻ/chẵn đang diễn ra. Do đó, bạn sẽ có thể giải mã bất kỳ số lẻ (`\\\\\`, `\\\\\\\\\`, v.v.) hoặc chẵn (`\\\\\\`, `\\\\\\\\\\`, v.v.) của các dấu gạch chéo ngược trong một ký tự chuỗi. |
 
-#### Line Continuation
+#### Tiếp Tục Dòng
 
-The `\` character followed by an actual new-line character (not just literal `n`) is a special case, and it creates what's called a line-continuation:
+Ký tự `\` theo sau là một ký tự dòng mới thực tế (không chỉ là `n` theo nghĩa đen) là một trường hợp đặc biệt, và nó tạo ra những gì được gọi là tiếp tục dòng (line-continuation):
 
 ```js
 greeting = "Hello \
@@ -353,19 +352,19 @@ console.log(greeting);
 // Hello Friends!
 ```
 
-As you can see, the new-line at the end of the `greeting = ` line is immediately preceded by a `\`, which allows this string literal to continue onto the subsequent line. Without the escaping `\` before it, a new-line -- the actual new-line, not the `\n` character escape sequence -- appearing in a `"` or `'` delimited string literal would actually produce a JS syntax parsing error.
+Như bạn có thể thấy, dòng mới ở cuối dòng `greeting =` ngay lập tức được đi trước bởi một `\`, cho phép ký tự chuỗi này tiếp tục vào dòng tiếp theo. Nếu không có dấu `\` thoát trước nó, một dòng mới -- dòng mới thực tế, không phải chuỗi thoát ký tự `\n` -- xuất hiện trong một ký tự chuỗi được phân cách bởi `"` hoặc `'` thực sự sẽ tạo ra một lỗi phân tích cú pháp cú pháp JS.
 
-Because the end-of-line `\` turns the new-line character into a line continuation, the new-line character is omitted from the string, as shown by the `console.log(..)` output.
+Bởi vì `\` cuối dòng biến ký tự dòng mới thành một sự tiếp tục dòng, ký tự dòng mới bị bỏ qua khỏi chuỗi, như được hiển thị bởi đầu ra `console.log(..)`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| This line-continuation feature is often referred to as "multi-line strings", but I think that's a confusing label. As you can see, the string value itself doesn't have multiple lines, it only was defined across multiple lines via the line continuations. A multi-line string would actually have multiple lines in the underlying value. We'll revisit this topic later in this chapter when we cover Template Literals. |
+| Tính năng tiếp tục dòng này thường được gọi là "chuỗi nhiều dòng", nhưng tôi nghĩ đó là một nhãn gây nhầm lẫn. Như bạn có thể thấy, bản thân giá trị chuỗi không có nhiều dòng, nó chỉ được định nghĩa qua nhiều dòng thông qua các tiếp tục dòng. Một chuỗi nhiều dòng thực sự sẽ có nhiều dòng trong giá trị bên dưới. Chúng ta sẽ xem xét lại chủ đề này sau trong chương này khi chúng ta đề cập đến Template Literals. |
 
-### Multi-Character Escapes
+### Các Chuỗi Thoát Đa Ký Tự
 
-Multi-character escape sequences may be hexadecimal or Unicode sequences.
+Các chuỗi thoát đa ký tự có thể là các chuỗi thập lục phân hoặc Unicode.
 
-Hexadecimal escape sequences are used to encode any of the base ASCII characters (codes 0-255), and look like `\x` followed by exactly two hexadecimal characters (`0-9` and `a-f` / `A-F` -- case insensitive). For example, `A9` or `a9` are decimal value `169`, which corresponds to:
+Các chuỗi thoát thập lục phân được sử dụng để mã hóa bất kỳ ký tự ASCII cơ sở nào (mã 0-255), và trông giống như `\x` theo sau bởi chính xác hai ký tự thập lục phân (`0-9` và `a-f` / `A-F` -- không phân biệt chữ hoa thường). Ví dụ, `A9` hoặc `a9` là giá trị thập phân `169`, tương ứng với:
 
 ```js
 copyright = "\xA9";  // or "\xa9"
@@ -373,23 +372,23 @@ copyright = "\xA9";  // or "\xa9"
 console.log(copyright);     // ©
 ```
 
-For any normal character that can be typed on a keyboard, such as `"a"`, it's usually most readable to just specify the literal character, as opposed to a more obfuscated hexadecimal representation:
+Đối với bất kỳ ký tự bình thường nào có thể được gõ trên bàn phím, chẳng hạn như `"a"`, thường dễ đọc nhất là chỉ định ký tự chữ đen, thay vì một biểu diễn thập lục phân khó hiểu hơn:
 
 ```js
 "a" === "\x61";             // true
 ```
 
-#### Unicode In Strings
+#### Unicode Trong Chuỗi
 
-Unicode escape sequences alone can encode any of the characters from the Unicode BMP. They look like `\u` followed by exactly four hexadecimal characters.
+Các chuỗi thoát Unicode đơn lẻ có thể mã hóa bất kỳ ký tự nào từ Unicode BMP. Chúng trông giống như `\u` theo sau bởi chính xác bốn ký tự thập lục phân.
 
-For example, the escape-sequence `\u00A9` (or `\u00a9`) corresponds to that same `©` symbol, while `\u263A` (or `\u263a`) corresponds to the Unicode character with code-point `9786`: `☺` (smiley face symbol).
+Ví dụ, chuỗi thoát `\u00A9` (hoặc `\u00a9`) tương ứng với cùng biểu tượng `©` đó, trong khi `\u263A` (hoặc `\u263a`) tương ứng với ký tự Unicode có code-point `9786`: `☺` (biểu tượng mặt cười).
 
-When any character-escape sequence (regardless of length) is recognized, the single character it represents is inserted into the string, rather than the original separate characters. So, in the string `"\u263A"`, there's only one (smiley) character, not six individual characters.
+Khi bất kỳ chuỗi thoát ký tự nào (bất kể độ dài) được nhận ra, ký tự đơn lẻ mà nó đại diện được chèn vào chuỗi, thay vì các ký tự riêng biệt ban đầu. Vì vậy, trong chuỗi `"\u263A"`, chỉ có một ký tự (mặt cười), không phải sáu ký tự riêng lẻ.
 
-But as explained earlier, many Unicode code-points are well above `65535`. For example, `1F4A9` (or `1f4a9`) is decimal code-point `128169`, which corresponds to the funny `💩` (pile-of-poo) symbol.
+Nhưng như đã giải thích trước đó, nhiều code-point Unicode nằm cao hơn `65535`. Ví dụ, `1F4A9` (hoặc `1f4a9`) là code-point thập phân `128169`, tương ứng với biểu tượng vui nhộn `💩` (đống phân).
 
-But `\u1F4A9` wouldn't work to include this character in a string, since it would be parsed as the Unicode escape sequence `\u1F4A`, followed by a literal `9` character. To address this limitation, a variation of Unicode escape sequences was introduced to allow an arbitrary number of hexadecimal characters after the `\u`, by surrounding them with `{ .. }` curly braces:
+Nhưng `\u1F4A9` sẽ không hoạt động để bao gồm ký tự này trong một chuỗi, vì nó sẽ được phân tích cú pháp là chuỗi thoát Unicode `\u1F4A`, theo sau là một ký tự `9` theo nghĩa đen. Để giải quyết hạn chế này, một biến thể của các chuỗi thoát Unicode đã được giới thiệu để cho phép một số lượng ký tự thập lục phân tùy ý sau `\u`, bằng cách bao quanh chúng bằng dấu ngoặc nhọn `{ .. }`:
 
 ```js
 myReaction = "\u{1F4A9}";
@@ -398,7 +397,7 @@ console.log(myReaction);
 // 💩
 ```
 
-Recall the earlier discussion of extended (non-BMP) Unicode characters and *surrogate halves*? The same `💩` could also be defined with two explicit code-units, that form a surrogate pair:
+Hãy nhớ lại cuộc thảo luận trước đó về các ký tự Unicode mở rộng (không phải BMP) và *các nửa thay thế* (surrogate halves)? Cùng một `💩` đó cũng có thể được định nghĩa với hai đơn vị mã rõ ràng, tạo thành một cặp thay thế:
 
 ```js
 myReaction = "\uD83D\uDCA9";
@@ -407,26 +406,26 @@ console.log(myReaction);
 // 💩
 ```
 
-All three representations of this same character are stored internally by JS identically, and are indistinguishable:
+Cả ba biểu diễn của cùng ký tự này được lưu trữ nội bộ bởi JS giống hệt nhau, và không thể phân biệt:
 
 ```js
 "💩" === "\u{1F4A9}";                // true
 "\u{1F4A9}" === "\uD83D\uDCA9";     // true
 ```
 
-Even though JS doesn't care which way such a character is represented in your program, consider the readability differences carefully when authoring your code.
+Mặc dù JS không quan tâm cách biểu diễn ký tự như vậy trong chương trình của bạn, hãy xem xét cẩn thận sự khác biệt về khả năng đọc khi soạn thảo mã của bạn.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Even though `💩` looks like a single character, its internal representation affects things like the length computation of a string with that character in it. We'll cover length computation of strings in Chapter 2. |
+| Mặc dù `💩` trông giống như một ký tự đơn lẻ, biểu diễn nội bộ của nó ảnh hưởng đến những thứ như tính toán độ dài của một chuỗi có ký tự đó trong đó. Chúng ta sẽ đề cập đến việc tính toán độ dài của chuỗi trong Chương 2. |
 
-##### Unicode Normalization
+##### Chuẩn Hóa Unicode
 
-Another wrinkle in Unicode string handling is that even certain single BMP characters can be represented in different ways.
+Một nếp nhăn khác trong xử lý chuỗi Unicode là ngay cả một số ký tự BMP đơn lẻ nhất định cũng có thể được biểu diễn theo những cách khác nhau.
 
-For example, the `"é"` character can either be represented as itself (code-point `233`, aka `\xe9` or `\u00e9` or `\u{e9}`), or as the combination of two code-points: the `"e"` character (code-point `101`, aka `\x65`, `\u0065`, `\u{65}`) and the *combining tilde* (code-point `769`, aka `\u0301`, `\u{301}`).
+Ví dụ, ký tự `"é"` có thể được biểu diễn dưới dạng chính nó (code-point `233`, hay còn gọi là `\xe9` hoặc `\u00e9` hoặc `\u{e9}`), hoặc dưới dạng sự kết hợp của hai code-point: ký tự `"e"` (code-point `101`, hay còn gọi là `\x65`, `\u0065`, `\u{65}`) và *dấu ngã kết hợp* (code-point `769`, hay còn gọi là `\u0301`, `\u{301}`).
 
-Consider:
+Hãy xem xét:
 
 ```js
 eTilde1 = "é";
@@ -438,9 +437,9 @@ console.log(eTilde2);       // é
 console.log(eTilde3);       // é
 ```
 
-The string literal assigned to `eTilde3` in this snippet stores the accent mark as a separate *combining mark* symbol. Like surrogate pairs, a combining mark only makes sense in connection with the symbol it's adjacent to (usually after).
+Ký tự chuỗi được gán cho `eTilde3` trong đoạn trích này lưu trữ dấu trọng âm dưới dạng một biểu tượng *dấu kết hợp* riêng biệt. Giống như các cặp thay thế, một dấu kết hợp chỉ có ý nghĩa liên quan đến biểu tượng mà nó liền kề (thường là sau).
 
-The rendering of the Unicode symbol should be the same regardless, but how the `"é"` character is internally stored affects things like `length` computation of the containing string, as well as equality and relational comparison (more on these in Chapter 2):
+Việc hiển thị biểu tượng Unicode phải giống nhau bất kể, nhưng cách ký tự `"é"` được lưu trữ nội bộ ảnh hưởng đến những thứ như tính toán `length` của chuỗi chứa, cũng như so sánh bằng và quan hệ (thêm về những điều này trong Chương 2):
 
 ```js
 eTilde1.length;             // 2
@@ -451,13 +450,13 @@ eTilde1 === eTilde2;        // false
 eTilde1 === eTilde3;        // true
 ```
 
-One particular challenge is that you may copy-paste a string with an `"é"` character visible in it, and that character you copied may have been in the *composed* or *decomposed* form. But there's no visual way to tell, and yet the underlying string value in the literal will be different:
+Một thách thức cụ thể là bạn có thể sao chép-dán một chuỗi với một ký tự `"é"` hiển thị trong đó, và ký tự bạn đã sao chép có thể ở dạng *được kết hợp* hoặc *được phân tách*. Nhưng không có cách trực quan nào để biết, và tuy nhiên giá trị chuỗi bên dưới trong ký tự chuỗi sẽ khác nhau:
 
 ```js
 "é" === "é";           // false!!
 ```
 
-This internal representation difference can be quite challenging if not carefully planned for. Fortunately, JS provides a `normalize(..)` utility method on strings to help:
+Sự khác biệt biểu diễn nội bộ này có thể khá thách thức nếu không được lập kế hoạch cẩn thận. May mắn thay, JS cung cấp một phương thức tiện ích `normalize(..)` trên các chuỗi để giúp đỡ:
 
 ```js
 eTilde1 = "é";
@@ -468,19 +467,19 @@ eTilde1.normalize("NFC") === eTilde2;
 eTilde2.normalize("NFD") === eTilde3;
 ```
 
-The `"NFC"` normalization mode combines adjacent code-points into the *composed* code-point (if possible), whereas the `"NFD"` normalization mode splits a single code-point into its *decomposed* code-points (if possible).
+Chế độ chuẩn hóa `"NFC"` kết hợp các code-point liền kề thành code-point *được kết hợp* (nếu có thể), trong khi chế độ chuẩn hóa `"NFD"` phân tách một code-point đơn lẻ thành các code-point *được phân tách* của nó (nếu có thể).
 
-And there can actually be more than two individual *decomposed* code-points that make up a single *composed* code-point -- for example, a single character could have several diacritical marks applied to it.
+Và thực sự có thể có nhiều hơn hai code-point *được phân tách* riêng lẻ tạo nên một code-point *được kết hợp* đơn lẻ -- ví dụ, một ký tự đơn lẻ có thể có một vài dấu phụ được áp dụng cho nó.
 
-When dealing with Unicode strings that will be compared, sorted, or length analyzed, it's very important to keep Unicode normalization in mind, and use it where necessary.
+Khi xử lý các chuỗi Unicode sẽ được so sánh, sắp xếp, hoặc phân tích độ dài, điều rất quan trọng cần ghi nhớ là chuẩn hóa Unicode, và sử dụng nó khi cần thiết.
 
-##### Unicode Grapheme Clusters
+##### Các Cụm Hình Vị Unicode
 
-A final complication of Unicode string handling is the support for clustering of multiple adjacent code-points into a single visually distinct symbol, referred to as a *grapheme* (or a *grapheme cluster*).
+Một biến chứng cuối cùng của việc xử lý chuỗi Unicode là hỗ trợ cho việc phân cụm nhiều code-point liền kề thành một biểu tượng phân biệt trực quan duy nhất, được gọi là một *hình vị* (hoặc một *cụm hình vị*).
 
-An example would be a family emoji such as `"👩‍👩‍👦‍👦"`, which is actually made up of 7 code-points that all cluster/group together into a single visual symbol.
+Một ví dụ sẽ là một emoji gia đình như `"👩‍👩‍👦‍👦"`, thực sự được tạo thành từ 7 code-point tất cả cụm/nhóm lại với nhau thành một biểu tượng trực quan duy nhất.
 
-Consider:
+Hãy xem xét:
 
 ```js
 familyEmoji = "\u{1f469}\u{200d}\u{1f469}\u{200d}\u{1f466}\u{200d}\u{1f466}";
@@ -488,23 +487,23 @@ familyEmoji = "\u{1f469}\u{200d}\u{1f469}\u{200d}\u{1f466}\u{200d}\u{1f466}";
 familyEmoji;            // 👩‍👩‍👦‍👦
 ```
 
-This emoji is *not* a single registered Unicode code-point, and as such, there's no *normalization* that can be performed to compose these 7 separate code-points into a single entity. The visual rendering logic for such composite symbols is quite complex, well beyond what most of JS developers want to embed into our programs. Libraries do exist for handling some of this logic, but they're often large and still don't necessarily cover all of the nuances/variations.
+Emoji này *không* phải là một code-point Unicode đã đăng ký đơn lẻ, và như vậy, không có *sự chuẩn hóa* nào có thể được thực hiện để kết hợp 7 code-point riêng biệt này thành một thực thể duy nhất. Logic hiển thị trực quan cho các biểu tượng tổng hợp như vậy khá phức tạp, vượt xa những gì hầu hết các nhà phát triển JS muốn nhúng vào chương trình của chúng ta. Các thư viện tồn tại để xử lý một số logic này, nhưng chũng thường lớn và vẫn không nhất thiết bao gồm tất cả các sắc thái/biến thể.
 
-Unlike surrogate pairs and combining marks, the symbols in grapheme clusters can in fact act as standalone characters, but have the special combining behavior when placed adjacent to each other.
+Không giống như các cặp thay thế và các dấu kết hợp, các biểu tượng trong các cụm hình vị thực sự có thể hoạt động như các ký tự độc lập, nhưng có hành vi kết hợp đặc biệt khi được đặt liền kề với nhau.
 
-This kind of complexity significantly affects length computations, comparison, sorting, and many other common string-oriented operations.
+Loại phức tạp này ảnh hưởng đáng kể đến các tính toán độ dài, so sánh, sắp xếp, và nhiều hoạt động hướng chuỗi phổ biến khác.
 
 ### Template Literals
 
-I mentioned earlier that strings can alternately be delimited with `` `..` `` back-ticks:
+Tôi đã đề cập trước đó rằng các chuỗi có thể luân phiên được phân cách bằng dấu back-tick `` `..` ``:
 
 ```js
 myName = `Kyle`;
 ```
 
-All the same rules for character encodings, character escape sequences, and lengths apply to these types of strings.
+Tất cả các quy tắc tương tự cho mã hóa ký tự, chuỗi thoát ký tự, và độ dài đều áp dụng cho các loại chuỗi này.
 
-However, the contents of these template (string) literals are additionally parsed for a special delimiter sequence `${ .. }`, which marks an expression to evaluate and interpolate into the string value at that location:
+Tuy nhiên, nội dung của các template (string) literals này được phân tích cú pháp bổ sung cho một chuỗi phân cách đặc biệt `${ .. }`, đánh dấu một biểu thức để đánh giá và nội suy vào giá trị chuỗi tại vị trí đó:
 
 ```js
 myName = `Kyle`;
@@ -514,13 +513,13 @@ greeting = `Hello, ${myName}!`;
 console.log(greeting);      // Hello, Kyle!
 ```
 
-Everything between the `{ .. }` in such a template literal is an arbitrary JS expression. It can be simple variables like `myName`, or complex JS programs, or anything in between (even another template literal expression!).
+Mọi thứ giữa `{ .. }` trong một template literal như vậy là một biểu thức JS tùy ý. Nó có thể là các biến đơn giản như `myName`, hoặc các chương trình JS phức tạp, hoặc bất cứ thứ gì ở giữa (thậm chí một biểu thức template literal khác!).
 
-| TIP: |
+| MẸO: |
 | :--- |
-| This feature is commonly called "template literals" or "template strings", but I think that's confusing. "Template" usually means, in programming contexts, a reusable set of text that can be re-evaluated with different data. For example, *template engines* for pages, email templates for newsletter campaigns, etc. This JS feature is not re-usable. It's a literal, and it produces a single, immediate value (usually a string). You can put such a value in a function, and call the function multiple times. But then the function is acting as the template, not the the literal itself. I prefer instead to refer to this feature as *interpolated literals*, or the funny, short-hand: *interpoliterals*. I just think that name is more accurately descriptive. |
+| Tính năng này thường được gọi là "template literals" hoặc "template strings", nhưng tôi nghĩ điều đó gây nhầm lẫn. "Template" thường có nghĩa là, trong bối cảnh lập trình, một tập hợp văn bản có thể tái sử dụng có thể được đánh giá lại với dữ liệu khác nhau. Ví dụ, *công cụ mẫu* (template engines) cho các trang, mẫu email cho các chiến dịch bản tin, v.v. Tính năng JS này không có khả năng tái sử dụng. Nó là một ký tự literal, và nó tạo ra một giá trị đơn lẻ, tức thì (thường là một chuỗi). Bạn có thể đặt một giá trị như vậy trong một hàm, và gọi hàm nhiều lần. Nhưng sau đó hàm đang hoạt động như mẫu, không phải bản thân literal. Tôi thích thay vào đó gọi tính năng này là *interpolated literals*, hoặc cách viết tắt vui nhộn: *interpoliterals*. Tôi chỉ nghĩ cái tên đó mô tả chính xác hơn. |
 
-Template literals also have an interesting different behavior with respect to new-lines, compared to classic `"` or `'` delimited strings. Recall that for those strings, a line-continuation required a `\` at the end of each line, right before a new-line. Not so, with template literals!
+Template literals cũng có một hành vi khác thú vị liên quan đến các dòng mới, so với các chuỗi được phân cách bằng `"` hoặc `'` cổ điển. Hãy nhớ lại rằng đối với các chuỗi đó, một sự tiếp tục dòng yêu cầu một `\` ở cuối mỗi dòng, ngay trước một dòng mới. Không phải vậy, với template literals!
 
 ```js
 myPoem = `
@@ -537,35 +536,35 @@ console.log(myPoem);
 // and so R2.
 ```
 
-Line-continuations with template literals do *not require* escaping. However, that means the new-line is part of the string, even the first new-line above. In other words, `myPoem` above holds a truly *multi-line string*, as shown. However, if you `\` escape the end of any line in a template literal, the new-line will be omitted, just like with non-template literal strings.
+Các sự tiếp tục dòng với template literals *không yêu cầu* thoát. Tuy nhiên, điều đó có nghĩa là dòng mới là một phần của chuỗi, ngay cả dòng mới đầu tiên ở trên. Nói cách khác, `myPoem` ở trên giữ một *chuỗi nhiều dòng* thực sự, như được hiển thị. Tuy nhiên, nếu bạn thoát `\` ở cuối bất kỳ dòng nào trong một template literal, dòng mới sẽ bị bỏ qua, giống như với các chuỗi không phải template literal.
 
-Template literals usually result in a string value, but not always. A form of template literal that may look kind of strange is called a *tagged template literal*:
+Template literals thường dẫn đến một giá trị chuỗi, nhưng không phải luôn luôn. Một dạng của template literal có thể trông hơi lạ được gọi là *tagged template literal*:
 
 ```js
 price = formatCurrency`The cost is: ${totalCost}`;
 ```
 
-Here, `formatCurrency` is a tag applied to the template literal value, which actually invokes `formatCurrency(..)` as a function, passing it the string literals and interpolated expressions parsed from the value. This function can then assemble those in any way it sees fit -- such as formatting a `number` value as currency in the current locale -- and return whatever value, string or otherwise, that it wants.
+Ở đây, `formatCurrency` là một thẻ được áp dụng cho giá trị template literal, thực sự gọi `formatCurrency(..)` như một hàm, truyền cho nó các ký tự chuỗi và các biểu thức nội suy được phân tích cú pháp từ giá trị. Hàm này sau đó có thể lắp ráp chúng theo bất kỳ cách nào nó thấy phù hợp -- chẳng hạn như định dạng một giá trị `number` thành tiền tệ trong locale hiện tại -- và trả về bất kỳ giá trị nào, chuỗi hoặc cái gì khác, mà nó muốn.
 
-So tagged template literals are not always strings; they can be any value. But untagged template literals *will always be* strings.
+Vì vậy các tagged template literals không phải luôn là chuỗi; chúng có thể là bất kỳ giá trị nào. Nhưng các template literals không được gắn thẻ *sẽ luôn là* chuỗi.
 
-Some JS developers believe that untagged template literal strings are best to use for *all* strings, even if not using any expression interpolation or multiple lines. I disagree. I think they should only be used when interpolating (or multi-line'ing).
+Một số nhà phát triển JS tin rằng các chuỗi template literal không được gắn thẻ là tốt nhất để sử dụng cho *tất cả* các chuỗi, ngay cả khi không sử dụng bất kỳ nội suy biểu thức hoặc nhiều dòng nào. Tôi không đồng ý. Tôi nghĩ chúng chỉ nên được sử dụng khi nội suy (hoặc nhiều dòng).
 
-| TIP: |
+| MẸO: |
 | :--- |
-| The principle I always apply in making such determinations: use the closest-matched, and least capable, feature/tool, for any task. |
+| Nguyên tắc tôi luôn áp dụng trong việc đưa ra các quyết định như vậy: sử dụng tính năng/công cụ khớp gần nhất, và ít khả năng nhất, cho bất kỳ nhiệm vụ nào. |
 
-Moreover, there are a few places where `` `..` `` style strings are disallowed. For example, the `"use strict"` pragma cannot use back-ticks, or the pragma will be silently ignored (and thus the program accidentally runs in non-strict mode). Also, this style of strings cannot be used in quoted property names of object literals, destruturing patterns, or in the ES Module `import .. from ..` module-specifier clause.
+Hơn nữa, có một vài nơi mà các chuỗi kiểu `` `..` `` bị cấm. Ví dụ, pragma `"use strict"` không thể sử dụng back-ticks, hoặc pragma sẽ bị bỏ qua một cách âm thầm (và do đó chương trình vô tình chạy trong chế độ không nghiêm ngặt). Ngoài ra, kiểu chuỗi này không thể được sử dụng trong các tên thuộc tính được trích dẫn của các object literals, các mẫu destructuring, hoặc trong mệnh đề chỉ định mô-đun `import .. from ..` của ES Module.
 
-My take: use `` `..` `` delimited strings where allowed, but only when interpolation/multi-line is needed; and keep using `".."` or `'..'` delimited strings for everything else.
+Quan điểm của tôi: sử dụng các chuỗi được phân cách bởi `` `..` `` ở nơi được phép, nhưng chỉ khi cần nội suy/nhiều dòng; và tiếp tục sử dụng các chuỗi được phân cách bởi `".."` hoặc `'..'` cho mọi thứ khác.
 
-## Number Values
+## Các Giá Trị Số
 
-The `number` type contains any numeric value (whole number or decimal), such as `-42` or `3.1415926`. These values are represented by the JS engine as 64-bit, IEEE-754 double-precision binary floating-point values. [^IEEE754]
+Kiểu `number` chứa bất kỳ giá trị số nào (số nguyên hoặc thập phân), chẳng hạn như `-42` hoặc `3.1415926`. Các giá trị này được biểu diễn bởi công cụ JS dưới dạng các giá trị dấu phẩy động nhị phân độ chính xác kép 64-bit, IEEE-754. [^IEEE754]
 
-JS `number`s are always decimals; whole numbers (aka "integers") are not stored in a different/special way. An "integer" stored as a `number` value merely has nothing non-zero as its fraction portion; `42` is thus indistinguishable in JS from `42.0` and `42.000000`.
+Các `number` JS luôn là số thập phân; các số nguyên (còn gọi là "integers") không được lưu trữ theo cách khác biệt/đặc biệt. Một "số nguyên" được lưu trữ dưới dạng một giá trị `number` chỉ đơn thuần là không có gì khác không làm phần phân số của nó; `42` do đó không thể phân biệt trong JS với `42.0` và `42.000000`.
 
-We can use `Number.isInteger(..)` to determine if a `number` value has any non-zero fraction or not:
+Chúng ta có thể sử dụng `Number.isInteger(..)` để xác định xem một giá trị `number` có bất kỳ phân số khác không nào hay không:
 
 ```js
 Number.isInteger(42);           // true
@@ -575,13 +574,13 @@ Number.isInteger(42.000000);    // true
 Number.isInteger(42.0000001);   // false
 ```
 
-### Parsing vs Coercion
+### Phân Tích Cú Pháp vs Ép Buộc
 
-If a string value holds numeric-looking contents, you may need to convert from that string value to a `number`, for mathematical operation purposes.
+Nếu một giá trị chuỗi giữ nội dung trông giống số, bạn có thể cần chuyển đổi từ giá trị chuỗi đó sang một `number`, cho các mục đích toán học.
 
-However, it's very important to distinguish between parsing-conversion and coercive-conversion.
+Tuy nhiên, điều rất quan trọng là phân biệt giữa chuyển đổi phân tích cú pháp (parsing-conversion) và chuyển đổi ép buộc (coercive-conversion).
 
-We can parse-convert with JS's built-in `parseInt(..)` or `parseFloat(..)` utilities:
+Chúng ta có thể chuyển đổi phân tích cú pháp với các tiện ích `parseInt(..)` hoặc `parseFloat(..)` được tích hợp sẵn của JS:
 
 ```js
 someNumericText = "123.456";
@@ -594,27 +593,27 @@ parseInt("42",10) === parseFloat("42");     // true
 parseInt("512px");                          // 512
 ```
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Parsing is only relevant for string values, as it's a character-by-character (left-to-right) operation. It doesn't make sense to parse the contents of a `boolean`, nor to parse the contents of a `number` or a `null`; there's nothing to parse. If you pass anything other than a string value to `parseInt(..)` / `parseFloat(..)`, those utilities first convert that value to a string and then try to parse it. That's almost certainly problematic (leading to bugs) or wasteful -- `parseInt(42)` is silly, and `parseInt(42.3)` is an abuse of `parseInt(..)` to do the job of `Math.floor(..)`. |
+| Phân tích cú pháp chỉ có liên quan đối với các giá trị chuỗi, vì nó là một hoạt động từng ký tự (trái sang phải). Sẽ không có ý nghĩa gì khi phân tích cú pháp nội dung của một `boolean`, cũng như phân tích cú pháp nội dung của một `number` hoặc một `null`; không có gì để phân tích cú pháp. Nếu bạn truyền bất cứ thứ gì khác ngoài một giá trị chuỗi cho `parseInt(..)` / `parseFloat(..)`, các tiện ích đó trước tiên chuyển đổi giá trị đó thành một chuỗi và sau đó cố gắng phân tích cú pháp nó. Điều đó gần như chắc chắn có vấn đề (dẫn đến lỗi) hoặc lãng phí -- `parseInt(42)` là ngớ ngẩn, và `parseInt(42.3)` là một sự lạm dụng `parseInt(..)` để thực hiện công việc của `Math.floor(..)`. |
 
-Parsing pulls out numeric-looking characters from the string value, and puts them into a `number` value, stopping once it encounters a character that's non-numeric (e.g., not `-`, `.` or `0`-`9`). If parsing fails on the first character, both utilities return the special `NaN` value (see "Invalid Number" below), indicating the operation was invalid and failed.
+Phân tích cú pháp lấy ra các ký tự trông giống số từ giá trị chuỗi, và đưa chúng vào một giá trị `number`, dừng lại ngay khi nó gặp một ký tự không phải số (ví dụ: không phải `-`, `.` hoặc `0`-`9`). Nếu phân tích cú pháp thất bại ở ký tự đầu tiên, cả hai tiện ích đều trả về giá trị đặc biệt `NaN` (xem "Số Không Hợp Lệ" bên dưới), cho biết hoạt động không hợp lệ và đã thất bại.
 
-When `parseInt(..)` encounters the `.` in `"123.456"`, it stops, using just the `123` in the resulting `number` value. `parseFloat(..)` by contrast accepts this `.` character, and keeps right on parsing a float with any decimal digits after the `.`.
+Khi `parseInt(..)` gặp `.` trong `"123.456"`, nó dừng lại, chỉ sử dụng `123` trong giá trị `number` kết quả. `parseFloat(..)` ngược lại chấp nhận ký tự `.` này, và tiếp tục phân tích cú pháp một số thập phân với bất kỳ chữ số thập phân nào sau `.`.
 
-The `parseInt(..)` utility specifically, takes as an optional -- but *actually*, rather necessary -- second argument, `radix`: the numeric base to assume for interpreting the string characters for the `number` (range `2` - `36`). `10` is for standard base-10 numbers, `2` is for binary, `8` is for octal, and `16` is for hexadecimal. Any other unusual `radix`, like `23`, assumes digits in order, `0` - `9` followed by the `a` - `z` (case insensitive) character ordination. If the specified radix is outside the `2` - `36` range, `parseInt(..)` fails as invalid and returns the `NaN` value.
+Tiện ích `parseInt(..)` cụ thể, nhận một đối số thứ hai tùy chọn -- nhưng *thực tế*, khá cần thiết --, `radix`: cơ sở số để giả định cho việc thông dịch các ký tự chuỗi cho `number` (phạm vi `2` - `36`). `10` là cho các số cơ sở 10 tiêu chuẩn, `2` là cho nhị phân, `8` là cho bát phân, và `16` là cho thập lục phân. Bất kỳ `radix` bất thường nào khác, như `23`, giả định các chữ số theo thứ tự, `0` - `9` theo sau là thứ tự ký tự `a` - `z` (không phân biệt chữ hoa thường). Nếu radix được chỉ định nằm ngoài phạm vi `2` - `36`, `parseInt(..)` thất bại là không hợp lệ và trả về giá trị `NaN`.
 
-If `radix` is omitted, the behavior of `parseInt(..)` is rather nuanced and confusing, in that it attempts to make a best-guess for a radix, based on what it sees in the first character. This historically has lead to lots of subtle bugs, so never rely on the default auto-guessing; always specify an explicit radix (like `10` in the calls above).
+Nếu `radix` bị bỏ qua, hành vi của `parseInt(..)` khá tinh tế và khó hiểu, ở chỗ nó cố gắng đoán tốt nhất cho một radix, dựa trên những gì nó thấy trong ký tự đầu tiên. Điều này trong lịch sử đã dẫn đến rất nhiều lỗi tinh vi, vì vậy đừng bao giờ dựa vào việc tự động đoán mặc định; luôn chỉ định một radix rõ ràng (như `10` trong các lệnh gọi ở trên).
 
-`parseFloat(..)` always parses with a radix of `10`, so no second argument is accepted.
+`parseFloat(..)` luôn phân tích cú pháp với một radix là `10`, vì vậy không có đối số thứ hai nào được chấp nhận.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| One surprising difference between `parseInt(..)` and `parseFloat(..)` is that `parseInt(..)` will not fully parse scientific notation (e.g., `"1.23e+5"`), instead stopping at the `.` as it's not valid for integers; in fact, even `"1e+5"` stops at the `"e"`. `parseFloat(..)` on the other hand fully parses scientific notation as expected. |
+| Một sự khác biệt đáng ngạc nhiên giữa `parseInt(..)` và `parseFloat(..)` là `parseInt(..)` sẽ không phân tích cú pháp đầy đủ ký hiệu khoa học (ví dụ: `"1.23e+5"`), thay vào đó dừng lại ở `.` vì nó không hợp lệ cho số nguyên; trên thực tế, ngay cả `"1e+5"` cũng dừng lại ở `"e"`. `parseFloat(..)` mặt khác phân tích cú pháp đầy đủ ký hiệu khoa học như mong đợi. |
 
-In contrast to parsing-conversion, coercive-conversion is an all-or-nothing sort of operation. Either the entire contents of the string are recognized as numeric (integer or floating-point), or the whole conversion fails (resulting in `NaN` -- again, see "Invalid Number" later in this chapter).
+Trái ngược với chuyển đổi phân tích cú pháp, chuyển đổi ép buộc là một loại hoạt động tất cả hoặc không có gì. Hoặc toàn bộ nội dung của chuỗi được nhận ra là số (số nguyên hoặc số thập phân), hoặc toàn bộ chuyển đổi thất bại (dẫn đến `NaN` -- một lần nữa, xem "Số Không Hợp Lệ" sau trong chương này).
 
-Coercive-conversion can be done explicitly with the `Number(..)` function (no `new` keyword) or with the unary `+` operator in front of the value:
+Chuyển đổi ép buộc có thể được thực hiện một cách rõ ràng với hàm `Number(..)` (không có từ khóa `new`) hoặc với toán tử một ngôi `+` phía trước giá trị:
 
 ```js
 someNumericText = "123.456";
@@ -626,9 +625,9 @@ Number("512px");                // NaN
 +"512px";                       // NaN
 ```
 
-### Other Numeric Representations
+### Các Biểu Diễn Số Khác
 
-In addition to defining numbers using traditional base-10 numerals (`0`-`9`), JS supports defining whole-number-only number literals in three other bases: binary (base-2), octal (base-8), and hexadecimal (base-16).
+Ngoài việc định nghĩa các số bằng các chữ số cơ sở 10 truyền thống (`0`-`9`), JS hỗ trợ định nghĩa các literal số chỉ toàn số nguyên trong ba cơ sở khác: nhị phân (cơ sở 2), bát phân (cơ sở 8), và thập lục phân (cơ sở 16).
 
 ```js
 // binary
@@ -644,15 +643,15 @@ myAge = 0x2a;
 myAge;              // 42
 ```
 
-As you can see, the prefixes `0b` (binary), `0o` (octal), and `0x` (hexadecimal) signal defining numbers in the different bases, but decimals are not allowed on these numeric literals.
+Như bạn có thể thấy, các tiền tố `0b` (nhị phân), `0o` (bát phân), và `0x` (thập lục phân) báo hiệu việc xác định các số trong các cơ sở khác nhau, nhưng các số thập phân không được phép trên các literal số này.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| JS syntax allows `0B`, `0O`, and `0X` prefixes as well. However, please don't ever use those uppercase prefix forms. I think any sensible person would agree: `0O` is much easier to confuse at a glance than `0o` (which is, itself, a bit visually ambiguous at a glance). Always stick to the lowercase prefix forms! |
+| Cú pháp JS cho phép các tiền tố `0B`, `0O`, và `0X` cũng như vậy. Tuy nhiên, xin đừng bao giờ sử dụng các dạng tiền tố chữ hoa đó. Tôi nghĩ bất kỳ người nhạy cảm nào cũng sẽ đồng ý: `0O` dễ bị nhầm lẫn hơn nhiều khi nhìn lướt qua so với `0o` (bản thân nó cũng hơi mơ hồ về mặt hình ảnh khi nhìn lướt qua). Luôn gắn bó với các dạng tiền tố chữ thường! |
 
-It's important to realize that you're not defining a *different number*, just using a different form to produce the same underlying numeric value.
+Điều quan trọng là phải nhận ra rằng bạn không đang định nghĩa một *số khác*, chỉ là sử dụng một dạng khác để tạo ra cùng một giá trị số bên dưới.
 
-By default, JS represents the underlying numeric value in output/string fashion with standard base-10 form. However, `number` values have a built-in `toString(..)` method that produces a string representation in any specified base/radix (as with `parseInt(..)`, in the range `2` - `36`):
+Theo mặc định, JS đại diện cho giá trị số bên dưới theo kiểu đầu ra/chuỗi với dạng cơ sở 10 tiêu chuẩn. Tuy nhiên, các giá trị `number` có một phương thức `toString(..)` được tích hợp sẵn tạo ra một biểu diễn chuỗi trong bất kỳ cơ sở/radix được chỉ định nào (như với `parseInt(..)`, trong phạm vi `2` - `36`):
 
 ```js
 myAge = 42;
@@ -664,7 +663,7 @@ myAge.toString(23);         // "1j"
 myAge.toString(36);         // "16"
 ```
 
-You can round-trip any arbitrary-radix string representation back into a `number` using `parseInt(..)`, with the appropriate radix:
+Bạn có thể khứ hồi bất kỳ biểu diễn chuỗi radix tùy ý nào trở lại thành một `number` bằng cách sử dụng `parseInt(..)`, với radix thích hợp:
 
 ```js
 myAge = 42;
@@ -672,7 +671,7 @@ myAge = 42;
 parseInt(myAge.toString("23"),23);      // 42
 ```
 
-Another allowed form for specifying number literals is using scientific notation:
+Một dạng được phép khác để chỉ định các literal số là sử dụng ký hiệu khoa học:
 
 ```js
 myAge = 4.2E1;      // or 4.2e1 or 4.2e+1
@@ -680,13 +679,13 @@ myAge = 4.2E1;      // or 4.2e1 or 4.2e+1
 myAge;              // 42
 ```
 
-`4.2E1` (or `4.2e1`) means, `4.2 * (10 ** 1)` (`10` to the `1` power). The exponent can optionally have a sign `+` or `-`. If the sign is omitted, it's assumed to be `+`. A negative exponent makes the number smaller (moves the decimal leftward) rather than larger (moving the decimal rightward):
+`4.2E1` (hoặc `4.2e1`) có nghĩa là, `4.2 * (10 ** 1)` (`10` mũ `1`). Số mũ có thể tùy chọn có dấu `+` hoặc `-`. Nếu dấu bị bỏ qua, nó được cho là `+`. Một số mũ âm làm cho số nhỏ hơn (di chuyển dấu thập phân sang trái) thay vì lớn hơn (di chuyển dấu thập phân sang phải):
 
 ```js
 4.2E-3;             // 0.0042
 ```
 
-This scientific notation form is especially useful for readability when specifying larger powers of `10`:
+Dạng ký hiệu khoa học này đặc biệt hữu ích cho khả năng đọc khi chỉ định các lũy thừa lớn hơn của `10`:
 
 ```js
 someBigPowerOf10 = 1000000000;
@@ -696,7 +695,7 @@ someBigPowerOf10 = 1000000000;
 someBigPowerOf10 = 1e9;
 ```
 
-By default, JS will represent (e.g., as string values, etc) either very large or very small numbers -- specifically, if the values require more than 21 digits of precision -- using this same scientific notation:
+Theo mặc định, JS sẽ đại diện (ví dụ, dưới dạng giá trị chuỗi, v.v.) hoặc các số rất lớn hoặc rất nhỏ -- cụ thể, nếu các giá trị yêu cầu nhiều hơn 21 chữ số chính xác -- sử dụng cùng dạng ký hiệu khoa học này:
 
 ```js
 ratherBigNumber = 123 ** 11;
@@ -706,7 +705,7 @@ prettySmallNumber = 123 ** -11;
 prettySmallNumber.toString();   // "1.0257553107587752e-23"
 ```
 
-Numbers with smaller absolute values (closer to `0`) than these thresholds can still be forced into scientific notation form (as strings):
+Các số có giá trị tuyệt đối nhỏ hơn (gần `0` hơn) so với các ngưỡng này vẫn có thể bị buộc vào dạng ký hiệu khoa học (dưới dạng chuỗi):
 
 ```js
 plainBoringNumber = 42;
@@ -716,9 +715,9 @@ plainBoringNumber.toExponential(0);     // "4e+1"
 plainBoringNumber.toExponential(4);     // "4.2000e+1"
 ```
 
-The optional argument to `toExponential(..)` specifies the number of decimal digits to include in the string representation.
+Đối số tùy chọn cho `toExponential(..)` chỉ định số lượng chữ số thập phân cần bao gồm trong biểu diễn chuỗi.
 
-Another readability affordance for specifying numeric literals in code is the ability to insert `_` as a digit separator wherever its convenient/meaningful to do so. For example:
+Một khả năng đọc khác để chỉ định các literal số trong mã là khả năng chèn `_` làm dấu phân cách chữ số bất cứ nơi nào thuận tiện/có ý nghĩa để làm như vậy. Ví dụ:
 
 ```js
 someBigPowerOf10 = 1_000_000_000;
@@ -726,76 +725,76 @@ someBigPowerOf10 = 1_000_000_000;
 totalCostInPennies = 123_45;  // vs 12_345
 ```
 
-The decision to use `12345` (no separator), `12_345` (like "12,345"), or `123_45` (like "123.45") is entirely up to the author of the code; JS ignores the separators. But depending on the context, `123_45` could be more semantically meaningful (readability wise) than the more traditional three-digit-grouping-from-the-right-separated-with-commas style mimicked with `12_345`.
+Quyết định sử dụng `12345` (không có dấu phân cách), `12_345` (giống như "12,345"), hoặc `123_45` (giống như "123.45") hoàn toàn tùy thuộc vào tác giả của mã; JS bỏ qua các dấu phân cách. Nhưng tùy thuộc vào ngữ cảnh, `123_45` có thể có ý nghĩa về mặt ngữ nghĩa (về mặt khả năng đọc) hơn là kiểu nhóm ba chữ số từ phải sang trái phân cách bằng dấu phẩy truyền thống được bắt chước với `12_345`.
 
-### IEEE-754 Bitwise Binary Representations
+### Biểu Diễn Nhị Phân Bitwise IEEE-754
 
-IEEE-754[^IEEE754] is a technical standard for binary representation of decimal numbers. It's widely used by most computer programming languages, including JS, Python, Ruby, etc.
+IEEE-754[^IEEE754] là một tiêu chuẩn kỹ thuật cho biểu diễn nhị phân của các số thập phân. Nó được sử dụng rộng rãi bởi hầu hết các ngôn ngữ lập trình máy tính, bao gồm JS, Python, Ruby, v.v.
 
-I'm not going to cover it exhaustively, but I think a brief primer on how numbers work in languages like JS is more than warranted, given how few programmers have *any* familiarity with it.
+Tôi sẽ không đề cập đến nó một cách thấu đáo, nhưng tôi nghĩ một bài giới thiệu ngắn gọn về cách các con số hoạt động trong các ngôn ngữ như JS là hơn mức cần thiết, vì rất ít lập trình viên có *bất kỳ* sự quen thuộc nào với nó.
 
-In 64-bit IEEE-754 -- so called "double-precision", because originally IEEE-754 used to be 32-bit, and now it's double that! -- the 64 bits are divided into three sections: 52 bits for the number's base value (aka, "fraction", "mantissa", or "significand"), 11 bits for the exponent to raise `2` to before multiplying, and 1 bit for the sign of the ultimate value.
+Trong IEEE-754 64-bit -- được gọi là "độ chính xác kép" (double-precision), bởi vì ban đầu IEEE-754 từng là 32-bit, và bây giờ nó gấp đôi thế! -- 64 bit được chia thành ba phần: 52 bit cho giá trị cơ sở của số (hay còn gọi là "phần phân số", "mantissa", hoặc "significand"), 11 bit cho số mũ để nâng `2` lên trước khi nhân, và 1 bit cho dấu của giá trị cuối cùng.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| Since only 52 of the 64 bits are actually used to represent the base value, `number` doesn't actually have `2^64` values in it. According to the specification for the `number` type[^NumberType], the number of values is precisely `2^64 - 2^53 + 3`, or about 18 quintillion, split about evenly between positive and negative numbers. |
+| Vì chỉ có 52 trong số 64 bit thực sự được sử dụng để đại diện cho giá trị cơ sở, `number` không thực sự có `2^64` giá trị trong đó. Theo đặc tả cho kiểu `number`[^NumberType], số lượng giá trị chính xác là `2^64 - 2^53 + 3`, hoặc khoảng 18 tỷ tỷ (quintillion), chia đều giữa các số dương và số âm. |
 
-These bits are arranged left-to-right, as so (S = Sign Bit, E = Exponent Bit, M = Mantissa Bit):
+Các bit này được sắp xếp từ trái sang phải, như sau (S = Bit Dấu, E = Bit Số Mũ, M = Bit Mantissa):
 
 ```js
 SEEEEEEEEEEEMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 ```
 
-So, the number `42` (or `42.000000`) would be represented by these bits:
+Vì vậy, số `42` (hoặc `42.000000`) sẽ được biểu diễn bởi các bit này:
 
-```
+```text
 // 42:
 01000000010001010000000000000000
 00000000000000000000000000000000
 ```
 
-The sign bit is `0`, meaning the number is positive (`1` means negative).
+Bit dấu là `0`, có nghĩa là số dương (`1` có nghĩa là âm).
 
-The 11-bit exponent is binary `10000000100`, which in base-10 is `1028`. But in IEEE-754, this value is interpreted as being stored unsigned with an "exponent bias" of `1023`, meaning that we're shifting up the exponent range from `-1022:1023` to `1:2046` (where `0` and `2047` are reserved for special representations). So, take `1028` and subtract the bias `1023`, which gives an effective exponent of `5`. We raise `2` to that value (`2^5`), giving `32`.
+Số mũ 11-bit là nhị phân `10000000100`, trong cơ sở 10 là `1028`. Nhưng trong IEEE-754, giá trị này được diễn giải là được lưu trữ không dấu với "độ lệch số mũ" (exponent bias) là `1023`, có nghĩa là chúng ta đang thay đổi phạm vi số mũ từ `-1022:1023` thành `1:2046` (nơi `0` và `2047` được dành riêng cho các biểu diễn đặc biệt). Vì vậy, lấy `1028` trừ đi độ lệch `1023`, cho ra số mũ hiệu quả là `5`. Chúng ta nâng `2` lên giá trị đó (`2^5`), cho ra `32`.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| If the subtracting `1023` from the exponent value gives a negative (e.g., `-3`), that's still interpreted as `2`'s exponent; raising `2` to negative numbers just produces smaller and smaller values. |
+| Nếu việc trừ `1023` khỏi giá trị số mũ cho ra một số âm (ví dụ, `-3`), điều đó vẫn được diễn giải là số mũ của `2`; nâng `2` lên các số âm chỉ tạo ra các giá trị nhỏ hơn và nhỏ hơn. |
 
-The remaining 52 bits give us the base value `01010000...`, interpreted as binary decimal `1.0101000...` (with all trailing zeros). Converting *that* to base-10, we get `1.3125000...`. Finally, then multiply that by `32` already computed from the exponent. The result: `42`.
+52 bit còn lại cung cấp cho chúng ta giá trị cơ sở `01010000...`, được diễn giải là số thập phân nhị phân `1.0101000...` (với tất cả các số không theo sau). Chuyển đổi *cái đó* sang cơ sở 10, chúng ta nhận được `1.3125000...`. Cuối cùng, nhân nó với `32` đã được tính toán từ số mũ. Kết quả: `42`.
 
-As you might be able to tell now, this IEEE-754 number representation standard is called "floating point" because the decimal point "floats" back-and-forth along the bits, depending on the specified exponent value.
+Như bạn có thể có thể nhận ra bây giờ, tiêu chuẩn biểu diễn số IEEE-754 này được gọi là "dấu phẩy động" (floating point) bởi vì dấu thập phân "trôi nổi" qua lại dọc theo các bit, tùy thuộc vào giá trị số mũ được chỉ định.
 
-The number `42.0000001`, which is only different from `42.000000` by just `0.0000001`, would be represented by these bits:
+Số `42.0000001`, chỉ khác với `42.000000` bởi chỉ `0.0000001`, sẽ được biểu diễn bởi các bit này:
 
-```
+```text
 // 42.0000001:
 01000000010001010000000000000000
 00000000110101101011111110010101
 ```
 
-Notice how the previous bit pattern and this one differ by quite a few bits in the trailing positions! The binary decimal fraction containing all those extra `1` bits (`1.010100000000...01011111110010101`) converts to base-10 as `1.31250000312500003652`, which multiplied by `32` gives us exactly `42.0000001`.
+Hãy chú ý cách mẫu bit trước đó và mẫu này khác nhau khá nhiều bit ở các vị trí cuối cùng! Phân số thập phân nhị phân chứa tất cả các bit `1` thừa đó (`1.010100000000...01011111110010101`) chuyển đổi sang cơ sở 10 là `1.31250000312500003652`, nhân với `32` cho chúng ta chính xác `42.0000001`.
 
-We'll revisit more details about floating-point (im)precision in Chapter 2. But now you understand a *bit more* about how IEEE-754 works!
+Chúng ta sẽ xem xét lại nhiều chi tiết hơn về độ (không) chính xác dấu phẩy động trong Chương 2. Nhưng bây giờ bạn đã hiểu thêm một *chút* về cách IEEE-754 hoạt động!
 
-### Number Limits
+### Các Giới Hạn Số
 
-As might be evident now that you've seen how IEEE-754 works, the 52 bits of the number's base must be shared, representing both the whole number portion (if any) as well as the decimal portion (if any), of the intended `number` value. Essentially, the larger the whole number portion to be represented, the less bits are available for the decimal portion, and vice versa.
+Như có thể thấy rõ bây giờ khi bạn đã thấy cách IEEE-754 hoạt động, 52 bit của cơ sở số phải được chia sẻ, đại diện cho cả phần nguyên (nếu có) cũng như phần thập phân (nếu có), của giá trị `number` dự định. Về cơ bản, phần nguyên càng lớn được biểu diễn, càng ít bit có sẵn cho phần thập phân, và ngược lại.
 
-The largest value that can accurately be stored in the `number` type is exposed as `Number.MAX_VALUE`:
+Giá trị lớn nhất có thể được lưu trữ chính xác trong kiểu `number` được hiển thị dưới dạng `Number.MAX_VALUE`:
 
 ```js
 Number.MAX_VALUE;           // 1.7976931348623157e+308
 ```
 
-You might expect that value to be a decimal value, given the representation. But on closer inspection, `1.79E308` is (approximately) `2^1024 - 1`. That seems much more like it should be an integer, right? We can verify:
+Bạn có thể mong đợi giá trị đó là một giá trị thập phân, dựa trên biểu diễn. Nhưng khi kiểm tra kỹ hơn, `1.79E308` (xấp xỉ) là `2^1024 - 1`. Điều đó có vẻ giống như nó nên là một số nguyên hơn, phải không? Chúng ta có thể xác minh:
 
 ```js
 Number.isInteger(Number.MAX_VALUE);         // true
 ```
 
-But what happens if you go above the max value?
+Nhưng điều gì xảy ra nếu bạn vượt quá giá trị tối đa?
 
 ```js
 Number.MAX_VALUE === (Number.MAX_VALUE + 1);
@@ -805,9 +804,9 @@ Number.MAX_VALUE === (Number.MAX_VALUE + 10000000);
 // true
 ```
 
-So, is `Number.MAX_VALUE` actually the largest value representable in JS? It's certainly the largest *finite* `number` value.
+Vì vậy, `Number.MAX_VALUE` có thực sự là giá trị lớn nhất có thể biểu diễn trong JS không? Nó chắc chắn là giá trị `number` *hữu hạn* lớn nhất.
 
-IEEE-754 defines a special infinite value, which JS exposes as `Infinity`; there's also a `-Infinity` at the far other end of the number line. Values can be tested to see if they are finite or infinite:
+IEEE-754 định nghĩa một giá trị vô hạn đặc biệt, mà JS hiển thị dưới dạng `Infinity`; cũng có một `-Infinity` ở phía đầu kia của trục số. Các giá trị có thể được kiểm tra xem chúng có hữu hạn hay vô hạn không:
 
 ```js
 Number.isFinite(Number.MAX_VALUE);  // true
@@ -816,9 +815,9 @@ Number.isFinite(Infinity);          // false
 Number.isFinite(-Infinity);         // false
 ```
 
-You can't ever count upwards (with `+ 1`) from `Number.MAX_VALUE` to `Infinity`, no matter how long you let the program run, because the `+ 1` operation isn't actually incrementing beyond the top `Number.MAX_VALUE` value.
+Bạn không bao giờ có thể đếm lên (với `+ 1`) từ `Number.MAX_VALUE` đến `Infinity`, bất kể bạn để chương trình chạy bao lâu, bởi vì phép toán `+ 1` không thực sự tăng vượt quá giá trị `Number.MAX_VALUE` trên cùng.
 
-However, JS arithmetic operations (`+`, `*`, and even `/`) can definitely overflow the `number` type on the top-end, in which case `Infinity` is the result:
+Tuy nhiên, các phép toán số học JS (`+`, `*`, và thậm chí `/`) chắc chắn có thể làm tràn kiểu `number` ở đầu trên, trong trường hợp đó `Infinity` là kết quả:
 
 ```js
 Number.MAX_VALUE + 1E291;           // 1.7976931348623157e+308
@@ -830,23 +829,23 @@ Number.MAX_VALUE * 1.0000000001;    // Infinity
 1 / 1E-309;                         // Infinity
 ```
 
-| TIP: |
+| MẸO: |
 | :--- |
-| The reverse is not true: an arithmetic operation on an infinite value *will never* produce a finite value. |
+| Điều ngược lại không đúng: một phép toán số học trên một giá trị vô hạn *sẽ không bao giờ* tạo ra một giá trị hữu hạn. |
 
-Going from the very large to the very, very small -- actually, closest to zero, which is not the same thing as going very, very negative! -- the smallest absolute decimal value you could theoretically store in the `number` type would be `2^-1022` (remember the IEEE-754 exponent range?), or around `2E-308`. However, JS engines are allowed by the specification to vary in their internal representations for this lower limit. Whatever the engine's effective lower limit is, it'll be exposed as `Number.MIN_VALUE`:
+Đi từ rất lớn đến rất, rất nhỏ -- thực ra, gần nhất với số không, điều này không giống với việc đi rất, rất âm! -- giá trị thập phân tuyệt đối nhỏ nhất bạn có thể lưu trữ theo lý thuyết trong kiểu `number` sẽ là `2^-1022` (hãy nhớ phạm vi số mũ IEEE-754?), hoặc khoảng `2E-308`. Tuy nhiên, các công cụ JS được phép bởi đặc tả thay đổi trong các biểu diễn nội bộ của chúng cho giới hạn dưới này. Bất kể giới hạn dưới hiệu quả của công cụ là gì, nó sẽ được hiển thị dưới dạng `Number.MIN_VALUE`:
 
 ```js
-Number.MIN_VALUE;               // 5e-324 <-- usually!
+Number.MIN_VALUE;               // 5e-324 <-- thường là vậy!
 ```
 
-Most JS engines seem to have a minimum representable value around `5E-324` (about `2^-1074`). Depending on the engine and/or platform, a different value may be exposed. Be careful about any program logic that relies on such implementation-dependent values.
+Hầu hết các công cụ JS dường như có một giá trị tối thiểu có thể biểu diễn khoảng `5E-324` (khoảng `2^-1074`). Tùy thuộc vào công cụ và/hoặc nền tảng, một giá trị khác có thể được hiển thị. Hãy cẩn thận về bất kỳ logic chương trình nào dựa vào các giá trị phụ thuộc vào triển khai như vậy.
 
-### Safe Integer Limits
+### Các Giới Hạn Số Nguyên An Toàn
 
-Since `Number.MAX_VALUE` is an integer, you might assume that it's the largest integer in the language. But that's not really accurate.
+Vì `Number.MAX_VALUE` là một số nguyên, bạn có thể cho rằng đó là số nguyên lớn nhất trong ngôn ngữ. Nhưng điều đó không thực sự chính xác.
 
-The largest integer you can accurately store in the `number` type is `2^53 - 1`, or `9007199254740991`, which is *way smaller* than `Number.MAX_VALUE` (about `2^1024 - 1`). This special safer value is exposed as `Number.MAX_SAFE_INTEGER`:
+Số nguyên lớn nhất bạn có thể lưu trữ chính xác trong kiểu `number` là `2^53 - 1`, hoặc `9007199254740991`, *nhỏ hơn nhiều* so với `Number.MAX_VALUE` (khoảng `2^1024 - 1`). Giá trị an toàn hơn đặc biệt này được hiển thị dưới dạng `Number.MAX_SAFE_INTEGER`:
 
 ```js
 maxInt = Number.MAX_SAFE_INTEGER;
@@ -858,28 +857,28 @@ maxInt + 1;         // 9007199254740992
 maxInt + 2;         // 9007199254740992
 ```
 
-We've seen that integers larger than `9007199254740991` can show up. However, those larger integers are not "safe", in that the precision/accuracy start to break down when you do operations with them. As shown above, the `maxInt + 1` and `maxInt + 2` expressions both errantly give the same result, illustrating the hazard when exceeding the `Number.MAX_SAFE_INTEGER` limit.
+Chúng ta đã thấy các số nguyên lớn hơn `9007199254740991` có thể xuất hiện. Tuy nhiên, những số nguyên lớn hơn đó không "an toàn", ở chỗ độ chính xác bắt đầu bị phá vỡ khi bạn thực hiện các phép toán với chúng. Như được hiển thị ở trên, các biểu thức `maxInt + 1` và `maxInt + 2` đều cho kết quả sai giống nhau, minh họa mối nguy hiểm khi vượt quá giới hạn `Number.MAX_SAFE_INTEGER`.
 
-But what's the smallest safe integer?
+Nhưng số nguyên an toàn nhỏ nhất là bao nhiêu?
 
-Depending on how you interpret "smallest", you could either answer `0` or... `Number.MIN_SAFE_INTEGER`:
+Tùy thuộc vào cách bạn diễn giải "nhỏ nhất", bạn có thể trả lời `0` hoặc... `Number.MIN_SAFE_INTEGER`:
 
 ```js
 Number.MIN_SAFE_INTEGER;    // -9007199254740991
 ```
 
-And JS provides a utility to determine if a value is an integer in this safe range (`-2^53 + 1` - `2^53 - 1`):
+Và JS cung cấp một tiện ích để xác định xem một giá trị có phải là một số nguyên trong phạm vi an toàn này (`-2^53 + 1` - `2^53 - 1`) hay không:
 
 ```js
 Number.isSafeInteger(2 ** 53);      // false
 Number.isSafeInteger(2 ** 53 - 1);  // true
 ```
 
-### Double Zeros
+### Các Số Không Kép (Double Zeros)
 
-It may surprise you to learn that JS has two zeros: `0`, and `-0` (negative zero). But what on earth is a "negative zero"? [^SignedZero] A mathematician would surely balk at such a notion.
+Có thể làm bạn ngạc nhiên khi biết rằng JS có hai số không: `0`, và `-0` (số không âm). Nhưng trên trái đất này "số không âm" là cái gì? [^SignedZero] Một nhà toán học chắc chắn sẽ chần chừ trước một khái niệm như vậy.
 
-This isn't just a funny JS quirk; it's mandated by the IEEE-754[^IEEE754] specification. All floating point numbers are signed, including zero. And though JS does kind of hide the existence of `-0`, it's entirely possible to produce it and to detect it:
+Đây không chỉ là một điều kỳ quặc vui nhộn của JS; nó được bắt buộc bởi đặc tả IEEE-754[^IEEE754]. Tất cả các số dấu phẩy động đều có dấu, bao gồm cả số không. Và mặc dù JS có phần che giấu sự tồn tại của `-0`, hoàn toàn có thể tạo ra nó và phát hiện nó:
 
 ```js
 function isNegZero(v) {
@@ -890,32 +889,32 @@ regZero = 0 / 1;
 negZero = 0 / -1;
 
 regZero === negZero;        // true -- oops!
-Object.is(-0,regZero);      // false -- phew!
+Object.is(-0,regZero);      // false -- phù!
 Object.is(-0,negZero);      // true
 
 isNegZero(regZero);         // false
 isNegZero(negZero);         // true
 ```
 
-You may wonder why we'd ever need such a thing as `-0`. It can be useful when using numbers to represent both the magnitude of movement (speed) of some item (like a game character or an animation) and also its direction (e.g., negative = left, positive = right).
+Bạn có thể tự hỏi tại sao chúng ta lại cần một thứ như `-0`. Nó có thể hữu ích khi sử dụng các con số để biểu diễn cả độ lớn của chuyển động (tốc độ) của một vật phẩm nào đó (như nhân vật trò chơi hoặc hoạt hình) và cả hướng của nó (ví dụ: âm = trái, dương = phải).
 
-Without having a signed zero value, you couldn't tell which direction such an item was pointing at the moment it came to rest.
+Nếu không có giá trị số không có dấu, bạn không thể biết vật phẩm đó đang trỏ về hướng nào ngay tại thời điểm nó dừng lại.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| While JS defines a signed zero in the `number` type, there is no corresponding signed zero in the `bigint` number type. As such, `-0n` is just interpreted as `0n`, and the two are indistinguishable. |
+| Trong khi JS định nghĩa một số không có dấu trong kiểu `number`, không có số không có dấu tương ứng trong kiểu số `bigint`. Như vậy, `-0n` chỉ được diễn giải là `0n`, và cả hai là không thể phân biệt. |
 
-### Invalid Number
+### Số Không Hợp Lệ
 
-Mathematical operations can sometimes produce an invalid result. For example:
+Các phép toán toán học đôi khi có thể tạo ra một kết quả không hợp lệ. Ví dụ:
 
 ```js
 42 / "Kyle";            // NaN
 ```
 
-It's probably obvious, but if you try to divide a number by a string, that's an invalid mathematical operation.
+Có lẽ là hiển nhiên, nhưng nếu bạn cố gắng chia một số cho một chuỗi, đó là một phép toán toán học không hợp lệ.
 
-Another type of invalid numeric operation is trying to coercively-convert a non-numeric resembling value to a `number`. As discussed earlier, we can do so with either the `Number(..)` function or the unary `+` operator:
+Một loại phép toán số không hợp lệ khác là cố gắng chuyển đổi ép buộc một giá trị không giống số thành một `number`. Như đã thảo luận trước đó, chúng ta có thể làm như vậy với hàm `Number(..)` hoặc toán tử một ngôi `+`:
 
 ```js
 myAge = Number("just a number");
@@ -925,30 +924,30 @@ myAge;                  // NaN
 +undefined;             // NaN
 ```
 
-All such invalid operations (mathematical or coercive/numeric) produce the special `number` value called `NaN`.
+Tất cả các hoạt động không hợp lệ như vậy (toán học hoặc ép buộc/số) tạo ra giá trị `number` đặc biệt gọi là `NaN`.
 
-The historical root of "NaN" (from the IEEE-754[^IEEE754] specification) is as an acronym for "Not a Number". Technically, there are about 9 quadrillion values in the 64-bit IEEE-754 number space designated as "NaN", but JS treats all of them indistinguishably as the single `NaN` value.
+Nguồn gốc lịch sử của "NaN" (từ đặc tả IEEE-754[^IEEE754]) là viết tắt cho "Not a Number". Về mặt kỹ thuật, có khoảng 9 triệu tỷ giá trị trong không gian số IEEE-754 64-bit được chỉ định là "NaN", nhưng JS xử lý tất cả chúng không thể phân biệt như là giá trị `NaN` duy nhất.
 
-Unfortunately, that *not a number* meaning produces confusion, since `NaN` is *absolutely* a `number`.
+Thật không may, ý nghĩa *không phải là một số* đó tạo ra sự nhầm lẫn, vì `NaN` *hoàn toàn* là một `number`.
 
-| TIP: |
+| MẸO: |
 | :--- |
-| Why is `NaN` a `number`?!? Think of the opposite: what if a mathematical/numeric operation, like `+` or `/`, produced a non-`number` value (like `null`, `undefined`, etc)? Wouldn't that be really strange and unexpected? What if they threw exceptions, so that you had to `try..catch` all your math? The only sensible behavior is, numeric/mathematical operations should *always* produce a `number`, even if that value is invalid because it came from an invalid operation. |
+| Tại sao `NaN` là một `number`?!? Hãy nghĩ về điều ngược lại: điều gì sẽ xảy ra nếu một phép toán toán học/số, như `+` hoặc `/`, tạo ra một giá trị không phải `number` (như `null`, `undefined`, v.v.)? Điều đó sẽ không thực sự lạ và bất ngờ sao? Điều gì sẽ xảy ra nếu chúng ném ra các ngoại lệ, để bạn phải `try..catch` tất cả toán học của mình? Hành vi hợp lý duy nhất là, các phép toán số/toán học *luôn luôn* tạo ra một `number`, ngay cả khi giá trị đó không hợp lệ vì nó đến từ một hoạt động không hợp lệ. |
 
-To avoid such confusion, I strongly prefer to define "NaN" as any of the following instead:
+Để tránh sự nhầm lẫn như vậy, tôi thực sự thích định nghĩa "NaN" là bất kỳ điều nào sau đây thay thế:
 
-* "iNvalid Number"
-* "Not actual Number"
-* "Not available Number"
-* "Not applicable Number"
+* "iNvalid Number" (Số Không Hợp Lệ)
+* "Not actual Number" (Không phải Số thực tế)
+* "Not available Number" (Số Không có sẵn)
+* "Not applicable Number" (Số Không áp dụng được)
 
-`NaN` is a special value in JS, in that it's the only value in the language that lacks the *identity property* -- it's never equal to itself.
+`NaN` là một giá trị đặc biệt trong JS, ở chỗ nó là giá trị duy nhất trong ngôn ngữ thiếu *tính chất danh tính* (identity property) -- nó không bao giờ bằng chính nó.
 
 ```js
 NaN === NaN;            // false
 ```
 
-So unfortunately, the `===` operator cannot check a value to see if it's `NaN`. But there are some ways to do so:
+Vì vậy, thật không may, toán tử `===` không thể kiểm tra một giá trị để xem nó có phải là `NaN` không. Nhưng có một số cách để làm như vậy:
 
 ```js
 politicianIQ = "nothing" / Infinity;
@@ -959,29 +958,29 @@ Object.is(NaN,politicianIQ);        // true
 [ NaN ].includes(politicianIQ);     // true
 ```
 
-Here's a fact of virtually all JS programs, whether you realize it or not: `NaN` happens. Seriously, almost all programs that do any math or numeric conversions are subject to `NaN` showing up.
+Đây là một thực tế của hầu như tất cả các chương trình JS, cho dù bạn có nhận ra hay không: `NaN` xảy ra. Nghiêm túc mà nói, gần như tất cả các chương trình thực hiện bất kỳ toán học hoặc chuyển đổi số nào đều có thể gặp `NaN`.
 
-If you're not properly checking for `NaN` in your programs where you do math or numeric conversions, I can say with some degree of certainty: you probably have a number bug in your program somewhere, and it just hasn't bitten you yet (that you know of!).
+Nếu bạn không kiểm tra `NaN` đúng cách trong các chương trình của mình nơi bạn thực hiện toán học hoặc chuyển đổi số, tôi có thể nói với một mức độ chắc chắn nào đó: bạn có thể có một lỗi số trong chương trình của mình ở đâu đó, và nó chỉ chưa cắn bạn thôi (mà bạn biết!).
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| JS originally provided a global function called `isNaN(..)` for `NaN` checking, but it unfortunately has a long-standing coercion bug. `isNaN("Kyle")` returns `true`, even though the string value `"Kyle"` is most definitely *not* the `NaN` value. This is because the global `isNaN(..)` function forces any non-`number` argument to coerce to a `number` first, before checking for `NaN`. Coercing `"Kyle"` to a `number` produces `NaN`, so now the function sees a `NaN` and returns `true`! This buggy global `isNaN(..)` still exists in JS, but should never be used. When `NaN` checking, always use `Number.isNaN(..)`, `Object.is(..)`, etc. |
+| JS ban đầu cung cấp một hàm toàn cục gọi là `isNaN(..)` để kiểm tra `NaN`, nhưng thật không may nó có một lỗi ép buộc tồn tại lâu đời. `isNaN("Kyle")` trả về `true`, mặc dù giá trị chuỗi `"Kyle"` chắc chắn *không* phải là giá trị `NaN`. Điều này là do hàm `isNaN(..)` toàn cục buộc bất kỳ đối số nào không phải `number` phải ép buộc thành một `number` trước, trước khi kiểm tra `NaN`. Ép buộc `"Kyle"` thành một `number` tạo ra `NaN`, vì vậy bây giờ hàm nhìn thấy một `NaN` và trả về `true`! Hàm `isNaN(..)` toàn cục bị lỗi này vẫn tồn tại trong JS, nhưng không bao giờ nên được sử dụng. Khi kiểm tra `NaN`, luôn sử dụng `Number.isNaN(..)`, `Object.is(..)`, v.v. |
 
-## BigInteger Values
+## Các Giá Trị BigInteger
 
-As the maximum safe integer in JS `number`s is `9007199254740991` (see above), such a relatively low limit can present a problem if a JS program needs to perform larger integer math, or even just hold values like 64-bit integer IDs (e.g., Twitter Tweet IDs).
+Vì số nguyên an toàn tối đa trong các `number` JS là `9007199254740991` (xem ở trên), giới hạn tương đối thấp như vậy có thể gây ra vấn đề nếu một chương trình JS cần thực hiện toán học số nguyên lớn hơn, hoặc thậm chí chỉ giữ các giá trị như ID số nguyên 64-bit (ví dụ: ID Twitter Tweet).
 
-For that reason, JS provides the alternate `bigint` type (BigInteger), which can store arbitrarily large (theoretically not limited, except by finite machine memory and/or JS implementation) integers.
+Vì lý do đó, JS cung cấp kiểu `bigint` thay thế (BigInteger), có thể lưu trữ các số nguyên lớn tùy ý (về mặt lý thuyết không giới hạn, ngoại trừ bởi bộ nhớ máy hữu hạn và/hoặc triển khai JS).
 
-To distinguish a `bigint` from a whole (integer) `number` value, which would otherwise both look the same (`42`), JS requires an `n` suffix on `bigint` values:
+Để phân biệt một `bigint` với một giá trị `number` nguyên (integer), mà nếu không sẽ trông giống nhau (`42`), JS yêu cầu một hậu tố `n` trên các giá trị `bigint`:
 
 ```js
-myAge = 42n;        // this is a bigint, not a number
+myAge = 42n;        // đây là một bigint, không phải number
 
-myKidsAge = 11;     // this is a number, not a bigint
+myKidsAge = 11;     // đây là một number, không phải bigint
 ```
 
-Let's illustrate the upper un-boundedness of `bigint`:
+Hãy minh họa sự không giới hạn trên của `bigint`:
 
 ```js
 Number.MAX_SAFE_INTEGER;        // 9007199254740991
@@ -990,18 +989,18 @@ Number.MAX_SAFE_INTEGER + 2;    // 9007199254740992 -- oops!
 
 myBigInt = 9007199254740991n;
 
-myBigInt + 2n;                  // 9007199254740993n -- phew!
+myBigInt + 2n;                  // 9007199254740993n -- phù!
 
 myBigInt ** 2n;                 // 81129638414606663681390495662081n
 ```
 
-As you can see, the `bigint` value-type is able to do precise arithmetic above the integer limit of the `number` value-type.
+Như bạn có thể thấy, kiểu giá trị `bigint` có thể thực hiện số học chính xác trên giới hạn số nguyên của kiểu giá trị `number`.
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Notice that the `+` operator required `.. + 2n` instead of just `.. + 2`? You cannot mix `number` and `bigint` value-types in the same expression. This restriction is annoying, but it protects your program from invalid mathematical operations that would give non-obvious unexpected results. |
+| Nhận thấy rằng toán tử `+` yêu cầu `.. + 2n` thay vì chỉ `.. + 2`? Bạn không thể trộn lẫn các kiểu giá trị `number` và `bigint` trong cùng một biểu thức. Hạn chế này gây phiền nhiễu, nhưng nó bảo vệ chương trình của bạn khỏi các phép toán toán học không hợp lệ sẽ đưa ra các kết quả không mong đợi không rõ ràng. |
 
-A `bigint` value can also be created with the `BigInt(..)` function; for example, to convert a whole (integer) `number` value to a `bigint`:
+Một giá trị `bigint` cũng có thể được tạo bằng hàm `BigInt(..)`; ví dụ, để chuyển đổi một giá trị `number` nguyên (integer) thành một `bigint`:
 
 ```js
 myAge = 42n;
@@ -1013,15 +1012,15 @@ myAge += BigInt(inc);
 myAge;              // 43n
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Though it may seem counter-intuitive to some readers, `BigInt(..)` is *always* called without the `new` keyword. If `new` is used, an exception will be thrown. |
+| Mặc dù có vẻ phản trực giác đối với một số độc giả, `BigInt(..)` *luôn luôn* được gọi mà không có từ khóa `new`. Nếu `new` được sử dụng, một ngoại lệ sẽ bị ném ra. |
 
-That's definitely one of the most common usages of the `BigInt(..)` function: to convert `number`s to `bigint`s, for mathematical operation purposes.
+Đó chắc chắn là một trong những cách sử dụng phổ biến nhất của hàm `BigInt(..)`: để chuyển đổi các `number` thành các `bigint`, cho các mục đích hoạt động toán học.
 
-But it's not that uncommon to represent large integer values as strings, especially if those values are coming to the JS environment from other language environments, or via certain exchange formats, which themselves do not support `bigint`-style values.
+Nhưng cũng không quá hiếm khi biểu diễn các giá trị số nguyên lớn dưới dạng chuỗi, đặc biệt nếu các giá trị đó đến môi trường JS từ các môi trường ngôn ngữ khác, hoặc thông qua các định dạng trao đổi nhất định, mà bản thân chúng không hỗ trợ các giá trị kiểu `bigint`.
 
-As such, `BigInt(..)` is useful to coerce those string values to `bigint`s:
+Như vậy, `BigInt(..)` hữu ích để ép buộc các giá trị chuỗi đó thành các `bigint`:
 
 ```js
 myBigInt = BigInt("12345678901234567890");
@@ -1029,37 +1028,37 @@ myBigInt = BigInt("12345678901234567890");
 myBigInt;                       // 12345678901234567890n
 ```
 
-Unlike `parseInt(..)`, if any character in the string is non-numeric (`0-9` digits or `-`), including `.` or even a trailing `n` suffix character, an exception will be thrown. In other words, `BigInt(..)` is an all-or-nothing coercion-conversion, not a parsing-conversion.
+Không giống như `parseInt(..)`, nếu bất kỳ ký tự nào trong chuỗi là không phải số (các chữ số `0-9` hoặc `-`), bao gồm `.` hoặc thậm chí một ký tự hậu tố `n` ở cuối, một ngoại lệ sẽ bị ném ra. Nói cách khác, `BigInt(..)` là một chuyển đổi ép buộc tất cả hoặc không có gì, không phải là một chuyển đổi phân tích cú pháp.
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| I think it's absurd that `BigInt(..)` won't accept the trailing `n` character while string coercing (and thus effectively ignore it). I lobbied vehemently for that behavior, in the TC39 process, but was ultimately denied. In my opinion, it's now a tiny little gotcha wart on JS, but a wart nonetheless. |
+| Tôi nghĩ thật vô lý khi `BigInt(..)` sẽ không chấp nhận ký tự `n` ở cuối trong khi ép buộc chuỗi (và do đó bỏ qua nó một cách hiệu quả). Tôi đã vận động kịch liệt cho hành vi đó, trong quy trình TC39, nhưng cuối cùng đã bị từ chối. Theo ý kiến của tôi, bây giờ nó là một cái mụn cóc nhỏ bé trên JS, nhưng dù sao cũng là một cái mụn cóc. |
 
-## Symbol Values
+## Các Giá Trị Symbol
 
-The `symbol` type contains special opaque values called "symbols". These values can only be created by the `Symbol(..)` function:
+Kiểu `symbol` chứa các giá trị mờ đặc biệt gọi là "symbols". Các giá trị này chỉ có thể được tạo bởi hàm `Symbol(..)`:
 
 ```js
 secret = Symbol("my secret");
 ```
 
-| WARNING: |
+| CẢNH BÁO: |
 | :--- |
-| Just as with `BigInt(..)`, the `Symbol(..)` function must be called without the `new` keyword. |
+| Cũng giống như với `BigInt(..)`, hàm `Symbol(..)` phải được gọi mà không có từ khóa `new`. |
 
-The `"my secret"` string passed into the `Symbol(..)` function call is *not* the symbol value itself, even though it seems that way. It's merely an optional descriptive label, used only for debugging purposes for the benefit of the developer.
+Chuỗi `"my secret"` được truyền vào lệnh gọi hàm `Symbol(..)` *không* phải là bản thân giá trị symbol, ngay cả khi nó có vẻ như vậy. Nó chỉ đơn thuần là một nhãn mô tả tùy chọn, chỉ được sử dụng cho mục đích gỡ lỗi vì lợi ích của nhà phát triển.
 
-The underlying value returned from `Symbol(..)` is a special kind of value that resists the program/developer inspecting anything about its underlying representation. That's what I mean by "opaque".
+Giá trị bên dưới được trả về từ `Symbol(..)` là một loại giá trị đặc biệt chống lại việc chương trình/nhà phát triển kiểm tra bất cứ điều gì về biểu diễn bên dưới của nó. Đó là những gì tôi muốn nói là "mờ" (opaque - không trong suốt).
 
-| NOTE: |
+| LƯU Ý: |
 | :--- |
-| You could think of symbols as if they are monotonically incrementing integer numbers -- indeed, that's similar to how at least some JS engines implement them. But the JS engine will never expose any representation of a symbol's underlying value in any way that you or the program can see. |
+| Bạn có thể nghĩ về các symbol như thể chúng là các số nguyên tăng đơn điệu -- thực sự, đó là tương tự như cách ít nhất một số công cụ JS triển khai chúng. Nhưng công cụ JS sẽ không bao giờ hiển thị bất kỳ biểu diễn nào về giá trị bên dưới của một symbol theo bất kỳ cách nào mà bạn hoặc chương trình có thể nhìn thấy. |
 
-Symbols are guaranteed by the JS engine to be unique (only within the program itself), and are unguessable. In other words, a duplicate symbol value can never be created in a program.
+Các symbol được đảm bảo bởi công cụ JS là duy nhất (chỉ trong chính chương trình), và không thể đoán được. Nói cách khác, một giá trị symbol trùng lặp không bao giờ có thể được tạo ra trong một chương trình.
 
-You might be wondering at this point what symbols are used for?
+Bạn có thể đang tự hỏi tại thời điểm này các symbol được sử dụng để làm gì?
 
-One typical usage is as "special" values that the developer distinguishes from any other values that could accidentally collide. For example:
+Một cách sử dụng điển hình là dưới dạng các giá trị "đặc biệt" mà nhà phát triển phân biệt với bất kỳ giá trị nào khác có thể vô tình va chạm. Ví dụ:
 
 ```js
 EMPTY = Symbol("not set yet");
@@ -1072,9 +1071,9 @@ if (myNickname == EMPTY) {
 }
 ```
 
-Here, I've defined a special `EMPTY` value and initialized `myNickname` to it. Later, I check to see if it's still that special value, and then perform some action if so. I might not want to have used `null` or `undefined` for such purposes, as another developer might be able to pass in one of those common built-in values. `EMPTY` by contrast here is a unique, unguessable value that only I've defined and have control over and access to.
+Ở đây, tôi đã định nghĩa một giá trị `EMPTY` đặc biệt và khởi tạo `myNickname` cho nó. Sau đó, tôi kiểm tra xem nó có còn là giá trị đặc biệt đó không, và sau đó thực hiện một số hành động nếu đúng. Tôi có thể không muốn sử dụng `null` hoặc `undefined` cho các mục đích như vậy, vì một nhà phát triển khác có thể truyền vào một trong những giá trị tích hợp chung đó. `EMPTY` ngược lại ở đây là một giá trị duy nhất, không thể đoán được mà chỉ tôi mới có định nghĩa và có quyền kiểm soát và truy cập.
 
-Perhaps even more commonly, symbols are often used as special (meta-) properties on objects:
+Có lẽ thậm chí phổ biến hơn, các symbol thường được sử dụng làm các thuộc tính đặc biệt (meta-) trên các đối tượng:
 
 ```js
 myInfo = {
@@ -1089,7 +1088,7 @@ PRIVATE_ID = Symbol("private unique ID, don't touch!");
 myInfo[PRIVATE_ID] = generateID();
 ```
 
-It's important to note that symbol properties are still publicly visible on any object; they're not *actually* private. But they're treated as special and set-apart from the normal collection of object properties. It's similar to if I had done instead:
+Điều quan trọng cần lưu ý là các thuộc tính symbol vẫn hiển thị công khai trên bất kỳ đối tượng nào; chúng không *thực sự* riêng tư. Nhưng chúng được coi là đặc biệt và tách biệt khỏi bộ sưu tập các thuộc tính đối tượng thông thường. Nó tương tự như nếu tôi đã làm thay thế:
 
 ```js
 Object.defineProperty(myInfo,"__private_id_dont_touch",{
@@ -1098,13 +1097,13 @@ Object.defineProperty(myInfo,"__private_id_dont_touch",{
 });
 ```
 
-By convention only, most developers know that if a property name is prefixed with `_` (or even more so, `__`!), that means it's "pseudo-private" and to leave it alone unless they're really supposed to access it.
+Chỉ theo quy ước, hầu hết các nhà phát triển biết rằng nếu một tên thuộc tính được bắt đầu bằng `_` (hoặc thậm chí nhiều hơn thế, `__`!), điều đó có nghĩa là nó là "giả riêng tư" và hãy để yên nó trừ khi họ thực sự phải truy cập nó.
 
-Symbols basically serve the same use-case, but a bit more ergonomically than the prefixing approach.
+Các symbol về cơ bản phục vụ cùng một trường hợp sử dụng, nhưng tiện dụng hơn một chút so với phương pháp tiếp đầu ngữ.
 
-### Well-Known Symbols (WKS)
+### Các Symbol Nổi Tiếng (Well-Known Symbols - WKS)
 
-JS pre-defines a set of symbols, referred to as *well-known symbols* (WKS), that represent certain special meta-programming hooks on objects. These symbols are stored as static properties on the `Symbol` function object. For example:
+JS định nghĩa trước một tập hợp các symbol, được gọi là *các symbol nổi tiếng* (well-known symbols - WKS), đại diện cho các móc meta-programming đặc biệt nhất định trên các đối tượng. Các symbol này được lưu trữ dưới dạng các thuộc tính tĩnh trên đối tượng hàm `Symbol`. Ví dụ:
 
 ```js
 myInfo = {
@@ -1117,19 +1116,19 @@ myInfo[Symbol.toStringTag] = "my-info";
 String(myInfo);         // [object my-info]
 ```
 
-`Symbol.toStringTag` is a well-known symbol for accessing and overriding the default string representation of a plain object (`"[object Object]"`), replacing the `"Object"` part with a different value (e.g., `"my-info"`).
+`Symbol.toStringTag` là một symbol nổi tiếng để truy cập và ghi đè biểu diễn chuỗi mặc định của một đối tượng đơn giản (`"[object Object]"`), thay thế phần `"Object"` bằng một giá trị khác (ví dụ, `"my-info"`).
 
-See the "Objects & Classes" book of this series for more information about Well-Known Symbols and metaprogramming.
+Xem cuốn sách "Objects & Classes" của loạt bài này để biết thêm thông tin về Well-Known Symbols và metaprogramming.
 
-### Global Symbol Registry
+### Sổ Đăng Ký Symbol Toàn Cầu
 
-Often, you want to keep symbol values private, such as inside a module scope. But occasionally, you want to expose them so they're accessible globally throughout all the files in a JS program.
+Thông thường, bạn muốn giữ các giá trị symbol riêng tư, chẳng hạn như bên trong phạm vi mô-đun. Nhưng đôi khi, bạn muốn hiển thị chúng để chúng có thể truy cập toàn cầu trong tất cả các tệp trong một chương trình JS.
 
-Instead of just attaching them as global variables (i.e., properties on the `globalThis` object), JS provides an alternate *global namespace* to register symbols in:
+Thay vì chỉ gắn chúng như các biến toàn cục (tức là, các thuộc tính trên đối tượng `globalThis`), JS cung cấp một *không gian tên toàn cục* thay thế để đăng ký các symbol trong đó:
 
 ```js
-// retrieve if already registered,
-// otherwise register
+// truy xuất nếu đã đăng ký,
+// nếu không thì đăng ký
 PRIVATE_ID = Symbol.for("private-id");
 
 // elsewhere:
@@ -1139,43 +1138,43 @@ privateIDKey;           // "private-id"
 
 // elsewhere:
 
-// retrieve symbol from registry undeer
-// specified key
+// truy xuất symbol từ sổ đăng ký dưới
+// khóa đã chỉ định
 privateIDSymbol = Symbol.for(privateIDKey);
 ```
 
-The value passed to `Symbol.for(..)` is *not* the same as passed to `Symbol(..)`. `Symbol.for(..)` expects a unique *key* for the symbol to be registered under in the global registry, whereas `Symbol(..)` optionally accepts a descriptive label (not necessarily unique).
+Giá trị được truyền cho `Symbol.for(..)` *không* giống như được truyền cho `Symbol(..)`. `Symbol.for(..)` mong đợi một *khóa* duy nhất cho symbol được đăng ký dưới nó trong sổ đăng ký toàn cục, trong khi `Symbol(..)` tùy chọn chấp nhận một nhãn mô tả (không nhất thiết phải duy nhất).
 
-If the registry doesn't have a symbol under that specified *key*, a new symbol (with no descriptive label) is created and automatically registered there. Otherwise, `Symbol.for(..)` returns whatever previously registered symbol is under that *key*.
+Nếu sổ đăng ký không có một symbol dưới *khóa* đã chỉ định đó, một symbol mới (không có nhãn mô tả) được tạo và tự động đăng ký ở đó. Nếu không, `Symbol.for(..)` trả về bất kỳ symbol nào đã đăng ký trước đó dưới *khóa* đó.
 
-Going in the opposite direction, if you have the symbol value itself, and want to retrieve the *key* it's registered under, `Symbol.keyFor(..)` takes the symbol itself as input, and returns the *key* (if any). That's useful in case it's more convenient to pass around the *key* string value than the symbol itself.
+Đi theo hướng ngược lại, nếu bạn có chính giá trị symbol, và muốn truy xuất *khóa* mà nó được đăng ký dưới đó, `Symbol.keyFor(..)` lấy chính symbol làm đầu vào, và trả về *khóa* (nếu có). Điều đó hữu ích trong trường hợp thuận tiện hơn khi truyền xung quanh giá trị chuỗi *khóa* hơn là chính symbol.
 
-### Object or Primitive?
+### Object hay Primitive?
 
-Unlike other primitives like `42`, where you can create multiple copies of the same value, symbols *do* act more like specific object references in that they're always completely unique (for purposes of value assignment and equality comparison). The specification also categorizes the `Symbol()` function under the "Fundamental Objects" section, calling the function a "constructor", and even defining its `prototype` property.
+Không giống như các primitive khác như `42`, nơi bạn có thể tạo nhiều bản sao của cùng một giá trị, các symbol *thực sự* hoạt động giống như các tham chiếu đối tượng cụ thể ở chỗ chúng luôn hoàn toàn duy nhất (cho các mục đích gán giá trị và so sánh bằng). Đặc tả cũng phân loại hàm `Symbol()` dưới phần "Fundamental Objects" (Các Đối Tượng Cơ Bản), gọi hàm là một "hàm tạo" (constructor), và thậm chí định nghĩa thuộc tính `prototype` của nó.
 
-However, as mentioned earlier, `new` cannot be used with `Symbol(..)`; this is similar to the `BigInt()` "constructor". We clearly know `bigint` values are primitives, so `symbol` values seem to be of the same *kind*.
+Tuy nhiên, như đã đề cập trước đó, `new` không thể được sử dụng với `Symbol(..)`; điều này tương tự như "hàm tạo" `BigInt()`. Chúng ta biết rõ ràng các giá trị `bigint` là các primitive, vì vậy các giá trị `symbol` dường như cùng *loại*.
 
-And in the specification's "Terms and Definitions", it lists symbol as a primitive value. [^PrimitiveValues] Moreover, the values themselves are used in JS programs as primitives rather than objects. For example, symbols are primarily used as keys in objects -- we know objects cannot use other object values as keys! -- along with strings, which are also primitives.
+Và trong phần "Terms and Definitions" (Thuật Ngữ và Định Nghĩa) của đặc tả, nó liệt kê symbol là một giá trị nguyên thủy (primitive value). [^PrimitiveValues] Hơn nữa, chính các giá trị được sử dụng trong các chương trình JS như các primitive thay vì các đối tượng. Ví dụ, các symbol chủ yếu được sử dụng làm khóa trong các đối tượng -- chúng ta biết các đối tượng không thể sử dụng các giá trị đối tượng khác làm khóa! -- cùng với các chuỗi, cũng là các primitive.
 
-As mentioned earlier, some JS engines even internally implement symbols as unique, monotonically incrementing integers (primitives!).
+Như đã đề cập trước đó, một số công cụ JS thậm chí thực hiện nội bộ các symbol dưới dạng các số nguyên duy nhất, tăng đơn điệu (các primitive!).
 
-Finally, as explained at the top of this chapter, we know primitive values are *not allowed* to have properties set on them, but are *auto-boxed* (see "Automatic Objects" in Chapter 3) internally to the corresponding object-wrapper type to facilitate property/method access. Symbols follow all these exact behaviors, the same as all the other primitives.
+Cuối cùng, như đã giải thích ở đầu chương này, chúng ta biết các giá trị nguyên thủy *không được phép* có các thuộc tính được đặt trên chúng, nhưng được *tự động đóng hộp* (auto-boxed) (xem "Automatic Objects" trong Chương 3) nội bộ thành loại object-wrapper tương ứng để tạo điều kiện cho truy cập thuộc tính/phương thức. Các symbol tuân theo tất cả các hành vi chính xác này, giống như tất cả các primitive khác.
 
-All this considered, I think symbols are *much more* like primitives than objects, so that's how I present them in this book.
+Tất cả điều này được xem xét, tôi nghĩ các symbol *giống nhiều hơn* các primitive so với các đối tượng, vì vậy đó là cách tôi trình bày chúng trong cuốn sách này.
 
-## Primitives Are Built-In Types
+## Primitives Là Các Kiểu Tích Hợp Sẵn
 
-We've now dug deeply into the seven primitive (non-object) value types that JS provides automatically built-in.
+Bây giờ chúng ta đã đào sâu vào bảy loại giá trị nguyên thủy (không phải đối tượng) mà JS cung cấp tự động tích hợp sẵn.
 
-Before we move on to discussing JS's built-in object value type, we want to take a closer look at the kinds of behaviors we can expect from JS values. We'll do so in-depth, in the next chapter.
+Trước khi chúng ta chuyển sang thảo luận về loại giá trị đối tượng tích hợp của JS, chúng ta muốn xem xét kỹ hơn các loại hành vi mà chúng ta có thể mong đợi từ các giá trị JS. Chúng ta sẽ làm như vậy một cách chuyên sâu, trong chương tiếp theo.
 
-[^PrimitiveValues]: "4.4.5 primitive value", ECMAScript 2022 Language Specification; https://tc39.es/ecma262/#sec-primitive-value ; Accessed August 2022
+[^PrimitiveValues]: "4.4.5 primitive value", ECMAScript 2022 Language Specification; <https://tc39.es/ecma262/#sec-primitive-value> ; Accessed August 2022
 
-[^UTFUCS]: "JavaScript’s internal character encoding: UCS-2 or UTF-16?"; Mathias Bynens; January 20 2012; https://mathiasbynens.be/notes/javascript-encoding ; Accessed July 2022
+[^UTFUCS]: "JavaScript’s internal character encoding: UCS-2 or UTF-16?"; Mathias Bynens; January 20 2012; <https://mathiasbynens.be/notes/javascript-encoding> ; Accessed July 2022
 
-[^IEEE754]: "IEEE-754"; https://en.wikipedia.org/wiki/IEEE_754 ; Accessed July 2022
+[^IEEE754]: "IEEE-754"; <https://en.wikipedia.org/wiki/IEEE_754> ; Accessed July 2022
 
-[^NumberType]: "6.1.6.1 The Number Type", ECMAScript 2022 Language Specification; https://262.ecma-international.org/13.0/#sec-ecmascript-language-types-number-type ; Accessed August 2022
+[^NumberType]: "6.1.6.1 The Number Type", ECMAScript 2022 Language Specification; <https://262.ecma-international.org/13.0/#sec-ecmascript-language-types-number-type> ; Accessed August 2022
 
-[^SignedZero]: "Signed Zero", Wikipedia; https://en.wikipedia.org/wiki/Signed_zero ; Accessed August 2022
+[^SignedZero]: "Signed Zero", Wikipedia; <https://en.wikipedia.org/wiki/Signed_zero> ; Accessed August 2022
