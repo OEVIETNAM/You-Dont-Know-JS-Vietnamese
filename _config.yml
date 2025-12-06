@@ -1,5 +1,7 @@
 title: "You Don't Know JS Yet (Vietnamese)"
 description: "Bản dịch tiếng Việt của bộ sách You Don't Know JS Yet"
+url: https://oevietnam.github.io/ # site url
+baseurl: "/markdown-vietnamese"
 remote_theme: just-the-docs/just-the-docs
 
 color_scheme: dark
